@@ -86,7 +86,7 @@ Email:`martin.poinsinet-de-sivry@polymtl.ca <mailto:martin.poinsinet-de-sivry@po
    :target: https://pyfibermodes.readthedocs.io/en/latest/
    :alt: Documentation Status
 
-.. |Unittest| image:: https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/MartinPdeS/2cac8ebb51cd9ce07dc7a955648301d5/raw/d75a89f19acc11302d81dacefe5be207beee24a8/PyFiberModes_coverage_badge.json
+.. |Unittest| image:: https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/MartinPdeS/a0f72417f310bf9f071afd845a328cd2/raw/71453f2c0e8dd3ed7eb5a1c179963cf4d682e58d/coverage_badge.json
 
 .. |PyPi| image:: https://badge.fury.io/py/PyFiberModes.svg
    :target: https://pypi.org/project/PyFiberModes/
