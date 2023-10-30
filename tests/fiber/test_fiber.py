@@ -19,8 +19,8 @@
 import unittest
 import os.path
 
-from fibermodes import FiberFactory
-from fibermodes.fiber.material.material import OutOfRangeWarning
+from PyFiberModes import FiberFactory
+from PyFiberModes.fiber.material.material import OutOfRangeWarning
 from math import isinf
 import warnings
 

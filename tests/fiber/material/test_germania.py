@@ -17,8 +17,8 @@
 
 import unittest
 
-from fibermodes import Wavelength
-from fibermodes.fiber.material import Germania
+from PyFiberModes import Wavelength
+from PyFiberModes.fiber.material import Germania
 
 
 class TestGermania(unittest.TestCase):

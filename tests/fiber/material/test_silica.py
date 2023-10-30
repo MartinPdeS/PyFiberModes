@@ -13,12 +13,12 @@
 # You should have received a copy of the GNU General Public License
 # along with FiberModes.  If not, see <http://www.gnu.org/licenses/>.
 
-"""Test suite for fibermodes.fiber.material.silica module"""
+"""Test suite for PyFiberModes.fiber.material.silica module"""
 
 import unittest
 
-from fibermodes import Wavelength
-from fibermodes.fiber.material import Silica
+from PyFiberModes import Wavelength
+from PyFiberModes.fiber.material import Silica
 
 
 class TestSilica(unittest.TestCase):

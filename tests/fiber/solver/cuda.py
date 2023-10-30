@@ -1,10 +1,10 @@
-"""Test suite for fibermodes.fiber.solver.cuda"""
+"""Test suite for PyFiberModes.fiber.solver.cuda"""
 
 import unittest
 
 try:
     from tests.fiber.solver.tlsif import TestTLSIF
-    from fibermodes.fiber.solver import cuda
+    from PyFiberModes.fiber.solver import cuda
 
 
     @unittest.skip("Implementation not finished")

@@ -17,7 +17,7 @@
 
 import unittest
 
-from fibermodes import FiberFactory, Mode, ModeFamily, HE11
+from PyFiberModes import FiberFactory, Mode, ModeFamily, HE11
 from itertools import zip_longest
 from math import isnan
 

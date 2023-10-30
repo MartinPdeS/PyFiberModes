@@ -13,11 +13,11 @@
 # You should have received a copy of the GNU General Public License
 # along with FiberModes.  If not, see <http://www.gnu.org/licenses/>.
 
-"""Test suite for fibermodes.fiber.solver.ssif module."""
+"""Test suite for PyFiberModes.fiber.solver.ssif module."""
 
 import unittest
 
-from fibermodes import Wavelength, Mode, FiberFactory
+from PyFiberModes import Wavelength, Mode, FiberFactory
 from math import sqrt
 
 

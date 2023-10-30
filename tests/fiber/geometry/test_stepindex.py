@@ -17,7 +17,7 @@
 
 import unittest
 
-from fibermodes.fiber.geometry.stepindex import StepIndex
+from PyFiberModes.fiber.geometry.stepindex import StepIndex
 
 
 class TestStepIndex(unittest.TestCase):

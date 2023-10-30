@@ -13,13 +13,13 @@
 # You should have received a copy of the GNU General Public License
 # along with FiberModes.  If not, see <http://www.gnu.org/licenses/>.
 
-"""Test suite for fibermodes.simulator module"""
+"""Test suite for PyFiberModes.simulator module"""
 
 import unittest
 import os.path
 
-from fibermodes import FiberFactory, Mode, ModeFamily, HE11
-from fibermodes.simulator import Simulator
+from PyFiberModes import FiberFactory, Mode, ModeFamily, HE11
+from PyFiberModes.simulator import Simulator
 
 __dir__, _ = os.path.split(__file__)
 

@@ -17,8 +17,8 @@
 
 import unittest
 
-from fibermodes import Wavelength
-from fibermodes.fiber.material import Air
+from PyFiberModes import Wavelength
+from PyFiberModes.fiber.material import Air
 
 
 class TestAir(unittest.TestCase):

@@ -19,7 +19,7 @@
 import unittest
 import os.path
 
-from fibermodes import FiberFactory
+from PyFiberModes import FiberFactory
 
 __dir__, _ = os.path.split(__file__)
 

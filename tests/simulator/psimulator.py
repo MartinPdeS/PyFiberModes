@@ -1,7 +1,7 @@
-"""Test suite for fibermodes.simulator.psimulator module"""
+"""Test suite for PyFiberModes.simulator.psimulator module"""
 
 import unittest
-from fibermodes.simulator import PSimulator
+from PyFiberModes.simulator import PSimulator
 from tests.simulator.simulator import TestSimulator
 
 
