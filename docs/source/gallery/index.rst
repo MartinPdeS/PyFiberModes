@@ -15,7 +15,30 @@ A gallery of examples and that showcase how PyFiberModes can be used. Some examp
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="Effective index VS core index">
+
+.. only:: html
+
+  .. image:: /gallery/images/thumb/sphx_glr_plot_effective_index_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_gallery_plot_effective_index.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Effective index VS core index</div>
     </div>
+
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /gallery/plot_effective_index
 
 
 

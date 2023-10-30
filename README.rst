@@ -8,14 +8,6 @@ PyFiberModes
 |PyPi_download|
 
 
-..  figure:: https://github.com/MartinPdeS/PyFiberModes/blob/master/docs/images/mode_propagation.gif?raw=true
-   :alt: some image
-   :class: with-shadow float-left
-   :width: 800px
-
-   Propagation of mode in an adiabatic 2x1 modally-specific photonic lantern.
-
-
 
 
 This project aims to develop an useful tool to simulate propagating mode in fiber optics for all kind of circular-symmetric geometries.

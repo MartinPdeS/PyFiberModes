@@ -1,5 +1,5 @@
-MPSPlots's documentation
-========================
+PyFiberModes' documentation
+===========================
 
 **Date**: |today|, **Version**: |version|
 
