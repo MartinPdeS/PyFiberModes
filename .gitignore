@@ -9,7 +9,6 @@ _build/
 fibermodes.sublime-workspace
 scripts/*.tex
 *.tab
-*.txt
 *.zip
 *.pdf
 *.fiber

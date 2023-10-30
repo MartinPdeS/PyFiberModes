@@ -1,8 +1,0 @@
-[run]
-
-source = fibermodes
-omit =
-    *numpy*
-    *scipy*
-    fibermodes/fiber/geometry/supergaussian.py
-    
