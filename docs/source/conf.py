@@ -5,7 +5,7 @@ import os
 import sys
 from sphinx_gallery.sorting import FileNameSortKey
 from packaging.version import parse
-from PyFiberModes.styles import use_mpsplots_style
+from MPSPlots.styles import use_mpsplots_style
 
 from PyFiberModes.tools.directories import (
     project_path,
