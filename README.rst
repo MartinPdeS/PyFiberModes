@@ -1,128 +1,102 @@
-# fibermodes
-Multilayers fiber mode solver
+PyFiberModes
+============
 
-[![Build Status](https://travis-ci.org/cbrunet/fibermodes.svg?branch=master)](https://travis-ci.org/cbrunet/fibermodes)
-[![Coverage Status](https://coveralls.io/repos/cbrunet/fibermodes/badge.svg?branch=master&service=github)](https://coveralls.io/github/cbrunet/fibermodes?branch=master)
+|python|
+|docs|
+|Citation|
+|Unittest|
+|PyPi|
+|PyPi_download|
 
-API documentation available on http://fibermodes.rtfd.org/
+
+..  figure:: https://github.com/MartinPdeS/PyFiberModes/blob/master/docs/images/mode_propagation.gif?raw=true
+   :alt: some image
+   :class: with-shadow float-left
+   :width: 800px
+
+   Propagation of mode in an adiabatic 2x1 modally-specific photonic lantern.
+
+
+
+
+This project aims to develop an useful tool to simulate propagating mode in fiber optics for all kind of circular-symmetric geometries.
+
+----
+
+Documentation
+**************
+All the latest available documentation is available `here <https://pyfibermodes.readthedocs.io/en/latest/>`_ or you can click the following badge:
+
+|docs|
+
+
+----
 
 
 Installation
-============
-
-Requirements:
-
-- Python >= 3.4
-- numpy
-- scipy
-
-For GUI:
-
- - PyQt4
- - pyqtgraph
-
-To run unit tests:
-
- - nose
- - coverage (for coverage tests)
+------------
 
 
-This software is still under heavy development. Therefore, it is recommended to
-install it in a development environment, to be able to quickly pull newest changes
-from the GitHub repository, and to be able to propose pull requests. However,
-we also describe a *simple* installation, in case you only want to run  the 
-software, without hacking it.
+Pip installation
+****************
+
+The package have been uploaded as wheel for a few OS (Linux, MacOS) and need Python 3.10.
+As such, with the adequate configuration one can simply do
+
+.. code-block:: python
+
+   >>> pip3 install PyFiberModes
 
 
-Installing the required environment
------------------------------------
 
-### For Linux
+Manual installation
+*******************
 
-On **Ubuntu** / **Debian**, install the following packages:
-`python3`, `python3-numpy`, `python3-scipy`, `python3-pyqt4`, `python3-pyqtgraph`,
-`python3-nose`, `python3-coverage`.
+To install manually (os independent) you will need to install:
 
-On **Arch**, the required packages are:
-`python`, `python-numpy`, `python-scipy`, `python-pyqt4`, `python-nose`,
-`python-coverage`, `python-pip`.
+1. cmake (3.16+)
 
+In order to use the PyFiberModes Simulator Library, one must have installed the python dependencies:
 
-### For Windows
+Then, download and install the PyFiberModes package:
 
-I recommend to use a distribution that includes scientific Python.
-Choose a distribution that includes Python 3.4 or higher. I recommend
-using either
-[WinPython](http://winpython.github.io/) or
-[Anaconda](https://www.continuum.io/downloads).
-Follow the installation instructions, and everything should work out-of-the-box.
+.. code-block:: python
+
+    >>> git clone https://github.com/MartinPdeS/PyFiberModes.git
+    >>> cd PyFiberModes
+    >>> pip install -r requirements/requirements.txt
+    >>> pip install .
+
+----
 
 
-### For Mac OS
+Contact Information
+*******************
 
-I do not have a machine to test installation on Mac OS. However, it *should* work.
-Please fell free to share me your experience.
+As of 2021 the project is still under development if you want to collaborate it would be a pleasure. I encourage you to contact me.
 
+PyMieSim was written by `Martin Poinsinet de Sivry-Houle <https://github.com/MartinPdS>`_  .
 
-*Simple* installation
----------------------
-
-This is not the recommended way. You should consider *development* installation
-instead. However, this is the simplest installation, as it does not require `git`.
-
-1. Download the [ZIP archive from GitHub](https://github.com/cbrunet/fibermodes).
-2. Unzip it!
-3. On a command line, go inside the `fibermodes` directory.
-4. Run `python setup.py install`
-
-The command on line 4 may vary.
-For instance, it should be `sudo python3 setup.py install` on Ubuntu / Debian.
+Email:`martin.poinsinet-de-sivry@polymtl.ca <mailto:martin.poinsinet-de-sivry@polymtl.ca?subject=PyFiberModes>`_ .
 
 
-Development installation
-------------------------
+.. |python| image:: https://img.shields.io/badge/Made%20with-Python-1f425f.svg
+   :target: https://www.python.org/
 
-The first step is to install `git`. For Linux, the package should be called `git`.
-For Windows, it is a little more complicated. I recommend using
-[Git for Windows](https://git-for-windows.github.io/). Follow the installation
-instructions from their page.
-You could also install [GitHub Desktop](https://desktop.github.com/) instead.
+.. |docs| image:: https://readthedocs.org/projects/pyfibermodes/badge/?version=latest
+   :target: https://pyfibermodes.readthedocs.io/en/latest/
+   :alt: Documentation Status
 
-The second step is to create a GitHub account, if you do not already have one.
-Then you should configure you machine with ssh keys, and configure your name
-and email for git.
+.. |Citation| image:: https://zenodo.org/badge/366930899.svg
+   :target: https://zenodo.org/badge/latestdoi/366930899
 
-The third step is to fork and clone the
-[fibermodes repository](https://github.com/cbrunet/fibermodes).
-I recommend forking it first, as it will allow you to commit your changes
-on GitHub, and to suggest pull requests.
+.. |Unittest| image:: https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/MartinPdeS/2cac8ebb51cd9ce07dc7a955648301d5/raw/d75a89f19acc11302d81dacefe5be207beee24a8/PyFiberModes_coverage_badge.json
 
-Then you should install the software in `develop` mode. This is similar
-to `install`, but it uses links instead of moving the files. Therefore, you
-do not need to reinstall each time you pull changes from GitHub.
-The command is: `python setup.py develop`. You may need to use `python3`
-instead of `python` if you are on Ubuntu / Debian, and you may need to use
-`sudo` to run this command.
+.. |PyPi| image:: https://badge.fury.io/py/PyFiberModes.svg
+   :target: https://pypi.org/project/PyFiberModes/
 
+.. |PyPi_download| image:: https://img.shields.io/pypi/dm/PyFiberModes.svg
+   :target: https://pypi.org/project/PyFiberModes/
 
-Running tests
--------------
-
-To ensure you have all the required dependencies to run tests, you can
-do, from the `fibermodes` directory: `pip install .[test]`.
-
-Then, you can either run `nosetests` or `python setup.py nosetests`.
-
-
-Building documentation
-----------------------
-
-You need sphinx (and probably a few dependencies to be documented).
-
-``
-python setup.py build_sphinx
-``
-
-Documentation is generated under `doc/_build/html`.
 
 
