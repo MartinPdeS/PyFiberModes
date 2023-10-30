@@ -1,4 +1,4 @@
-from fibermodes.material import Silica, Germania, Air
+from PyFiberModes.material import Silica, Germania, Air
 import numpy
 from matplotlib import pyplot
 

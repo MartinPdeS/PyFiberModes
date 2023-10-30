@@ -12,7 +12,7 @@ if __name__ == '__main__':
     from matplotlib import pyplot
     import numpy
 
-    from fibermodes import fixedFiber, Wavelength
+    from PyFiberModes import fixedFiber, Wavelength
 
     wl = Wavelength(1550e-9)
     n = numpy.array([1.4444, 1.4489, 1.4474])

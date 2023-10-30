@@ -1,4 +1,4 @@
-from fibermodes import Wavelength, fixedFiber, HE11
+from PyFiberModes import Wavelength, fixedFiber, HE11
 import numpy
 from matplotlib import pyplot
 
@@ -16,6 +16,5 @@ if __name__ == '__main__':
 
     pyplot.plot(neff[1:-1], x[1:-1])
     # pyplot.ylim((-1e5, 1e5))
-
 
     pyplot.show()

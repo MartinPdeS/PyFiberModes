@@ -4,8 +4,8 @@ Updated: 2015-10-15
 
 """
 
-from fibermodes.fiber.material import SiO2GeO2, Silica, Germania
-from fibermodes.fiber.material.sio2geo2cm import SiO2GeO2 as SiO2GeO2CM
+from PyFiberModes.fiber.material import SiO2GeO2, Silica, Germania
+from PyFiberModes.fiber.material.sio2geo2cm import SiO2GeO2 as SiO2GeO2CM
 import numpy
 from matplotlib import pyplot
 

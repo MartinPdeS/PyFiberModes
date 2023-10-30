@@ -1,4 +1,4 @@
-from fibermodes import FiberFactory, Wavelength, Mode, ModeFamily
+from PyFiberModes import FiberFactory, Wavelength, Mode, ModeFamily
 from matplotlib import pyplot
 from matplotlib.patches import Circle
 import numpy
@@ -11,7 +11,7 @@ def fromVDelta(V, Delta, wl):
     params(3.9, 0.26, wl)  # Bures 3.25
 
     """
-    nco = numpy.sqrt(1.444**2 / (1 - Delta*2))
+    nco = numpy.sqrt(1.444**2 / (1 - Delta * 2))
     rho = V / wl.k0 / numpy.sqrt(nco**2 - 1.444**2)
 
     f = FiberFactory()
@@ -99,7 +99,7 @@ def plotExProfile(fiber, mode, wl, r=10e-6, np=101):
     ax = fig.add_subplot(1, 1, 1)
     ax.set_title(str(mode))
     ax.set_xlabel("r (µm)")
-    ax.plot(R*1e6, E[:, 0], label="Ex")
+    ax.plot(R * 1e6, E[:, 0], label="Ex")
     plotLayers(ax)
 
 
@@ -119,21 +119,21 @@ def plotEHProfile(fiber, mode, wl, r=10e-6, np=101):
     ax = fig.add_subplot(2, 1, 1)
     ax.set_title(str(mode))
     ax.set_xlabel("r (µm)")
-    ax.plot(R*1e6, E[:, 0], label="Er")
-    ax.plot(R*1e6, E[:, 1], label="Ephi")
-    ax.plot(R*1e6, E[:, 2], label="Ez")
+    ax.plot(R * 1e6, E[:, 0], label="Er")
+    ax.plot(R * 1e6, E[:, 1], label="Ephi")
+    ax.plot(R * 1e6, E[:, 2], label="Ez")
     ax.legend()
-    ax.set_xlim((-r*1e6, r*1e6))
+    ax.set_xlim((-r * 1e6, r * 1e6))
     plotLayers(ax)
     # H
     ax = fig.add_subplot(2, 1, 2)
     ax.set_title(str(mode))
     ax.set_xlabel("r (µm)")
-    ax.plot(R*1e6, H[:, 0], label="Hr")
-    ax.plot(R*1e6, H[:, 1], label="Hphi")
-    ax.plot(R*1e6, H[:, 2], label="Hz")
+    ax.plot(R * 1e6, H[:, 0], label="Hr")
+    ax.plot(R * 1e6, H[:, 1], label="Hphi")
+    ax.plot(R * 1e6, H[:, 2], label="Hz")
     ax.legend()
-    ax.set_xlim((-r*1e6, r*1e6))
+    ax.set_xlim((-r * 1e6, r * 1e6))
     plotLayers(ax)
 
 
@@ -157,7 +157,7 @@ def Alberto():
         print(str(mode))
         fields = fiber.field(mode, wl, R, np=NP)
 
-        Er = numpy.zeros(((NP-1)//2+1, 3))
+        Er = numpy.zeros(((NP - 1) // 2 + 1, 3))
         Hr = numpy.zeros(Er.shape)
         for i, r in enumerate(numpy.linspace(0, R, Er.shape[0])):
             Er[i, :], Hr[i, :] = fiber._rfield(mode, wl, r)
