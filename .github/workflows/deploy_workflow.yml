@@ -26,7 +26,7 @@ jobs:
             with:
                 package-name: PyFiberModes
                 python-version: "3.10"
-                auth: ${{ secrets.MPdS_gist_token }}
+                auth: ${{ secrets.GIST_TOKEN }}
                 gistID: a0f72417f310bf9f071afd845a328cd2
 
     publish_documentation:
