@@ -1,1 +1,2 @@
-return 1
+def test_dummy():
+    return 1
