@@ -6,7 +6,6 @@ dist/
 *.npy
 *.npz
 _build/
-fibermodes.sublime-workspace
 scripts/*.tex
 *.tab
 *.zip

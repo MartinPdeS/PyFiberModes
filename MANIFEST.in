@@ -1,8 +1,6 @@
-recursive-include fibermodesgui/icons *
 recursive-include tests *
-recursive-include doc *.rst
-include doc/Makefile
-include doc/conf.py
+recursive-include docs *
+recursive-include PyFiberModes *
 global-exclude *.pyc
 include LICENSE.txt
 include README.md
