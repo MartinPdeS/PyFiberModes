@@ -1,21 +1,3 @@
-# This file is part of FiberModes.
-#
-# FiberModes is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# FiberModes is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with FiberModes.  If not, see <http://www.gnu.org/licenses/>.
-
-
-"""Miscellaneous mathematical functions."""
-
 from math import factorial
 
 # A[(k, m, i)]
@@ -133,5 +115,5 @@ def derivative(f, x, k, m, j, h, *args):
         *args: other function arguments
 
     """
-    C = factorial(k) / (factorial(m-1) * h**k)
-    return C * sum(A[(k, m, j)][i] * f(x + (i-j) * h, *args) for i in range(m))
+    C = factorial(k) / (factorial(m - 1) * h**k)
+    return C * sum(A[(k, m, j)][i] * f(x + (i - j) * h, *args) for i in range(m))

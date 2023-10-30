@@ -1,39 +1,46 @@
-'''
-Created on 2014-05-06
-
-@author: cbrunet
-'''
-
-import sys
-sys.path.insert(0, '..')
+from PyFiberModes import FiberFactory, HE11, HE12, LP01, LP02, Wavelength
+from PyFiberModes.field import Field
+from MPSPlots.render2D import SceneList
 
 if __name__ == '__main__':
+    factory = FiberFactory()
 
-    from matplotlib import pyplot
-    import numpy
+    factory.addLayer(
+        name='core',
+        radius=4.5e-6,
+        index=1.4489
+    )
 
-    from PyFiberModes import fixedFiber, Wavelength, Mode
+    factory.addLayer(
+        name='clad',
+        radius=62.5e-6,
+        index=1.4440
+    )
 
-    n2 = 1.457420
-    n1 = 1.462420
-    rho = 8.335e-6
-    wl = Wavelength(0.6328e-6)
+    # factory.addLayer(
+    #     name='air',
+    #     radius=1e-6,
+    #     index=1.0001
+    # )
 
-    fiber = fixedFiber(wl, [rho], [n1, n2])
-    modes = fiber.lpModes(delta=1e-4)
+    fiber = factory[0]
 
-    neff = numpy.linspace(n2, n1, 100)
-    ceq = numpy.zeros(neff.size)
-    for m in (Mode('LP', 3, 1), Mode('LP', 4, 1)):
-        for i in range(neff.size):
-            ceq[i] = fiber._ceq(m)(neff[i], m)
-        pyplot.plot(neff, ceq, label=str(m))
+    figure = SceneList(unit_size=(4, 4))
 
-    lpmodes = fiber.lpModes(delta=1e-5)
-    for m in lpmodes:
-        if str(m) == 'LP(3,1)':
-            print(m, m.neff)
-            pyplot.axvline(m.neff, ls='--')
+    for mode in [HE11, LP01]:
+        field = Field(
+            fiber=fiber,
+            mode=mode,
+            wavelength=1550e-9,
+            limit=100e-6
+        )
 
-    pyplot.legend()
-    pyplot.show()
+        ex = field.Ex()
+
+        ax = figure.append_ax(title=f'{mode}')
+
+        ax.add_mesh(
+            scalar=ex
+        )
+
+    figure.show()

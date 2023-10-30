@@ -18,3 +18,4 @@ scripts/*.tex
 *.dat
 *.data
 .coverage
+*.DS_Store

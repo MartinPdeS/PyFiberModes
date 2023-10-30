@@ -1,21 +1,3 @@
-# This file is part of FiberModes.
-#
-# FiberModes is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# FiberModes is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with FiberModes.  If not, see <http://www.gnu.org/licenses/>.
-
-
-"""Fiber mode representations, and utility functions."""
-
 from enum import Enum
 from colorsys import hsv_to_rgb
 from collections import namedtuple
@@ -27,8 +9,8 @@ Family = Enum('Family', 'LP HE EH TE TM', module=__name__)
 
 
 class Mode(namedtuple('Mode', 'family nu m')):
-
-    """Fiber mode representation.
+    """
+    Fiber mode representation.
 
     The fiber mode consists of a mode family, and two mode parameters
     (*ν* and *m*). If is derived from namedtuple. Therefore, it is
@@ -142,11 +124,11 @@ class Mode(namedtuple('Mode', 'family nu m')):
         Returns:
             (r, g, b) tuple (0 .. 255)
         """
-        nu = self.nu-1 if self.family in (Family.EH, Family.HE) else self.nu
-        nu %= nn+1
+        nu = self.nu - 1 if self.family in (Family.EH, Family.HE) else self.nu
+        nu %= nn + 1
 
-        hd = {Family.LP: 2/3, Family.HE: 2/3, Family.EH: 1,
-              Family.TE: 1/3, Family.TM: 1/6}
+        hd = {Family.LP: 2 / 3, Family.HE: 2 / 3, Family.EH: 1,
+              Family.TE: 1 / 3, Family.TM: 1 / 6}
         h = hd[self.family]
 
         if self.family in (Family.TE, Family.TM):
@@ -163,24 +145,18 @@ class Mode(namedtuple('Mode', 'family nu m')):
 
         # print(str(self), (h, s, v), (r, g, b))
         if asint:
-            return (round(r*255), round(g*255), round(b*255))
+            return (round(r * 255), round(g * 255), round(b * 255))
         else:
             return (r, g, b)
 
+
 #: Predefined HE(1,1) mode
 HE11 = Mode(Family.HE, 1, 1)
+HE12 = Mode(Family.HE, 1, 2)
 
 #: Predefined LP(0,1) mode
 LP01 = Mode(Family.LP, 0, 1)
+LP11 = Mode(Family.LP, 1, 1)
+LP02 = Mode(Family.LP, 0, 2)
 
-
-if __name__ == '__main__':
-    m = HE11
-    print(m)
-    print(repr(m))
-
-    def f():
-        a = HE11
-        return a
-
-    print(f())
+# -

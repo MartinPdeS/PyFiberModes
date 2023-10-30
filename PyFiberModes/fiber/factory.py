@@ -430,13 +430,13 @@ class FiberFactory(object):
             mp[i] = tuple(mp[i])
 
         # Remove unneeded layers
-        i = len(m)-2
+        i = len(m) - 2
         while i >= 0 and len(m) > 1:
             if (r[i] == 0 or
-                    (i > 0 and r[i] <= r[i-1]) or
-                    (f[i] == f[i+1] == 'StepIndex' and
-                     m[i] == m[i+1] and
-                     mp[i] == mp[i+1])):
+                    (i > 0 and r[i] <= r[i - 1]) or
+                    (f[i] == f[i + 1] == 'StepIndex' and
+                     m[i] == m[i + 1] and
+                     mp[i] == mp[i + 1])):
                 del r[i]
                 del f[i]
                 del fp[i]

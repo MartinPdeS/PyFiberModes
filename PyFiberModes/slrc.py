@@ -1,26 +1,3 @@
-# This file is part of FiberModes.
-#
-# FiberModes is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# FiberModes is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with FiberModes.  If not, see <http://www.gnu.org/licenses/>.
-
-
-"""Scalar, list, range or code object.
-
-This is a convenient object used to encapsulate a parameter that can
-be either a scalar (float), a list of floats, a range, or a function (code).
-
-"""
-
 import math
 import logging
 import numpy
@@ -111,7 +88,7 @@ class SLRC(object):
             high = self._value['end']
             n = self._value['num']
             if n > 1:
-                return [low + index*(high-low)/(n-1) for index in range(n)]
+                return [low + index * (high - low) / (n - 1) for index in range(n)]
             elif n == 1:
                 return [low]
             else:
@@ -165,7 +142,7 @@ class SLRC(object):
             low = self._value['start']
             high = self._value['end']
             n = self._value['num']
-            return low + index*(high-low)/(n-1) if n > 1 else low
+            return low + index * (high - low) / (n - 1) if n > 1 else low
         else:
             return self.value
 
@@ -256,7 +233,7 @@ class SLRC(object):
                 if n == 1:
                     self._value = [low]
                 else:
-                    self._value = [low + index*(high-low)/(n-1)
+                    self._value = [low + index * (high - low) / (n - 1)
                                    for index in range(n)]
             else:
                 self._value = [0]
