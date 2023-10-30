@@ -123,6 +123,7 @@ class FiberFactory(object):
         if filename:
             with open(filename, 'r') as f:
                 self.load(f)
+
         self._Neff = None
         self._Cutoff = None
 
@@ -375,19 +376,16 @@ class FiberFactory(object):
         self._Neff = Neff
 
     def _buildFiber(self, indexes):
-        """Build Fiber object from list of indexes"""
+        """
+        Build Fiber object from list of indexes
+        """
 
-        r = []
-        f = []
-        fp = []
-        m = []
-        mp = []
-        names = []
+        r, f, fp, m, mp, names = [], [], [], [], [], []
 
         # Get parameters for selected fiber
         ii = 0
         for i, layer in enumerate(self._fibers["layers"], 1):
-            name = layer["name"] if layer["name"] else "layer {}".format(i+1)
+            name = layer["name"] if layer["name"] else f"layer {i + 1}"
             names.append(name)
 
             if i < len(self._fibers["layers"]):

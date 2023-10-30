@@ -47,7 +47,7 @@ class Field(object):
         """
         return numpy.cos(self.mode.nu * self.phi_mesh + phi0)
 
-    def g(self, phi0) -> numpy.ndarray:
+    def g(self, phi0: float) -> numpy.ndarray:
         """Azimuthal dependency function.
 
         Args:
@@ -59,7 +59,7 @@ class Field(object):
         """
         return -numpy.sin(self.mode.nu * self.phi_mesh + phi0)
 
-    def Ex(self, phi=0, theta=0) -> numpy.ndarray:
+    def Ex(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
         """x component of the E field.
 
         Args:
@@ -80,7 +80,7 @@ class Field(object):
         else:
             return self.Et(phi, theta) * numpy.cos(self.Epol(phi, theta))
 
-    def Ey(self, phi=0, theta=0) -> numpy.ndarray:
+    def Ey(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
         """y component of the E field.
 
         Args:
@@ -101,7 +101,7 @@ class Field(object):
         else:
             return self.Et(phi, theta) * numpy.sin(self.Epol(phi, theta))
 
-    def Ez(self, phi=0, theta=0) -> numpy.ndarray:
+    def Ez(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
         """z component of the E field.
 
         Args:
@@ -119,7 +119,7 @@ class Field(object):
             self._Ez[j, i] = er[2] * f[j, i]
         return self._Ez
 
-    def Er(self, phi=0, theta=0) -> numpy.ndarray:
+    def Er(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
         """r component of the E field.
 
         Args:
@@ -140,7 +140,7 @@ class Field(object):
                 self._Er[j, i] = er[0] * f[j, i]
             return self._Er
 
-    def Ephi(self, phi=0, theta=0) -> numpy.ndarray:
+    def Ephi(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
         """phi component of the E field.
 
         Args:
@@ -161,7 +161,7 @@ class Field(object):
                 self._Ephi[j, i] = er[1] * g[j, i]
             return self._Ephi
 
-    def Et(self, phi=0, theta=0) -> numpy.ndarray:
+    def Et(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
         """transverse component of the E field.
 
         Args:
@@ -187,7 +187,7 @@ class Field(object):
 
         return e_transverse
 
-    def Epol(self, phi=0, theta=0) -> numpy.ndarray:
+    def Epol(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
         """polarization of the transverse E field (in radians).
 
         Args:
@@ -209,7 +209,7 @@ class Field(object):
 
         return e_polarization
 
-    def Emod(self, phi=0, theta=0) -> numpy.ndarray:
+    def Emod(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
         """modulus of the E field.
 
         Args:
@@ -237,7 +237,7 @@ class Field(object):
 
         return e_modulus
 
-    def Hx(self, phi=0, theta=0) -> numpy.ndarray:
+    def Hx(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
         """x component of the H field.
 
         Args:
@@ -258,7 +258,7 @@ class Field(object):
         else:
             return self.Ht(phi, theta) * numpy.cos(self.Hpol(phi, theta))
 
-    def Hy(self, phi=0, theta=0) -> numpy.ndarray:
+    def Hy(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
         """y component of the H field.
 
         Args:
@@ -279,7 +279,7 @@ class Field(object):
         else:
             return self.Ht(phi, theta) * numpy.sin(self.Hpol(phi, theta))
 
-    def Hz(self, phi=0, theta=0) -> numpy.ndarray:
+    def Hz(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
         """z component of the H field.
 
         Args:
@@ -297,7 +297,7 @@ class Field(object):
             self._Hz[j, i] = hr[2] * f[j, i]
         return self._Hz
 
-    def Hr(self, phi=0, theta=0) -> numpy.ndarray:
+    def Hr(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
         """r component of the H field.
 
         Args:
@@ -321,7 +321,7 @@ class Field(object):
                 self._Hr[j, i] = hr[0] * f[j, i]
             return self._Hr
 
-    def Hphi(self, phi=0, theta=0) -> numpy.ndarray:
+    def Hphi(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
         """phi component of the H field.
 
         Args:
@@ -342,7 +342,7 @@ class Field(object):
                 self._Hphi[j, i] = hr[1] * g[j, i]
             return self._Hphi
 
-    def Ht(self, phi=0, theta=0) -> numpy.ndarray:
+    def Ht(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
         """transverse component of the H field.
 
         Args:
@@ -362,7 +362,7 @@ class Field(object):
             h_phi = self.Hphi(phi, theta)
             return numpy.sqrt(numpy.square(h_r) + numpy.square(h_phi))
 
-    def Hpol(self, phi=0, theta=0) -> numpy.ndarray:
+    def Hpol(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
         """polarization of the transverse H field (in radians).
 
         Args:
@@ -388,7 +388,7 @@ class Field(object):
 
         return h_polarization
 
-    def Hmod(self, phi=0, theta=0) -> numpy.ndarray:
+    def Hmod(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
         """modulus of the H field.
 
         Args:
