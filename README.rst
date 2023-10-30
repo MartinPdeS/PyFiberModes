@@ -3,7 +3,6 @@ PyFiberModes
 
 |python|
 |docs|
-|Citation|
 |Unittest|
 |PyPi|
 |PyPi_download|
@@ -86,9 +85,6 @@ Email:`martin.poinsinet-de-sivry@polymtl.ca <mailto:martin.poinsinet-de-sivry@po
 .. |docs| image:: https://readthedocs.org/projects/pyfibermodes/badge/?version=latest
    :target: https://pyfibermodes.readthedocs.io/en/latest/
    :alt: Documentation Status
-
-.. |Citation| image:: https://zenodo.org/badge/366930899.svg
-   :target: https://zenodo.org/badge/latestdoi/366930899
 
 .. |Unittest| image:: https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/MartinPdeS/2cac8ebb51cd9ce07dc7a955648301d5/raw/d75a89f19acc11302d81dacefe5be207beee24a8/PyFiberModes_coverage_badge.json
 
