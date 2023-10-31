@@ -9,27 +9,26 @@ from scipy.special import jvp, yvp, ivp, kvp
 
 
 class StepIndex(Geometry):
-
     DEFAULT_PARAMS = []
 
-    def index(self, r, wl):
-        if self.ri <= abs(r) <= self.ro:
-            return self._m.n(wl, *self._mp)
+    def index(self, radius: float, wavelength: float) -> float:
+        if self.ri <= abs(radius) <= self.ro:
+            return self._m.n(wavelength, *self._mp)
         else:
             return None
 
-    def get_minimum_index(self, wl):
-        return self._m.n(wl, *self._mp)
+    def get_minimum_index(self, wavelength: float) -> float:
+        return self._m.n(wavelength, *self._mp)
 
-    def get_maximum_index(self, wl):
-        return self._m.n(wl, *self._mp)
+    def get_maximum_index(self, wavelength: float) -> float:
+        return self._m.n(wavelength, *self._mp)
 
-    def u(self, r, neff, wl):
-        return wl.k0 * r * sqrt(abs(self.index(r, wl)**2 - neff**2))
+    def u(self, radius: float, neff, wavelength: float) -> float:
+        return wavelength.k0 * radius * sqrt(abs(self.index(radius, wavelength)**2 - neff**2))
 
-    def Psi(self, r, neff, wl, nu, C):
-        u = self.u(r, neff, wl)
-        if neff < self.get_maximum_index(wl):
+    def Psi(self, radius: float, neff, wavelength: float, nu, C):
+        u = self.u(radius, neff, wavelength)
+        if neff < self.get_maximum_index(wavelength):
             psi = (C[0] * jn(nu, u) + C[1] * yn(nu, u) if C[1] else
                    C[0] * jn(nu, u))
             psip = u * (C[0] * jvp(nu, u) + C[1] * yvp(nu, u) if C[1] else
@@ -40,12 +39,17 @@ class StepIndex(Geometry):
             psip = u * (C[0] * ivp(nu, u) + C[1] * kvp(nu, u) if C[1] else
                         C[0] * ivp(nu, u))
         # if numpy.isnan(psi):
-        #     print(neff, self.get_maximum_index(wl), C, r)
+        #     print(neff, self.get_maximum_index(wavelength), C, r)
         return psi, psip
 
-    def lpConstants(self, r, neff, wl, nu, A):
-        u = self.u(r, neff, wl)
-        if neff < self.get_maximum_index(wl):
+    def lpConstants(self, radius: float, neff, wavelength: float, nu, A):
+        u = self.u(
+            radius=radius,
+            neff=neff,
+            wavelength=wavelength
+        )
+
+        if neff < self.get_maximum_index(wavelength):
             W = constants.pi / 2
             return (W * (u * yvp(nu, u) * A[0] - yn(nu, u) * A[1]),
                     W * (jn(nu, u) * A[1] - u * jvp(nu, u) * A[0]))
@@ -53,14 +57,19 @@ class StepIndex(Geometry):
             return ((u * kvp(nu, u) * A[0] - kn(nu, u) * A[1]),
                     (iv(nu, u) * A[1] - u * ivp(nu, u) * A[0]))
 
-    def EH_fields(self, ri, ro, nu, neff, wl, EH, tm=True):
+    def EH_fields(self, ri, ro, nu, neff, wavelength: float, EH, tm=True):
         """
 
         modify EH in-place (for speed)
 
         """
-        n = self.get_maximum_index(wl)
-        u = self.u(ro, neff, wl)
+        maximum_index = self.get_maximum_index(wavelength=wavelength)
+
+        u = self.u(
+            radius=ro,
+            neff=neff,
+            wavelength=wavelength
+        )
 
         if ri == 0:
             if nu == 0:
@@ -75,23 +84,23 @@ class StepIndex(Geometry):
         elif nu == 0:
             self.C = numpy.zeros(4)
             if tm:
-                c = constants.Y0 * n * n
+                c = constants.Y0 * maximum_index**2
                 idx = (0, 3)
-                self.C[:2] = self.tetmConstants(ri, ro, neff, wl, EH, c, idx)
+                self.C[:2] = self.tetmConstants(ri, ro, neff, wavelength, EH, c, idx)
             else:
                 c = -constants.eta0
                 idx = (1, 2)
-                self.C[2:] = self.tetmConstants(ri, ro, neff, wl, EH, c, idx)
+                self.C[2:] = self.tetmConstants(ri, ro, neff, wavelength, EH, c, idx)
         else:
-            self.C = self.vConstants(ri, ro, neff, wl, nu, EH)
+            self.C = self.vConstants(ri, ro, neff, wavelength, nu, EH)
 
         # Compute EH fields
-        if neff < n:
-            c1 = wl.k0 * ro / u
+        if neff < maximum_index:
+            c1 = wavelength.k0 * ro / u
             F3 = jvp(nu, u) / jn(nu, u)
             F4 = yvp(nu, u) / yn(nu, u)
         else:
-            c1 = -wl.k0 * ro / u
+            c1 = -wavelength.k0 * ro / u
             F3 = ivp(nu, u) / iv(nu, u)
             F4 = kvp(nu, u) / kn(nu, u)
 
@@ -108,20 +117,31 @@ class StepIndex(Geometry):
 
         return EH
 
-    def vConstants(self, ri, ro, neff, wl, nu, EH):
+    def vConstants(self, ri: float, ro: float, neff, wavelength: float, nu, EH):
         a = numpy.zeros((4, 4))
-        n = self.get_maximum_index(wl)
-        u = self.u(ro, neff, wl)
-        urp = self.u(ri, neff, wl)
 
-        if neff < n:
+        maximum_index = self.get_maximum_index(wavelength)
+
+        u = self.u(
+            radius=ro,
+            neff=neff,
+            wavelength=wavelength
+        )
+
+        urp = self.u(
+            radius=ri,
+            neff=neff,
+            wavelength=wavelength
+        )
+
+        if neff < maximum_index:
             B1 = jn(nu, u)
             B2 = yn(nu, u)
             F1 = jn(nu, urp) / B1
             F2 = yn(nu, urp) / B2
             F3 = jvp(nu, urp) / B1
             F4 = yvp(nu, urp) / B2
-            c1 = wl.k0 * ro / u
+            c1 = wavelength.k0 * ro / u
         else:
             B1 = iv(nu, u)
             B2 = kn(nu, u)
@@ -129,7 +149,7 @@ class StepIndex(Geometry):
             F2 = kn(nu, urp) / B2
             F3 = ivp(nu, urp) / B1 if u else 1
             F4 = kvp(nu, urp) / B2
-            c1 = -wl.k0 * ro / u
+            c1 = -wavelength.k0 * ro / u
         c2 = neff * nu / urp * c1
         c3 = constants.eta0 * c1
         c4 = constants.Y0 * n * n * c1
@@ -149,20 +169,31 @@ class StepIndex(Geometry):
 
         return numpy.linalg.solve(a, EH)
 
-    def tetmConstants(self, ri, ro, neff, wl, EH, c, idx):
+    def tetmConstants(self, ri: float, ro: float, neff, wavelength: float, EH, c, idx):
         a = numpy.empty((2, 2))
-        n = self.get_maximum_index(wl)
-        u = self.u(ro, neff, wl)
-        urp = self.u(ri, neff, wl)
 
-        if neff < n:
+        maximum_index = self.get_maximum_index(wavelength)
+
+        u = self.u(
+            radius=ro,
+            neff=neff,
+            wavelength=wavelength
+        )
+
+        urp = self.u(
+            radius=ri,
+            neff=neff,
+            wavelength=wavelength
+        )
+
+        if neff < maximum_index:
             B1 = j0(u)
             B2 = y0(u)
             F1 = j0(urp) / B1
             F2 = y0(urp) / B2
             F3 = -j1(urp) / B1
             F4 = -y1(urp) / B2
-            c1 = wl.k0 * ro / u
+            c1 = wavelength.k0 * ro / u
         else:
             B1 = i0(u)
             B2 = k0(u)
@@ -170,7 +201,7 @@ class StepIndex(Geometry):
             F2 = k0(urp) / B2
             F3 = i1(urp) / B1
             F4 = -k1(urp) / B2
-            c1 = -wl.k0 * ro / u
+            c1 = -wavelength.k0 * ro / u
         c3 = c * c1
 
         a[0, 0] = F1

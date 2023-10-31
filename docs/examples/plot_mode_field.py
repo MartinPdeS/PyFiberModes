@@ -41,13 +41,10 @@ for mode in [HE11, HE12, HE22]:
     )
 
     e_x = field.Ex()
-    print(e_x)
 
     ax = figure.append_ax(title=mode)
 
-    ax.add_mesh(
-        scalar=e_x,
-    )
+    ax.add_mesh(scalar=e_x)
 
 figure.show()
 
