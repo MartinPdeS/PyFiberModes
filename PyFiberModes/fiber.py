@@ -513,12 +513,12 @@ class Fiber(object):
 
         match mode.family:
             case ModeFamily.LP:
-                return self._neff._lpfield(wavelength, mode.nu, neff, radius)
+                return self._neff.get_LP_field(**kwargs)
             case ModeFamily.TE:
-                return self._neff._tefield(wavelength, mode.nu, neff, radius)
+                return self._neff.get_TE_field(**kwargs)
             case ModeFamily.TM:
-                return self._neff._tmfield(wavelength, mode.nu, neff, radius)
+                return self._neff.get_TM_field(**kwargs)
             case ModeFamily.EH:
-                return self._neff._ehfield(wavelength, mode.nu, neff, radius)
+                return self._neff.get_EH_field(**kwargs)
             case ModeFamily.HE:
-                return self._neff._hefield(wavelength, mode.nu, neff, radius)
+                return self._neff.get_HE_field(**kwargs)

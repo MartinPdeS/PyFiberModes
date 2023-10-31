@@ -77,13 +77,14 @@ class FiberSolver(object):
         self.logger.info(f"maxiter reached ({maxiter}, {lowbound}, {highbound})")
         return float("nan")
 
-    def _findBetween(self, fct, lowbound, highbound, args=(), maxj=15):
+    def _findBetween(self, fct, lowbound: float, highbound: float, args=(), max_iteration: int = 15):
         fct = self.__record(fct)  # For debug purpose.
         v = [lowbound, highbound]
+
         s = [fct(lowbound, *args), fct(highbound, *args)]
 
         for j in count():  # probably not needed...
-            if j == maxj:
+            if j == max_iteration:
                 self.logger.warning("_findBetween: max iter reached")
                 return float("nan")
             for i in range(len(s) - 1):
