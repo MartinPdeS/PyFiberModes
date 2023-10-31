@@ -329,7 +329,9 @@ class Fiber(object):
             self.beta, omega, p, m, j, h, mode, 0, delta, lowbound)
 
     def b(self, mode, wavelength: float, delta=1e-6, lowbound=None):
-        """Normalized propagation constant"""
+        """
+        Normalized propagation constant
+        """
         neff = self.neff(mode, wavelength, delta, lowbound)
         nmax = max(layer.get_maximum_index(wavelength) for layer in self.layers)
         ncl = self.get_minimum_index(-1, wavelength)
@@ -344,8 +346,9 @@ class Fiber(object):
                          mode, 1, delta, lowbound) * constants.c
 
     def vg(self, mode, wavelength: float, delta: float = 1e-6, lowbound=None):
-        return 1 / self.beta(
-            Wavelength(wavelength).omega, mode, 1, delta, lowbound)
+        wavelength = Wavelength(wavelength)
+        beta = self.beta(wavelength.omega, mode, 1, delta, lowbound)
+        return 1 / beta
 
     def D(self, mode, wavelength: float, delta: float = 1e-6, lowbound=None):
         wavelength = Wavelength(wavelength)
@@ -357,15 +360,33 @@ class Fiber(object):
         beta = self.beta(wavelength.omega, mode, 3, delta, lowbound)
         return (beta * (2 * pi * constants.c / wavelength**2)**2 * 1e-3)
 
-    def findVmodes(self, wavelength: float, numax=None, mmax=None, delta=1e-6):
+    def get_vectorial_modes(self, wavelength: float, numax=None, mmax=None, delta=1e-6):
         families = (ModeFamily.HE, ModeFamily.EH, ModeFamily.TE, ModeFamily.TM)
-        return self.findModes(families, wavelength, numax, mmax, delta)
 
-    def findLPmodes(self, wavelength: float, ellmax=None, mmax=None, delta=1e-6):
+        modes = self.get_modes_from_familly(
+            families=families,
+            wavelength=wavelength,
+            numax=numax,
+            mmax=mmax,
+            delta=delta
+        )
+
+        return modes
+
+    def get_LP_modes(self, wavelength: float, ellmax=None, mmax=None, delta=1e-6):
         families = (ModeFamily.LP,)
-        return self.findModes(families, wavelength, ellmax, mmax, delta)
 
-    def findModes(self, families, wavelength: float, numax=None, mmax=None, delta: float = 1e-6):
+        modes = self.get_modes_from_familly(
+            families=families,
+            wavelength=wavelength,
+            ellmax=ellmax,
+            mmax=mmax,
+            delta=delta
+        )
+
+        return modes
+
+    def get_modes_from_familly(self, families, wavelength: float, numax=None, mmax=None, delta: float = 1e-6):
         """
         Find all modes of given families, within given constraints
 
