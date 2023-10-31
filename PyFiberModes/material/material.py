@@ -1,24 +1,3 @@
-# This file is part of FiberModes.
-#
-# FiberModes is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# FiberModes is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with FiberModes.  If not, see <http://www.gnu.org/licenses/>.
-
-"""Module for fiber materials.
-
-A material gives a refractive index, as function of the wavelength.
-
-"""
-
 from scipy.optimize import brentq
 import warnings
 
@@ -50,25 +29,23 @@ class Material(object):
     WLRANGE = None  # Acceptable range for the wavelength
 
     @classmethod
-    def _testRange(cls, wl):
+    def _testRange(cls, wavelength: float):
         if cls.WLRANGE is None:
             return
-        if cls.WLRANGE[0] <= wl <= cls.WLRANGE[1]:
+        if cls.WLRANGE[0] <= wavelength <= cls.WLRANGE[1]:
             return
 
-        msg = ("Wavelength {} out of supported range for material {}. "
-               "Wavelength should be in the range {} - {}. "
-               "Results could be innacurate.").format(
-            str(wl),
-            cls.name,
-            cls.WLRANGE[0],
-            cls.WLRANGE[1])
+        msg = f"""Wavelength {wavelength} out of supported range for material {cls.name}. 
+        Wavelength should be in the range {cls.WLRANGE[0]} - {cls.WLRANGE[1]}.
+        Results could be innacurate."""
+
         warnings.warn(msg, OutOfRangeWarning)
 
     @classmethod
-    def n(cls, wl, *args, **kwargs):
+    def n(cls, wavelength: float, *args, **kwargs):
         raise NotImplementedError(
-            "This method must be implemented in derived class.")
+            "This method must be implemented in derived class."
+        )
 
     @classmethod
     def wlFromN(cls, n, *args, **kwargs):
@@ -77,13 +54,13 @@ class Material(object):
 
         if cls.WLRANGE is None:
             raise NotImplementedError(
-                "This method only works if WLRANGE is defined")
+                "This method only works if WLRANGE is defined"
+            )
 
         a = f(cls.WLRANGE[0])
         b = f(cls.WLRANGE[1])
-        if a*b > 0:
-            warnings.warn("Index {} out of range.".format(n),
-                          OutOfRangeWarning)
+        if a * b > 0:
+            warnings.warn(f"Index {n} out of range.", OutOfRangeWarning)
             return None
 
         return brentq(f, cls.WLRANGE[0], cls.WLRANGE[1])
@@ -98,10 +75,4 @@ class Material(object):
 
     @classmethod
     def __repr__(cls):
-        return "{}()".format(cls.__name__)
-
-
-if __name__ == '__main__':
-    m = Material()
-    print(m)
-    print(repr(m))
+        return f"{cls.__name__}()"

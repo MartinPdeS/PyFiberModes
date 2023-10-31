@@ -5,7 +5,7 @@ Source code structures
 
 Fiber
 -----
- .. automodule:: PyFiberModes.fiber.Fiber
+ .. automodule:: PyFiberModes.fiber
      :members:
      :inherited-members:
      :member-order: bysource
@@ -14,7 +14,7 @@ Fiber
 
 Field
 -----
- .. automodule:: PyFiberModes.field.Field
+ .. automodule:: PyFiberModes.field
      :members:
      :inherited-members:
      :member-order: bysource
