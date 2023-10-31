@@ -1,18 +1,3 @@
-# This file is part of FiberModes.
-#
-# FiberModes is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# FiberModes is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with FiberModes.  If not, see <http://www.gnu.org/licenses/>.
-
 from .solver import FiberSolver
 from PyFiberModes import Mode, ModeFamily
 from math import sqrt, isnan, isinf
@@ -23,8 +8,9 @@ import logging
 
 
 class Cutoff(FiberSolver):
-
-    """Cutoff for standard step-index fiber."""
+    """
+    Cutoff for standard step-index fiber.
+    """
 
     logger = logging.getLogger(__name__)
 
@@ -47,8 +33,8 @@ class Cutoff(FiberSolver):
         return jn_zeros(nu, m)[m - 1]
 
     def _cutoffHE(self, V0, nu):
-        wl = self.fiber.V0_to_wavelength(V0)
-        n02 = self.fiber.get_maximum_index(0, wl)**2 / self.fiber.get_minimum_index(1, wl)**2
+        wavelength = self.fiber.V0_to_wavelength(V0)
+        n02 = self.fiber.get_maximum_index(0, wavelength)**2 / self.fiber.get_minimum_index(1, wavelength)**2
         return (1 + n02) * jn(nu - 2, V0) - (1 - n02) * jn(nu, V0)
 
     def _findHEcutoff(self, mode):
@@ -79,19 +65,20 @@ class Cutoff(FiberSolver):
 
 
 class Neff(FiberSolver):
+    """
+    Effective index for standard step-index fiber
+    """
 
-    """neff for standard step-index fiber"""
-
-    def __call__(self, wl, mode, delta, lowbound):
+    def __call__(self, wavelength: float, mode, delta, lowbound):
         epsilon = 1e-12
 
         co = self.fiber.cutoff(mode)
-        if self.fiber.V0(wl) < co:
+        if self.fiber.get_V0(wavelength=wavelength) < co:
             return float("nan")
 
-        nco = self.fiber.get_maximum_index(0, wl)
+        nco = self.fiber.get_maximum_index(0, wavelength)
         r = self.fiber.get_outer_radius(0)
-        highbound = sqrt(nco**2 - (co / (r * wl.k0))**2) - epsilon
+        highbound = sqrt(nco**2 - (co / (r * wavelength.k0))**2) - epsilon
 
         if mode.family is ModeFamily.LP:
             nm = Mode(ModeFamily.LP, mode.nu + 1, mode.m)
@@ -103,8 +90,8 @@ class Neff(FiberSolver):
             nm = Mode(ModeFamily.LP, 1, mode.m + 1)
         co = self.fiber.cutoff(nm)
         try:
-            lowbound = max(sqrt(nco**2 - (co / (r * wl.k0))**2) + epsilon,
-                           self.fiber.get_minimum_index(-1, wl) + epsilon)
+            lowbound = max(sqrt(nco**2 - (co / (r * wavelength.k0))**2) + epsilon,
+                           self.fiber.get_minimum_index(-1, wavelength) + epsilon)
         except ValueError:
             lowbound = nco
 
@@ -116,13 +103,13 @@ class Neff(FiberSolver):
                }
 
         return self._findBetween(fct[mode.family], lowbound, highbound,
-                                 args=(wl, mode.nu))
+                                 args=(wavelength, mode.nu))
 
-    def _lpfield(self, wl, nu, neff, r):
+    def _lpfield(self, wavelength, nu, neff, r):
         rho = self.fiber.get_outer_radius(0)
-        k = wl.k0
-        nco2 = self.fiber.get_maximum_index(0, wl)**2
-        ncl2 = self.fiber.get_minimum_index(1, wl)**2
+        k = wavelength.k0
+        nco2 = self.fiber.get_maximum_index(0, wavelength)**2
+        ncl2 = self.fiber.get_minimum_index(1, wavelength)**2
         u = rho * k * sqrt(nco2 - neff**2)
         w = rho * k * sqrt(neff**2 - ncl2)
 
@@ -134,11 +121,11 @@ class Neff(FiberSolver):
 
         return numpy.array((ex, 0, 0)), numpy.array((0, hy, 0))
 
-    def _tefield(self, wl, nu, neff, r):
+    def _tefield(self, wavelength, nu, neff, r):
         rho = self.fiber.get_outer_radius(0)
-        k = wl.k0
-        nco2 = self.fiber.get_maximum_index(0, wl)**2
-        ncl2 = self.fiber.get_minimum_index(1, wl)**2
+        k = wavelength.k0
+        nco2 = self.fiber.get_maximum_index(0, wavelength)**2
+        ncl2 = self.fiber.get_minimum_index(1, wavelength)**2
         u = rho * k * sqrt(nco2 - neff**2)
         w = rho * k * sqrt(neff**2 - ncl2)
 
@@ -152,11 +139,11 @@ class Neff(FiberSolver):
 
         return numpy.array((0, ephi, 0)), numpy.array((hr, 0, hz))
 
-    def _tmfield(self, wl, nu, neff, r):
+    def _tmfield(self, wavelength, nu, neff, r):
         rho = self.fiber.get_outer_radius(0)
-        k = wl.k0
-        nco2 = self.fiber.get_maximum_index(0, wl)**2
-        ncl2 = self.fiber.get_minimum_index(1, wl)**2
+        k = wavelength.k0
+        nco2 = self.fiber.get_maximum_index(0, wavelength)**2
+        ncl2 = self.fiber.get_minimum_index(1, wavelength)**2
         u = rho * k * sqrt(nco2 - neff**2)
         w = rho * k * sqrt(neff**2 - ncl2)
 
@@ -171,11 +158,11 @@ class Neff(FiberSolver):
 
         return numpy.array((er, 0, ez)), numpy.array((0, hphi, 0))
 
-    def _hefield(self, wl, nu, neff, r):
+    def _hefield(self, wavelength, nu, neff, r):
         rho = self.fiber.get_outer_radius(0)
-        k = wl.k0
-        nco2 = self.fiber.get_maximum_index(0, wl)**2
-        ncl2 = self.fiber.get_minimum_index(1, wl)**2
+        k = wavelength.k0
+        nco2 = self.fiber.get_maximum_index(0, wavelength)**2
+        ncl2 = self.fiber.get_minimum_index(1, wavelength)**2
         u = rho * k * sqrt(nco2 - neff**2)
         w = rho * k * sqrt(neff**2 - ncl2)
         v = rho * k * sqrt(nco2 - ncl2)
@@ -183,10 +170,10 @@ class Neff(FiberSolver):
         jnu = jn(nu, u)
         knw = kn(nu, w)
 
-        Delta = (1 - ncl2/nco2)/2
+        Delta = (1 - ncl2 / nco2) / 2
         b1 = jvp(nu, u) / (u * jnu)
         b2 = kvp(nu, w) / (w * knw)
-        F1 = (u * w / v)**2 * (b1 + (1 - 2 * Delta)*b2) / nu
+        F1 = (u * w / v)**2 * (b1 + (1 - 2 * Delta) * b2) / nu
         F2 = (v / (u * w))**2 * nu / (b1 + b2)
         a1 = (F2 - 1) / 2
         a2 = (F2 + 1) / 2
@@ -196,8 +183,8 @@ class Neff(FiberSolver):
         a6 = (F1 + 1 - 2 * Delta) / 2
 
         if r < rho:
-            jmur = jn(nu-1, u * r / rho)
-            jpur = jn(nu+1, u * r / rho)
+            jmur = jn(nu - 1, u * r / rho)
+            jpur = jn(nu + 1, u * r / rho)
             jnur = jn(nu, u * r / rho)
             er = -(a1 * jmur + a2 * jpur) / jnu
             ephi = -(a1 * jmur - a2 * jpur) / jnu
@@ -206,8 +193,8 @@ class Neff(FiberSolver):
             hphi = -Y0 * nco2 / neff * (a3 * jmur + a4 * jpur) / jnu
             hz = Y0 * u * F2 / (k * rho) * jnur / jnu
         else:
-            kmur = kn(nu-1, w * r / rho)
-            kpur = kn(nu+1, w * r / rho)
+            kmur = kn(nu - 1, w * r / rho)
+            kpur = kn(nu + 1, w * r / rho)
             knur = kn(nu, w * r / rho)
             er = -u / w * (a1 * kmur - a2 * kpur) / knw
             ephi = -u / w * (a1 * kmur + a2 * kpur) / knw
@@ -220,33 +207,33 @@ class Neff(FiberSolver):
 
     _ehfield = _hefield
 
-    def _uw(self, wl, neff):
+    def _uw(self, wavelength, neff):
         r = self.fiber.get_outer_radius(0)
-        rk0 = r * wl.k0
-        return (rk0 * sqrt(self.fiber.get_maximum_index(0, wl)**2 - neff**2),
-                rk0 * sqrt(neff**2 - self.fiber.get_minimum_index(1, wl)**2))
+        rk0 = r * wavelength.k0
+        return (rk0 * sqrt(self.fiber.get_maximum_index(0, wavelength)**2 - neff**2),
+                rk0 * sqrt(neff**2 - self.fiber.get_minimum_index(1, wavelength)**2))
 
-    def _lpceq(self, neff, wl, nu):
-        u, w = self._uw(wl, neff)
+    def _lpceq(self, neff, wavelength, nu):
+        u, w = self._uw(wavelength, neff)
         return (u * jn(nu - 1, u) * kn(nu, w) +
                 w * jn(nu, u) * kn(nu - 1, w))
 
-    def _teceq(self, neff, wl, nu):
-        u, w = self._uw(wl, neff)
+    def _teceq(self, neff, wavelength, nu):
+        u, w = self._uw(wavelength, neff)
         return u * j0(u) * k1(w) + w * j1(u) * k0(w)
 
-    def _tmceq(self, neff, wl, nu):
-        u, w = self._uw(wl, neff)
-        nco = self.fiber.get_maximum_index(0, wl)
-        ncl = self.fiber.get_minimum_index(1, wl)
+    def _tmceq(self, neff, wavelength, nu):
+        u, w = self._uw(wavelength, neff)
+        nco = self.fiber.get_maximum_index(0, wavelength)
+        ncl = self.fiber.get_minimum_index(1, wavelength)
         return (u * j0(u) * k1(w) * ncl**2 +
                 w * j1(u) * k0(w) * nco**2)
 
-    def _heceq(self, neff, wl, nu):
-        u, w = self._uw(wl, neff)
-        v2 = u*u + w*w
-        nco = self.fiber.get_maximum_index(0, wl)
-        ncl = self.fiber.get_minimum_index(1, wl)
+    def _heceq(self, neff, wavelength, nu):
+        u, w = self._uw(wavelength, neff)
+        v2 = u**2 + w**2
+        nco = self.fiber.get_maximum_index(0, wavelength)
+        ncl = self.fiber.get_minimum_index(1, wavelength)
         delta = (1 - ncl**2 / nco**2) / 2
         jnu = jn(nu, u)
         knu = kn(nu, w)
@@ -260,7 +247,7 @@ class Neff(FiberSolver):
 
     def _ehceq(self, neff, wl, nu):
         u, w = self._uw(wl, neff)
-        v2 = u*u + w*w
+        v2 = u**2 + w**2
         nco = self.fiber.get_maximum_index(0, wl)
         ncl = self.fiber.get_minimum_index(1, wl)
         delta = (1 - ncl**2 / nco**2) / 2

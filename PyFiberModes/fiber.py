@@ -241,7 +241,7 @@ class Fiber(object):
         n2 = self.get_minimum_index(-1, wavelength)
         return sqrt(n1 * n1 - n2 * n2)
 
-    def V0(self, wavelength: float):
+    def get_V0(self, wavelength: float):
         wavelength = Wavelength(wavelength)
         return wavelength.k0 * self.get_inner_radius(-1) * self.get_NA(wavelength)
 
@@ -392,7 +392,7 @@ class Fiber(object):
 
         """
         modes = set()
-        v0 = self.V0(wavelength)
+        v0 = self.get_V0(wavelength=wavelength)
         for fam in families:
             for nu in count(0):
                 try:
