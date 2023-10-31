@@ -24,7 +24,7 @@ factory.addLayer(name="cladding", index=1.4444)
 # %%
 # Preparing the figure
 figure = SceneList(
-    title='Mode fields for vectorial modse',
+    title='Mode fields for vectorial mode',
     unit_size=(4, 4),
     ax_orientation='horizontal'
 )
@@ -36,7 +36,7 @@ for mode in [HE11, HE12, HE22]:
         fiber=fiber,
         mode=mode,
         wavelength=1550e-9,
-        limit=30e-6,
+        limit=10e-6,
         n_point=101
     )
 

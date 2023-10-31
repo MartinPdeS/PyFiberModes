@@ -72,7 +72,7 @@ class Neff(FiberSolver):
     def __call__(self, wavelength: float, mode, delta, lowbound):
         epsilon = 1e-12
 
-        co = self.fiber.cutoff(mode)
+        co = self.fiber.cutoff(mode=mode)
         if self.fiber.get_V0(wavelength=wavelength) < co:
             return float("nan")
 

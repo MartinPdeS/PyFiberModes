@@ -14,7 +14,8 @@ class Wavelength(float):
     """
 
     def __new__(cls, *args, **kwargs):
-        """Construct a Wavelength object, using given value.
+        """
+        Construct a Wavelength object, using given value.
 
         You can pass to the constructor any keyword defined in properties
         (k0, omega, w, wl, wavelength, frequency, v, or f).
@@ -31,19 +32,19 @@ class Wavelength(float):
         elif 'k0' in kwargs:
             wl = 2 * numpy.pi / kwargs['k0']
         elif 'omega' in kwargs:
-            wl = scipy.c * 2 * numpy.pi / kwargs['omega']
+            wl = scipy.constants.c * 2 * numpy.pi / kwargs['omega']
         elif 'w' in kwargs:
-            wl = scipy.c * 2 * numpy.pi / kwargs['w']
+            wl = scipy.constants.c * 2 * numpy.pi / kwargs['w']
         elif 'wl' in kwargs:
             wl = kwargs['wl']
         elif 'wavelength' in kwargs:
             wl = kwargs['wavelength']
         elif 'frequency' in kwargs:
-            wl = scipy.c / kwargs['frequency']
+            wl = scipy.constants.c / kwargs['frequency']
         elif 'v' in kwargs:
-            wl = scipy.c / kwargs['v']
+            wl = scipy.constants.c / kwargs['v']
         elif 'f' in kwargs:
-            wl = scipy.c / kwargs['f']
+            wl = scipy.constants.c / kwargs['f']
         else:
             raise TypeError("Invalid argument")
 
@@ -51,34 +52,42 @@ class Wavelength(float):
 
     @property
     def k0(self):
-        """Wave number (:math:`2 \pi / \lambda`)."""
+        """
+        Wave number (:math:`2 \pi / \lambda`).
+        """
         return 2 * numpy.pi / self if self != 0 else float("inf")
 
     @property
-    def omega(self):
-        """Angular frequency (in rad/s)."""
-        return scipy.c * 2 * numpy.pi / self if self != 0 else float("inf")
+    def omega(self) -> float:
+        """
+        Angular frequency (in rad/s).
+        """
+        return scipy.constants.constants.c * 2 * numpy.pi / self if self != 0 else float("inf")
 
     w = omega
 
     @property
-    def wavelength(self):
+    def wavelength(self) -> float:
         """Wavelength (in meters)."""
         return self
 
     wl = wavelength
 
     @property
-    def frequency(self):
-        """Frequency (in Hertz)."""
-        return scipy.c / self if self != 0 else float("inf")
+    def frequency(self) -> float:
+        """
+        Frequency (in Hertz).
+        """
+        return scipy.constants.c / self if self != 0 else float("inf")
 
     v = frequency
     f = frequency
 
     def __str__(self):
-        """Format wavelength as string (nanometers, 2 digits)"""
-        return "{:.2f} nm".format(1e9 * self.wavelength)
+        """
+        Format wavelength as string (nanometers, 2 digits)
+        """
+        return f"{1e9 * self.wavelength:.2f} nm"
 
     def __repr__(self):
-        return "wavelength({})".format(self.wavelength)
+        return f"wavelength({self.wavelength})"

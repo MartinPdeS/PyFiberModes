@@ -3,18 +3,18 @@
 Source code structures
 ======================
 
-Axis
-----
- .. automodule:: MPSPlots.render2D.axis
+Fiber
+-----
+ .. automodule:: PyFiberModes.fiber.Fiber
      :members:
      :inherited-members:
      :member-order: bysource
 
 
 
-Artists list
-------------
- .. automodule:: MPSPlots.render2D.artist
+Field
+-----
+ .. automodule:: PyFiberModes.field.Field
      :members:
      :inherited-members:
      :member-order: bysource

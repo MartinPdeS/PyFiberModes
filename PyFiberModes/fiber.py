@@ -27,10 +27,10 @@ class Fiber(object):
 
     def __init__(self,
             layer_radius: list,
-            layer_type: list,
+            layer_types: list,
             fp,
-            material_parameter: list,
-            layer_index,
+            material_parameters: list,
+            layer_indexes,
             layer_names: list,
             Cutoff=None,
             Neff=None):
@@ -40,18 +40,26 @@ class Fiber(object):
 
         self.layers = []
 
-        enumerator = zip(layer_type, fp, material_parameter, layer_index)
+        enumerator = zip(layer_types, fp, material_parameters, layer_indexes)
 
-        for idx, (f_, fp_, m_, mp_) in enumerate(enumerator):
+        for idx, (layer_type, fp_, m_, mp_) in enumerate(enumerator):
             ri = self.layer_radius[idx - 1] if idx else 0
 
             ro = self.layer_radius[idx] if idx < len(layer_radius) else float("inf")
 
-            layer = geometry.__dict__[f_](ri, ro, *fp_,
-                                          m=m_, mp=mp_, cm=material_parameter[-1], cmp=layer_index[-1])
+            layer = geometry.__dict__[layer_type](
+                ri,
+                ro,
+                *fp_,
+                m=m_,
+                mp=mp_,
+                cm=material_parameters[-1],
+                cmp=layer_indexes[-1]
+            )
+
             self.layers.append(layer)
 
-        self.co_cache = {
+        self.cutoff_cache = {
             Mode("HE", 1, 1): 0,
             Mode("LP", 0, 1): 0
         }
@@ -129,9 +137,10 @@ class Fiber(object):
         if layer_idx < 0:
             layer_idx = len(self.layer_radius) + layer_idx + 1
 
-        output = self.layer_radius[layer_idx - 1] if layer_idx else 0
+        if layer_idx != 0:
+            return self.layer_radius[layer_idx - 1]
 
-        return output
+        return 0
 
     def get_outer_radius(self, layer_idx: int) -> float:
         """
@@ -143,7 +152,9 @@ class Fiber(object):
         :returns:   The inner radius.
         :rtype:     float
         """
-        return self.layer_radius[layer_idx] if layer_idx < len(self.layer_radius) else float("inf")
+        if layer_idx < len(self.layer_radius):
+            return self.layer_radius[layer_idx]
+        return float("inf")
 
     def get_thickness(self, layer_idx: int) -> float:
         """
@@ -170,6 +181,7 @@ class Fiber(object):
         :rtype:     float
         """
         layer = self.get_layer_at_radius(radius)
+
         return layer.index(radius, wavelength)
 
     def get_minimum_index(self, layer_idx: int, wavelength: float) -> float:
@@ -184,7 +196,9 @@ class Fiber(object):
         :returns:   The minimum index.
         :rtype:     float
         """
-        return self.layers[layer_idx].get_minimum_index(wavelength)
+        layer = self.layers[layer_idx]
+
+        return layer.get_minimum_index(wavelength)
 
     def get_maximum_index(self, layer_idx: int, wavelength: float) -> float:
         """
@@ -198,7 +212,9 @@ class Fiber(object):
         :returns:   The minimum index.
         :rtype:     float
         """
-        return self.layers[layer_idx].get_maximum_index(wavelength)
+        layer = self.layers[layer_idx]
+
+        return layer.get_maximum_index(wavelength=wavelength)
 
     def find_cutoff_solver(self):
         cutoff = solver.solver.FiberSolver
@@ -265,16 +281,16 @@ class Fiber(object):
         if isinf(V0):
             return 0
 
-        def f(x):
+        def model(x):
             return 2 * pi / V0 * b * self.get_NA(x)
 
         b = self.get_inner_radius(-1)
 
-        wavelength = f(1.55e-6)
-        if abs(wavelength - f(wavelength)) > tol:
+        wavelength = model(1.55e-6)
+        if abs(wavelength - model(wavelength)) > tol:
             for w in (1.55e-6, 5e-6, 10e-6):
                 try:
-                    wavelength = fixed_point(f, w, xtol=tol, maxiter=maxiter)
+                    wavelength = fixed_point(model, w, xtol=tol, maxiter=maxiter)
                 except RuntimeError:
                     # FIXME: What should we do if it does not converge?
                     self.logger.info(
@@ -290,18 +306,19 @@ class Fiber(object):
 
         return Wavelength(wavelength)
 
-    def cutoff(self, mode):
+    def cutoff(self, mode: Mode):
         try:
-            return self.co_cache[mode]
+            return self.cutoff_cache[mode]
         except KeyError:
-            co = self._cutoff(mode)
-            self.co_cache[mode] = co
-            return co
+            cutoff = self._cutoff(mode=mode)
+            self.cutoff_cache[mode] = cutoff
+            return cutoff
 
-    def cutoffWl(self, mode):
-        return self.V0_to_wavelength(self.cutoff(mode))
+    def get_cutoff_wavelength(self, mode: Mode) -> float:
+        cutoff = self.cutoff(mode=mode)
+        return self.V0_to_wavelength(cutoff)
 
-    def neff(self, mode, wavelength: float, delta: float = 1e-6, lowbound=None) -> float:
+    def neff(self, mode: Mode, wavelength: float, delta: float = 1e-6, lowbound=None) -> float:
         try:
             return self.ne_cache[wavelength][mode]
         except KeyError:
@@ -309,7 +326,7 @@ class Fiber(object):
             self.set_ne_cache(wavelength, mode, neff)
             return neff
 
-    def beta(self, omega, mode, p: float = 0, delta: float = 1e-6, lowbound=None):
+    def beta(self, omega: float, mode: Mode, p: float = 0, delta: float = 1e-6, lowbound=None):
         wl = Wavelength(omega=omega)
         if p == 0:
             neff = self.neff(mode, wl, delta, lowbound)
@@ -328,37 +345,84 @@ class Fiber(object):
         return derivative(
             self.beta, omega, p, m, j, h, mode, 0, delta, lowbound)
 
-    def b(self, mode, wavelength: float, delta=1e-6, lowbound=None):
+    def get_normalized_beta(self, mode: Mode, wavelength: float, delta: float = 1e-6, lowbound=None) -> float:
         """
         Normalized propagation constant
         """
-        neff = self.neff(mode, wavelength, delta, lowbound)
-        nmax = max(layer.get_maximum_index(wavelength) for layer in self.layers)
-        ncl = self.get_minimum_index(-1, wavelength)
-        ncl2 = ncl**2
-        return (neff**2 - ncl2) / (nmax**2 - ncl2)
+        neff = self.neff(
+            mode=mode,
+            wavelength=wavelength,
+            delta=delta,
+            lowbound=lowbound
+        )
 
-    def vp(self, mode, wavelength: float, delta: float = 1e-6, lowbound=None):
-        return constants.c / self.neff(mode, wavelength, delta, lowbound)
+        overall_maximum_index = max(layer.get_maximum_index(wavelength) for layer in self.layers)
 
-    def ng(self, mode, wavelength: float, delta: float = 1e-6, lowbound=None):
-        return self.beta(Wavelength(wavelength).omega,
-                         mode, 1, delta, lowbound) * constants.c
+        minimum_index = self.get_minimum_index(-1, wavelength)
 
-    def vg(self, mode, wavelength: float, delta: float = 1e-6, lowbound=None):
+        numerator = neff**2 - minimum_index**2
+
+        denominator = overall_maximum_index**2 - minimum_index**2
+
+        return numerator / denominator
+
+    def get_phase_velocity(self, mode: Mode, wavelength: float, delta: float = 1e-6, lowbound=None) -> float:
+        n_eff = self.neff(
+            mode=mode,
+            wavelength=wavelength,
+            delta=delta,
+            lowbound=lowbound
+        )
+
+        return constants.c / n_eff
+
+    def get_group_index(self, mode: Mode, wavelength: float, delta: float = 1e-6, lowbound=None) -> float:
         wavelength = Wavelength(wavelength)
-        beta = self.beta(wavelength.omega, mode, 1, delta, lowbound)
+        beta = self.beta(
+            omega=wavelength.omega,
+            mode=mode,
+            p=1,
+            delta=delta,
+            lowbound=lowbound
+        )
+
+        return beta * constants.c
+
+    def get_groupe_velocity(self, mode: Mode, wavelength: float, delta: float = 1e-6, lowbound=None) -> float:
+        wavelength = Wavelength(wavelength)
+        beta = self.beta(
+            omega=wavelength.omega,
+            mode=mode,
+            p=1,
+            delta=delta,
+            lowbound=lowbound
+        )
+
         return 1 / beta
 
-    def D(self, mode, wavelength: float, delta: float = 1e-6, lowbound=None):
+    def D(self, mode: Mode, wavelength: float, delta: float = 1e-6, lowbound=None) -> float:
         wavelength = Wavelength(wavelength)
-        beta = self.beta(wavelength.omega, mode, 2, delta, lowbound)
+        beta = self.beta(
+            omega=wavelength.omega,
+            mode=mode,
+            p=2,
+            delta=delta,
+            lowbound=lowbound
+        )
+
         return -beta * 2 * pi * constants.c * 1e6 / wavelength**2
 
-    def S(self, mode, wavelength: float, delta: float = 1e-6, lowbound=None):
+    def S(self, mode: Mode, wavelength: float, delta: float = 1e-6, lowbound=None) -> float:
         wavelength = Wavelength(wavelength)
-        beta = self.beta(wavelength.omega, mode, 3, delta, lowbound)
-        return (beta * (2 * pi * constants.c / wavelength**2)**2 * 1e-3)
+        beta = self.beta(
+            omega=wavelength.omega,
+            mode=mode,
+            p=3,
+            delta=delta,
+            lowbound=lowbound
+        )
+
+        return 1e-3 * beta * (2 * pi * constants.c / wavelength**2)**2
 
     def get_vectorial_modes(self, wavelength: float, numax=None, mmax=None, delta=1e-6):
         families = (ModeFamily.HE, ModeFamily.EH, ModeFamily.TE, ModeFamily.TM)
@@ -425,16 +489,20 @@ class Fiber(object):
                     break
         return modes
 
-    def field(self, mode, wavelength: float, r, np: int = 101):
+    def field(self, mode: Mode, wavelength: float, r, n_point: int = 101):
         """
         Return electro-magnetic field.
 
         """
-        return Field(self, mode, wavelength, r, np)
+        return Field(self, mode, wavelength, r, n_point)
 
     @lru_cache(maxsize=None)
-    def _rfield(self, mode, wavelength: float, r):
-        neff = self.neff(mode, wavelength)
+    def _rfield(self, mode: Mode, wavelength: float, r):
+        neff = self.neff(
+            mode=mode,
+            wavelength=wavelength
+        )
+
         fct = {ModeFamily.LP: self._neff._lpfield,
                ModeFamily.TE: self._neff._tefield,
                ModeFamily.TM: self._neff._tmfield,
