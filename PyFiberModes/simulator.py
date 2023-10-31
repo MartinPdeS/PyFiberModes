@@ -120,7 +120,6 @@ class _FSimulator(object):
 
 
 class Simulator(object):
-
     """The Simulator links :py:class:`~PyFiberModes.fiber.factory.FiberFactory`
     with a list of wavelengths, and provides a convenient way to compute
     a range of modal properties.

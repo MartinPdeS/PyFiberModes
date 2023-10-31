@@ -1,26 +1,13 @@
-# This file is part of FiberModes.
-#
-# FiberModes is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# FiberModes is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with FiberModes.  If not, see <http://www.gnu.org/licenses/>.
-
-from .geometry import Geometry
-from ... import constants
+from PyFiberModes.fiber_geometry.geometry import Geometry
 from math import sqrt, exp
 import numpy
 from scipy.special import jn, iv
 from scipy.special import jvp, ivp
 
 from scipy.integrate import ode
+from scipy.constants import mu_0, epsilon_0, physical_constants
+eta0 = physical_constants['characteristic impedance of vacuum']
+Y0 = sqrt(epsilon_0 / mu_0)  #: Admitance of free-space.
 
 
 class SuperGaussian(Geometry):
@@ -58,11 +45,15 @@ class SuperGaussian(Geometry):
         cn = self._cm.n(wl, *self._cmp)
 
         if r > 0 or self.ri == 0:
-            return ((cn - n) * self.m * n *
-                    ((r - self.mu) / self.c)**(2*self.m - 1) / self.c)
+            power = 2 * self.m - 1
+            term_0 = (cn - n) * self.m * n
+            term_1 = (r - self.mu) / self.c
+            return term_0 * term_1**power / self.c
         else:
-            return ((cn - n) * self.m * n *
-                    ((r + self.mu) / self.c)**(2*self.m) / (self.mu + r))
+            power = 2 * self.m
+            term_0 = (cn - n) * self.m * n
+            term_1 = (r + self.mu) / self.c
+            return term_0 * term_1**power / (self.mu + r)
 
     def minIndex(self, wl):
         di = abs(self.mu - self.ri)
@@ -127,11 +118,11 @@ class SuperGaussian(Geometry):
             yp[1] = y[3]
             yp[2] = (y[0] * (nu2 / r2 - p) +
                      y[2] * (2 * beta2 / p * np / n - 1 / r) -
-                     y[1] * constants.eta0 * (2 * nu * beta * wl.k0 * np /
+                     y[1] * eta0 * (2 * nu * beta * wl.k0 * np /
                                               (r * p * n)))
             yp[3] = (y[1] * (nu2 / r2 - p) +
                      y[3] * (2 * wl.k0**2 * n * np / p - 1 / r) -
-                     y[0] * constants.Y0 * (2 * nu * beta * wl.k0 * n * np /
+                     y[0] * Y0 * (2 * nu * beta * wl.k0 * n * np /
                                             (r * p)))
             return yp
 
@@ -146,11 +137,11 @@ class SuperGaussian(Geometry):
             m[0, :] = (0, 0, 1, 0)
             m[1, :] = (0, 0, 0, 1)
             m[2, :] = ((nu2 / r2 - p),
-                       -(constants.eta0 * (2 * nu * beta * wl.k0 * np /
+                       -(eta0 * (2 * nu * beta * wl.k0 * np /
                                            (r * p * n))),
                        (2 * wl.k0**2 * n * np / p - 1 / r),
                        0)
-            m[3, :] = (-constants.Y0 * (2 * nu * beta * wl.k0 * n * np /
+            m[3, :] = (-Y0 * (2 * nu * beta * wl.k0 * n * np /
                                         (r * p)),
                        0,
                        (nu2 / r2 - p),
@@ -183,11 +174,10 @@ class SuperGaussian(Geometry):
         u = self.u(ro, neff, wl)
         n = self.index(ro, wl)
         beta = wl.k0 * neff
-        c = 1 / (wl.k0**2 * (n*n - neff*neff))
+        c = 1 / (wl.k0**2 * (n * n - neff * neff))
 
-        EH[2] = c * (beta * EH[0] * nu / ro -
-                     constants.eta0 * wl.k0 * Hzp)
-        EH[3] = c * (-beta * EH[1] * nu / ro +
-                     constants.Y0 * wl.k0 * n * n * Ezp)
+        EH[2] = c * (beta * EH[0] * nu / ro - eta0 * wl.k0 * Hzp)
+
+        EH[3] = c * (-beta * EH[1] * nu / ro + Y0 * wl.k0 * n * n * Ezp)
 
         return EH

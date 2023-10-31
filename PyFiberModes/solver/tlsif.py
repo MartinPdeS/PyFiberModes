@@ -1,6 +1,6 @@
-from .solver import FiberSolver
+from PyFiberModes import solver
 from PyFiberModes import Mode, ModeFamily, Wavelength, HE11
-from PyFiberModes.fiber.material.material import OutOfRangeWarning
+from PyFiberModes.material.material import OutOfRangeWarning
 from math import sqrt, isinf, isnan
 import numpy
 from scipy.special import j0, y0, i0, k0
@@ -10,7 +10,7 @@ from scipy.special import jvp, ivp
 import warnings
 
 
-class Cutoff(FiberSolver):
+class Cutoff(solver.solver.FiberSolver):
 
     def __call__(self, mode):
         fct = {ModeFamily.LP: self._lpcoeq,

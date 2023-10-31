@@ -1,4 +1,4 @@
-from PyFiberModes.fiber.geometry.geometry import Geometry
+from PyFiberModes.fiber_geometry.geometry import Geometry
 from PyFiberModes import constants
 from math import sqrt
 import numpy
@@ -18,10 +18,10 @@ class StepIndex(Geometry):
         else:
             return None
 
-    def minIndex(self, wl):
+    def get_minimum_index(self, wl):
         return self._m.n(wl, *self._mp)
 
-    def maxIndex(self, wl):
+    def get_maximum_index(self, wl):
         return self._m.n(wl, *self._mp)
 
     def u(self, r, neff, wl):
@@ -29,7 +29,7 @@ class StepIndex(Geometry):
 
     def Psi(self, r, neff, wl, nu, C):
         u = self.u(r, neff, wl)
-        if neff < self.maxIndex(wl):
+        if neff < self.get_maximum_index(wl):
             psi = (C[0] * jn(nu, u) + C[1] * yn(nu, u) if C[1] else
                    C[0] * jn(nu, u))
             psip = u * (C[0] * jvp(nu, u) + C[1] * yvp(nu, u) if C[1] else
@@ -40,12 +40,12 @@ class StepIndex(Geometry):
             psip = u * (C[0] * ivp(nu, u) + C[1] * kvp(nu, u) if C[1] else
                         C[0] * ivp(nu, u))
         # if numpy.isnan(psi):
-        #     print(neff, self.maxIndex(wl), C, r)
+        #     print(neff, self.get_maximum_index(wl), C, r)
         return psi, psip
 
     def lpConstants(self, r, neff, wl, nu, A):
         u = self.u(r, neff, wl)
-        if neff < self.maxIndex(wl):
+        if neff < self.get_maximum_index(wl):
             W = constants.pi / 2
             return (W * (u * yvp(nu, u) * A[0] - yn(nu, u) * A[1]),
                     W * (jn(nu, u) * A[1] - u * jvp(nu, u) * A[0]))
@@ -59,7 +59,7 @@ class StepIndex(Geometry):
         modify EH in-place (for speed)
 
         """
-        n = self.maxIndex(wl)
+        n = self.get_maximum_index(wl)
         u = self.u(ro, neff, wl)
 
         if ri == 0:
@@ -110,7 +110,7 @@ class StepIndex(Geometry):
 
     def vConstants(self, ri, ro, neff, wl, nu, EH):
         a = numpy.zeros((4, 4))
-        n = self.maxIndex(wl)
+        n = self.get_maximum_index(wl)
         u = self.u(ro, neff, wl)
         urp = self.u(ri, neff, wl)
 
@@ -151,7 +151,7 @@ class StepIndex(Geometry):
 
     def tetmConstants(self, ri, ro, neff, wl, EH, c, idx):
         a = numpy.empty((2, 2))
-        n = self.maxIndex(wl)
+        n = self.get_maximum_index(wl)
         u = self.u(ro, neff, wl)
         urp = self.u(ri, neff, wl)
 

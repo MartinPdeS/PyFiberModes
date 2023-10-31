@@ -25,7 +25,7 @@ class Neff(FiberSolver):
                 if isnan(lowbound):
                     return lowbound
             else:
-                lowbound = max(layer.maxIndex(wl)
+                lowbound = max(layer.get_maximum_index(wl)
                                for layer in self.fiber.layers)
 
             if mode.family is ModeFamily.LP and mode.nu > 0:
@@ -40,8 +40,8 @@ class Neff(FiberSolver):
         #     if self.fiber.V0(wl) < co:
         #         return float("nan")
 
-        #     nco = max(layer.maxIndex(wl) for layer in self.fiber.layers)
-        #     r = self.fiber.innerRadius(-1)
+        #     nco = max(layer.get_maximum_index(wl) for layer in self.fiber.layers)
+        #     r = self.fiber.get_inner_radius(-1)
 
         #     lowbound = min(lowbound, sqrt(nco**2 - (co / (r * wl.k0))**2))
         # except (NotImplementedError):
@@ -49,7 +49,7 @@ class Neff(FiberSolver):
         # if mode == Mode(ModeFamily.HE, 3, 1):
         #     print('3', lowbound)
 
-        highbound = self.fiber.minIndex(-1, wl)
+        highbound = self.fiber.get_minimum_index(-1, wl)
 
         fct = {ModeFamily.LP: self._lpceq,
                ModeFamily.TE: self._teceq,
@@ -75,11 +75,11 @@ class Neff(FiberSolver):
         C = numpy.array((1, 0))
 
         for i in range(1, N):
-            rho = self.fiber.innerRadius(i)
+            rho = self.fiber.get_inner_radius(i)
             if r < rho:
                 layer = self.fiber.layers[i-1]
                 break
-            A = self.fiber.layers[i-1].Psi(rho, neff, wl, nu, C)
+            A = self.fiber.layers[i - 1].Psi(rho, neff, wl, nu, C)
             C = self.fiber.layers[i].lpConstants(rho, neff, wl, nu, A)
         else:
             layer = self.fiber.layers[-1]
@@ -100,10 +100,10 @@ class Neff(FiberSolver):
         EH = numpy.zeros(4)
         ri = 0
 
-        for i in range(N-1):
-            ro = self.fiber.outerRadius(i)
+        for i in range(N - 1):
+            ro = self.fiber.get_outer_radius(i)
             layer = self.fiber.layers[i]
-            n = layer.maxIndex(wl)
+            n = layer.get_maximum_index(wl)
             u = layer.u(ro, neff, wl)
 
             if i > 0:
@@ -143,7 +143,7 @@ class Neff(FiberSolver):
         else:
             i += 1
         layer = self.fiber.layers[i]
-        n = layer.maxIndex(wl)
+        n = layer.get_maximum_index(wl)
         u = layer.u(rho, neff, wl)
         urp = u * r / rho
 
@@ -204,11 +204,11 @@ class Neff(FiberSolver):
         C[0, 0] = 1
 
         for i in range(1, N-1):
-            r = self.fiber.innerRadius(i)
+            r = self.fiber.get_inner_radius(i)
             A = self.fiber.layers[i-1].Psi(r, neff, wl, nu, C[i-1, :])
             C[i, :] = self.fiber.layers[i].lpConstants(r, neff, wl, nu, A)
 
-        r = self.fiber.innerRadius(-1)
+        r = self.fiber.get_inner_radius(-1)
         A = self.fiber.layers[N-2].Psi(r, neff, wl, nu, C[-1, :])
         u = self.fiber.layers[N-1].u(r, neff, wl)
         return u * kvp(nu, u) * A[0] - kn(nu, u) * A[1]
@@ -219,7 +219,7 @@ class Neff(FiberSolver):
         ri = 0
 
         for i in range(N-1):
-            ro = self.fiber.outerRadius(i)
+            ro = self.fiber.get_outer_radius(i)
             self.fiber.layers[i].EH_fields(ri, ro, nu, neff, wl, EH, False)
             ri = ro
 
@@ -236,14 +236,14 @@ class Neff(FiberSolver):
         ri = 0
 
         for i in range(N-1):
-            ro = self.fiber.outerRadius(i)
+            ro = self.fiber.get_outer_radius(i)
             self.fiber.layers[i].EH_fields(ri, ro, nu, neff, wl, EH, True)
             ri = ro
 
         # Last layer
         Ez, _, _, Hp = EH
         u = self.fiber.layers[-1].u(ri, neff, wl)
-        n = self.fiber.maxIndex(-1, wl)
+        n = self.fiber.get_maximum_index(-1, wl)
 
         F4 = k1(u) / k0(u)
         return Hp - wl.k0 * ri / u * constants.Y0 * n * n * Ez * F4
@@ -254,7 +254,7 @@ class Neff(FiberSolver):
         ri = 0
 
         for i in range(N-1):
-            ro = self.fiber.outerRadius(i)
+            ro = self.fiber.get_outer_radius(i)
             try:
                 self.fiber.layers[i].EH_fields(ri, ro, nu, neff, wl, EH)
             except ZeroDivisionError:
@@ -268,7 +268,7 @@ class Neff(FiberSolver):
         self.fiber.layers[N-1].C = C
 
         u = self.fiber.layers[N-1].u(ri, neff, wl)
-        n = self.fiber.maxIndex(-1, wl)
+        n = self.fiber.get_maximum_index(-1, wl)
 
         F4 = kvp(nu, u) / kn(nu, u)
         c1 = -wl.k0 * ri / u

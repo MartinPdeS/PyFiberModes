@@ -13,11 +13,10 @@
 # You should have received a copy of the GNU General Public License
 # along with FiberModes.  If not, see <http://www.gnu.org/licenses/>.
 
-from PyFiberModes.fiber import material
+from PyFiberModes.fiber_ import material
 
 
 class Geometry(object):
-
     def __init__(self, ri, ro, *fp, m, mp, **kwargs):
         self._m = material.__dict__[m]()  # instantiate material object
         self._mp = mp

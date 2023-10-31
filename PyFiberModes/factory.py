@@ -5,27 +5,18 @@ from distutils.version import StrictVersion as Version
 from operator import mul
 from functools import reduce
 from itertools import product, islice
-from .fiber import Fiber
+from PyFiberModes.fiber import Fiber
 from PyFiberModes.slrc import SLRC
-from PyFiberModes.fiber import material as materialmod
+from PyFiberModes import material as materialmod
 from PyFiberModes.fiber import geometry as geometrymod
-from PyFiberModes.fiber.solver.solver import FiberSolver
-from PyFiberModes.fiber.material.compmaterial import CompMaterial
+from PyFiberModes.solver.solver import FiberSolver
+from PyFiberModes.material.compmaterial import CompMaterial
 
 
 __version__ = "0.0.1"
 
 
-class FiberFactoryValidationError(Exception):
-
-    """Exception emmited when fiber file does not validate.
-
-    """
-    pass
-
-
 class LayerProxy(object):
-
     def __init__(self, layer):
         self._layer = layer
 
@@ -65,7 +56,7 @@ class LayerProxy(object):
         self._layer["type"] = value
         dp = geometrymod.__dict__[value].DEFAULT_PARAMS
         tp = self._layer["tparams"]
-        for i in range(len(tp)-1, len(dp)):
+        for i in range(len(tp) - 1, len(dp)):
             tp.append(dp[i])
         # print("_type", value, self._layer["tparams"])
 
@@ -187,9 +178,13 @@ class FiberFactory(object):
         """
         return LayersProxy(self)
 
-    def addLayer(self, pos=None, name="", radius=0,
-                 material="Fixed", geometry="StepIndex",
-                 **kwargs):
+    def addLayer(self,
+            pos: int = None,
+            name: str = "",
+            radius: float = 0,
+            material: str = "Fixed",
+            geometry: str = "StepIndex",
+            **kwargs):
         """Insert a new layer in the factory.
 
         Args:
@@ -313,19 +308,20 @@ class FiberFactory(object):
             obj(dict): Dict of fiber factory parameters.
 
         Raises:
-            FiberFactoryValidationError: Object does not validate.
+            ValueError: Object does not validate.
 
         """
         for key in ("version", "name", "description",
                     "author", "crdate", "tstamp", "layers"):
             if key not in obj.keys():
-                raise FiberFactoryValidationError(
-                    "Missing '{}' parameter".format(key))
+                raise ValueError(
+                    f"Missing '{key}' parameter"
+                )
 
         if Version(obj["version"]) > Version(__version__):
-            raise FiberFactoryValidationError("Version of loaded object "
-                                              "is higher that version "
-                                              "of current library")
+            raise ValueError(
+                "Version of loaded object is higher that version of current library"
+            )
         elif Version(obj["version"]) < Version(__version__):
             self._upgrade(obj)
 
@@ -335,9 +331,7 @@ class FiberFactory(object):
     def _validateLayer(self, layer, layernum):
         for key in ("name", "type", "tparams", "material", "mparams"):
             if key not in layer.keys():
-                raise FiberFactoryValidationError(
-                    "Missing '{}' parameter for layer {}".format(key,
-                                                                 layernum))
+                raise ValueError(f"Missing '{key}' parameter for layer {layernum}")
 
     def _upgrade(self, obj):
         obj["version"] = __version__
