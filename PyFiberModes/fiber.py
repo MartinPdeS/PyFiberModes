@@ -166,7 +166,9 @@ class Fiber(object):
         :returns:   The thickness.
         :rtype:     float
         """
-        return self.get_outer_radius(layer_idx) - self.get_inner_radius(layer_idx)
+        outer_radius = self.get_outer_radius(layer_idx=layer_idx)
+        inner_radius = self.get_inner_radius(layer_idx=layer_idx)
+        return outer_radius - inner_radius
 
     def get_index_at_radius(self, radius: float, wavelength: float) -> float:
         """
@@ -229,8 +231,7 @@ class Fiber(object):
 
     def find_n_eff_solver(self) -> float:
         neff = solver.mlsif.Neff
-        if all(isinstance(layer, geometry.StepIndex)
-               for layer in self.layers):
+        if all(isinstance(layer, geometry.StepIndex) for layer in self.layers):
             nlayers = len(self)
             if nlayers == 2:  # SSIF
                 neff = solver.ssif.Neff
@@ -457,7 +458,7 @@ class Fiber(object):
         """
         modes = set()
         v0 = self.get_V0(wavelength=wavelength)
-        for fam in families:
+        for family in families:
             for nu in count(0):
                 try:
                     _mmax = mmax[nu]
@@ -466,16 +467,16 @@ class Fiber(object):
                 except TypeError:
                     _mmax = mmax
 
-                if (fam is ModeFamily.TE or fam is ModeFamily.TM) and nu > 0:
+                if (family is ModeFamily.TE or family is ModeFamily.TM) and nu > 0:
                     break
-                if (fam is ModeFamily.HE or fam is ModeFamily.EH) and nu == 0:
+                if (family is ModeFamily.HE or family is ModeFamily.EH) and nu == 0:
                     continue
                 if numax is not None and nu > numax:
                     break
                 for m in count(1):
                     if _mmax is not None and m > _mmax:
                         break
-                    mode = Mode(fam, nu, m)
+                    mode = Mode(family, nu, m)
                     try:
                         co = self.cutoff(mode)
                         if co > v0:
@@ -497,16 +498,27 @@ class Fiber(object):
         return Field(self, mode, wavelength, r, n_point)
 
     @lru_cache(maxsize=None)
-    def _rfield(self, mode: Mode, wavelength: float, r):
+    def _rfield(self, mode: Mode, wavelength: float, radius: float):
         neff = self.neff(
             mode=mode,
             wavelength=wavelength
         )
 
-        fct = {ModeFamily.LP: self._neff._lpfield,
-               ModeFamily.TE: self._neff._tefield,
-               ModeFamily.TM: self._neff._tmfield,
-               ModeFamily.EH: self._neff._ehfield,
-               ModeFamily.HE: self._neff._hefield}
+        kwargs = dict(
+            wavelength=wavelength,
+            nu=mode.nu,
+            neff=neff,
+            radius=radius
+        )
 
-        return fct[mode.family](wavelength, mode.nu, neff, r)
+        match mode.family:
+            case ModeFamily.LP:
+                return self._neff._lpfield(wavelength, mode.nu, neff, radius)
+            case ModeFamily.TE:
+                return self._neff._tefield(wavelength, mode.nu, neff, radius)
+            case ModeFamily.TM:
+                return self._neff._tmfield(wavelength, mode.nu, neff, radius)
+            case ModeFamily.EH:
+                return self._neff._ehfield(wavelength, mode.nu, neff, radius)
+            case ModeFamily.HE:
+                return self._neff._hefield(wavelength, mode.nu, neff, radius)

@@ -40,7 +40,7 @@ class Neff(mlsif.Neff):
         c_path = os.path.dirname(os.path.realpath(__file__)) + "/cudasrc/"
         for cfile in ("constf.c", "hypergf.c", "ivf.c",
                       "knf.c", "besseldiff.c", "chareq.c"):
-            with open(c_path+cfile) as f:
+            with open(c_path + cfile) as f:
                 c_src += f.read()
         cudamod = SourceModule(c_src)
         self.chareq = cudamod.get_function("chareq")
@@ -81,18 +81,18 @@ class Neff(mlsif.Neff):
             self.gpu_neff, numpy.float32(wl.k0), self.gpu_r,
             self.gpu_n, numpy.uint32(n.size), self.gpu_nu,
             self.gpu_x,
-            shared_size=5*4*2*4)
+            shared_size=5 * 4 * 2 * 4)
 
         cuda.memcpy_dtoh(self.x, self.gpu_x)
 
         sols = []
 
-        for i in range(self.NSOLVERS-1, 0, -1):
-            if (abs(self.x[0, i]) > 1e5) or (abs(self.x[0, i-1]) > 1e5):
+        for i in range(self.NSOLVERS - 1, 0, -1):
+            if (abs(self.x[0, i]) > 1e5) or (abs(self.x[0, i - 1]) > 1e5):
                 continue
-            if ((self.x[0, i-1] < 0 and self.x[0, i] > 0) or
-                    (self.x[0, i-1] > 0 and self.x[0, i] < 0)):
-                sols.append((neff[i-1], neff[i]))
+            if ((self.x[0, i - 1] < 0 and self.x[0, i] > 0) or
+                    (self.x[0, i - 1] > 0 and self.x[0, i] < 0)):
+                sols.append((neff[i - 1], neff[i]))
                 # sols.append(self._findBetween(
                 #     self._heceq, neff[i-1], neff[i], args=(wl, mode.nu)))
 
@@ -108,6 +108,7 @@ class Neff(mlsif.Neff):
             return self.fiber.ne_cache[wl][mode]
         except KeyError:
             return float("nan")
+
 
 if __name__ == '__main__':
     from fibermodes import FiberFactory

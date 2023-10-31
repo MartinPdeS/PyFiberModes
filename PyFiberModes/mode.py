@@ -105,8 +105,9 @@ class Mode(namedtuple('Mode', 'family nu m')):
     def __gt__(self, m2):
         return m2 < self
 
-    def color(self, nn=5, nm=3, asint=True):
-        """Return color (r, g, b) as function of mode.
+    def color(self, nn: int = 5, nm: int = 3, asint: bool = True):
+        """
+        Return color (r, g, b) as function of mode.
 
         LP, HE modes are blue,
         EH modes are red,

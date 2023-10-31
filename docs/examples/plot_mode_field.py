@@ -7,7 +7,7 @@ Mode fields
 # %%
 # Imports
 # ~~~~~~~
-from PyFiberModes import FiberFactory, HE11, HE12, HE22
+from PyFiberModes import FiberFactory, HE11, HE12, HE22, LP01
 from PyFiberModes.field import Field
 from MPSPlots.render2D import SceneList
 
@@ -29,7 +29,7 @@ figure = SceneList(
     ax_orientation='horizontal'
 )
 
-for mode in [HE11, HE12, HE22]:
+for mode in [HE11, HE12, HE22, LP01]:
     fiber = factory[0]
 
     field = Field(

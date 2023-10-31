@@ -35,8 +35,9 @@ class Field(object):
         self.r_mesh = numpy.sqrt(numpy.square(self.x_mesh) + numpy.square(self.y_mesh))
         self.phi_mesh = numpy.arctan2(self.y_mesh, self.x_mesh)
 
-    def f(self, phi0) -> numpy.ndarray:
-        """Azimuthal dependency function.
+    def get_azimuthal_dependency_f(self, phi: float) -> numpy.ndarray:
+        """
+        Azimuthal dependency function.
 
         Args:
             phi0(float): Phase (rotation) of the field.
@@ -45,10 +46,11 @@ class Field(object):
             2D array of values (ndarray). Values are between -1 and 1.
 
         """
-        return numpy.cos(self.mode.nu * self.phi_mesh + phi0)
+        return numpy.cos(self.mode.nu * self.phi_mesh + phi)
 
-    def g(self, phi0: float) -> numpy.ndarray:
-        """Azimuthal dependency function.
+    def get_azimuthal_dependency_g(self, phi: float) -> numpy.ndarray:
+        """
+        Azimuthal dependency function.
 
         Args:
             phi0(float): Phase (rotation) of the field.
@@ -57,49 +59,105 @@ class Field(object):
             2D array of values (ndarray). Values are between -1 and 1.
 
         """
-        return -numpy.sin(self.mode.nu * self.phi_mesh + phi0)
+        return -numpy.sin(self.mode.nu * self.phi_mesh + phi)
+
+    def wrapper_get_field(function):
+        def wrapper(self, *args, **kwargs):
+            return function(self, *args, **kwargs)
+
+        return wrapper
+
+    # @wrapper_get_field
+
+    def _get_field_for_LP_mode(self, phi: float, theta: float) -> numpy.ndarray:
+        if self.mode.family is ModeFamily.LP:
+            data = numpy.zeros(self.x_mesh.shape)
+            azimuthal_dependency_f = self.get_azimuthal_dependency_f(phi=phi)
+            iterator = numpy.nditer(data, flags=['multi_index'])
+
+            for _ in iterator:
+                index = iterator.multi_index
+
+                er, hr = self.fiber._rfield(
+                    mode=self.mode,
+                    wavelength=self.wavelength,
+                    radius=self.r_mesh[index]
+                )
+
+                data[index] = er[0] * azimuthal_dependency_f[index]
+
+            self._Ex = data
+            return data
+        else:
+            polarisation = self.Epol(phi, theta)
+            return self.Et(phi, theta) * numpy.cos(polarisation)
 
     def Ex(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
-        """x component of the E field.
+        """
+        X component of the E field.y component of the E field.
 
-        Args:
-            phi: phase (in radians)
-            theta: orientation (in radians)
+        :param      phi:    The phase in radian
+        :type       phi:    float
+        :param      theta:  The orientation in radian
+        :type       theta:  float
 
-        Return:
-            (np x np) numpy array
-
+        :returns:   The field in the x-direction
+        :rtype:     numpy.ndarray
         """
         if self.mode.family is ModeFamily.LP:
-            self._Ex = numpy.zeros(self.x_mesh.shape)
-            f = self.f(phi)
-            for i, j in product(range(self.n_point), repeat=2):
-                er, hr = self.fiber._rfield(self.mode, self.wavelength, self.r_mesh[j, i])
-                self._Ex[j, i] = er[0] * f[j, i]
-            return self._Ex
+            data = numpy.zeros(self.x_mesh.shape)
+            azimuthal_dependency_f = self.get_azimuthal_dependency_f(phi=phi)
+            iterator = numpy.nditer(data, flags=['multi_index'])
+
+            for _ in iterator:
+                index = iterator.multi_index
+
+                er, hr = self.fiber._rfield(
+                    mode=self.mode,
+                    wavelength=self.wavelength,
+                    radius=self.r_mesh[index]
+                )
+
+                data[index] = er[0] * azimuthal_dependency_f[index]
+
+            self._Ex = data
+            return data
         else:
-            return self.Et(phi, theta) * numpy.cos(self.Epol(phi, theta))
+            polarisation = self.Epol(phi, theta)
+            return self.Et(phi, theta) * numpy.cos(polarisation)
 
     def Ey(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
-        """y component of the E field.
+        """
+        Y component of the E field.y component of the E field.
 
-        Args:
-            phi: phase (in radians)
-            theta: orientation (in radians)
+        :param      phi:    The phase in radian
+        :type       phi:    float
+        :param      theta:  The orientation in radian
+        :type       theta:  float
 
-        Return:
-            (np x np) numpy array
-
+        :returns:   The field in the y-direction
+        :rtype:     numpy.ndarray
         """
         if self.mode.family is ModeFamily.LP:
-            self._Ey = numpy.zeros(self.x_mesh.shape)
-            f = self.f(phi)
-            for i, j in product(range(self.n_point), repeat=2):
-                er, hr = self.fiber._rfield(self.mode, self.wavelength, self.r_mesh[j, i])
-                self._Ey[j, i] = er[1] * f[j, i]
-            return self._Ey
+            data = numpy.zeros(self.x_mesh.shape)
+            azimuthal_dependency_f = self.get_azimuthal_dependency_f(phi=phi)
+            iterator = numpy.nditer(data, flags=['multi_index'])
+
+            for _ in iterator:
+                index = iterator.multi_index
+
+                er, hr = self.fiber._rfield(
+                    mode=self.mode,
+                    wavelength=self.wavelength,
+                    radius=self.r_mesh[index]
+                )
+
+                data[index] = er[1] * azimuthal_dependency_f[index]
+            self._Ey = data
+            return data
         else:
-            return self.Et(phi, theta) * numpy.sin(self.Epol(phi, theta))
+            polarisation = self.Epol(phi, theta)
+            return self.Et(phi, theta) * numpy.sin(polarisation)
 
     def Ez(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
         """z component of the E field.
@@ -113,10 +171,19 @@ class Field(object):
 
         """
         self._Ez = numpy.zeros(self.x_mesh.shape)
-        f = self.f(phi)
-        for i, j in product(range(self.n_point), repeat=2):
-            er, hr = self.fiber._rfield(self.mode, self.wavelength, self.r_mesh[j, i])
-            self._Ez[j, i] = er[2] * f[j, i]
+        f = self.get_azimuthal_dependency_f(phi=phi)
+
+        iterator = numpy.nditer(self._Ez, flags=['multi_index'])
+        for _ in iterator:
+            index = iterator.multi_index
+
+            er, hr = self.fiber._rfield(
+                mode=self.mode,
+                wavelength=self.wavelength,
+                radius=self.r_mesh[index]
+            )
+            self._Ez[index] = er[2] * f[index]
+
         return self._Ez
 
     def Er(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
@@ -134,9 +201,14 @@ class Field(object):
             return self.Et(phi, theta) * numpy.cos(self.Epol(phi, theta) - self.phi_mesh)
         else:
             self._Er = numpy.zeros(self.x_mesh.shape)
-            f = self.f(phi)
+            f = self.get_azimuthal_dependency_f(phi=phi)
             for i, j in product(range(self.n_point), repeat=2):
-                er, hr = self.fiber._rfield(self.mode, self.wavelength, self.r_mesh[j, i])
+                er, hr = self.fiber._rfield(
+                    mode=self.mode,
+                    wavelength=self.wavelength,
+                    radius=self.r_mesh[j, i]
+                )
+
                 self._Er[j, i] = er[0] * f[j, i]
             return self._Er
 
@@ -155,9 +227,15 @@ class Field(object):
             return self.Et(phi, theta) * numpy.sin(self.Epol(phi, theta) - self.phi_mesh)
         else:
             self._Ephi = numpy.zeros(self.x_mesh.shape)
-            g = self.g(phi)
+            g = self.get_azimuthal_dependency_g(phi=phi)
             for i, j in product(range(self.n_point), repeat=2):
-                er, hr = self.fiber._rfield(self.mode, self.wavelength, self.r_mesh[j, i])
+
+                er, hr = self.fiber._rfield(
+                    mode=self.mode,
+                    wavelength=self.wavelength,
+                    radius=self.r_mesh[j, i]
+                )
+
                 self._Ephi[j, i] = er[1] * g[j, i]
             return self._Ephi
 
@@ -250,9 +328,15 @@ class Field(object):
         """
         if self.mode.family is ModeFamily.LP:
             self._Hx = numpy.zeros(self.x_mesh.shape)
-            f = self.f(phi)
+            f = self.get_azimuthal_dependency_f(phi=phi)
             for i, j in product(range(self.n_point), repeat=2):
-                er, hr = self.fiber._rfield(self.mode, self.wavelength, self.r_mesh[j, i])
+
+                er, hr = self.fiber._rfield(
+                    mode=self.mode,
+                    wavelength=self.wavelength,
+                    radius=self.r_mesh[j, i]
+                )
+
                 self._Hx[j, i] = hr[0] * f[j, i]
             return self._Hx
         else:
@@ -271,9 +355,15 @@ class Field(object):
         """
         if self.mode.family is ModeFamily.LP:
             self._Hy = numpy.zeros(self.x_mesh.shape)
-            f = self.f(phi)
+            f = self.get_azimuthal_dependency_f(phi=phi)
             for i, j in product(range(self.n_point), repeat=2):
-                er, hr = self.fiber._rfield(self.mode, self.wavelength, self.r_mesh[j, i])
+
+                er, hr = self.fiber._rfield(
+                    mode=self.mode,
+                    wavelength=self.wavelength,
+                    radius=self.r_mesh[j, i]
+                )
+
                 self._Hy[j, i] = hr[1] * f[j, i]
             return self._Hy
         else:
@@ -291,9 +381,15 @@ class Field(object):
 
         """
         self._Hz = numpy.zeros(self.x_mesh.shape)
-        f = self.f(phi)
+        f = self.get_azimuthal_dependency_f(phi=phi)
         for i, j in product(range(self.n_point), repeat=2):
-            er, hr = self.fiber._rfield(self.mode, self.wavelength, self.r_mesh[j, i])
+
+            er, hr = self.fiber._rfield(
+                mode=self.mode,
+                wavelength=self.wavelength,
+                radius=self.r_mesh[j, i]
+            )
+
             self._Hz[j, i] = hr[2] * f[j, i]
         return self._Hz
 
@@ -315,9 +411,15 @@ class Field(object):
 
         else:
             self._Hr = numpy.zeros(self.x_mesh.shape)
-            f = self.f(phi)
+            f = self.get_azimuthal_dependency_f(phi=phi)
             for i, j in product(range(self.n_point), repeat=2):
-                er, hr = self.fiber._rfield(self.mode, self.wavelength, self.r_mesh[j, i])
+
+                er, hr = self.fiber._rfield(
+                    mode=self.mode,
+                    wavelength=self.wavelength,
+                    radius=self.r_mesh[j, i]
+                )
+
                 self._Hr[j, i] = hr[0] * f[j, i]
             return self._Hr
 
@@ -336,10 +438,17 @@ class Field(object):
             return self.Ht(phi, theta) * numpy.sin(self.Hpol(phi, theta) - self.phi_mesh)
         else:
             self._Hphi = numpy.zeros(self.x_mesh.shape)
-            g = self.g(phi)
+            g = self.get_azimuthal_dependency_g(phi=phi)
             for i, j in product(range(self.n_point), repeat=2):
-                er, hr = self.fiber._rfield(self.mode, self.wavelength, self.r_mesh[j, i])
+
+                er, hr = self.fiber._rfield(
+                    mode=self.mode,
+                    wavelength=self.wavelength,
+                    radius=self.r_mesh[j, i]
+                )
+
                 self._Hphi[j, i] = hr[1] * g[j, i]
+
             return self._Hphi
 
     def Ht(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
@@ -416,7 +525,7 @@ class Field(object):
 
         return h_modulus
 
-    def Aeff(self):
+    def get_effective_area(self) -> float:
         """
         Estimation of mode effective area.
 
@@ -428,16 +537,30 @@ class Field(object):
         return (numpy.square(numpy.sum(numpy.square(modF))) /
                 numpy.sum(numpy.power(modF, 4))) * self.dx * self.dy
 
-    def I(self):
-        neff = self.fiber.neff(HE11, self.wavelength)
-        nm = self.fiber.neff(self.mode, self.wavelength)
-        return nm / neff * numpy.sum(numpy.square(self.Et())) * self.dx * self.dy
+    def I(self) -> float:
+        neff = self.fiber.neff(
+            mode=HE11,
+            wavelength=self.wavelength
+        )
 
-    def N(self):
+        nm = self.fiber.neff(
+            mode=self.mode,
+            wavelength=self.wavelength
+        )
+
+        norm_squared = numpy.sum(numpy.square(self.Et()))
+
+        return nm / neff * norm_squared * self.dx * self.dy
+
+    def N(self) -> float:
         """
         Normalization constant.
         """
-        neff = self.fiber.neff(HE11, self.wavelength)
+        neff = self.fiber.neff(
+            mode=HE11,
+            wavelength=self.wavelength
+        )
+
         return 0.5 * scipy.constants.epsilon_0 * neff * scipy.constants.c * self.I()
 
     def S(self):
