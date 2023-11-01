@@ -467,9 +467,9 @@ class Fiber(object):
                 except TypeError:
                     _mmax = mmax
 
-                if (family is ModeFamily.TE or family is ModeFamily.TM) and nu > 0:
+                if family in [ModeFamily.TE, ModeFamily.TM] and nu > 0:
                     break
-                if (family is ModeFamily.HE or family is ModeFamily.EH) and nu == 0:
+                if family in [ModeFamily.HE, ModeFamily.EH] and nu == 0:
                     continue
                 if numax is not None and nu > numax:
                     break
@@ -482,20 +482,34 @@ class Fiber(object):
                         if co > v0:
                             break
                     except (NotImplementedError, ValueError):
-                        neff = self.neff(mode, wavelength, delta)
+                        neff = self.neff(
+                            mode=mode,
+                            wavelength=wavelength,
+                            delta=delta
+                        )
+
                         if isnan(neff):
                             break
+
                     modes.add(mode)
                 if m == 1:
                     break
         return modes
 
-    def field(self, mode: Mode, wavelength: float, r, n_point: int = 101):
+    def field(self, mode: Mode, wavelength: float, limit: float, n_point: int = 101):
         """
         Return electro-magnetic field.
 
         """
-        return Field(self, mode, wavelength, r, n_point)
+        field = Field(
+            fiber=self,
+            mode=mode,
+            wavelength=wavelength,
+            limit=limit,
+            n_point=n_point
+        )
+
+        return field
 
     @lru_cache(maxsize=None)
     def _rfield(self, mode: Mode, wavelength: float, radius: float):

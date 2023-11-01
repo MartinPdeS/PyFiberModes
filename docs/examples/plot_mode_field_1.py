@@ -29,24 +29,26 @@ figure = SceneList(
     ax_orientation='horizontal'
 )
 
-for mode in [HE11, HE12, HE22, LP01]:
-    fiber = factory[0]
+mode = HE11
 
-    field = Field(
-        fiber=fiber,
-        mode=mode,
-        wavelength=1550e-9,
-        limit=10e-6,
-        n_point=101
-    )
+fiber = factory[0]
 
-    e_x = field.Ex()
+field = Field(
+    fiber=fiber,
+    mode=mode,
+    wavelength=1550e-9,
+    limit=10e-6,
+    n_point=201
+)
 
-    ax = figure.append_ax(title=mode)
 
-    ax.add_mesh(scalar=e_x)
+for field_name in ['Ex', 'Ey', 'Ez', 'Er', 'Ephi']:
+    field_array = getattr(field, field_name)()
 
-    ax.add_colorbar(symmetric=True)
+    ax = figure.append_ax(title=field_name, show_colorbar=True)
+
+    ax.add_mesh(scalar=field_array)
+
 
 figure.show()
 
