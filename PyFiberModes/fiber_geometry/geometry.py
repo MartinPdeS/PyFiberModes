@@ -1,4 +1,4 @@
-from PyFiberModes.fiber_ import material
+from PyFiberModes import material
 
 
 class Geometry(object):

@@ -6,7 +6,7 @@ import numpy
 from scipy.special import kn, kvp, k0, k1, jn, jvp, yn, yvp, iv, ivp
 
 
-class Neff(FiberSolver):
+class NeffSolver(FiberSolver):
 
     def __call__(self, wavelength: float, mode: Mode, delta: float, lowbound):
         wavelength = Wavelength(wavelength)

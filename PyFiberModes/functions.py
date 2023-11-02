@@ -1,7 +1,7 @@
 from math import factorial
 
 # A[(k, m, i)]
-A = {
+derivatives_table = {
     # First derivative
     # Three points
     (1, 3, 0): (-3, 4, -1),
@@ -102,18 +102,33 @@ A = {
 }
 
 
-def derivative(f, x, k, m, j, h, *args):
-    """Numerical differentiation
-
-    Args:
-        f(function): function
-        x(float): parameter
-        k(int): differentiation order (1 to 5)
-        m(int): number of points (3 to 6)
-        j(int): central point (0 to m-1)
-        h(float): distance between points
-        *args: other function arguments
-
+def get_derivative(function, x: float, order: int, n_point: int, central_point: int, delta: float, function_args: tuple) -> float:
     """
-    C = factorial(k) / (factorial(m - 1) * h**k)
-    return C * sum(A[(k, m, j)][i] * f(x + (i - j) * h, *args) for i in range(m))
+    Retunrs the derivative a the given function
+
+    :param      function:       The function
+    :type       function:       function
+    :param      x:              parameter to derive
+    :type       x:              float
+    :param      order:          Differentiation order (1 to 5)
+    :type       order:          int
+    :param      n_point:        Number of points (3 to 6)
+    :type       n_point:        int
+    :param      central_point:  Central point (0 to m-1)
+    :type       central_point:  int
+    :param      delta:          Distance between points
+    :type       delta:          float
+    :param      args:           The arguments
+    :type       args:           list
+
+    :returns:   The value of the derivative
+    :rtype:     float
+    """
+
+    prefactor = factorial(order) / (factorial(n_point - 1) * delta**order)
+
+    evaluation = [
+        derivatives_table[(order, n_point, central_point)][i] * function(x + (i - central_point) * delta, *function_args) for i in range(n_point)
+    ]
+
+    return prefactor * sum(evaluation)

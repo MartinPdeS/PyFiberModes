@@ -7,7 +7,7 @@ Mode fields
 # %%
 # Imports
 # ~~~~~~~
-from PyFiberModes import FiberFactory, HE11, HE12, HE22, LP01
+from PyFiberModes import FiberFactory, HE11
 from PyFiberModes.field import Field
 from MPSPlots.render2D import SceneList
 
@@ -17,8 +17,8 @@ from MPSPlots.render2D import SceneList
 # Here we create the different fiber design that we want to explore
 core_indexes = 1.54
 factory = FiberFactory()
-factory.addLayer(name="core", radius=4e-6, index=core_indexes)
-factory.addLayer(name="cladding", index=1.4444)
+factory.add_layer(name="core", radius=4e-6, index=core_indexes)
+factory.add_layer(name="cladding", index=1.4444)
 
 
 # %%

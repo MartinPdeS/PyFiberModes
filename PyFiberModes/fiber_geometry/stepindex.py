@@ -71,6 +71,7 @@ class StepIndex(Geometry):
         return wavelength.k0 * radius * sqrt(abs(index**2 - neff**2))
 
     def Psi(self, radius: float, neff: float, wavelength: float, nu, C):
+
         u = self.get_u_parameter(
             radius=radius,
             neff=neff,
@@ -92,14 +93,22 @@ class StepIndex(Geometry):
         #     print(neff, self.get_maximum_index(wavelength), C, r)
         return psi, psip
 
-    def lpConstants(self, radius: float, neff: float, wavelength: float, nu, A) -> tuple:
+    def lpConstants(self,
+            radius: float,
+            neff: float,
+            wavelength: float,
+            nu: int,
+            A: list) -> tuple:
+
         u = self.get_u_parameter(
             radius=radius,
             neff=neff,
             wavelength=wavelength
         )
 
-        if neff < self.get_maximum_index(wavelength):
+        maximum_index = self.get_maximum_index(wavelength=wavelength)
+
+        if neff < maximum_index:
             W = numpy.pi / 2
             term_0 = W * (u * yvp(nu, u) * A[0] - yn(nu, u) * A[1])
             term_1 = W * (jn(nu, u) * A[1] - u * jvp(nu, u) * A[0])
@@ -110,7 +119,14 @@ class StepIndex(Geometry):
 
         return term_0, term_1
 
-    def EH_fields(self, radius_in: float, radius_out: float, nu: float, neff: float, wavelength: float, EH, TM: bool=True):
+    def EH_fields(self,
+            radius_in: float,
+            radius_out: float,
+            nu: int,
+            neff: float,
+            wavelength: float,
+            EH: object,
+            TM: bool = True):
         """
 
         modify EH in-place (for speed)

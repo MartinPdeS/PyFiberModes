@@ -107,8 +107,8 @@ class FiberFactory(object):
             "name": "",
             "description": "",
             "author": "",
-            "crdate": time.time(),
-            "tstamp": time.time(),
+            "creation_date": time.time(),
+            "time_stamp": time.time(),
             "layers": []
         }
         if filename:
@@ -156,29 +156,30 @@ class FiberFactory(object):
         self._fibers["description"] = value
 
     @property
-    def crdate(self):
+    def creation_date(self):
         """Creation date of this factory.
 
         """
-        return self._fibers["crdate"]
+        return self._fibers["creation_date"]
 
     @property
-    def tstamp(self):
+    def time_stamp(self):
         """Timestamp (modification date).
 
         This is automatically updated when the fiber factory is saved.
 
         """
-        return self._fibers["tstamp"]
+        return self._fibers["time_stamp"]
 
     @property
     def layers(self):
-        """List of layers.
+        """
+        List of layers.
 
         """
         return LayersProxy(self)
 
-    def addLayer(self,
+    def add_layer(self,
             pos: int = None,
             name: str = "",
             radius: float = 0,
@@ -237,20 +238,22 @@ class FiberFactory(object):
                 else:
                     x = 0
                 layer["mparams"] = [x]
-        assert len(kwargs) == 0, "unknown arguments {}".format(
-            ", ".join(kwargs.keys()))
+
+        assert len(kwargs) == 0, f"Unknown arguments {kwargs}"
+
         self._fibers["layers"].insert(pos, layer)
 
-    def removeLayer(self, pos=-1):
-        """Remore layer at given position (default: last layer)
+    def remove_layer(self, layer_idx=-1):
+        """
+        Remove layer at given position (default: last layer)
 
         Args:
             pos(int): Index of the layer to remove.
 
         """
-        self._fibers["layers"].pop(pos)
+        self._fibers["layers"].pop(layer_idx)
 
-    def dump(self, fp, **kwargs):
+    def dump(self, file_pointer, **kwargs):
         """Dumps fiber factory to a file.
 
         Args:
@@ -258,7 +261,7 @@ class FiberFactory(object):
             **kwargs: See json.dumps
 
         """
-        fp.write(self.dumps(**kwargs))
+        file_pointer.write(self.dumps(**kwargs))
 
     def dumps(self, **kwargs):
         """Dumps fiber factory to a string.
@@ -270,7 +273,7 @@ class FiberFactory(object):
             JSON string.
 
         """
-        self._fibers["tstamp"] = time.time()
+        self._fibers["time_stamp"] = time.time()
         return json.dumps(self._fibers, **kwargs)
 
     def load(self, fp, **kwargs):
@@ -312,7 +315,7 @@ class FiberFactory(object):
 
         """
         for key in ("version", "name", "description",
-                    "author", "crdate", "tstamp", "layers"):
+                    "author", "creation_date", "time_stamp", "layers"):
             if key not in obj.keys():
                 raise ValueError(
                     f"Missing '{key}' parameter"
@@ -359,8 +362,11 @@ class FiberFactory(object):
                     self._nitems.append(len(SLRC(tp)))
 
     def _getIndexes(self, index):
-        """Get list of indexes from a single index."""
+        """
+        Get list of indexes from a single index.
+        """
         g = product(*(range(i) for i in self._nitems))
+
         return next(islice(g, index, None))
 
     def setSolvers(self, Cutoff=None, Neff=None):
@@ -437,4 +443,15 @@ class FiberFactory(object):
                 del names[i]
             i -= 1
 
-        return Fiber(r, f, fp, m, mp, names, self._Cutoff, self._Neff)
+        fiber = Fiber(
+            layer_radius=r,
+            layer_types=f,
+            fp=fp,
+            material_parameters=m,
+            layer_indexes=mp,
+            layer_names=names,
+            cutoff_solver=self._Cutoff,
+            neff_solver=self._Neff
+        )
+
+        return fiber

@@ -7,7 +7,7 @@ from PyFiberModes.constants import Y0
 import logging
 
 
-class Cutoff(FiberSolver):
+class CutoffSolver(FiberSolver):
     """
     Cutoff for standard step-index fiber.
     """
@@ -49,34 +49,49 @@ class Cutoff(FiberSolver):
 
         return (1 + ratio) * jn(nu - 2, V0) - (1 - ratio) * jn(nu, V0)
 
-    def _findHEcutoff(self, mode: Mode):
+    def _findHEcutoff(self, mode: Mode) -> float:
         if mode.m > 1:
-            pm = Mode(mode.family, mode.nu, mode.m - 1)
-            lowbound = self.fiber.cutoff(pm)
+
+            pm = Mode(
+                family=mode.family,
+                nu=mode.nu,
+                m=mode.m - 1
+            )
+
+            lowbound = self.fiber.cutoff(mode=pm)
+
             if isnan(lowbound) or isinf(lowbound):
-                raise AssertionError("_findHEcutoff: no previous cutoff for"
-                                     "{} mode".format(str(mode)))
+                raise AssertionError(f"_findHEcutoff: no previous cutoff for {mode} mode")
+
             delta = 1 / lowbound if lowbound else self._MCD
             lowbound += delta
         else:
             lowbound = delta = self._MCD
-        ipoints = numpy.concatenate((jn_zeros(mode.nu, mode.m),
-                                     jn_zeros(mode.nu - 2, mode.m)))
+
+        ipoints = numpy.concatenate(
+            (jn_zeros(mode.nu, mode.m),
+            jn_zeros(mode.nu - 2, mode.m))
+        )
+
         ipoints.sort()
         ipoints = list(ipoints[ipoints > lowbound])
-        co = self._findFirstRoot(self.get_cutoff_HE,
-                                 args=(mode.nu,),
-                                 lowbound=lowbound,
-                                 ipoints=ipoints,
-                                 delta=delta)
-        if isnan(co):
-            self.logger.error("_findHEcutoff: no cutoff found for "
-                              "{} mode".format(str(mode)))
+
+        cutoff = self._findFirstRoot(
+            self.get_cutoff_HE,
+            args=(mode.nu,),
+            lowbound=lowbound,
+            ipoints=ipoints,
+            delta=delta
+        )
+
+        if isnan(cutoff):
+            self.logger.error(f"_findHEcutoff: no cutoff found for {mode} mode")
             return 0
-        return co
+
+        return cutoff
 
 
-class Neff(FiberSolver):
+class NeffSolver(FiberSolver):
     """
     Effective index for standard step-index fiber
     """
@@ -193,7 +208,7 @@ class Neff(FiberSolver):
         return numpy.array((0, ephi, 0)), numpy.array((hr, 0, hz))
 
     def get_TM_field(self, wavelength: float, nu, neff: float, radius: float) -> numpy.ndarray:
-        rho = self.fiber.get_outer_radius(0)
+        rho = self.fiber.get_outer_radius(layer_idx=0)
         k = wavelength.k0
 
         max_index_core = self.fiber.get_maximum_index(
@@ -224,8 +239,9 @@ class Neff(FiberSolver):
         return numpy.array((er, 0, ez)), numpy.array((0, hphi, 0))
 
     def get_HE_field(self, wavelength: float, nu: float, neff: float, radius: float) -> numpy.ndarray:
-        rho = self.fiber.get_outer_radius(0)
+        rho = self.fiber.get_outer_radius(layer_idx=0)
         k = wavelength.k0
+
         nco2 = self.fiber.get_maximum_index(
             layer_idx=0,
             wavelength=wavelength

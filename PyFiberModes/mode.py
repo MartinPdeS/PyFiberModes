@@ -37,10 +37,13 @@ class Mode(namedtuple('Mode', 'family nu m')):
     def __new__(cls, family, nu, m):
         if not isinstance(family, Family):
             family = Family[family]
+
         return super(Mode, cls).__new__(cls, family, nu, m)
 
-    def lpEq(self):
-        """Equivalent LP mode."""
+    def get_LP_equvalent_mode(self):  # previously lpEq
+        """
+        Gets the equivalent LP mode.
+        """
         if self.family is Family.LP:
             return self
         elif self.family is Family.HE:
@@ -49,11 +52,10 @@ class Mode(namedtuple('Mode', 'family nu m')):
             return Mode(Family.LP, self.nu + 1, self.m)
 
     def __str__(self):
-        return "{}({},{})".format(self.family.name, self.nu, self.m)
+        return f"{self.family.name}({self.nu},{self.m})"
 
     def __repr__(self):
-        return "Mode('{}',{},{})".format(
-            self.family.name, self.nu, self.m)
+        return f"Mode('{self.family.name}',{self.nu},{self.m})"
 
     def __lt__(self, m2):
         """Function used to sort modes.
@@ -149,16 +151,5 @@ class Mode(namedtuple('Mode', 'family nu m')):
             return (round(r * 255), round(g * 255), round(b * 255))
         else:
             return (r, g, b)
-
-
-#: Predefined HE(1,1) mode
-HE11 = Mode(Family.HE, 1, 1)
-HE12 = Mode(Family.HE, 1, 2)
-HE22 = Mode(Family.HE, 2, 2)
-
-#: Predefined LP(0,1) mode
-LP01 = Mode(Family.LP, 0, 1)
-LP11 = Mode(Family.LP, 1, 1)
-LP02 = Mode(Family.LP, 0, 2)
 
 # -
