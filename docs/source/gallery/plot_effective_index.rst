@@ -53,8 +53,8 @@ Here we create the different fiber design that we want to explore
 
     core_indexes = numpy.linspace(1.464, 1.494)
     factory = FiberFactory()
-    factory.addLayer(name="core", radius=4e-6, index=core_indexes)
-    factory.addLayer(name="cladding", index=1.4444)
+    factory.add_layer(name="core", radius=4e-6, index=core_indexes)
+    factory.add_layer(name="cladding", index=1.4444)
 
 
 
@@ -79,7 +79,7 @@ Preparing the figure
     for mode in [HE11, HE12, HE22]:
         neff = []
         for fiber in factory:
-            effective_index = fiber.neff(mode, 1550e-9)
+            effective_index = fiber.get_effective_index(mode, 1550e-9)
             neff.append(effective_index)
 
         ax.add_line(
@@ -113,7 +113,7 @@ Preparing the figure
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.407 seconds)
+   **Total running time of the script:** (0 minutes 0.134 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_effective_index.py:

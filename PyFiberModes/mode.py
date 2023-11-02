@@ -88,8 +88,13 @@ class Mode(namedtuple('Mode', 'family nu m')):
                 else:
                     nu2 = m2.nu + 1
                 if nu1 == nu2:
-                    fams = [Family.LP, Family.EH, Family.TE,
-                            Family.HE, Family.TM]
+                    fams = [
+                        Family.LP,
+                        Family.EH,
+                        Family.TE,
+                        Family.HE,
+                        Family.TM
+                    ]
                     result = fams.index(self.family) < fams.index(m2.family)
                 else:
                     result = nu1 < nu2

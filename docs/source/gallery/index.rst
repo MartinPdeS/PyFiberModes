@@ -15,6 +15,23 @@ A gallery of examples and that showcase how PyFiberModes can be used. Some examp
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="Modal dispersion VS core index">
+
+.. only:: html
+
+  .. image:: /gallery/images/thumb/sphx_glr_plot_dispersion_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_gallery_plot_dispersion.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Modal dispersion VS core index</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="Effective index VS core index">
 
 .. only:: html
@@ -32,13 +49,68 @@ A gallery of examples and that showcase how PyFiberModes can be used. Some examp
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="Groupe index VS core index">
+
+.. only:: html
+
+  .. image:: /gallery/images/thumb/sphx_glr_plot_fiber_LP_modes_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_gallery_plot_fiber_LP_modes.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Groupe index VS core index</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Mode fields">
+
+.. only:: html
+
+  .. image:: /gallery/images/thumb/sphx_glr_plot_mode_field_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_gallery_plot_mode_field.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Mode fields</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Mode fields">
+
+.. only:: html
+
+  .. image:: /gallery/images/thumb/sphx_glr_plot_mode_field_1_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_gallery_plot_mode_field_1.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Mode fields</div>
+    </div>
+
+
+.. raw:: html
+
     </div>
 
 
 .. toctree::
    :hidden:
 
+   /gallery/plot_dispersion
    /gallery/plot_effective_index
+   /gallery/plot_fiber_LP_modes
+   /gallery/plot_mode_field
+   /gallery/plot_mode_field_1
 
 
 

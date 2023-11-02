@@ -50,9 +50,9 @@ class CutoffSolver(solver.solver.FiberSolver):
         if isnan(delta):
             print(lowbound)
 
-        return self._findFirstRoot(
-            fct[mode.family],
-            args=(mode.nu,),
+        return self.find_function_first_root(
+            function=fct[mode.family],
+            function_args=(mode.nu,),
             lowbound=lowbound,
             delta=delta,
             maxiter=int(250 / delta)

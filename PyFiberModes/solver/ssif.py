@@ -27,7 +27,7 @@ class CutoffSolver(FiberSolver):
             if nu == 1:
                 m -= 1
             else:
-                return self._findHEcutoff(mode)
+                return self.find_HE_mode_cutoff(mode)
 
         return jn_zeros(nu, m)[m - 1]
 
@@ -49,7 +49,7 @@ class CutoffSolver(FiberSolver):
 
         return (1 + ratio) * jn(nu - 2, V0) - (1 - ratio) * jn(nu, V0)
 
-    def _findHEcutoff(self, mode: Mode) -> float:
+    def find_HE_mode_cutoff(self, mode: Mode) -> float:
         if mode.m > 1:
 
             pm = Mode(
@@ -61,7 +61,7 @@ class CutoffSolver(FiberSolver):
             lowbound = self.fiber.cutoff(mode=pm)
 
             if isnan(lowbound) or isinf(lowbound):
-                raise AssertionError(f"_findHEcutoff: no previous cutoff for {mode} mode")
+                raise AssertionError(f"find_HE_mode_cutoff: no previous cutoff for {mode} mode")
 
             delta = 1 / lowbound if lowbound else self._MCD
             lowbound += delta
@@ -69,23 +69,22 @@ class CutoffSolver(FiberSolver):
             lowbound = delta = self._MCD
 
         ipoints = numpy.concatenate(
-            (jn_zeros(mode.nu, mode.m),
-            jn_zeros(mode.nu - 2, mode.m))
+            (jn_zeros(mode.nu, mode.m), jn_zeros(mode.nu - 2, mode.m))
         )
 
         ipoints.sort()
         ipoints = list(ipoints[ipoints > lowbound])
 
-        cutoff = self._findFirstRoot(
-            self.get_cutoff_HE,
-            args=(mode.nu,),
+        cutoff = self.find_function_first_root(
+            function=self.get_cutoff_HE,
+            function_args=(mode.nu,),
             lowbound=lowbound,
             ipoints=ipoints,
             delta=delta
         )
 
         if isnan(cutoff):
-            self.logger.error(f"_findHEcutoff: no cutoff found for {mode} mode")
+            self.logger.error(f"find_HE_mode_cutoff: no cutoff found for {mode} mode")
             return 0
 
         return cutoff

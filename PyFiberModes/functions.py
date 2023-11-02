@@ -104,7 +104,7 @@ derivatives_table = {
 
 def get_derivative(function, x: float, order: int, n_point: int, central_point: int, delta: float, function_args: tuple) -> float:
     """
-    Retunrs the derivative a the given function
+    Returns the derivative a the given function
 
     :param      function:       The function
     :type       function:       function

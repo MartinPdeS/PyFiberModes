@@ -1,6 +1,7 @@
 from itertools import count
 from scipy.optimize import brentq
 import logging
+import numpy
 
 
 class FiberSolver(object):
@@ -34,39 +35,42 @@ class FiberSolver(object):
             return r
         return wrapper
 
-    def _findFirstRoot(self, fct, args=(), lowbound=0, highbound=None,
-                       ipoints=[], delta=0.25, maxiter=None):
-        fct = self.__record(fct)  # For debug purpose.
+    def find_function_first_root(self,
+            function,
+            function_args: tuple = (),
+            lowbound: float = 0,
+            highbound: float = None,
+            ipoints: list = [],
+            delta: float = 0.25,
+            maxiter: int = numpy.inf):
+
+        function = self.__record(function)  # For debug purpose.
         while True:
             if ipoints:
                 maxiter = len(ipoints)
             elif highbound:
                 maxiter = int((highbound - lowbound) / delta)
-            assert maxiter is not None
 
             a = lowbound
-            fa = fct(a, *args)
+            fa = function(a, *function_args)
             if fa == 0:
                 return a
 
             for i in range(1, maxiter + 1):
                 b = ipoints.pop(0) if ipoints else a + delta
                 if highbound:
-                    if ((b > highbound > lowbound) or
-                            (b < highbound < lowbound)):
-                        self.logger.info("_findFirstRoot: no root found within"
-                                         " allowed range")
+                    if (b > highbound > lowbound) or (b < highbound < lowbound):
+                        self.logger.info("find_function_first_root: no root found within allowed range")
                         return float("nan")
-                fb = fct(b, *args)
+                fb = function(b, *function_args)
                 if fb == 0:
                     return b
 
                 if (fa > 0 and fb < 0) or (fa < 0 and fb > 0):
-                    z = brentq(fct, a, b, args=args, xtol=1e-20)
-                    fz = fct(z, *args)
+                    z = brentq(function, a, b, args=function_args, xtol=1e-20)
+                    fz = function(z, *function_args)
                     if abs(fa) > abs(fz) < abs(fb):  # Skip discontinuities
-                        self.logger.debug("skipped ({}, {}, {})".format(
-                            fa, fz, fb))
+                        self.logger.debug(f"skipped ({fa}, {fz}, {fb})")
                         return z
 
                 a, fa = b, fb
@@ -77,11 +81,20 @@ class FiberSolver(object):
         self.logger.info(f"maxiter reached ({maxiter}, {lowbound}, {highbound})")
         return float("nan")
 
-    def _findBetween(self, fct, lowbound: float, highbound: float, args=(), max_iteration: int = 15):
-        fct = self.__record(fct)  # For debug purpose.
+    def _findBetween(self,
+            function,
+            lowbound: float,
+            highbound: float,
+            function_args: tuple = (),
+            max_iteration: int = 15):
+
+        function = self.__record(function)  # For debug purpose.
         v = [lowbound, highbound]
 
-        s = [fct(lowbound, *args), fct(highbound, *args)]
+        s = [
+            function(lowbound, *function_args),
+            function(highbound, *function_args)
+        ]
 
         for j in count():  # probably not needed...
             if j == max_iteration:
@@ -92,8 +105,8 @@ class FiberSolver(object):
                 fa, fb = s[i], s[i + 1]
 
                 if (fa > 0 and fb < 0) or (fa < 0 and fb > 0):
-                    z = brentq(fct, a, b, args=args)
-                    fz = fct(z, *args)
+                    z = brentq(function, a, b, args=function_args)
+                    fz = function(z, *function_args)
                     if abs(fa) > abs(fz) < abs(fb):  # Skip discontinuities
                         return z
 
@@ -102,4 +115,4 @@ class FiberSolver(object):
                 a, b = v[2 * i], v[2 * i + 1]
                 c = (a + b) / 2
                 v.insert(2 * i + 1, c)
-                s.insert(2 * i + 1, fct(c, *args))
+                s.insert(2 * i + 1, function(c, *function_args))

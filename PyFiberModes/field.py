@@ -55,7 +55,7 @@ class Field(object):
         :type       phi:  float
 
         :returns:   The azimuthal dependency g values in [-1, 1].
-        :rtype:     { return_type_description }
+        :rtype:     numpy.ndarray
         """
         return -numpy.sin(self.mode.nu * self.phi_mesh + phi)
 
@@ -71,8 +71,8 @@ class Field(object):
         return wrapper
 
     def Ex(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
-        """
-        X component of the electric field.
+        r"""
+        X component of the electric field :math:`\| E_{x} \|`.
 
         :param      phi:    The phase in radian
         :type       phi:    float
@@ -102,8 +102,8 @@ class Field(object):
         return array
 
     def Ey(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
-        """
-        Y component of the electric field.
+        r"""
+        Y component of the electric field :math:`\| E_{y} \|`.
 
         :param      phi:    The phase in radian
         :type       phi:    float
@@ -133,8 +133,8 @@ class Field(object):
         return array
 
     def Ez(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
-        """
-        Z component of the electric field.
+        r"""
+        Z component of the electric field :math:`\| E_{z} \|`.
 
         :param      phi:    The phase in radian
         :type       phi:    float
@@ -160,8 +160,8 @@ class Field(object):
         return array
 
     def Er(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
-        """
-        Radial component of the electric field.
+        r"""
+        Radial component of the electric field :math:`\| E_{r} \|`.
 
         :param      phi:    The phase in radian
         :type       phi:    float
@@ -191,8 +191,8 @@ class Field(object):
         return array
 
     def Ephi(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
-        """
-        Phi component of the electric field.
+        r"""
+        Phi component of the electric field :math:`\| E_{\phi} \|`.
 
         :param      phi:    The phase in radian
         :type       phi:    float
@@ -223,8 +223,8 @@ class Field(object):
         return array
 
     def Et(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
-        """
-        Transverse component of the electric field.
+        r"""
+        Transverse component of the electric field :math:`\| E_{T} \|`.
 
         :param      phi:    The phase in radian
         :type       phi:    float
@@ -250,7 +250,7 @@ class Field(object):
         return e_transverse
 
     def Epol(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
-        """
+        r"""
         Polarization of the transverse electric field (in radians).
 
         :param      phi:    The phase in radian
@@ -273,15 +273,16 @@ class Field(object):
         return e_polarization
 
     def Emod(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
-        """modulus of the E field.
+        r"""
+        Norm of the E vector. :math:`\| \vec{E} \|`.
 
-        Args:
-            phi: phase (in radians)
-            theta: orientation (in radians)
+        :param      phi:                  The phi
+        :type       phi:                  float
+        :param      theta:                The theta
+        :type       theta:                float
 
-        Return:
-            (np x np) numpy array
-
+        :returns:   Norm of the H vector
+        :rtype:     numpy.ndarray
         """
         if self.mode.family is ModeFamily.LP:
             e_x = self.Ex(phi, theta)
@@ -301,8 +302,8 @@ class Field(object):
         return e_modulus
 
     def Hx(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
-        """
-        X component of the magnetic field.
+        r"""
+        X component of the magnetic field :math:`\| H_{x} \|`.
 
         :param      phi:    The phase in radian
         :type       phi:    float
@@ -333,8 +334,8 @@ class Field(object):
         return array
 
     def Hy(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
-        """
-        Y component of the magnetic field.
+        r"""
+        Y component of the magnetic field :math:`\| H_{y} \|`.
 
         :param      phi:    The phase in radian
         :type       phi:    float
@@ -364,8 +365,8 @@ class Field(object):
         return array
 
     def Hz(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
-        """
-        Z component of the magnetic field.
+        r"""
+        Z component of the magnetic field :math:`\| H_{z} \|`.
 
         :param      phi:    The phase in radian
         :type       phi:    float
@@ -389,8 +390,8 @@ class Field(object):
         return array
 
     def Hr(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
-        """
-        Radial component of the magnetic field.
+        r"""
+        Radial component of the magnetic field :math:`\| H_{r} \|`.
 
         :param      phi:    The phase in radian
         :type       phi:    float
@@ -423,8 +424,8 @@ class Field(object):
         return array
 
     def Hphi(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
-        """
-        Azimuthal component of the magnetic field.
+        r"""
+        Azimuthal component of the magnetic field :math:`\| H_{\phi} \|`.
 
         :param      phi:    The phase in radian
         :type       phi:    float
@@ -454,8 +455,8 @@ class Field(object):
         return array
 
     def Ht(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
-        """
-        Transverse component of the magnetic field.
+        r"""
+        Transverse component of the magnetic field :math:`\| H_{T} \|`.
 
         :param      phi:    The phase in radian
         :type       phi:    float
@@ -502,15 +503,17 @@ class Field(object):
         return h_polarization
 
     def Hmod(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
-        """modulus of the H field.
+        r"""
+        Norm of the H vector :math:`\| \vec{H} \|`.
 
-        Args:
-            phi: phase (in radians)
-            theta: orientation (in radians)
 
-        Return:
-            (np x np) numpy array
+        :param      phi:                  The phi
+        :type       phi:                  float
+        :param      theta:                The theta
+        :type       theta:                float
 
+        :returns:   Norm of the H vector
+        :rtype:     numpy.ndarray
         """
         if self.mode.family is ModeFamily.LP:
             h_x = self.Hx(phi, theta)
@@ -534,19 +537,42 @@ class Field(object):
         Estimation of mode effective area.
 
         Suppose than r is large enough, such as F(r, r) = 0.
-
         """
         field_array_norm = self.Emod()
 
-        term_0 = numpy.square(numpy.sum(numpy.square(field_array_norm)))
+        integral = self.get_integrale_square(array=self.Emod())
+
+        term_0 = numpy.square(integral)
 
         term_1 = numpy.sum(numpy.power(field_array_norm, 4))
 
-        return (term_0 / term_1) * self.dx * self.dy
+        return (term_0 / term_1)
+
+    def get_integrale_square(self, array: numpy.ndarray) -> float:
+        """
+        Gets the integrale of the array squared.
+
+        :param      array: The array
+        :type       array: numpy.ndarray
+
+        :returns:   The integrale square.
+        :rtype:     float
+        """
+        square_field = numpy.square(array)
+
+        sum_square_field = numpy.sum(square_field)
+
+        integral = sum_square_field * self.dx * self.dy
+
+        return integral
 
     def get_intensity(self) -> float:
-        """
-        Gets the intensity.
+        r"""
+        Gets the intensity value of the mode.
+
+        .. math::
+
+            I = \frac{n_{eff}}{n_{eff}{HE11}} * \int \| E_T \|^2 * dx * dy
 
         :returns:   The intensity.
         :rtype:     float
@@ -561,13 +587,17 @@ class Field(object):
             wavelength=self.wavelength
         )
 
-        norm_squared = numpy.sum(numpy.square(self.Et()))
+        norm_squared = self.get_integrale_square(array=self.Et())
 
-        return n_eff / HE11_n_eff * norm_squared * self.dx * self.dy
+        return n_eff / HE11_n_eff * norm_squared
 
     def get_normalization_constant(self) -> float:
-        """
-        Gets the normalization constant.
+        r"""
+        Gets the normalization constant :math:`N`.
+
+        .. math::
+
+            N = \frac{I}{2} * \epsilon_0 * n_{eff} * c
 
         :returns:   The normalization constant.
         :rtype:     float
@@ -577,13 +607,15 @@ class Field(object):
             wavelength=self.wavelength
         )
 
-        return 0.5 * scipy.constants.epsilon_0 * neff * scipy.constants.c * self.get_intensity()
+        intensity = self.get_intensity()
 
-    def S(self):
+        return 0.5 * scipy.constants.epsilon_0 * neff * scipy.constants.c * intensity
+
+    def get_poynting_vector(self):
         """
-        Gets the Poyinting vector.
+        Gets the Poynting vector but is not implemented yet.
 
-        :returns:   The Poyinting vector modulus.
+        :returns:   The Poynting vector modulus.
         :rtype:     float
         """
         raise NotImplementedError('Not yet implemented')
