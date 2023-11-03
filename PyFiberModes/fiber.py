@@ -7,7 +7,6 @@ import logging
 from PyFiberModes import fiber_geometry as geometry
 from PyFiberModes import solver
 from PyFiberModes import Wavelength, Mode, ModeFamily
-# from PyFiberModes import constants
 from PyFiberModes.functions import get_derivative
 from PyFiberModes.field import Field
 from itertools import count
@@ -42,13 +41,6 @@ class Fiber(object):
 
     def __post_init__(self):
         self.initialize_layers()
-
-        self.cutoff_cache = {
-            Mode("HE", 1, 1): 0,
-            Mode("LP", 0, 1): 0
-        }
-
-        self.ne_cache = {}
 
         self.set_solvers(
             cutoff_class=self.cutoff_solver,
@@ -376,13 +368,20 @@ class Fiber(object):
 
         return Wavelength(wavelength)
 
-    def cutoff(self, mode: Mode):
-        try:
-            return self.cutoff_cache[mode]
-        except KeyError:
-            cutoff = self.cutoff_solver(mode=mode)
-            self.cutoff_cache[mode] = cutoff
-            return cutoff
+    def get_cutoff(self, mode: Mode) -> float:
+        """
+        Gets the cutoff wavelength of the fiber.
+
+        :param      mode:  The mode
+        :type       mode:  Mode
+
+        :returns:   The cutoff wavelength.
+        :rtype:     float
+        """
+        if mode in [Mode("HE", 1, 1), Mode("LP", 0, 1)]:
+            return 0
+
+        return self.cutoff_solver(mode=mode)
 
     def get_cutoff_wavelength(self, mode: Mode) -> float:
         """
@@ -394,7 +393,7 @@ class Fiber(object):
         :returns:   The cutoff wavelength.
         :rtype:     float
         """
-        cutoff = self.cutoff(mode=mode)
+        cutoff = self.get_cutoff(mode=mode)
         wavelength = self.V0_to_wavelength(V0=cutoff)
         return wavelength
 
@@ -702,10 +701,10 @@ class Fiber(object):
 
         :param      wavelength:  The wavelength
         :type       wavelength:  float
-        :param      numax:       The numax
-        :type       numax:       { type_description }
-        :param      mmax:        The mmax
-        :type       mmax:        { type_description }
+        :param      nu_max:      The numax
+        :type       nu_max:      int
+        :param      m_max:       The mmax
+        :type       m_max:       int
         :param      delta:       The delta
         :type       delta:       float
 
@@ -771,7 +770,7 @@ class Fiber(object):
         Find all modes of given families, within given constraints
 
         :param      families:    The families
-        :type       families:    { type_description }
+        :type       families:    object
         :param      wavelength:  The wavelength
         :type       wavelength:  float
         :param      numax:       The radial number nu maximum to reach
@@ -813,7 +812,7 @@ class Fiber(object):
                     mode = Mode(family, nu, m)
 
                     try:
-                        if self.cutoff(mode=mode) > v0:
+                        if self.get_cutoff(mode=mode) > v0:
                             break
 
                     except (NotImplementedError, ValueError):

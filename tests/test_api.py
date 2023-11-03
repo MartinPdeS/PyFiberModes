@@ -54,4 +54,7 @@ def test_get_attribute(function_string):
             wavelength=1550e-9
         )
 
+
+if __name__ == '__main__':
+    test_get_attribute(function_string='get_dispersion')
 # -

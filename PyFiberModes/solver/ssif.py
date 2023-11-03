@@ -58,7 +58,7 @@ class CutoffSolver(FiberSolver):
                 m=mode.m - 1
             )
 
-            lowbound = self.fiber.cutoff(mode=pm)
+            lowbound = self.fiber.get_cutoff(mode=pm)
 
             if isnan(lowbound) or isinf(lowbound):
                 raise AssertionError(f"find_HE_mode_cutoff: no previous cutoff for {mode} mode")
@@ -98,7 +98,7 @@ class NeffSolver(FiberSolver):
     def __call__(self, wavelength: float, mode: Mode, delta: float, lowbound: float):
         epsilon = 1e-12
 
-        cutoff = self.fiber.cutoff(mode=mode)
+        cutoff = self.fiber.get_cutoff(mode=mode)
 
         if self.fiber.get_V0(wavelength=wavelength) < cutoff:
             return float("nan")
@@ -122,7 +122,7 @@ class NeffSolver(FiberSolver):
             case _:
                 nm = Mode(ModeFamily.LP, 1, mode.m + 1)
 
-        cutoff = self.fiber.cutoff(mode=nm)
+        cutoff = self.fiber.get_cutoff(mode=nm)
 
         try:
             value_0 = sqrt(max_core_index**2 - (cutoff / (r * wavelength.k0))**2) + epsilon
