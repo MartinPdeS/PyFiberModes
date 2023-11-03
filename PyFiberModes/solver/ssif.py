@@ -1,15 +1,20 @@
-from .solver import FiberSolver
-from PyFiberModes import Mode, ModeFamily
-from math import sqrt, isnan, isinf
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import numpy
+import logging
+
+from PyFiberModes.solver.solver import FiberSolver
+from PyFiberModes import Mode, ModeFamily
+
+
 from scipy.special import jn, jn_zeros, kn, j0, j1, k0, k1, jvp, kvp
 from PyFiberModes.constants import Y0
-import logging
 
 
 class CutoffSolver(FiberSolver):
     """
-    Cutoff for standard step-index fiber.
+    Cutoff solver for standard step-index fiber.
     """
     logger = logging.getLogger(__name__)
 
@@ -31,7 +36,7 @@ class CutoffSolver(FiberSolver):
 
         return jn_zeros(nu, m)[m - 1]
 
-    def get_cutoff_HE(self, V0: float, nu: float) -> float:
+    def get_cutoff_HE(self, V0: float, nu: int) -> float:
 
         wavelength = self.fiber.V0_to_wavelength(V0=V0)
 
@@ -60,7 +65,7 @@ class CutoffSolver(FiberSolver):
 
             lowbound = self.fiber.get_cutoff(mode=pm)
 
-            if isnan(lowbound) or isinf(lowbound):
+            if numpy.isnan(lowbound) or numpy.isinf(lowbound):
                 raise AssertionError(f"find_HE_mode_cutoff: no previous cutoff for {mode} mode")
 
             delta = 1 / lowbound if lowbound else self._MCD
@@ -83,7 +88,7 @@ class CutoffSolver(FiberSolver):
             delta=delta
         )
 
-        if isnan(cutoff):
+        if numpy.isnan(cutoff):
             self.logger.error(f"find_HE_mode_cutoff: no cutoff found for {mode} mode")
             return 0
 
@@ -110,7 +115,7 @@ class NeffSolver(FiberSolver):
 
         r = self.fiber.get_outer_radius(layer_idx=0)
 
-        highbound = sqrt(max_core_index**2 - (cutoff / (r * wavelength.k0))**2) - epsilon
+        highbound = numpy.sqrt(max_core_index**2 - (cutoff / (r * wavelength.k0))**2) - epsilon
 
         match mode.family:
             case ModeFamily.LP:
@@ -125,7 +130,7 @@ class NeffSolver(FiberSolver):
         cutoff = self.fiber.get_cutoff(mode=nm)
 
         try:
-            value_0 = sqrt(max_core_index**2 - (cutoff / (r * wavelength.k0))**2) + epsilon
+            value_0 = numpy.sqrt(max_core_index**2 - (cutoff / (r * wavelength.k0))**2) + epsilon
             value_1 = self.fiber.get_minimum_index(-1, wavelength) + epsilon
             lowbound = max(value_0, value_1)
         except ValueError:
@@ -165,8 +170,8 @@ class NeffSolver(FiberSolver):
             wavelength=wavelength
         )
 
-        u = core_outer_radius * wavelength.k0 * sqrt(max_index_core**2 - neff**2)
-        w = core_outer_radius * wavelength.k0 * sqrt(neff**2 - min_index_clad**2)
+        u = core_outer_radius * wavelength.k0 * numpy.sqrt(max_index_core**2 - neff**2)
+        w = core_outer_radius * wavelength.k0 * numpy.sqrt(neff**2 - min_index_clad**2)
 
         if radius < core_outer_radius:
             ex = j0(u * radius / core_outer_radius) / j0(u)
@@ -189,8 +194,8 @@ class NeffSolver(FiberSolver):
             wavelength=wavelength
         )
 
-        u = core_outer_radius * wavelength.k0 * sqrt(max_index_core**2 - neff**2)
-        w = core_outer_radius * wavelength.k0 * sqrt(neff**2 - min_index_clad**2)
+        u = core_outer_radius * wavelength.k0 * numpy.sqrt(max_index_core**2 - neff**2)
+        w = core_outer_radius * wavelength.k0 * numpy.sqrt(neff**2 - min_index_clad**2)
 
         term_0 = wavelength.k0 * core_outer_radius
         ratio = radius / core_outer_radius
@@ -220,8 +225,8 @@ class NeffSolver(FiberSolver):
             wavelength=wavelength
         )
 
-        u = rho * wavelength.k0 * sqrt(max_index_core**2 - neff**2)
-        w = rho * wavelength.k0 * sqrt(neff**2 - min_index_clad**2)
+        u = rho * wavelength.k0 * numpy.sqrt(max_index_core**2 - neff**2)
+        w = rho * wavelength.k0 * numpy.sqrt(neff**2 - min_index_clad**2)
 
         radius_ratio = radius / rho
         index_ratio = max_index_core / min_index_clad
@@ -251,9 +256,9 @@ class NeffSolver(FiberSolver):
             wavelength=wavelength
         )**2
 
-        u = rho * k * sqrt(nco2 - neff**2)
-        w = rho * k * sqrt(neff**2 - ncl2)
-        v = rho * k * sqrt(nco2 - ncl2)
+        u = rho * k * numpy.sqrt(nco2 - neff**2)
+        w = rho * k * numpy.sqrt(neff**2 - ncl2)
+        v = rho * k * numpy.sqrt(nco2 - ncl2)
 
         jnu = jn(nu, u)
         knw = kn(nu, w)
@@ -315,8 +320,8 @@ class NeffSolver(FiberSolver):
             wavelength=wavelength
         )
 
-        term_0 = outer_radius * wavelength.k0 * sqrt(max_index**2 - neff**2)
-        term_1 = outer_radius * wavelength.k0 * sqrt(neff**2 - min_index**2)
+        term_0 = outer_radius * wavelength.k0 * numpy.sqrt(max_index**2 - neff**2)
+        term_1 = outer_radius * wavelength.k0 * numpy.sqrt(neff**2 - min_index**2)
 
         return term_0, term_1
 
@@ -382,7 +387,7 @@ class NeffSolver(FiberSolver):
         term_2 = nco * u * w
         term_3 = u * kp * delta
 
-        return term_0 + jnu * sqrt(term_3**2 + (term_1 / term_2)**2)
+        return term_0 + jnu * numpy.sqrt(term_3**2 + (term_1 / term_2)**2)
 
     def _ehceq(self, neff: float, wavelength: float, nu: float):
         u, w = self.get_parameter_uw(
@@ -407,4 +412,4 @@ class NeffSolver(FiberSolver):
         knu = kn(nu, w)
         kp = kvp(nu, w)
 
-        return (jvp(nu, u) * w * knu + kp * u * jnu * (1 - delta) - jnu * sqrt((u * kp * delta)**2 + ((nu * neff * v2 * knu) / (nco * u * w))**2))
+        return (jvp(nu, u) * w * knu + kp * u * jnu * (1 - delta) - jnu * numpy.sqrt((u * kp * delta)**2 + ((nu * neff * v2 * knu) / (nco * u * w))**2))

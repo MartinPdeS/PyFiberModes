@@ -3,16 +3,16 @@
 
 import numpy
 import logging
+from itertools import count
+from scipy.optimize import fixed_point
+from dataclasses import dataclass
+from scipy import constants
 
 from PyFiberModes import fiber_geometry as geometry
 from PyFiberModes import solver
 from PyFiberModes import Wavelength, Mode, ModeFamily
 from PyFiberModes.functions import get_derivative
 from PyFiberModes.field import Field
-from itertools import count
-from scipy.optimize import fixed_point
-from dataclasses import dataclass
-from scipy import constants
 
 
 @dataclass
