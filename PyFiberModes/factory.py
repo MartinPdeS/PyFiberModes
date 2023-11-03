@@ -1,4 +1,6 @@
-# This file is part of FiberModes.
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import json
 import time
 from distutils.version import StrictVersion as Version

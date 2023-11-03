@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from PyFiberModes import FiberFactory, Wavelength, Mode, ModeFamily
 from PyFiberModes.slrc import SLRC
 from functools import reduce, partial

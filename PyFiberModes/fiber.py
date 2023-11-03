@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from PyFiberModes import fiber_geometry as geometry
 from PyFiberModes import solver
 from math import sqrt, isnan, isinf, pi
@@ -185,6 +188,21 @@ class Fiber(object):
         outer_radius = self.get_outer_radius(layer_idx=layer_idx)
         inner_radius = self.get_inner_radius(layer_idx=layer_idx)
         return outer_radius - inner_radius
+
+    def get_fiber_radius(self) -> float:
+        """
+        Gets the fiber total radius taking account for all layers.
+
+        :returns:   The fiber radius.
+        :rtype:     float
+        """
+        layer_radius = [
+            layer.radius_out for layer in self.layers
+        ]
+
+        largest_radius = numpy.max(layer_radius)
+
+        return largest_radius
 
     def get_index_at_radius(self, radius: float, wavelength: float) -> float:
         """
@@ -814,10 +832,10 @@ class Fiber(object):
                     break
         return modes
 
-    def field(self,
+    def get_field(self,
             mode: Mode,
             wavelength: float,
-            limit: float,
+            limit: float = None,
             n_point: int = 101) -> Field:
         """
         Get field class
@@ -826,14 +844,17 @@ class Fiber(object):
         :type       mode:        Mode
         :param      wavelength:  The wavelength
         :type       wavelength:  float
-        :param      limit:       The limit
+        :param      limit:       The limit boundary
         :type       limit:       float
-        :param      n_point:     The n point
+        :param      n_point:     The number of point for axis discreditization
         :type       n_point:     int
 
         :returns:   The field instance of the mode.
         :rtype:     Field
         """
+        if limit is None:
+            limit = self.get_fiber_radius()
+
         field = Field(
             fiber=self,
             mode=mode,

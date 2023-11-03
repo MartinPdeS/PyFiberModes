@@ -31,12 +31,12 @@ for mode in [HE11, HE12, HE22]:
     data = []
     for fiber in factory:
 
-        dispersion = fiber.get_dispersion(
+        effective_index = fiber.get_dispersion(
             mode=mode,
             wavelength=1550e-9
         )
 
-        data.append(dispersion)
+        data.append(effective_index)
 
     ax.add_line(
         x=core_indexes,

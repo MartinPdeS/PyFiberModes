@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from enum import Enum
 from colorsys import hsv_to_rgb
 from collections import namedtuple

@@ -74,6 +74,7 @@ class FiberSolver(object):
                         return z
 
                 a, fa = b, fb
+
             if highbound and maxiter < 100:
                 delta /= 10
             else:

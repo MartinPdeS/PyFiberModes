@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import numpy
 import scipy
 
@@ -52,7 +55,7 @@ class Wavelength(float):
 
     @property
     def k0(self):
-        """
+        r"""
         Wave number (:math:`2 \pi / \lambda`).
         """
         return 2 * numpy.pi / self if self != 0 else float("inf")
@@ -62,7 +65,7 @@ class Wavelength(float):
         """
         Angular frequency (in rad/s).
         """
-        return scipy.constants.constants.c * 2 * numpy.pi / self if self != 0 else float("inf")
+        return scipy.constants.c * 2 * numpy.pi / self if self != 0 else float("inf")
 
     w = omega
 

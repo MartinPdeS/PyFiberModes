@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import numpy
 import scipy
 from PyFiberModes import Wavelength, ModeFamily, HE11

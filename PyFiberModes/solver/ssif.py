@@ -133,21 +133,21 @@ class NeffSolver(FiberSolver):
 
         match mode.family:
             case ModeFamily.LP:
-                fonction = self._lpceq
+                function = self._lpceq
             case ModeFamily.TE:
-                fonction = self._teceq
+                function = self._teceq
             case ModeFamily.TM:
-                fonction = self._tmceq
+                function = self._tmceq
             case ModeFamily.EH:
-                fonction = self._ehceq
+                function = self._ehceq
             case ModeFamily.HE:
-                fonction = self._heceq
+                function = self._heceq
 
         result = self._findBetween(
-            fct=fonction,
+            function=function,
             lowbound=lowbound,
             highbound=highbound,
-            args=(wavelength, mode.nu)
+            function_args=(wavelength, mode.nu)
         )
 
         return result
