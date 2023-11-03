@@ -1,19 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import numpy
+import logging
+
 from PyFiberModes import fiber_geometry as geometry
 from PyFiberModes import solver
-from math import sqrt, isnan, isinf, pi
 from PyFiberModes import Wavelength, Mode, ModeFamily
-from PyFiberModes import constants
+# from PyFiberModes import constants
 from PyFiberModes.functions import get_derivative
 from PyFiberModes.field import Field
 from itertools import count
-import logging
 from scipy.optimize import fixed_point
-from functools import lru_cache
 from dataclasses import dataclass
-import numpy
+from scipy import constants
 
 
 @dataclass
@@ -308,7 +308,7 @@ class Fiber(object):
 
         n2 = self.get_minimum_index(layer_idx=-1, wavelength=wavelength)
 
-        return sqrt(n1**2 - n2**2)
+        return numpy.sqrt(n1**2 - n2**2)
 
     def get_V0(self, wavelength: float) -> float:
         """
@@ -347,11 +347,11 @@ class Fiber(object):
         """
         if V0 == 0:
             return float("inf")
-        if isinf(V0):
+        if numpy.isinf(V0):
             return 0
 
         def model(wl):
-            return 2 * pi / V0 * b * self.get_NA(wavelength=wl)
+            return 2 * numpy.pi / V0 * b * self.get_NA(wavelength=wl)
 
         b = self.get_inner_radius(-1)
 
@@ -658,7 +658,7 @@ class Fiber(object):
             lowbound=lowbound
         )
 
-        return -beta * 2 * pi * constants.c * 1e6 / wavelength**2
+        return -beta * 2 * numpy.pi * constants.c * 1e6 / wavelength**2
 
     def get_S_parameter(self,
             mode: Mode,
@@ -690,7 +690,7 @@ class Fiber(object):
             lowbound=lowbound
         )
 
-        return 1e-3 * beta * (2 * pi * constants.c / wavelength**2)**2
+        return 1e-3 * beta * (2 * numpy.pi * constants.c / wavelength**2)**2
 
     def get_vectorial_modes(self,
             wavelength: float,
@@ -823,7 +823,7 @@ class Fiber(object):
                             delta=delta
                         )
 
-                        if isnan(neff):
+                        if numpy.isnan(neff):
                             break
 
                     modes.add(mode)
@@ -865,7 +865,6 @@ class Fiber(object):
 
         return field
 
-    @lru_cache(maxsize=None)
     def get_radial_field(self,
             mode: Mode,
             wavelength: float,
