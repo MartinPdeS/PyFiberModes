@@ -55,7 +55,6 @@ class LayerProxy(object):
         for i in range(len(tp) - 1, len(dp)):
             tp.append(dp[i])
 
-
     @property
     def radius(self):
         return self._layer["tparams"][0]
@@ -176,9 +175,11 @@ class FiberFactory(object):
         """
         Remove layer at given position (default: last layer)
 
-        Args:
-            pos(int): Index of the layer to remove.
+        :param      layer_idx:  Index of the layer to remove.
+        :type       layer_idx:  int
 
+        :returns:   No returns
+        :rtype:     None
         """
         self.layers_list.pop(layer_idx)
 
