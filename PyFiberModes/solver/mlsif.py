@@ -90,7 +90,7 @@ class NeffSolver(FiberSolver):
             C = self.fiber.layers[i].lpConstants(rho, neff, wavelength, nu, A)
         else:
             layer = self.fiber.layers[-1]
-            u = layer.u(rho, neff, wavelength)
+            u = layer.get_u_parameter(rho, neff, wavelength)
             C = (0, A[0] / kn(nu, u))
 
         ex, _ = layer.Psi(radius, neff, wavelength, nu, C)
@@ -111,7 +111,7 @@ class NeffSolver(FiberSolver):
             ro = self.fiber.get_outer_radius(i)
             layer = self.fiber.layers[i]
             n = layer.get_maximum_index(wavelength)
-            u = layer.u(ro, neff, wavelength)
+            u = layer.get_u_parameter(ro, neff, wavelength)
 
             if i > 0:
                 C = layer.tetmConstants(ri, ro, neff, wavelength, EH, constants.Y0 * n * n, (0, 3))
@@ -136,7 +136,7 @@ class NeffSolver(FiberSolver):
             ri = ro
         else:
             layer = self.fiber.layers[-1]
-            u = layer.u(ro, neff, wavelength)
+            u = layer.get_u_parameter(ro, neff, wavelength)
             # C =
 
         return numpy.array((0, ephi, 0)), numpy.array((hr, 0, hz))
@@ -150,7 +150,7 @@ class NeffSolver(FiberSolver):
             i += 1
         layer = self.fiber.layers[i]
         n = layer.get_maximum_index(wavelength)
-        u = layer.u(rho, neff, wavelength)
+        u = layer.get_u_parameter(rho, neff, wavelength)
         urp = u * radius / rho
 
         c1 = rho / u
@@ -211,12 +211,20 @@ class NeffSolver(FiberSolver):
 
         for i in range(1, N - 1):
             r = self.fiber.get_inner_radius(i)
-            A = self.fiber.layers[i - 1].Psi(r, neff, wl, nu, C[i - 1, :])
-            C[i, :] = self.fiber.layers[i].lpConstants(r, neff, wl, nu, A)
+
+            layer_0 = self.fiber.layers[i - 1]
+            layer_1 = self.fiber.layers[i]
+
+            A = layer_0.Psi(r, neff, wl, nu, C[i - 1, :])
+            C[i, :] = layer_1.lpConstants(r, neff, wl, nu, A)
 
         r = self.fiber.get_inner_radius(-1)
-        A = self.fiber.layers[N - 2].Psi(r, neff, wl, nu, C[-1, :])
-        u = self.fiber.layers[N - 1].u(r, neff, wl)
+
+        layer_0 = self.fiber.layers[N - 2]
+        layer_1 = self.fiber.layers[N - 1]
+
+        A = layer_0.Psi(r, neff, wl, nu, C[-1, :])
+        u = layer_1.get_u_parameter(r, neff, wl)
         return u * kvp(nu, u) * A[0] - kn(nu, u) * A[1]
 
     def _teceq(self, neff, wl, nu):
@@ -231,7 +239,8 @@ class NeffSolver(FiberSolver):
 
         # Last layer
         _, Hz, Ep, _ = EH
-        u = self.fiber.layers[-1].u(ri, neff, wl)
+        last_layer = self.fiber.layers[-1]
+        u = last_layer.get_u_parameter(ri, neff, wl)
 
         F4 = k1(u) / k0(u)
         return Ep + wl.k0 * ri / u * constants.eta0 * Hz * F4
@@ -249,7 +258,8 @@ class NeffSolver(FiberSolver):
 
         # Last layer
         Ez, _, _, Hp = EH
-        u = self.fiber.layers[-1].u(radius_in, neff, wavelength)
+        last_layer = self.fiber.layers[-1]
+        u = last_layer.get_u_parameter(radius_in, neff, wavelength)
         n = self.fiber.get_maximum_index(-1, wavelength)
 
         F4 = k1(u) / k0(u)
@@ -274,7 +284,7 @@ class NeffSolver(FiberSolver):
         C[3, :] = EH[1, :]
         self.fiber.layers[N - 1].C = C
 
-        u = self.fiber.layers[N - 1].u(ri, neff, wavelength)
+        u = self.fiber.layers[N - 1].get_u_parameter(ri, neff, wavelength)
         n = self.fiber.get_maximum_index(-1, wavelength)
 
         F4 = kvp(nu, u) / kn(nu, u)
