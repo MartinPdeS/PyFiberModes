@@ -12,9 +12,6 @@ from PyFiberModes.solver.solver import FiberSolver
 from PyFiberModes.material.compmaterial import CompMaterial
 
 
-__version__ = "0.0.1"
-
-
 class LayerProxy(object):
     def __init__(self, layer):
         self._layer = layer
@@ -57,7 +54,7 @@ class LayerProxy(object):
         tp = self._layer["tparams"]
         for i in range(len(tp) - 1, len(dp)):
             tp.append(dp[i])
-        # print("_type", value, self._layer["tparams"])
+
 
     @property
     def radius(self):
@@ -100,10 +97,8 @@ class FiberFactory(object):
 
     """
 
-    def __init__(self, filename=None):
-        self._fibers = {
-            "layers": []
-        }
+    def __init__(self):
+        self.layers_list = []
 
         self.neff_solver = None
         self.cutoff_solver = None
@@ -149,7 +144,7 @@ class FiberFactory(object):
 
         """
         if position is None:
-            position = len(self._fibers["layers"])
+            position = len(self.layers_list)
 
         layer = {
             "name": name,
@@ -175,7 +170,7 @@ class FiberFactory(object):
 
         assert len(kwargs) == 0, f"Unknown arguments {kwargs}"
 
-        self._fibers["layers"].insert(position, layer)
+        self.layers_list.insert(position, layer)
 
     def remove_layer(self, layer_idx: int = -1) -> None:
         """
@@ -185,7 +180,7 @@ class FiberFactory(object):
             pos(int): Index of the layer to remove.
 
         """
-        self._fibers["layers"].pop(layer_idx)
+        self.layers_list.pop(layer_idx)
 
     def __iter__(self):
         self.build_fiber_list()
@@ -193,7 +188,7 @@ class FiberFactory(object):
         return (self._buildFiber(i) for i in g)
 
     def __len__(self):
-        if not self.layers:
+        if not self.layers_list:
             return 0
         self.build_fiber_list()
         return reduce(mul, self._nitems)
@@ -204,7 +199,7 @@ class FiberFactory(object):
 
     def build_fiber_list(self) -> None:
         self._nitems = []
-        for layer in self._fibers["layers"]:
+        for layer in self.layers_list:
             for key in ("tparams", "material_parameters"):
                 for tp in layer[key]:
                     self._nitems.append(len(SLRC(tp)))
@@ -233,11 +228,11 @@ class FiberFactory(object):
 
         # Get parameters for selected fiber
         ii = 0
-        for i, layer in enumerate(self._fibers["layers"], 1):
+        for i, layer in enumerate(self.layers_list, 1):
             name = layer["name"] if layer["name"] else f"layer {i + 1}"
             names.append(name)
 
-            if i < len(self._fibers["layers"]):
+            if i < len(self.layers_list):
                 rr = SLRC(layer["tparams"][0])
                 rr.codeParams = ["r", "fp", "mp"]
                 r.append(rr[indexes[ii]])
