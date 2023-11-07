@@ -26,6 +26,17 @@ class Field(object):
 
     def __post_init__(self):
         self.wavelength = Wavelength(self.wavelength)
+
+        self.compute_meshes()
+
+    def compute_meshes(self) -> None:
+        """
+        Calculates the meshes and parameters necessary, which are:
+        dx - dy - x - y - r - phi
+
+        :returns:   No returns
+        :rtype:     None
+        """
         self.dx = 2 * self.limit / (self.n_point - 1)
         self.dy = 2 * self.limit / (self.n_point - 1)
 
@@ -46,7 +57,7 @@ class Field(object):
         :type       phi:  float
 
         :returns:   The azimuthal dependency g values in [-1, 1].
-        :rtype:     { return_type_description }
+        :rtype:     numpy.ndarray
         """
         return numpy.cos(self.mode.nu * self.phi_mesh + phi)
 
