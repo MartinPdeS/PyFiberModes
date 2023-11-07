@@ -1,0 +1,7 @@
+recursive-include tests *
+recursive-include docs *
+recursive-include PyFiberModes *
+global-exclude *.pyc
+include LICENSE.txt
+include README.md
+
