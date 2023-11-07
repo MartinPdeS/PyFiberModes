@@ -4,13 +4,14 @@
 import numpy
 import logging
 from itertools import count
+from functools import cache
 from scipy.optimize import fixed_point
 from dataclasses import dataclass, field
 from scipy import constants
 
-from PyFiberModes import fiber_geometry as geometry
 from PyFiberModes.fiber_geometry.stepindex import StepIndex
 from PyFiberModes import solver
+from PyFiberModes.mode_instances import HE11, LP01
 from PyFiberModes import Wavelength, Mode, ModeFamily
 from PyFiberModes.functions import get_derivative
 from PyFiberModes.field import Field
@@ -18,17 +19,23 @@ from PyFiberModes.field import Field
 from MPSTools.fiber_catalogue import loader
 
 
+class NameSpace():
+    def __init__(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+
+
 @dataclass
 class Fiber(object):
-    layer_names: list = field(default_factory=[])
+    layer_names: list = field(default_factory=list)
     """ Name of each layers """
-    layer_radius: list = field(default_factory=[])
+    layer_radius: list = field(default_factory=list)
     """ Radius of each layers """
-    layer_types: list = field(default_factory=[])
+    layer_types: list = field(default_factory=list)
     """ Type of each layers """
-    material_types: list = field(default_factory=[])
+    material_types: list = field(default_factory=list)
     """ Material of each layers """
-    material_parameters: list = field(default_factory=[])
+    index_list: list = field(default_factory=list)
     """ Refractive index of each layers """
     cutoff_solver: float = None
     """ Cutoff frequency class """
@@ -36,6 +43,11 @@ class Fiber(object):
     """ Neff class """
 
     logger = logging.getLogger(__name__)
+
+    def __post_init__(self):
+        self.layers_parameters = []
+        self.radius_in = 0
+        self.layers = []
 
     @property
     def n_layer(self) -> int:
@@ -49,13 +61,23 @@ class Fiber(object):
 
     def add_layer(self, name: str, radius: float, index: float, material_type: str, layer_type: str) -> None:
         self.layer_names.append(name)
+        self.layer_types.append(layer_type)
+        self.material_types.append(material_type)
+        self.index_list.append(index)
 
         if name != 'cladding':
             self.layer_radius.append(radius)
 
-        self.material_parameters.append(index)
-        self.material_types.append(material_type)
-        self.layer_types.append(layer_type)
+        layer = StepIndex(
+            radius_in=self.radius_in,
+            radius_out=radius,
+            material_type=material_type,
+            index_list=[index],
+        )
+
+        self.layers.append(layer)
+
+        self.radius_in += radius
 
     def initialize_layers(self) -> None:
         """
@@ -64,34 +86,7 @@ class Fiber(object):
         :returns:   No returns
         :rtype:     None
         """
-        self.layers = []
-
-        enumerator = zip(
-            self.layer_types,
-            self.material_types,
-            self.material_parameters
-        )
-
-        for idx, (layer_type, material_type, material_parameter) in enumerate(enumerator):
-
-            if idx:
-                radius_in = self.layer_radius[idx - 1]
-            else:
-                radius_in = 0
-
-            if idx < len(self.layer_radius):
-                radius_out = self.layer_radius[idx]
-            else:
-                radius_out = numpy.inf
-
-            layer = StepIndex(
-                radius_in=radius_in,
-                radius_out=radius_out,
-                material_type=material_type,
-                material_parameter=[material_parameter],
-            )
-
-            self.layers.append(layer)
+        self.layers[-1].radius_in = numpy.inf
 
         self.set_solvers(
             cutoff_class=self.cutoff_solver,
@@ -156,7 +151,7 @@ class Fiber(object):
             return self.layer_radius[layer_idx]
         return float("inf")
 
-    def get_thickness(self, layer_idx: int) -> float:
+    def get_layer_thickness(self, layer_idx: int) -> float:
         """
         Gets the thickness of a specific layer.
 
@@ -234,6 +229,12 @@ class Fiber(object):
         return layer.get_maximum_index(wavelength=wavelength)
 
     def find_cutoff_solver(self) -> solver.solver.FiberSolver:
+        """
+        Find and returns the adequat solver for cutoff value
+
+        :returns:   The cutoff solver
+        :rtype:     solver.solver.FiberSolver
+        """
         n_layers = len(self.layers)
 
         match n_layers:
@@ -245,20 +246,23 @@ class Fiber(object):
                 return solver.solver.FiberSolver
 
     def find_neff_solver(self) -> solver.solver.FiberSolver:
-        neff_class = solver.mlsif.NeffSolver
+        """
+        Find and returns the adequat solver for effective index
 
+        :returns:   The neff solver
+        :rtype:     solver.solver.FiberSolver
+        """
         number_of_layers = len(self.layers)
 
-        if all(isinstance(layer, geometry.StepIndex) for layer in self.layers):
-            if number_of_layers == 2:  # SSIF
-                neff_class = solver.ssif.NeffSolver
-
-        return neff_class
+        if number_of_layers == 2:  # Standard Step-Index Fiber [SSIF|
+            return solver.ssif.NeffSolver
+        else:                      # Multi-Layer Step-Index Fiber [MLSIF]
+            return solver.mlsif.NeffSolver
 
     def set_solvers(self, cutoff_class=None, neff_class=None) -> None:
-        assert cutoff_class is None or issubclass(cutoff_class, solver.FiberSolver)
+        assert cutoff_class is None or issubclass(cutoff_class, solver.solver.FiberSolver)
 
-        assert neff_class is None or issubclass(neff_class, solver.FiberSolver)
+        assert neff_class is None or issubclass(neff_class, solver.solver.FiberSolver)
 
         if cutoff_class is None:
             cutoff_class = self.find_cutoff_solver()
@@ -309,7 +313,7 @@ class Fiber(object):
 
         return V0
 
-    def V0_to_wavelength(self, V0: float, maxiter: int = 500, tol: float = 1e-15) -> float:
+    def V0_to_wavelength(self, V0: float, maxiter: int = 500, tolerance: float = 1e-15) -> float:
         """
         Convert V0 number to wavelength.
         An iterative method is used, since the index can be wavelength dependant.
@@ -336,10 +340,10 @@ class Fiber(object):
 
         wavelength = model(wl=1.55e-6)
 
-        if abs(wavelength - model(wl=wavelength)) > tol:
+        if abs(wavelength - model(wl=wavelength)) > tolerance:
             for w in (1.55e-6, 5e-6, 10e-6):
                 try:
-                    wavelength = fixed_point(model, w, xtol=tol, maxiter=maxiter)
+                    wavelength = fixed_point(model, w, xtol=tolerance, maxiter=maxiter)
                 except RuntimeError:
                     # FIXME: What should we do if it does not converge?
                     self.logger.info(
@@ -365,7 +369,7 @@ class Fiber(object):
         :returns:   The cutoff wavelength.
         :rtype:     float
         """
-        if mode in [Mode("HE", 1, 1), Mode("LP", 0, 1)]:
+        if mode in [HE11, LP01]:
             return 0
 
         return self.cutoff_solver(mode=mode)
@@ -851,6 +855,7 @@ class Fiber(object):
 
         return field
 
+    @cache
     def get_radial_field(self,
             mode: Mode,
             wavelength: float,
@@ -912,28 +917,15 @@ def load_fiber(fiber_name: str, wavelength: float = None):
         order='out-to-in'
     )
 
-    index_list = []
-    name_list = []
-    radius_list = []
-    material_types_list = []
-    layer_type_list = []
+    fiber = Fiber()
 
     for _, layer in fiber_dict['layers'].items():
         if layer.get('name') in ['air']:
             continue
-        index_list.append([layer.get('index')])
-        name_list.append(layer.get('name'))
-        radius_list.append(layer.get('radius'))
-        material_types_list.append('Fixed')
-        layer_type_list.append('StepIndex')
 
-    fiber = Fiber(
-        layer_radius=radius_list,
-        layer_types=layer_type_list,
-        material_types=material_types_list,
-        material_parameters=index_list,
-        layer_names=name_list,
-    )
+        fiber.add_layer(material_type='Fixed', layer_type='StepIndex', **layer)
+
+    fiber.initialize_layers()
 
     return fiber
 

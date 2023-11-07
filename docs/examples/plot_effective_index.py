@@ -19,7 +19,6 @@ core_indexes = numpy.linspace(1.464, 1.494, 100)
 factory = FiberFactory()
 factory.add_layer(name="core", radius=4e-6, index=core_indexes)
 factory.add_layer(name="cladding", index=1.4444)
-# factory.add_layer(name="cladding", index=1)
 
 
 # %%

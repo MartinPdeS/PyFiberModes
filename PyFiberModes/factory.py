@@ -4,7 +4,6 @@
 import numpy
 from itertools import product
 from PyFiberModes.fiber import Fiber
-from PyFiberModes.solver.solver import FiberSolver
 from dataclasses import dataclass
 
 
@@ -80,6 +79,12 @@ class FiberFactory(object):
         self.layers_list.append(layer)
 
     def get_overall_generator(self):
+        """
+        Return a generator of all combination of fibers.
+
+        :returns:   Generator
+        :rtype:     object
+        """
         list_of_generator = []
 
         for layer in self.layers_list:
@@ -92,11 +97,17 @@ class FiberFactory(object):
         return overall_generator
 
     def __getitem__(self, index: int) -> Fiber:
+        """
+        Of all the fiber combination, returns the one associated to the given index.
+
+        :returns:   Return the associated fiber
+        :rtype:     Fiber
+        """
         generator = self.get_overall_generator()
 
         structure = list(generator)[index]
 
-        fiber = Fiber([], [], [], [], [])
+        fiber = Fiber()
 
         for name, radius, index in structure:
             fiber.add_layer(
@@ -107,12 +118,20 @@ class FiberFactory(object):
                 layer_type='StepIndex'
             )
 
+        fiber.initialize_layers()
+
         return fiber
 
     def __iter__(self) -> Fiber:
+        """
+        Iterate through all combination of fibers.
+
+        :returns:   Yield the next fiber
+        :rtype:     Fiber
+        """
         generator = self.get_overall_generator()
         for structure in generator:
-            fiber = Fiber([], [], [], [], [])
+            fiber = Fiber()
 
             for name, radius, index in structure:
                 fiber.add_layer(

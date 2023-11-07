@@ -28,6 +28,14 @@ Step-index
      :member-order: bysource
 
 
+Fiber factory
+-------------
+ .. automodule:: PyFiberModes.factory
+     :members:
+     :inherited-members:
+     :member-order: bysource
+
+
 
 
 

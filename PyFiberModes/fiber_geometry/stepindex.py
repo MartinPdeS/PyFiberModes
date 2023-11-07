@@ -24,7 +24,7 @@ class StepIndex(Geometry):
         :rtype:     float
         """
         if self.radius_in <= abs(radius) <= self.radius_out:
-            return self.material_type.get_refractive_index(wavelength, *self.material_parameter)
+            return self.material_type.get_refractive_index(wavelength, *self.index_list)
         else:
             return None
 
@@ -38,7 +38,7 @@ class StepIndex(Geometry):
         :returns:   The maximum index.
         :rtype:     float
         """
-        return self.material_type.get_refractive_index(wavelength, *self.material_parameter)
+        return self.material_type.get_refractive_index(wavelength, *self.index_list)
 
     def get_maximum_index(self, wavelength: float) -> float:
         """
@@ -50,7 +50,7 @@ class StepIndex(Geometry):
         :returns:   The maximum index.
         :rtype:     float
         """
-        return self.material_type.get_refractive_index(wavelength, *self.material_parameter)
+        return self.material_type.get_refractive_index(wavelength, *self.index_list)
 
     def get_U_W_parameter(self, radius: float, neff: float, wavelength: float) -> float:
         r"""
