@@ -77,7 +77,7 @@ class Fiber(object):
 
         self.layers.append(layer)
 
-        self.radius_in += radius
+        self.radius_in = radius
 
     def initialize_layers(self) -> None:
         """
@@ -86,7 +86,7 @@ class Fiber(object):
         :returns:   No returns
         :rtype:     None
         """
-        self.layers[-1].radius_in = numpy.inf
+        self.layers[-1].radius_out = numpy.inf
 
         self.set_solvers(
             cutoff_class=self.cutoff_solver,
@@ -196,7 +196,7 @@ class Fiber(object):
 
         return layer.index(radius, wavelength)
 
-    def get_minimum_index(self, layer_idx: int, wavelength: float) -> float:
+    def get_layer_minimum_index(self, layer_idx: int, wavelength: float) -> float:
         """
         Gets the minimum refractive index of the layers.
 
@@ -212,7 +212,43 @@ class Fiber(object):
 
         return layer.get_minimum_index(wavelength)
 
-    def get_maximum_index(self, layer_idx: int, wavelength: float) -> float:
+    def get_maximum_index(self, wavelength: float) -> float:
+        """
+        Gets the maximum refractive index of the fiber.
+
+        :param      layer_idx:   The layer index
+        :type       layer_idx:   int
+        :param      wavelength:  The wavelength
+        :type       wavelength:  float
+
+        :returns:   The minimum index.
+        :rtype:     float
+        """
+        layers_maximum_index = [
+            layer.get_maximum_index(wavelength=wavelength) for layer in self.layers
+        ]
+
+        return numpy.max(layers_maximum_index)
+
+    def get_minimum_index(self, wavelength: float) -> float:
+        """
+        Gets the minimum refractive index of the fiber.
+
+        :param      layer_idx:   The layer index
+        :type       layer_idx:   int
+        :param      wavelength:  The wavelength
+        :type       wavelength:  float
+
+        :returns:   The minimum index.
+        :rtype:     float
+        """
+        layers_maximum_index = [
+            layer.get_minimum_index(wavelength=wavelength) for layer in self.layers
+        ]
+
+        return numpy.min(layers_maximum_index)
+
+    def get_layer_maximum_index(self, layer_idx: int, wavelength: float) -> float:
         """
         Gets the maximum refractive index of the layers.
 
@@ -289,7 +325,7 @@ class Fiber(object):
 
         n1 = max(layers_maximum_index)
 
-        n2 = self.get_minimum_index(layer_idx=-1, wavelength=wavelength)
+        n2 = self.get_layer_minimum_index(layer_idx=-1, wavelength=wavelength)
 
         return numpy.sqrt(n1**2 - n2**2)
 
@@ -372,7 +408,7 @@ class Fiber(object):
         if mode in [HE11, LP01]:
             return 0
 
-        return self.cutoff_solver(mode=mode)
+        return self.cutoff_solver.solve(mode=mode)
 
     def get_cutoff_wavelength(self, mode: Mode) -> float:
         """
@@ -391,8 +427,8 @@ class Fiber(object):
     def get_effective_index(self,
             mode: Mode,
             wavelength: float,
-            delta: float = 1e-6,
-            lowbound: float = None) -> float:
+            delta_neff: float = 1e-6,
+            lower_neff_boundary: float = None) -> float:
         """
         Gets the effective index.
 
@@ -410,11 +446,11 @@ class Fiber(object):
         """
         wavelength = Wavelength(wavelength)
 
-        neff = self.neff_solver(
+        neff = self.neff_solver.solve(
             wavelength=wavelength,
             mode=mode,
-            delta=delta,
-            lowbound=lowbound
+            delta_neff=delta_neff,
+            lower_neff_boundary=lower_neff_boundary
         )
 
         return neff
@@ -519,7 +555,7 @@ class Fiber(object):
 
         overall_maximum_index = max(layer_maximum_index)
 
-        minimum_index = self.get_minimum_index(-1, wavelength)
+        minimum_index = self.get_layer_minimum_index(-1, wavelength)
 
         numerator = neff**2 - minimum_index**2
 

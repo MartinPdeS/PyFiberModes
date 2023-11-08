@@ -17,7 +17,7 @@ class FiberSolver(object):
         self.log = []
         self._logging = False
 
-    def __call__(self, *args, **kwargs):
+    def solver(self, *args, **kwargs):
         raise NotImplementedError()
 
     def start_log(self):

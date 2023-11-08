@@ -22,7 +22,7 @@ class CutoffSolver(FiberSolver):
     """
     logger = logging.getLogger(__name__)
 
-    def __call__(self, mode: Mode):
+    def solve(self, mode: Mode):
         nu = mode.nu
         m = mode.m
 
@@ -44,15 +44,12 @@ class CutoffSolver(FiberSolver):
 
         wavelength = self.fiber.V0_to_wavelength(V0=V0)
 
-        max_index_core = self.fiber.get_maximum_index(
-            layer_idx=0,
-            wavelength=wavelength
-        )
+        core = self.fiber.layers[0]
+        clad = self.fiber.layers[1]
 
-        min_index_clad = self.fiber.get_minimum_index(
-            layer_idx=1,
-            wavelength=wavelength
-        )
+        max_index_core = core.get_maximum_index(wavelength=wavelength)
+
+        min_index_clad = clad.get_minimum_index(wavelength=wavelength)
 
         ratio = max_index_core**2 / min_index_clad**2
 
@@ -104,7 +101,7 @@ class NeffSolver(FiberSolver):
     Effective index solver for standard step-index fiber
     """
 
-    def __call__(self, wavelength: float, mode: Mode, delta: float, lowbound: float):
+    def solve(self, wavelength: float, mode: Mode, delta_neff: float, lower_neff_boundary: float):
         epsilon = 1e-12
 
         cutoff = self.fiber.get_cutoff(mode=mode)
@@ -112,10 +109,8 @@ class NeffSolver(FiberSolver):
         if self.fiber.get_V0(wavelength=wavelength) < cutoff:
             return float("nan")
 
-        max_core_index = self.fiber.get_maximum_index(
-            layer_idx=0,
-            wavelength=wavelength
-        )
+        core = self.fiber.layers[0]
+        max_core_index = core.get_maximum_index(wavelength=wavelength)
 
         r = self.fiber.get_outer_radius(layer_idx=0)
 
@@ -135,10 +130,14 @@ class NeffSolver(FiberSolver):
 
         try:
             value_0 = numpy.sqrt(max_core_index**2 - (cutoff / (r * wavelength.k0))**2) + epsilon
-            value_1 = self.fiber.get_minimum_index(-1, wavelength) + epsilon
-            lowbound = max(value_0, value_1)
+
+            last_layer = self.fiber.layers[-1]
+
+            value_1 = last_layer.get_minimum_index(wavelength=wavelength) + epsilon
+
+            lower_neff_boundary = max(value_0, value_1)
         except ValueError:
-            lowbound = max_core_index
+            lower_neff_boundary = max_core_index
 
         match mode.family:
             case ModeFamily.LP:
@@ -154,7 +153,7 @@ class NeffSolver(FiberSolver):
 
         result = self._findBetween(
             function=function,
-            lowbound=lowbound,
+            lowbound=lower_neff_boundary,
             highbound=highbound,
             function_args=(wavelength, mode.nu)
         )
@@ -314,15 +313,11 @@ class NeffSolver(FiberSolver):
     def get_parameter_uw(self, wavelength: float, neff: float) -> tuple:
         outer_radius = self.fiber.get_outer_radius(layer_idx=0)
 
-        max_index = self.fiber.get_maximum_index(
-            layer_idx=0,
-            wavelength=wavelength
-        )
+        core = self.fiber.layers[0]
+        clad = self.fiber.layers[1]
 
-        min_index = self.fiber.get_minimum_index(
-            layer_idx=1,
-            wavelength=wavelength
-        )
+        max_index = core.get_maximum_index(wavelength=wavelength)
+        min_index = clad.get_minimum_index(wavelength=wavelength)
 
         term_0 = outer_radius * wavelength.k0 * numpy.sqrt(max_index**2 - neff**2)
         term_1 = outer_radius * wavelength.k0 * numpy.sqrt(neff**2 - min_index**2)
@@ -371,15 +366,12 @@ class NeffSolver(FiberSolver):
 
         v2 = u**2 + w**2
 
-        nco = self.fiber.get_maximum_index(
-            layer_idx=0,
-            wavelength=wavelength
-        )
+        core = self.fiber.layers[0]
+        clad = self.fiber.layers[1]
 
-        ncl = self.fiber.get_minimum_index(
-            layer_idx=1,
-            wavelength=wavelength
-        )
+        nco = core.get_maximum_index(wavelength=wavelength)
+
+        ncl = clad.get_minimum_index(wavelength=wavelength)
 
         delta = (1 - ncl**2 / nco**2) / 2
         jnu = jn(nu, u)

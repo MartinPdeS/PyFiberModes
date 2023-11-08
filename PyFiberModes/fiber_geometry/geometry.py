@@ -10,7 +10,7 @@ class Geometry(object):
     """ Maximum radius of the structure """
     index_list: str
     """ Refractive index of the structure """
-    material_type: object = field(default_factory='Fixed')
+    material_type: object = field(default_factory=None)
     """ Material type """
 
     def __post_init__(self):

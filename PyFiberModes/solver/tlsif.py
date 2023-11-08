@@ -15,7 +15,7 @@ Solver for three layer step-index solver: TLSIF
 
 class CutoffSolver(solver.solver.FiberSolver):
 
-    def __call__(self, mode: Mode):
+    def solve(self, mode: Mode):
         if mode.m > 1:
             if mode.family is ModeFamily.HE:
                 pm = Mode(ModeFamily.EH, mode.nu, mode.m - 1)

@@ -73,7 +73,7 @@ class StepIndex(Geometry):
         :returns:   The u parameter at given radius.
         :rtype:     float
         """
-        refractive_index = self.get_index(radius, wavelength)
+        refractive_index = self.get_index(radius=radius, wavelength=wavelength)
 
         return wavelength.k0 * radius * sqrt(abs(refractive_index**2 - neff**2))
 
