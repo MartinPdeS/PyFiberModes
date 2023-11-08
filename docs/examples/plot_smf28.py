@@ -21,7 +21,7 @@ wavelength_list = numpy.linspace(1310e-9, 1550e-9, 10)
 smf28 = load_fiber(fiber_name='DCF1300S_20', wavelength=1550e-9)
 
 effective_index = smf28.get_effective_index(
-    mode=LP11,
+    mode=HE11,
     wavelength=1550e-9
 )
 

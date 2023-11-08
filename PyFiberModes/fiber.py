@@ -186,7 +186,7 @@ class Fiber(object):
 
         :param      radius:      The radius
         :type       radius:      float
-        :param      wavelength:  The wavelength
+        :param      wavelength:  The wavelength to consider
         :type       wavelength:  float
 
         :returns:   The refractive index at given radius.
@@ -202,7 +202,7 @@ class Fiber(object):
 
         :param      layer_idx:   The layer index
         :type       layer_idx:   int
-        :param      wavelength:  The wavelength
+        :param      wavelength:  The wavelength to consider
         :type       wavelength:  float
 
         :returns:   The minimum index.
@@ -218,7 +218,7 @@ class Fiber(object):
 
         :param      layer_idx:   The layer index
         :type       layer_idx:   int
-        :param      wavelength:  The wavelength
+        :param      wavelength:  The wavelength to consider
         :type       wavelength:  float
 
         :returns:   The minimum index.
@@ -236,7 +236,7 @@ class Fiber(object):
 
         :param      layer_idx:   The layer index
         :type       layer_idx:   int
-        :param      wavelength:  The wavelength
+        :param      wavelength:  The wavelength to consider
         :type       wavelength:  float
 
         :returns:   The minimum index.
@@ -254,7 +254,7 @@ class Fiber(object):
 
         :param      layer_idx:   The layer index
         :type       layer_idx:   int
-        :param      wavelength:  The wavelength
+        :param      wavelength:  The wavelength to consider
         :type       wavelength:  float
 
         :returns:   The minimum index.
@@ -313,27 +313,25 @@ class Fiber(object):
         """
         Gets the numerical aperture NA.
 
-        :param      wavelength:  The wavelength
+        :param      wavelength:  The wavelength to consider
         :type       wavelength:  float
 
         :returns:   The numerical aperture.
         :rtype:     float
         """
-        layers_maximum_index = [
-            layer.get_maximum_index(wavelength=wavelength) for layer in self.layers
-        ]
+        n_max = self.get_maximum_index(wavelength=wavelength)
 
-        n1 = max(layers_maximum_index)
+        last_layer = self.layers[-1]
 
-        n2 = self.get_layer_minimum_index(layer_idx=-1, wavelength=wavelength)
+        n_min = last_layer.get_minimum_index(wavelength=wavelength)
 
-        return numpy.sqrt(n1**2 - n2**2)
+        return numpy.sqrt(n_max**2 - n_min**2)
 
     def get_V0(self, wavelength: float) -> float:
         """
         Gets the V0 parameter.
 
-        :param      wavelength:  The wavelength
+        :param      wavelength:  The wavelength to consider
         :type       wavelength:  float
 
         :returns:   The parameter V0.
@@ -343,7 +341,7 @@ class Fiber(object):
 
         NA = self.get_NA(wavelength=wavelength)
 
-        inner_radius = self.get_inner_radius(layer_idx=-1)
+        inner_radius = self.layers[-1].radius_in
 
         V0 = wavelength.k0 * inner_radius * NA
 
@@ -370,9 +368,9 @@ class Fiber(object):
             return 0
 
         def model(wl):
-            return 2 * numpy.pi / V0 * b * self.get_NA(wavelength=wl)
-
-        b = self.get_inner_radius(-1)
+            last_layer = self.layers[-1]
+            NA = self.get_NA(wavelength=wl)
+            return 2 * numpy.pi / V0 * last_layer.radius_in * NA
 
         wavelength = model(wl=1.55e-6)
 
@@ -399,7 +397,7 @@ class Fiber(object):
         """
         Gets the cutoff wavelength of the fiber.
 
-        :param      mode:  The mode
+        :param      mode:  The mode to consider
         :type       mode:  Mode
 
         :returns:   The cutoff wavelength.
@@ -414,7 +412,7 @@ class Fiber(object):
         """
         Gets the cutoff wavelength.
 
-        :param      mode:  The mode
+        :param      mode:  The mode to consider
         :type       mode:  Mode
 
         :returns:   The cutoff wavelength.
@@ -432,14 +430,14 @@ class Fiber(object):
         """
         Gets the effective index.
 
-        :param      mode:        The mode
-        :type       mode:        Mode
-        :param      wavelength:  The wavelength
-        :type       wavelength:  float
-        :param      delta:       The delta
-        :type       delta:       float
-        :param      lowbound:    The lowbound
-        :type       lowbound:    float
+        :param      mode:                   The mode to consider
+        :type       mode:                   Mode
+        :param      wavelength:             The wavelength to consider
+        :type       wavelength:             float
+        :param      delta_neff:             The discretization for research of neff value
+        :type       delta_neff:             float
+        :param      lower_neff_boundary:    The minimum value neff can reach
+        :type       lower_neff_boundary:    float
 
         :returns:   The effective index.
         :rtype:     float
@@ -459,21 +457,21 @@ class Fiber(object):
             omega: float,
             mode: Mode,
             order: float = 0,
-            delta: float = 1e-6,
-            lowbound: float = None) -> float:
+            delta_neff: float = 1e-6,
+            lower_neff_boundary: float = None) -> float:
         """
         Gets the derivative of beta vs omega.
 
-        :param      omega:     The pulsation omega
-        :type       omega:     float
-        :param      mode:      The mode
-        :type       mode:      Mode
-        :param      order:     The order of the derivative
-        :type       order:     float
-        :param      delta:     The delta
-        :type       delta:     float
-        :param      lowbound:  The lowbound
-        :type       lowbound:  float
+        :param      omega:                The pulsation omega
+        :type       omega:                float
+        :param      mode:                 The mode to consider
+        :type       mode:                 Mode
+        :param      order:                The order of the derivative
+        :type       order:                float
+        :param      delta_neff:           The discretization for research of neff value
+        :type       delta_neff:           float
+        :param      lower_neff_boundary:  The minimum value neff can reach
+        :type       lower_neff_boundary:  float
 
         :returns:   The derivative beta vs omega.
         :rtype:     float
@@ -485,8 +483,8 @@ class Fiber(object):
             neff = self.get_effective_index(
                 mode=mode,
                 wavelength=wavelength,
-                delta=delta,
-                lowbound=lowbound
+                delta_neff=delta_neff,
+                lower_neff_boundary=lower_neff_boundary
             )
 
             return neff * wavelength.k0
@@ -494,21 +492,22 @@ class Fiber(object):
         n_point = 5
         central_point = (n_point - 1) // 2
         delta = 1e12  # This value is critical for accurate computation
-        lb = lowbound
+
+        new_lower_boundary = lower_neff_boundary
 
         for i in range(n_point - 1, -1, -1):  # Precompute neff using previous wavelength
-            o = omega + (i - central_point) * delta
+            new_omega = omega + (i - central_point) * delta
 
-            wavelength = Wavelength(omega=o)
+            wavelength = Wavelength(omega=new_omega)
 
-            lb = self.get_effective_index(
+            new_lower_boundary = self.get_effective_index(
                 mode=mode,
                 wavelength=wavelength,
-                delta=delta,
-                lowbound=lb
+                delta_neff=delta_neff,
+                lower_neff_boundary=new_lower_boundary
             )
 
-            lb += delta * 1.1
+            new_lower_boundary += delta * 1.1
 
         derivative = get_derivative(
             function=self.get_derivative_beta_vs_omega,
@@ -517,7 +516,7 @@ class Fiber(object):
             n_point=n_point,
             central_point=central_point,
             delta=delta,
-            function_args=(mode, 0, delta, lowbound)
+            function_args=(mode, 0, delta, lower_neff_boundary)
         )
 
         return derivative
@@ -525,19 +524,19 @@ class Fiber(object):
     def get_normalized_beta(self,
             mode: Mode,
             wavelength: float,
-            delta: float = 1e-6,
-            lowbound: float = None) -> float:
+            delta_neff: float = 1e-6,
+            lower_neff_boundary: float = None) -> float:
         """
         Gets the normalized propagation constant [beta].
 
-        :param      mode:        The mode
-        :type       mode:        Mode
-        :param      wavelength:  The wavelength
-        :type       wavelength:  float
-        :param      delta:       The delta
-        :type       delta:       float
-        :param      lowbound:    The lowbound
-        :type       lowbound:    float
+        :param      mode:                   The mode to consider
+        :type       mode:                   Mode
+        :param      wavelength:             The wavelength to consider
+        :type       wavelength:             float
+        :param      delta_neff:             The discretization for research of neff value
+        :type       delta_neff:             float
+        :param      lower_neff_boundary:    The minimum value neff can reach
+        :type       lower_neff_boundary:    float
 
         :returns:   The normalized propagation constant.
         :rtype:     float
@@ -545,40 +544,38 @@ class Fiber(object):
         neff = self.get_effective_index(
             mode=mode,
             wavelength=wavelength,
-            delta=delta,
-            lowbound=lowbound
+            delta_neff=delta_neff,
+            lower_neff_boundary=lower_neff_boundary
         )
 
-        layer_maximum_index = [
-            layer.get_maximum_index(wavelength) for layer in self.layers
-        ]
+        fiber_maximum_index = self.get_maximum_index(wavelength=wavelength)
 
-        overall_maximum_index = max(layer_maximum_index)
+        last_layer = self.layers[-1]
 
-        minimum_index = self.get_layer_minimum_index(-1, wavelength)
+        minimum_index = last_layer.get_minimum_index(wavelength=wavelength)
 
         numerator = neff**2 - minimum_index**2
 
-        denominator = overall_maximum_index**2 - minimum_index**2
+        denominator = fiber_maximum_index**2 - minimum_index**2
 
         return numerator / denominator
 
     def get_phase_velocity(self,
             mode: Mode,
             wavelength: float,
-            delta: float = 1e-6,
-            lowbound=None) -> float:
+            delta_neff: float = 1e-6,
+            lower_neff_boundary: float = None) -> float:
         """
         Gets the phase velocity.
 
-        :param      mode:        The mode
-        :type       mode:        Mode
-        :param      wavelength:  The wavelength
-        :type       wavelength:  float
-        :param      delta:       The delta
-        :type       delta:       float
-        :param      lowbound:    The lowbound
-        :type       lowbound:    float
+        :param      mode:                   The mode to consider
+        :type       mode:                   Mode
+        :param      wavelength:             The wavelength to consider
+        :type       wavelength:             float
+        :param      delta_neff:             The discretization for research of neff value
+        :type       delta_neff:             float
+        :param      lower_neff_boundary:    The minimum value neff can reach
+        :type       lower_neff_boundary:    float
 
         :returns:   The phase velocity.
         :rtype:     float
@@ -586,8 +583,8 @@ class Fiber(object):
         n_eff = self.get_effective_index(
             mode=mode,
             wavelength=wavelength,
-            delta=delta,
-            lowbound=lowbound
+            delta_neff=delta_neff,
+            lower_neff_boundary=lower_neff_boundary
         )
 
         return constants.c / n_eff
@@ -595,19 +592,19 @@ class Fiber(object):
     def get_group_index(self,
             mode: Mode,
             wavelength: float,
-            delta: float = 1e-6,
-            lowbound: float = None) -> float:
+            delta_neff: float = 1e-6,
+            lower_neff_boundary: float = None) -> float:
         """
         Gets the group index.
 
-        :param      mode:        The mode
-        :type       mode:        Mode
-        :param      wavelength:  The wavelength
-        :type       wavelength:  float
-        :param      delta:       The delta
-        :type       delta:       float
-        :param      lowbound:    The lowbound
-        :type       lowbound:    float
+        :param      mode:                   The mode to consider
+        :type       mode:                   Mode
+        :param      wavelength:             The wavelength to consider
+        :type       wavelength:             float
+        :param      delta_neff:             The discretization for research of neff value
+        :type       delta_neff:             float
+        :param      lower_neff_boundary:    The minimum value neff can reach
+        :type       lower_neff_boundary:    float
 
         :returns:   The group index.
         :rtype:     float
@@ -618,8 +615,8 @@ class Fiber(object):
             omega=wavelength.omega,
             mode=mode,
             order=1,
-            delta=delta,
-            lowbound=lowbound
+            delta_neff=delta_neff,
+            lower_neff_boundary=lower_neff_boundary
         )
 
         return beta * constants.c
@@ -627,19 +624,19 @@ class Fiber(object):
     def get_groupe_velocity(self,
             mode: Mode,
             wavelength: float,
-            delta: float = 1e-6,
-            lowbound: float = None) -> float:
+            delta_neff: float = 1e-6,
+            lower_neff_boundary: float = None) -> float:
         """
         Gets the groupe velocity.
 
-        :param      mode:        The mode
-        :type       mode:        Mode
-        :param      wavelength:  The wavelength
-        :type       wavelength:  float
-        :param      delta:       The delta
-        :type       delta:       float
-        :param      lowbound:    The lowbound
-        :type       lowbound:    float
+        :param      mode:                  The mode to consider
+        :type       mode:                  Mode
+        :param      wavelength:            The wavelength to consider
+        :type       wavelength:            float
+        :param      delta_neff:            The discretization for research of neff value
+        :type       delta_neff:            float
+        :param      lower_neff_boundary:   The minimum value neff can reach
+        :type       lower_neff_boundary:   float
 
         :returns:   The groupe velocity.
         :rtype:     float
@@ -649,8 +646,8 @@ class Fiber(object):
             omega=wavelength.omega,
             mode=mode,
             order=1,
-            delta=delta,
-            lowbound=lowbound
+            delta_neff=delta_neff,
+            lower_neff_boundary=lower_neff_boundary
         )
 
         return 1 / beta
@@ -658,30 +655,31 @@ class Fiber(object):
     def get_dispersion(self,
             mode: Mode,
             wavelength: float,
-            delta: float = 1e-6,
-            lowbound: float = None) -> float:
+            delta_neff: float = 1e-6,
+            lower_neff_boundary: float = None) -> float:
         """
         Gets the modal dispersion.
 
-        :param      mode:        The mode
-        :type       mode:        Mode
-        :param      wavelength:  The wavelength
-        :type       wavelength:  float
-        :param      delta:       The delta
-        :type       delta:       float
-        :param      lowbound:    The lowbound
-        :type       lowbound:    float
+        :param      mode:                   The mode to consider
+        :type       mode:                   Mode
+        :param      wavelength:             The wavelength to consider
+        :type       wavelength:             float
+        :param      delta_neff:             The discretization for research of neff value
+        :type       delta_neff:             float
+        :param      lower_neff_boundary:    The minimum value neff can reach
+        :type       lower_neff_boundary:    float
 
         :returns:   The modal dispersion.
         :rtype:     float
         """
         wavelength = Wavelength(wavelength)
+
         beta = self.get_derivative_beta_vs_omega(
             omega=wavelength.omega,
             mode=mode,
             order=2,
-            delta=delta,
-            lowbound=lowbound
+            delta_neff=delta_neff,
+            lower_neff_boundary=lower_neff_boundary
         )
 
         return -beta * 2 * numpy.pi * constants.c * 1e6 / wavelength**2
@@ -689,19 +687,19 @@ class Fiber(object):
     def get_S_parameter(self,
             mode: Mode,
             wavelength: float,
-            delta: float = 1e-6,
-            lowbound: float = None) -> float:
+            delta_neff: float = 1e-6,
+            lower_neff_boundary: float = None) -> float:
         """
         Gets the s parameter.
 
-        :param      mode:        The mode
-        :type       mode:        Mode
-        :param      wavelength:  The wavelength
-        :type       wavelength:  float
-        :param      delta:       The delta
-        :type       delta:       float
-        :param      lowbound:    The lowbound
-        :type       lowbound:    float
+        :param      mode:                   The mode to consider
+        :type       mode:                   Mode
+        :param      wavelength:             The wavelength to consider
+        :type       wavelength:             float
+        :param      delta_neff:             The discretization for research of neff value
+        :type       delta_neff:             float
+        :param      lower_neff_boundary:    The minimum value neff can reach
+        :type       lower_neff_boundary:    float
 
         :returns:   The s parameter.
         :rtype:     float
@@ -712,8 +710,8 @@ class Fiber(object):
             omega=wavelength.omega,
             mode=mode,
             order=3,
-            delta=delta,
-            lowbound=lowbound
+            delta_neff=delta_neff,
+            lower_neff_boundary=lower_neff_boundary
         )
 
         return 1e-3 * beta * (2 * numpy.pi * constants.c / wavelength**2)**2
@@ -726,14 +724,14 @@ class Fiber(object):
         """
         Gets the family of vectorial modes.
 
-        :param      wavelength:  The wavelength
+        :param      wavelength:  The wavelength to consider
         :type       wavelength:  float
-        :param      nu_max:      The numax
+        :param      nu_max:      The maximum value of nu parameter
         :type       nu_max:      int
-        :param      m_max:       The mmax
+        :param      m_max:       The maximum value of m parameter
         :type       m_max:       int
-        :param      delta:       The delta
-        :type       delta:       float
+        :param      delta_neff:  The discretization for research of neff value
+        :type       delta_neff:  float
 
         :returns:   The vectorial modes.
         :rtype:     set
@@ -759,18 +757,18 @@ class Fiber(object):
             wavelength: float,
             ellmax: int = None,
             m_max: int = None,
-            delta: float = 1e-6) -> set:
+            delta_neff: float = 1e-6) -> set:
         """
         Gets the family of LP modes.
 
-        :param      wavelength:  The wavelength
+        :param      wavelength:  The wavelength to consider
         :type       wavelength:  float
         :param      ellmax:      The ellmax
         :type       ellmax:      int
-        :param      mmax:        The mmax
+        :param      mmax:        The maximum value of m parameter
         :type       mmax:        int
-        :param      delta:       The delta
-        :type       delta:       float
+        :param      delta_neff:  The discretization for research of neff value
+        :type       delta_neff:  float
 
         :returns:   The lp modes.
         :rtype:     set
@@ -782,7 +780,7 @@ class Fiber(object):
             wavelength=wavelength,
             nu_max=ellmax,
             m_max=m_max,
-            delta=delta
+            delta_neff=delta_neff
         )
 
         return modes
@@ -792,22 +790,22 @@ class Fiber(object):
             wavelength: float,
             nu_max: int = numpy.inf,
             m_max: int = numpy.inf,
-            delta: float = 1e-6) -> set:
+            delta_neff: float = 1e-6) -> set:
         """
         Find all modes of given families, within given constraints
 
-        :param      families:    The families
-        :type       families:    object
-        :param      wavelength:  The wavelength
-        :type       wavelength:  float
-        :param      numax:       The radial number nu maximum to reach
-        :type       numax:       int
-        :param      mmax:        The azimuthal number m maximum to reach
-        :type       mmax:        int
-        :param      delta:       The delta
-        :type       delta:       float
+        :param      families:         The families
+        :type       families:         object
+        :param      wavelength:       The wavelength to consider
+        :type       wavelength:       float
+        :param      nu_max:           The radial number nu maximum to reach
+        :type       nu_max:           int
+        :param      m_max:            The azimuthal number m maximum to reach
+        :type       m_max:            int
+        :param      delta_neff:       The discretization for research of neff value
+        :type       delta_neff:       float
 
-        :returns:   The modes from familly.
+        :returns:   The mode to considers from familly.
         :rtype:     set
         """
         modes = set()
@@ -846,7 +844,7 @@ class Fiber(object):
                         neff = self.get_effective_index(
                             mode=mode,
                             wavelength=wavelength,
-                            delta=delta
+                            delta_neff=delta_neff
                         )
 
                         if numpy.isnan(neff):
@@ -866,9 +864,9 @@ class Fiber(object):
         """
         Get field class
 
-        :param      mode:        The mode
+        :param      mode:        The mode to consider
         :type       mode:        Mode
-        :param      wavelength:  The wavelength
+        :param      wavelength:  The wavelength to consider
         :type       wavelength:  float
         :param      limit:       The limit boundary
         :type       limit:       float
@@ -899,9 +897,9 @@ class Fiber(object):
         """
         Gets the mode field without the azimuthal component.
 
-        :param      mode:        The mode
+        :param      mode:        The mode to consider
         :type       mode:        Mode
-        :param      wavelength:  The wavelength
+        :param      wavelength:  The wavelength to consider
         :type       wavelength:  float
         :param      radius:      The radius
         :type       radius:      float
@@ -940,7 +938,7 @@ def load_fiber(fiber_name: str, wavelength: float = None):
 
     :param      fiber_name:  The fiber name
     :type       fiber_name:  str
-    :param      wavelength:  The wavelength
+    :param      wavelength:  The wavelength to consider
     :type       wavelength:  float
 
     :returns:   { description_of_the_return_value }

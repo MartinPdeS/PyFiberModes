@@ -15,7 +15,7 @@ import numpy
 # Generating the fiber structures
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Here we create the different fiber design that we want to explore
-core_indexes = numpy.linspace(1.464, 1.494)
+core_indexes = numpy.linspace(1.464, 1.494, 100)
 factory = FiberFactory()
 factory.add_layer(name="core", radius=4e-6, index=core_indexes)
 factory.add_layer(name="cladding", index=1.4444)

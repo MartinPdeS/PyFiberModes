@@ -6,14 +6,14 @@
 
 Computation times
 =================
-**00:00.898** total execution time for **gallery** files:
+**00:00.453** total execution time for **gallery** files:
 
 +-------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_gallery_plot_dispersion.py` (``plot_dispersion.py``)           | 00:00.897 | 0.0 MB |
+| :ref:`sphx_glr_gallery_plot_effective_index.py` (``plot_effective_index.py``) | 00:00.285 | 0.0 MB |
 +-------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_gallery_plot_smf28.py` (``plot_smf28.py``)                     | 00:00.001 | 0.0 MB |
+| :ref:`sphx_glr_gallery_plot_smf28.py` (``plot_smf28.py``)                     | 00:00.168 | 0.0 MB |
 +-------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_gallery_plot_effective_index.py` (``plot_effective_index.py``) | 00:00.000 | 0.0 MB |
+| :ref:`sphx_glr_gallery_plot_dispersion.py` (``plot_dispersion.py``)           | 00:00.000 | 0.0 MB |
 +-------------------------------------------------------------------------------+-----------+--------+
 | :ref:`sphx_glr_gallery_plot_fiber_LP_modes.py` (``plot_fiber_LP_modes.py``)   | 00:00.000 | 0.0 MB |
 +-------------------------------------------------------------------------------+-----------+--------+

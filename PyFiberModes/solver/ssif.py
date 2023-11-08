@@ -22,7 +22,7 @@ class CutoffSolver(FiberSolver):
     """
     logger = logging.getLogger(__name__)
 
-    def solve(self, mode: Mode):
+    def solve(self, mode: Mode) -> float:
         nu = mode.nu
         m = mode.m
 
@@ -41,11 +41,9 @@ class CutoffSolver(FiberSolver):
         return jn_zeros(nu, m)[m - 1]
 
     def get_cutoff_HE(self, V0: float, nu: int) -> float:
-
         wavelength = self.fiber.V0_to_wavelength(V0=V0)
 
-        core = self.fiber.layers[0]
-        clad = self.fiber.layers[1]
+        core, clad = self.fiber.layers
 
         max_index_core = core.get_maximum_index(wavelength=wavelength)
 
@@ -58,33 +56,34 @@ class CutoffSolver(FiberSolver):
     def find_HE_mode_cutoff(self, mode: Mode) -> float:
         if mode.m > 1:
 
-            pm = Mode(
+            lower_boundary_mode = Mode(
                 family=mode.family,
                 nu=mode.nu,
                 m=mode.m - 1
             )
 
-            lowbound = self.fiber.get_cutoff(mode=pm)
+            lower_neff_boundary = self.fiber.get_cutoff(mode=lower_boundary_mode)
 
-            if numpy.isnan(lowbound) or numpy.isinf(lowbound):
+            if numpy.isnan(lower_neff_boundary) or numpy.isinf(lower_neff_boundary):
                 raise AssertionError(f"find_HE_mode_cutoff: no previous cutoff for {mode} mode")
 
-            delta = 1 / lowbound if lowbound else self._MCD
-            lowbound += delta
+            delta = 1 / lower_neff_boundary if lower_neff_boundary else self._MCD
+
+            lower_neff_boundary += delta
         else:
-            lowbound = delta = self._MCD
+            lower_neff_boundary = delta = self._MCD
 
         ipoints = numpy.concatenate(
             (jn_zeros(mode.nu, mode.m), jn_zeros(mode.nu - 2, mode.m))
         )
 
         ipoints.sort()
-        ipoints = list(ipoints[ipoints > lowbound])
+        ipoints = list(ipoints[ipoints > lower_neff_boundary])
 
         cutoff = self.find_function_first_root(
             function=self.get_cutoff_HE,
             function_args=(mode.nu,),
-            lowbound=lowbound,
+            lowbound=lower_neff_boundary,
             ipoints=ipoints,
             delta=delta
         )
@@ -102,6 +101,8 @@ class NeffSolver(FiberSolver):
     """
 
     def solve(self, wavelength: float, mode: Mode, delta_neff: float, lower_neff_boundary: float):
+        core, clad = self.fiber.layers
+
         epsilon = 1e-12
 
         cutoff = self.fiber.get_cutoff(mode=mode)
@@ -109,33 +110,29 @@ class NeffSolver(FiberSolver):
         if self.fiber.get_V0(wavelength=wavelength) < cutoff:
             return float("nan")
 
-        core = self.fiber.layers[0]
         max_core_index = core.get_maximum_index(wavelength=wavelength)
 
-        r = self.fiber.get_outer_radius(layer_idx=0)
-
-        highbound = numpy.sqrt(max_core_index**2 - (cutoff / (r * wavelength.k0))**2) - epsilon
+        higher_neff_boundary = numpy.sqrt(max_core_index**2 - (cutoff / (core.radius_out * wavelength.k0))**2) - epsilon
 
         match mode.family:
             case ModeFamily.LP:
-                nm = Mode(ModeFamily.LP, mode.nu + 1, mode.m)
+                upper_boundary_mode = Mode(ModeFamily.LP, mode.nu + 1, mode.m)
             case ModeFamily.HE:
-                nm = Mode(ModeFamily.LP, mode.nu, mode.m)
+                upper_boundary_mode = Mode(ModeFamily.LP, mode.nu, mode.m)
             case ModeFamily.EH:
-                nm = Mode(ModeFamily.LP, mode.nu + 2, mode.m)
+                upper_boundary_mode = Mode(ModeFamily.LP, mode.nu + 2, mode.m)
             case _:
-                nm = Mode(ModeFamily.LP, 1, mode.m + 1)
+                upper_boundary_mode = Mode(ModeFamily.LP, 1, mode.m + 1)
 
-        cutoff = self.fiber.get_cutoff(mode=nm)
+        cutoff = self.fiber.get_cutoff(mode=upper_boundary_mode)
 
         try:
-            value_0 = numpy.sqrt(max_core_index**2 - (cutoff / (r * wavelength.k0))**2) + epsilon
+            value_0 = numpy.sqrt(max_core_index**2 - (cutoff / (core.radius_out * wavelength.k0))**2) + epsilon
 
-            last_layer = self.fiber.layers[-1]
-
-            value_1 = last_layer.get_minimum_index(wavelength=wavelength) + epsilon
+            value_1 = clad.get_minimum_index(wavelength=wavelength) + epsilon
 
             lower_neff_boundary = max(value_0, value_1)
+
         except ValueError:
             lower_neff_boundary = max_core_index
 
@@ -154,56 +151,76 @@ class NeffSolver(FiberSolver):
         result = self._findBetween(
             function=function,
             lowbound=lower_neff_boundary,
-            highbound=highbound,
+            highbound=higher_neff_boundary,
             function_args=(wavelength, mode.nu)
         )
 
         return result
 
-    def get_LP_field(self, wavelength: float, nu: int, neff: float, radius: float) -> numpy.ndarray:
-        core_outer_radius = self.fiber.get_outer_radius(layer_idx=0)
+    def get_LP_field(self, wavelength: float, nu: int, neff: float, radius: float) -> tuple:
+        """
+        Gets the LP field in the form of a tuple containing two numpy arrays.
+        Tuple structure is [ex, 0, 0], [0, hy, 0]
 
-        max_index_core = self.fiber.get_maximum_index(
-            layer_idx=0,
-            wavelength=wavelength
-        )
+        :param      wavelength:  The wavelength
+        :type       wavelength:  float
+        :param      nu:          The nu parameter of the mode
+        :type       nu:          int
+        :param      neff:        The neff
+        :type       neff:        float
+        :param      radius:      The radius
+        :type       radius:      float
 
-        min_index_clad = self.fiber.get_minimum_index(
-            layer_idx=1,
-            wavelength=wavelength
-        )
+        :returns:   The lp field.
+        :rtype:     tuple
+        """
+        core, clad = self.fiber.layers
 
-        u = core_outer_radius * wavelength.k0 * numpy.sqrt(max_index_core**2 - neff**2)
-        w = core_outer_radius * wavelength.k0 * numpy.sqrt(neff**2 - min_index_clad**2)
+        max_index_core = core.get_maximum_index(wavelength=wavelength)
 
-        if radius < core_outer_radius:
-            ex = j0(u * radius / core_outer_radius) / j0(u)
+        min_index_clad = clad.get_minimum_index(wavelength=wavelength)
+
+        u = core.radius_out * wavelength.k0 * numpy.sqrt(max_index_core**2 - neff**2)
+        w = core.radius_out * wavelength.k0 * numpy.sqrt(neff**2 - min_index_clad**2)
+
+        if radius < core.radius_out:
+            ex = j0(u * radius / core.radius_out) / j0(u)
         else:
-            ex = k0(w * radius / core_outer_radius) / k0(w)
+            ex = k0(w * radius / core.radius_out) / k0(w)
         hy = neff * Y0 * ex  # Snyder & Love uses nco, but Bures uses neff
 
         return numpy.array((ex, 0, 0)), numpy.array((0, hy, 0))
 
     def get_TE_field(self, wavelength: float, nu, neff: float, radius: float) -> numpy.ndarray:
-        core_outer_radius = self.fiber.get_outer_radius(layer_idx=0)
+        r"""
+        Gets the TE field in the form of a tuple containing two numpy arrays.
+        Tuple structure is [0, E$_{\phi}$, 0], [H$_{r}$, 0, H$_{z}$]
 
-        max_index_core = self.fiber.get_maximum_index(
-            layer_idx=0,
-            wavelength=wavelength
-        )
+        :param      wavelength:  The wavelength
+        :type       wavelength:  float
+        :param      nu:          The nu parameter of the mode
+        :type       nu:          int
+        :param      neff:        The neff
+        :type       neff:        float
+        :param      radius:      The radius
+        :type       radius:      float
 
-        min_index_clad = self.fiber.get_minimum_index(
-            layer_idx=1,
-            wavelength=wavelength
-        )
+        :returns:   The lp field.
+        :rtype:     tuple
+        """
+        core, clad = self.fiber.layers
 
-        u = core_outer_radius * wavelength.k0 * numpy.sqrt(max_index_core**2 - neff**2)
-        w = core_outer_radius * wavelength.k0 * numpy.sqrt(neff**2 - min_index_clad**2)
+        max_index_core = core.get_maximum_index(wavelength=wavelength)
 
-        term_0 = wavelength.k0 * core_outer_radius
-        ratio = radius / core_outer_radius
+        min_index_clad = clad.get_minimum_index(wavelength=wavelength)
 
-        if radius < core_outer_radius:
+        u = core.radius_out * wavelength.k0 * numpy.sqrt(max_index_core**2 - neff**2)
+        w = core.radius_out * wavelength.k0 * numpy.sqrt(neff**2 - min_index_clad**2)
+
+        term_0 = wavelength.k0 * core.radius_out
+        ratio = radius / core.radius_out
+
+        if radius < core.radius_out:
             hz = -Y0 * u / term_0 * j0(u * ratio) / j1(u)
             ephi = -j1(u * ratio) / j1(u)
         else:
@@ -214,19 +231,32 @@ class NeffSolver(FiberSolver):
 
         return numpy.array((0, ephi, 0)), numpy.array((hr, 0, hz))
 
-    def get_TM_field(self, wavelength: float, nu, neff: float, radius: float) -> numpy.ndarray:
-        rho = self.fiber.get_outer_radius(layer_idx=0)
+    def get_TM_field(self, wavelength: float, nu, neff: float, radius: float) -> tuple:
+        r"""
+        Gets the TM field in the form of a tuple containing two numpy arrays.
+        Tuple structure is [E$_{r}$, 0, E$_{z}$], [0, H$_{\phi}$, 0]
+
+        :param      wavelength:  The wavelength
+        :type       wavelength:  float
+        :param      nu:          The nu parameter of the mode
+        :type       nu:          int
+        :param      neff:        The neff
+        :type       neff:        float
+        :param      radius:      The radius
+        :type       radius:      float
+
+        :returns:   The lp field.
+        :rtype:     tuple
+        """
+        core, clad = self.fiber.layers
+
+        rho = core.radius_out
+
         k = wavelength.k0
 
-        max_index_core = self.fiber.get_maximum_index(
-            layer_idx=0,
-            wavelength=wavelength
-        )
+        max_index_core = core.get_maximum_index(wavelength=wavelength)
 
-        min_index_clad = self.fiber.get_minimum_index(
-            layer_idx=1,
-            wavelength=wavelength
-        )
+        min_index_clad = clad.get_minimum_index(wavelength=wavelength)
 
         u = rho * wavelength.k0 * numpy.sqrt(max_index_core**2 - neff**2)
         w = rho * wavelength.k0 * numpy.sqrt(neff**2 - min_index_clad**2)
@@ -245,28 +275,41 @@ class NeffSolver(FiberSolver):
 
         return numpy.array((er, 0, ez)), numpy.array((0, hphi, 0))
 
-    def get_HE_field(self, wavelength: float, nu: float, neff: float, radius: float) -> numpy.ndarray:
-        rho = self.fiber.get_outer_radius(layer_idx=0)
+    def get_HE_field(self, wavelength: float, nu: float, neff: float, radius: float) -> tuple:
+        r"""
+        Gets the HE field in the form of a tuple containing two numpy arrays.
+        Tuple structure is [E$_{r}$, E$_{\phi}$, E$_{z}$], [H$_{r}$, H$_{\phi}$, H$_{z}$]
+
+        :param      wavelength:  The wavelength
+        :type       wavelength:  float
+        :param      nu:          The nu parameter of the mode
+        :type       nu:          int
+        :param      neff:        The neff
+        :type       neff:        float
+        :param      radius:      The radius
+        :type       radius:      float
+
+        :returns:   The lp field.
+        :rtype:     tuple
+        """
+        core, clad = self.fiber.layers
+
+        rho = core.radius_out
+
         k = wavelength.k0
 
-        nco2 = self.fiber.get_maximum_index(
-            layer_idx=0,
-            wavelength=wavelength
-        )**2
+        max_index_core_squared = core.get_maximum_index(wavelength=wavelength)**2
 
-        ncl2 = self.fiber.get_minimum_index(
-            layer_idx=1,
-            wavelength=wavelength
-        )**2
+        max_index_clad_squared = clad.get_minimum_index(wavelength=wavelength)**2
 
-        u = rho * k * numpy.sqrt(nco2 - neff**2)
-        w = rho * k * numpy.sqrt(neff**2 - ncl2)
-        v = rho * k * numpy.sqrt(nco2 - ncl2)
+        u = rho * k * numpy.sqrt(max_index_core_squared - neff**2)
+        w = rho * k * numpy.sqrt(neff**2 - max_index_clad_squared)
+        v = rho * k * numpy.sqrt(max_index_core_squared - max_index_clad_squared)
 
         jnu = jn(nu, u)
         knw = kn(nu, w)
 
-        Delta = (1 - ncl2 / nco2) / 2
+        Delta = (1 - max_index_clad_squared / max_index_core_squared) / 2
         b1 = jvp(nu, u) / (u * jnu)
         b2 = kvp(nu, w) / (w * knw)
         F1 = (u * w / v)**2 * (b1 + (1 - 2 * Delta) * b2) / nu
@@ -288,8 +331,8 @@ class NeffSolver(FiberSolver):
             er = -(a1 * jmur + a2 * jpur) / jnu
             ephi = -(a1 * jmur - a2 * jpur) / jnu
             ez = u / (k * neff * rho) * jnur / jnu
-            hr = Y0 * nco2 / neff * (a3 * jmur - a4 * jpur) / jnu
-            hphi = -Y0 * nco2 / neff * (a3 * jmur + a4 * jpur) / jnu
+            hr = Y0 * max_index_core_squared / neff * (a3 * jmur - a4 * jpur) / jnu
+            hphi = -Y0 * max_index_core_squared / neff * (a3 * jmur + a4 * jpur) / jnu
             hz = Y0 * u * F2 / (k * rho) * jnur / jnu
         else:
             term_1 = w * radius / rho
@@ -301,26 +344,39 @@ class NeffSolver(FiberSolver):
             er = -u / w * (a1 * kmur - a2 * kpur) / knw
             ephi = -u / w * (a1 * kmur + a2 * kpur) / knw
             ez = u / (k * neff * rho) * knur / knw
-            hr = Y0 * nco2 / neff * u / w * (a5 * kmur + a6 * kpur) / knw
-            hphi = -Y0 * nco2 / neff * u / w * (a5 * kmur - a6 * kpur) / knw
+            hr = Y0 * max_index_core_squared / neff * u / w * (a5 * kmur + a6 * kpur) / knw
+            hphi = -Y0 * max_index_core_squared / neff * u / w * (a5 * kmur - a6 * kpur) / knw
             hz = Y0 * u * F2 / (k * rho) * knur / knw
 
         return numpy.array((er, ephi, ez)), numpy.array((hr, hphi, hz))
 
-    def get_EH_field(self, *args, **kwargs) -> numpy.ndarray:
+    def get_EH_field(self, *args, **kwargs) -> tuple:
+        r"""
+        Gets the EH field in the form of a tuple containing two numpy arrays.
+        Tuple structure is [E$_{r}$, E$_{\phi}$, E$_{z}$], [H$_{r}$, H$_{\phi}$, H$_{z}$]
+
+        :param      wavelength:  The wavelength
+        :type       wavelength:  float
+        :param      nu:          The nu parameter of the mode
+        :type       nu:          int
+        :param      neff:        The neff
+        :type       neff:        float
+        :param      radius:      The radius
+        :type       radius:      float
+
+        :returns:   The lp field.
+        :rtype:     tuple
+        """
         return self.get_HE_field(*args, **kwargs)
 
     def get_parameter_uw(self, wavelength: float, neff: float) -> tuple:
-        outer_radius = self.fiber.get_outer_radius(layer_idx=0)
-
-        core = self.fiber.layers[0]
-        clad = self.fiber.layers[1]
+        core, clad = self.fiber.layers
 
         max_index = core.get_maximum_index(wavelength=wavelength)
         min_index = clad.get_minimum_index(wavelength=wavelength)
 
-        term_0 = outer_radius * wavelength.k0 * numpy.sqrt(max_index**2 - neff**2)
-        term_1 = outer_radius * wavelength.k0 * numpy.sqrt(neff**2 - min_index**2)
+        term_0 = core.radius_out * wavelength.k0 * numpy.sqrt(max_index**2 - neff**2)
+        term_1 = core.radius_out * wavelength.k0 * numpy.sqrt(neff**2 - min_index**2)
 
         return term_0, term_1
 

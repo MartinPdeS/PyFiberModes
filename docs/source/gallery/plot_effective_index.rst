@@ -51,7 +51,7 @@ Here we create the different fiber design that we want to explore
 
 .. code-block:: python3
 
-    core_indexes = numpy.linspace(1.464, 1.494)
+    core_indexes = numpy.linspace(1.464, 1.494, 100)
     factory = FiberFactory()
     factory.add_layer(name="core", radius=4e-6, index=core_indexes)
     factory.add_layer(name="cladding", index=1.4444)
@@ -106,14 +106,14 @@ Preparing the figure
  .. code-block:: none
 
 
-    SceneList(unit_size=(10, 3), tight_layout=True, transparent_background=False, title='Effective index vs core index', ax_orientation='vertical')
+    SceneList(unit_size=(10, 3), tight_layout=False, transparent_background=False, title='Effective index vs core index', ax_orientation='vertical')
 
 
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.134 seconds)
+   **Total running time of the script:** (0 minutes 0.285 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_effective_index.py:
