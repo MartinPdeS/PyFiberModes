@@ -12,28 +12,12 @@ class FiberSolver(object):
     logger = logging.getLogger(__name__)
     _MCD = 0.1
 
-    def __init__(self, fiber):
+    def __init__(self, fiber, wavelength):
         self.fiber = fiber
-        self.log = []
-        self._logging = False
+        self.wavelength = wavelength
 
     def solver(self, *args, **kwargs):
         raise NotImplementedError()
-
-    def start_log(self):
-        self.log = []
-        self._logging = True
-
-    def stop_log(self):
-        self._logging = False
-
-    def __record(self, fct):
-        def wrapper(z, *args):
-            r = fct(z, *args)
-            if self._logging:
-                self.log.append((z, r))
-            return r
-        return wrapper
 
     def find_function_first_root(self,
             function,
@@ -44,7 +28,6 @@ class FiberSolver(object):
             delta: float = 0.25,
             maxiter: int = numpy.inf):
 
-        function = self.__record(function)  # For debug purpose.
         while True:
             if ipoints:
                 maxiter = len(ipoints)
@@ -61,8 +44,10 @@ class FiberSolver(object):
                 if highbound:
                     if (b > highbound > lowbound) or (b < highbound < lowbound):
                         self.logger.info("find_function_first_root: no root found within allowed range")
-                        return float("nan")
+                        return numpy.nan
+
                 fb = function(b, *function_args)
+
                 if fb == 0:
                     return b
 
@@ -79,41 +64,53 @@ class FiberSolver(object):
                 delta /= 10
             else:
                 break
-        self.logger.info(f"maxiter reached ({maxiter}, {lowbound}, {highbound})")
-        return float("nan")
 
-    def _findBetween(self,
+        self.logger.info(f"maxiter reached ({maxiter}, {lowbound}, {highbound})")
+        return numpy.nan
+
+    def find_root_within_range(self,
             function,
             lowbound: float,
             highbound: float,
-            function_args: tuple = (),
+            function_kwargs: tuple = (),
             max_iteration: int = 15):
 
-        function = self.__record(function)  # For debug purpose.
-        v = [lowbound, highbound]
+        x_list = [lowbound, highbound]
 
-        s = [
-            function(lowbound, *function_args),
-            function(highbound, *function_args)
+        y_list = [
+            function(lowbound, **function_kwargs),
+            function(highbound, **function_kwargs)
         ]
 
         for j in count():  # probably not needed...
             if j == max_iteration:
-                self.logger.warning("_findBetween: max iter reached")
-                return float("nan")
-            for i in range(len(s) - 1):
-                a, b = v[i], v[i + 1]
-                fa, fb = s[i], s[i + 1]
+                self.logger.warning("Couldn't converge to value as max iteration is reached")
+                return numpy.nan
 
-                if (fa > 0 and fb < 0) or (fa < 0 and fb > 0):
-                    z = brentq(function, a, b, args=function_args)
-                    fz = function(z, *function_args)
-                    if abs(fa) > abs(fz) < abs(fb):  # Skip discontinuities
+            for i in range(len(y_list) - 1):
+                x0, x1 = x_list[i], x_list[i + 1]
+                y0, y1 = y_list[i], y_list[i + 1]
+
+                if (y0 > 0 and y1 < 0) or (y0 < 0 and y1 > 0):
+                    args = tuple(function_kwargs.values())
+
+                    z = brentq(
+                        f=function,
+                        a=x0,
+                        b=x1,
+                        args=args
+                    )
+
+                    y2 = function(z, **function_kwargs)
+
+                    if abs(y0) > abs(y2) < abs(y1):  # Skip discontinuities
                         return z
 
-            ls = len(s)
-            for i in range(ls - 1):
-                a, b = v[2 * i], v[2 * i + 1]
+            ls = len(y_list)
+            for idx in range(ls - 1):
+                a, b = x_list[2 * idx], x_list[2 * idx + 1]
                 c = (a + b) / 2
-                v.insert(2 * i + 1, c)
-                s.insert(2 * i + 1, function(c, *function_args))
+                x_list.insert(2 * idx + 1, c)
+                y_list.insert(2 * idx + 1, function(c, **function_kwargs))
+
+# -

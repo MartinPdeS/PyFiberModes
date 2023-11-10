@@ -3,9 +3,10 @@
 
 import numpy
 import scipy
-from PyFiberModes import Wavelength, ModeFamily, HE11
+from PyFiberModes import ModeFamily, HE11
 from PyFiberModes.mode import Mode
 from dataclasses import dataclass
+from MPSPlots.render2D import SceneList, Axis
 
 
 @dataclass
@@ -14,23 +15,16 @@ class Field(object):
     """ Fiber associated to the mode """
     mode: Mode
     """ Mode to evaluate """
-    wavelength: float
-    """ Wavelength for the simulation """
     limit: float
     """ Radius of the field to compute. """
     n_point: int = 101
-    """ Number of points (field will be np x np) """
-
-    FTYPES = ('Ex', 'Ey', 'Ez', 'Er', 'Ephi', 'Et', 'Epol', 'Emod',
-              'Hx', 'Hy', 'Hz', 'Hr', 'Hphi', 'Ht', 'Hpol', 'Hmod')
+    """ Number of points (field will be n_point x n_point) """
 
     def __post_init__(self):
-        self.wavelength = Wavelength(self.wavelength)
-
         self.compute_meshes()
 
     def compute_meshes(self) -> None:
-        """
+        r"""
         Calculates the meshes and parameters necessary, which are:
         dx - dy - x - y - r - phi
 
@@ -45,13 +39,14 @@ class Field(object):
             -self.limit: self.limit: complex(self.n_point)
         ]
 
-        self.r_mesh = numpy.sqrt(numpy.square(self.x_mesh) + numpy.square(self.y_mesh))
+        self.radius_mesh = numpy.sqrt(numpy.square(self.x_mesh) + numpy.square(self.y_mesh))
 
         self.phi_mesh = numpy.arctan2(self.y_mesh, self.x_mesh)
 
     def get_azimuthal_dependency_f(self, phi: float) -> numpy.ndarray:
-        """
-        Gets the azimuthal dependency f.
+        r"""
+        Gets the azimuthal dependency :math:`f_\nu`.
+        Reference: Eq. 3.71 of Jaques Bures.
 
         :param      phi:  Phase (rotation) of the field.
         :type       phi:  float
@@ -62,8 +57,9 @@ class Field(object):
         return numpy.cos(self.mode.nu * self.phi_mesh + phi)
 
     def get_azimuthal_dependency_g(self, phi: float) -> numpy.ndarray:
-        """
-        Gets the azimuthal dependency g.
+        r"""
+        Gets the azimuthal dependency :math:`g_\nu`.
+        Reference: Eq. 3.71 of Jaques Bures.
 
         :param      phi:  Phase (rotation) of the field.
         :type       phi:  float
@@ -86,7 +82,7 @@ class Field(object):
 
     def Ex(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
         r"""
-        X component of the electric field :math:`\| E_{x} \|`.
+        X component of the electric field :math:`E_{x}`.
 
         :param      phi:    The phase in radian
         :type       phi:    float
@@ -103,8 +99,8 @@ class Field(object):
             for index in self.get_index_iterator(array):
                 er, hr = self.fiber.get_radial_field(
                     mode=self.mode,
-                    wavelength=self.wavelength,
-                    radius=self.r_mesh[index]
+                    wavelength=self.fiber.wavelength,
+                    radius=self.radius_mesh[index]
                 )
 
                 array[index] = er[0] * azimuthal_dependency[index]
@@ -117,7 +113,7 @@ class Field(object):
 
     def Ey(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
         r"""
-        Y component of the electric field :math:`\| E_{y} \|`.
+        Y component of the electric field :math:`E_{y}`.
 
         :param      phi:    The phase in radian
         :type       phi:    float
@@ -134,8 +130,8 @@ class Field(object):
             for index in self.get_index_iterator(array):
                 er, hr = self.fiber.get_radial_field(
                     mode=self.mode,
-                    wavelength=self.wavelength,
-                    radius=self.r_mesh[index]
+                    wavelength=self.fiber.wavelength,
+                    radius=self.radius_mesh[index]
                 )
 
                 array[index] = er[1] * azimuthal_dependency[index]
@@ -148,7 +144,7 @@ class Field(object):
 
     def Ez(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
         r"""
-        Z component of the electric field :math:`\| E_{z} \|`.
+        Z component of the electric field :math:`E_{z}`.
 
         :param      phi:    The phase in radian
         :type       phi:    float
@@ -165,8 +161,8 @@ class Field(object):
         for index in self.get_index_iterator(array):
             er, hr = self.fiber.get_radial_field(
                 mode=self.mode,
-                wavelength=self.wavelength,
-                radius=self.r_mesh[index]
+                wavelength=self.fiber.wavelength,
+                radius=self.radius_mesh[index]
             )
 
             array[index] = er[2] * azimuthal_dependency[index]
@@ -175,7 +171,7 @@ class Field(object):
 
     def Er(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
         r"""
-        Radial component of the electric field :math:`\| E_{r} \|`.
+        Radial component of the electric field :math:`E_{r}`.
 
         :param      phi:    The phase in radian
         :type       phi:    float
@@ -196,8 +192,8 @@ class Field(object):
             for index in self.get_index_iterator(array):
                 er, hr = self.fiber.get_radial_field(
                     mode=self.mode,
-                    wavelength=self.wavelength,
-                    radius=self.r_mesh[index]
+                    wavelength=self.fiber.wavelength,
+                    radius=self.radius_mesh[index]
                 )
 
                 array[index] = er[0] * azimuthal_dependency_f[index]
@@ -206,7 +202,7 @@ class Field(object):
 
     def Ephi(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
         r"""
-        Phi component of the electric field :math:`\| E_{\phi} \|`.
+        Phi component of the electric field :math:`E_{\phi}`.
 
         :param      phi:    The phase in radian
         :type       phi:    float
@@ -228,8 +224,8 @@ class Field(object):
 
                 er, hr = self.fiber.get_radial_field(
                     mode=self.mode,
-                    wavelength=self.wavelength,
-                    radius=self.r_mesh[index]
+                    wavelength=self.fiber.wavelength,
+                    radius=self.radius_mesh[index]
                 )
 
                 array[index] = er[1] * azimuthal_dependency_g[index]
@@ -238,7 +234,7 @@ class Field(object):
 
     def Et(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
         r"""
-        Transverse component of the electric field :math:`\| E_{T} \|`.
+        Transverse component of the electric field :math:`E_{T}`.
 
         :param      phi:    The phase in radian
         :type       phi:    float
@@ -288,7 +284,7 @@ class Field(object):
 
     def Emod(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
         r"""
-        Norm of the E vector. :math:`\| \vec{E} \|`.
+        Norm of the E vector. :math:`\vec{E}`.
 
         :param      phi:                  The phi
         :type       phi:                  float
@@ -317,7 +313,7 @@ class Field(object):
 
     def Hx(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
         r"""
-        X component of the magnetic field :math:`\| H_{x} \|`.
+        X component of the magnetic field :math:`H_{x}`.
 
         :param      phi:    The phase in radian
         :type       phi:    float
@@ -335,8 +331,8 @@ class Field(object):
 
                 er, hr = self.fiber.get_radial_field(
                     mode=self.mode,
-                    wavelength=self.wavelength,
-                    radius=self.r_mesh[index]
+                    wavelength=self.fiber.wavelength,
+                    radius=self.radius_mesh[index]
                 )
 
                 array[index] = hr[0] * azimuthal_dependency_f[index]
@@ -349,7 +345,7 @@ class Field(object):
 
     def Hy(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
         r"""
-        Y component of the magnetic field :math:`\| H_{y} \|`.
+        Y component of the magnetic field :math:`H_{y}`.
 
         :param      phi:    The phase in radian
         :type       phi:    float
@@ -366,8 +362,8 @@ class Field(object):
 
                 er, hr = self.fiber.get_radial_field(
                     mode=self.mode,
-                    wavelength=self.wavelength,
-                    radius=self.r_mesh[index]
+                    wavelength=self.fiber.wavelength,
+                    radius=self.radius_mesh[index]
                 )
 
                 array[index] = hr[1] * azimuthal_dependency_f[index]
@@ -380,7 +376,7 @@ class Field(object):
 
     def Hz(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
         r"""
-        Z component of the magnetic field :math:`\| H_{z} \|`.
+        Z component of the magnetic field :math:`H_{z}`.
 
         :param      phi:    The phase in radian
         :type       phi:    float
@@ -396,8 +392,8 @@ class Field(object):
 
             er, hr = self.fiber.get_radial_field(
                 mode=self.mode,
-                wavelength=self.wavelength,
-                radius=self.r_mesh[index]
+                wavelength=self.fiber.wavelength,
+                radius=self.radius_mesh[index]
             )
 
             array[index] = hr[2] * azimuthal_dependency_f[index]
@@ -405,7 +401,7 @@ class Field(object):
 
     def Hr(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
         r"""
-        Radial component of the magnetic field :math:`\| H_{r} \|`.
+        Radial component of the magnetic field :math:`H_{r}`.
 
         :param      phi:    The phase in radian
         :type       phi:    float
@@ -429,8 +425,8 @@ class Field(object):
 
                 er, hr = self.fiber.get_radial_field(
                     mode=self.mode,
-                    wavelength=self.wavelength,
-                    radius=self.r_mesh[index]
+                    wavelength=self.fiber.wavelength,
+                    radius=self.radius_mesh[index]
                 )
 
                 array[index] = hr[0] * azimuthal_dependency_f[index]
@@ -439,7 +435,7 @@ class Field(object):
 
     def Hphi(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
         r"""
-        Azimuthal component of the magnetic field :math:`\| H_{\phi} \|`.
+        Azimuthal component of the magnetic field :math:`H_{\phi}`.
 
         :param      phi:    The phase in radian
         :type       phi:    float
@@ -460,8 +456,8 @@ class Field(object):
 
                 er, hr = self.fiber.get_radial_field(
                     mode=self.mode,
-                    wavelength=self.wavelength,
-                    radius=self.r_mesh[index]
+                    wavelength=self.fiber.wavelength,
+                    radius=self.radius_mesh[index]
                 )
 
                 array[index] = hr[1] * azimuthal_dependency_g[index]
@@ -470,7 +466,7 @@ class Field(object):
 
     def Ht(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
         r"""
-        Transverse component of the magnetic field :math:`\| H_{T} \|`.
+        Transverse component of the magnetic field :math:`H_{T}`.
 
         :param      phi:    The phase in radian
         :type       phi:    float
@@ -518,7 +514,7 @@ class Field(object):
 
     def Hmod(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
         r"""
-        Norm of the H vector :math:`\| \vec{H} \|`.
+        Norm of the H vector :math:`\vec{H}`.
 
 
         :param      phi:                  The phi
@@ -548,9 +544,10 @@ class Field(object):
 
     def get_effective_area(self) -> float:
         """
-        Estimation of mode effective area.
+        Gets of mode effective area. Suppose than r is large enough, such as F(r, r) = 0.
 
-        Suppose than r is large enough, such as F(r, r) = 0.
+        :returns:   The effective area.
+        :rtype:     float
         """
         field_array_norm = self.Emod()
 
@@ -563,7 +560,7 @@ class Field(object):
         return (term_0 / term_1)
 
     def get_integrale_square(self, array: numpy.ndarray) -> float:
-        """
+        r"""
         Gets the integrale of the array squared.
 
         :param      array: The array
@@ -586,19 +583,19 @@ class Field(object):
 
         .. math::
 
-            I = \frac{n_{eff}}{n_{eff}{HE11}} * \int \| E_T \|^2 * dx * dy
+            I = \frac{n_{eff}}{n_{eff}^{HE11}} * \int E_T^2 * dx * dy
 
         :returns:   The intensity.
         :rtype:     float
         """
         HE11_n_eff = self.fiber.neff(
             mode=HE11,
-            wavelength=self.wavelength
+            wavelength=self.fiber.wavelength
         )
 
         n_eff = self.fiber.neff(
             mode=self.mode,
-            wavelength=self.wavelength
+            wavelength=self.fiber.wavelength
         )
 
         norm_squared = self.get_integrale_square(array=self.Et())
@@ -618,7 +615,7 @@ class Field(object):
         """
         neff = self.fiber.neff(
             mode=HE11,
-            wavelength=self.wavelength
+            wavelength=self.fiber.wavelength
         )
 
         intensity = self.get_intensity()
@@ -633,5 +630,22 @@ class Field(object):
         :rtype:     float
         """
         raise NotImplementedError('Not yet implemented')
+
+    def add_to_ax(self, field_string: str, ax: Axis):
+        field = getattr(self, field_string)()
+
+        ax.add_mesh(scalar=field)
+
+        ax.add_colorbar(symmetric=True)
+
+    def plot(self, plot_type: list = []) -> SceneList:
+        figure = SceneList(unit_size=(4, 4), ax_orientation='horizontal', tight_layout=True)
+
+        for field_string in plot_type:
+            ax = figure.append_ax(title=field_string, equal=True)
+
+            self.add_to_ax(field_string=field_string, ax=ax)
+
+        return figure
 
 # -

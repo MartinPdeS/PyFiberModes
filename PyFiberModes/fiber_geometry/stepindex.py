@@ -11,55 +11,47 @@ from scipy.special import jvp, yvp, ivp, kvp
 class StepIndex(Geometry):
     DEFAULT_PARAMS = []
 
-    def get_index(self, radius: float, wavelength: float) -> float:
+    def get_index(self, radius: float) -> float:
         """
         Gets the index of the local layer at a given radius.
 
         :param      radius:      The radius for evaluation
         :type       radius:      float
-        :param      wavelength:  The wavelength
-        :type       wavelength:  float
 
         :returns:   The index at given radius.
         :rtype:     float
         """
         if self.radius_in <= abs(radius) <= self.radius_out:
-            return self.material_type.get_refractive_index(wavelength, *self.index_list)
+            return self.material_type.get_refractive_index(self.wavelength, *self.index_list)
         else:
             return None
 
-    def get_minimum_index(self, wavelength: float) -> float:
+    def get_minimum_index(self) -> float:
         """
         Gets the minimum index of the local layer.
 
-        :param      wavelength:  The wavelength
-        :type       wavelength:  float
-
         :returns:   The maximum index.
         :rtype:     float
         """
-        return self.material_type.get_refractive_index(wavelength, *self.index_list)
+        return self.material_type.get_refractive_index(self.wavelength, *self.index_list)
 
-    def get_maximum_index(self, wavelength: float) -> float:
+    def get_maximum_index(self) -> float:
         """
         Gets the maximum index of the local layer.
 
-        :param      wavelength:  The wavelength
-        :type       wavelength:  float
-
         :returns:   The maximum index.
         :rtype:     float
         """
-        return self.material_type.get_refractive_index(wavelength, *self.index_list)
+        return self.material_type.get_refractive_index(self.wavelength, *self.index_list)
 
-    def get_U_W_parameter(self, radius: float, neff: float, wavelength: float) -> float:
+    def get_U_W_parameter(self, radius: float, neff: float) -> float:
         r"""
         Gets the u parameter as defined as:
 
         .. math::
-            U^2 &= k^2 \rho^2 \left( n_{core}^2 - n_{eff}^2 \right) \, \text{[in the core]} \\
+            U &= k \rho \sqrt{ n_{core}^2 - n_{eff}^2 } \, \text{[in the core]} \\
 
-            W^2 &= k^2 \rho^2 \left( n_{neff}^2 - n_{clad}^2 \right) \, \text{[in the clad]} \\
+            W &= k \rho \sqrt{ n_{neff}^2 - n_{clad}^2 } \, \text{[in the clad]} \\
 
         Reference: Eq: 3.2 of Jacques Bures "Optique Guidée : Fibres Optiques et Composants Passifs Tout-Fibre"
 
@@ -67,17 +59,17 @@ class StepIndex(Geometry):
         :type       radius:      float
         :param      neff:        The neff
         :type       neff:        float
-        :param      wavelength:  The wavelength
-        :type       wavelength:  float
 
         :returns:   The u parameter at given radius.
         :rtype:     float
         """
-        refractive_index = self.get_index(radius=radius, wavelength=wavelength)
+        index = self.get_index(radius=radius)
 
-        return wavelength.k0 * radius * sqrt(abs(refractive_index**2 - neff**2))
+        U = self.wavelength.k0 * radius * sqrt(abs(index**2 - neff**2))
 
-    def Psi(self, radius: float, neff: float, wavelength: float, nu: int, C: list) -> tuple:
+        return U
+
+    def Psi(self, radius: float, neff: float, nu: int, C: list) -> tuple:
         r"""
         Return the :math:`\psi` function
 
@@ -93,8 +85,6 @@ class StepIndex(Geometry):
         :type       radius:      float
         :param      neff:        The effective index
         :type       neff:        float
-        :param      wavelength:  The wavelength for evaluation
-        :type       wavelength:  float
         :param      nu:          The nu parameter of the mode
         :type       nu:          int
         :param      C:           I don't know.
@@ -107,10 +97,9 @@ class StepIndex(Geometry):
         u = self.get_U_W_parameter(
             radius=radius,
             neff=neff,
-            wavelength=wavelength
         )
 
-        layer_max_index = self.get_maximum_index(wavelength=wavelength)
+        layer_max_index = self.get_maximum_index()
 
         if neff < layer_max_index:
             if C[1]:
@@ -133,17 +122,15 @@ class StepIndex(Geometry):
     def lpConstants(self,
             radius: float,
             neff: float,
-            wavelength: float,
             nu: int,
             A: list) -> tuple:
 
         u = self.get_U_W_parameter(
             radius=radius,
             neff=neff,
-            wavelength=wavelength
         )
 
-        maximum_index = self.get_maximum_index(wavelength=wavelength)
+        maximum_index = self.get_maximum_index()
 
         if neff < maximum_index:
             term_0 = numpy.pi / 2 * (u * yvp(nu, u) * A[0] - yn(nu, u) * A[1])
@@ -160,7 +147,6 @@ class StepIndex(Geometry):
             radius_out: float,
             nu: int,
             neff: float,
-            wavelength: float,
             EH: object,
             TM: bool = True):
         """
@@ -168,13 +154,9 @@ class StepIndex(Geometry):
         modify EH in-place (for speed)
 
         """
-        maximum_index = self.get_maximum_index(wavelength=wavelength)
+        maximum_index = self.get_maximum_index()
 
-        u = self.get_U_W_parameter(
-            radius=radius_out,
-            neff=neff,
-            wavelength=wavelength
-        )
+        u = self.get_U_W_parameter(radius=radius_out, neff=neff)
 
         if radius_in == 0:
             if nu == 0:
@@ -197,7 +179,6 @@ class StepIndex(Geometry):
                     radius_in=radius_in,
                     radius_out=radius_out,
                     neff=neff,
-                    wavelength=wavelength,
                     EH=EH,
                     c=c,
                     idx=idx
@@ -210,7 +191,6 @@ class StepIndex(Geometry):
                     radius_in=radius_in,
                     radius_out=radius_out,
                     neff=neff,
-                    wavelength=wavelength,
                     EH=EH,
                     c=c,
                     idx=idx
@@ -220,18 +200,17 @@ class StepIndex(Geometry):
                 radius_in=radius_in,
                 radius_out=radius_out,
                 neff=neff,
-                wavelength=wavelength,
                 nu=nu,
                 EH=EH
             )
 
         # Compute EH fields
         if neff < maximum_index:
-            c1 = wavelength.k0 * radius_out / u
+            c1 = self.wavelength.k0 * radius_out / u
             F3 = jvp(nu, u) / jn(nu, u)
             F4 = yvp(nu, u) / yn(nu, u)
         else:
-            c1 = -wavelength.k0 * radius_out / u
+            c1 = -self.wavelength.k0 * radius_out / u
             F3 = ivp(nu, u) / iv(nu, u)
             F4 = kvp(nu, u) / kn(nu, u)
 
@@ -250,25 +229,16 @@ class StepIndex(Geometry):
             radius_in: float,
             radius_out: float,
             neff: float,
-            wavelength: float,
             nu,
             EH) -> float:
 
         a = numpy.zeros((4, 4))
 
-        maximum_index = self.get_maximum_index(wavelength)
+        maximum_index = self.get_maximum_index()
 
-        u = self.get_U_W_parameter(
-            radius=radius_out,
-            neff=neff,
-            wavelength=wavelength
-        )
+        u = self.get_U_W_parameter(radius=radius_out, neff=neff)
 
-        urp = self.get_U_W_parameter(
-            radius=radius_in,
-            neff=neff,
-            wavelength=wavelength
-        )
+        urp = self.get_U_W_parameter(radius=radius_in, neff=neff)
 
         if neff < maximum_index:
             B1 = jn(nu, u)
@@ -277,7 +247,7 @@ class StepIndex(Geometry):
             F2 = yn(nu, urp) / B2
             F3 = jvp(nu, urp) / B1
             F4 = yvp(nu, urp) / B2
-            c1 = wavelength.k0 * radius_out / u
+            c1 = self.wavelength.k0 * radius_out / u
         else:
             B1 = iv(nu, u)
             B2 = kn(nu, u)
@@ -285,7 +255,7 @@ class StepIndex(Geometry):
             F2 = kn(nu, urp) / B2
             F3 = ivp(nu, urp) / B1 if u else 1
             F4 = kvp(nu, urp) / B2
-            c1 = -wavelength.k0 * radius_out / u
+            c1 = -self.wavelength.k0 * radius_out / u
 
         c2 = neff * nu / urp * c1
         c3 = constants.eta0 * c1
@@ -310,25 +280,22 @@ class StepIndex(Geometry):
             radius_in: float,
             radius_out: float,
             neff: float,
-            wavelength: float,
             EH,
             c,
             idx) -> float:
 
         a = numpy.empty((2, 2))
 
-        maximum_index = self.get_maximum_index(wavelength=wavelength)
+        maximum_index = self.get_maximum_index()
 
         u = self.get_U_W_parameter(
             radius=radius_out,
             neff=neff,
-            wavelength=wavelength
         )
 
         urp = self.get_U_W_parameter(
             radius=radius_in,
             neff=neff,
-            wavelength=wavelength
         )
 
         if neff < maximum_index:
@@ -338,7 +305,7 @@ class StepIndex(Geometry):
             F2 = y0(urp) / B2
             F3 = -j1(urp) / B1
             F4 = -y1(urp) / B2
-            c1 = wavelength.k0 * radius_out / u
+            c1 = self.wavelength.k0 * radius_out / u
         else:
             B1 = i0(u)
             B2 = k0(u)
@@ -346,7 +313,7 @@ class StepIndex(Geometry):
             F2 = k0(urp) / B2
             F3 = i1(urp) / B1
             F4 = -k1(urp) / B2
-            c1 = -wavelength.k0 * radius_out / u
+            c1 = -self.wavelength.k0 * radius_out / u
 
         c3 = c * c1
 

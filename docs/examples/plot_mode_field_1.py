@@ -16,7 +16,7 @@ from MPSPlots.render2D import SceneList
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Here we create the different fiber design that we want to explore
 core_indexes = 1.54
-factory = FiberFactory()
+factory = FiberFactory(wavelength=1550e-9)
 factory.add_layer(name="core", radius=4e-6, index=core_indexes)
 factory.add_layer(name="cladding", index=1.4444)
 
@@ -36,19 +36,12 @@ fiber = factory[0]
 field = Field(
     fiber=fiber,
     mode=mode,
-    wavelength=1550e-9,
     limit=10e-6,
     n_point=201
 )
 
 
-for field_name in ['Ex', 'Ey', 'Ez', 'Er', 'Ephi']:
-    field_array = getattr(field, field_name)()
-
-    ax = figure.append_ax(title=field_name, show_colorbar=True)
-
-    ax.add_mesh(scalar=field_array)
-
+figure = field.plot(plot_type=['Ex', 'Ey', 'Ez', 'Er', 'Ephi'])
 
 figure.show()
 

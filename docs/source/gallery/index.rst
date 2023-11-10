@@ -66,6 +66,23 @@ A gallery of examples and that showcase how PyFiberModes can be used. Some examp
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="Dispersion VS core index">
+
+.. only:: html
+
+  .. image:: /gallery/images/thumb/sphx_glr_plot_group_index_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_gallery_plot_group_index.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Dispersion VS core index</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="Mode fields">
 
 .. only:: html
@@ -126,6 +143,7 @@ A gallery of examples and that showcase how PyFiberModes can be used. Some examp
    /gallery/plot_dispersion
    /gallery/plot_effective_index
    /gallery/plot_fiber_LP_modes
+   /gallery/plot_group_index
    /gallery/plot_mode_field
    /gallery/plot_mode_field_1
    /gallery/plot_smf28

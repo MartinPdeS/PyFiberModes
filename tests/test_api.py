@@ -8,7 +8,7 @@ import numpy
 def test_fiber_factory():
     from PyFiberModes import FiberFactory
 
-    factory = FiberFactory()
+    factory = FiberFactory(wavelength=1550e-9)
 
     factory.add_layer(
         name="core",
@@ -34,7 +34,7 @@ attribute_function = [
 @pytest.mark.parametrize('function_string', attribute_function, ids=attribute_function)
 def test_get_attribute(function_string):
     from PyFiberModes import FiberFactory, HE11
-    factory = FiberFactory()
+    factory = FiberFactory(wavelength=1550e-9)
 
     factory.add_layer(
         name="core",
@@ -49,10 +49,7 @@ def test_get_attribute(function_string):
     for fiber in factory:
         function = getattr(fiber, function_string)
 
-        _ = function(
-            mode=HE11,
-            wavelength=1550e-9
-        )
+        _ = function(mode=HE11)
 
 
 if __name__ == '__main__':

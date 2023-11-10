@@ -105,7 +105,7 @@ derivatives_table = {
 }
 
 
-def get_derivative(function, x: float, order: int, n_point: int, central_point: int, delta: float, function_args: tuple) -> float:
+def get_derivative(function, x: float, order: int, n_point: int, central_point: int, delta: float, function_kwargs: dict) -> float:
     """
     Returns the derivative a the given function
 
@@ -129,9 +129,18 @@ def get_derivative(function, x: float, order: int, n_point: int, central_point: 
     """
 
     prefactor = factorial(order) / (factorial(n_point - 1) * delta**order)
+    derivative = derivatives_table[(order, n_point, central_point)]
 
-    evaluation = [
-        derivatives_table[(order, n_point, central_point)][i] * function(x + (i - central_point) * delta, *function_args) for i in range(n_point)
-    ]
+    evaluation = []
+    for idx in range(n_point):
+        x_eval = x + (idx - central_point) * delta
+        y = function(x_eval, **function_kwargs)
+        value = derivative[idx] * y
+        evaluation.append(value)
+
+
+    # evaluation = [
+    #     derivative[i] * function(x + (i - central_point) * delta, *function_args) for i in range(n_point)
+    # ]
 
     return prefactor * sum(evaluation)

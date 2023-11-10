@@ -36,11 +36,10 @@ class CutoffSolver(solver.solver.FiberSolver):
             lowbound += delta / 100
 
         elif mode.nu > 0:
-            # TE(0,1) is single-mode condition
-            # Roots below TE(0,1) are false-positive
+            # TE(0,1) is single-mode condition. Roots below TE(0,1) are false-positive
             pm = Mode(ModeFamily.TE, 0, 1)
             lowbound = self.fiber.cutoff(pm)
-            
+
             delta = 0.05 / lowbound
             lowbound -= delta / 100
         else:

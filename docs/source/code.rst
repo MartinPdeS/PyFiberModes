@@ -36,6 +36,14 @@ Fiber factory
      :member-order: bysource
 
 
+Solver single clad fiber
+------------------------
+ .. automodule:: PyFiberModes.solver.ssif
+     :members:
+     :inherited-members:
+     :member-order: bysource
+
+
 
 
 

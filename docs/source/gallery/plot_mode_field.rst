@@ -89,9 +89,9 @@ Preparing the figure
             n_point=101
         )
 
-        e_x = field.Ex()
-
         ax = figure.append_ax(title=mode)
+
+        e_x = field.Ex()
 
         ax.add_mesh(scalar=e_x)
 
@@ -114,14 +114,14 @@ Preparing the figure
  .. code-block:: none
 
 
-    SceneList(unit_size=(4, 4), tight_layout=True, transparent_background=False, title='Mode fields for vectorial mode if x-direction', ax_orientation='horizontal')
+    SceneList(unit_size=(4, 4), tight_layout=False, transparent_background=False, title='Mode fields for vectorial mode if x-direction', ax_orientation='horizontal')
 
 
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 1.497 seconds)
+   **Total running time of the script:** (0 minutes 2.419 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_mode_field.py:

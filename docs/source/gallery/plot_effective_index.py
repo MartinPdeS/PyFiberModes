@@ -28,14 +28,14 @@ figure = SceneList(title='Effective index vs core index')
 ax = figure.append_ax(show_legend=True)
 
 for mode in [HE11, HE12, HE22]:
-    neff = []
+    data = []
     for fiber in factory:
         effective_index = fiber.get_effective_index(mode, 1550e-9)
-        neff.append(effective_index)
+        data.append(effective_index)
 
     ax.add_line(
         x=core_indexes,
-        y=neff,
+        y=data,
         label=mode,
         line_width=2
     )

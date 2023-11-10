@@ -77,14 +77,14 @@ Preparing the figure
     ax = figure.append_ax(show_legend=True)
 
     for mode in [HE11, HE12, HE22]:
-        neff = []
+        data = []
         for fiber in factory:
             effective_index = fiber.get_effective_index(mode, 1550e-9)
-            neff.append(effective_index)
+            data.append(effective_index)
 
         ax.add_line(
             x=core_indexes,
-            y=neff,
+            y=data,
             label=mode,
             line_width=2
         )
@@ -94,26 +94,41 @@ Preparing the figure
     # -
 
 
-
-.. image-sg:: /gallery/images/sphx_glr_plot_effective_index_001.png
-   :alt: Effective index vs core index
-   :srcset: /gallery/images/sphx_glr_plot_effective_index_001.png
-   :class: sphx-glr-single-img
-
-
 .. rst-class:: sphx-glr-script-out
 
- .. code-block:: none
+.. code-block:: pytb
 
+    Traceback (most recent call last):
+      File "/Users/martinpdes/Desktop/GitProject/PyFiberModes/docs/examples/plot_effective_index.py", line 33, in <module>
+        effective_index = fiber.get_effective_index(mode, 1550e-9)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/Users/martinpdes/Desktop/GitProject/PyFiberModes/PyFiberModes/fiber.py", line 447, in get_effective_index
+        neff = self.neff_solver.solve(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+      File "/Users/martinpdes/Desktop/GitProject/PyFiberModes/PyFiberModes/solver/ssif.py", line 150, in solve
+        result = self._findBetween(
+                 ^^^^^^^^^^^^^^^^^^
+      File "/Users/martinpdes/Desktop/GitProject/PyFiberModes/PyFiberModes/solver/solver.py", line 77, in _findBetween
+        function(lowbound, *function_args),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/Users/martinpdes/Desktop/GitProject/PyFiberModes/PyFiberModes/solver/ssif.py", line 569, in _heceq
+        term_0, term_1 = self.get_HE_EH_terms(
+                         ^^^^^^^^^^^^^^^^^^^^^
+      File "/Users/martinpdes/Desktop/GitProject/PyFiberModes/PyFiberModes/solver/ssif.py", line 536, in get_HE_EH_terms
+        u, w, v = self.get_U_W_V_parameter(wavelength=wavelength, neff=neff)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/Users/martinpdes/Desktop/GitProject/PyFiberModes/PyFiberModes/solver/ssif.py", line 445, in get_U_W_V_parameter
+        U = core.radius_out * wavelength.k0 * numpy.sqrt(n_core**2 - neff**2)
+                              ^^^^^^^^^^^^^
+    AttributeError: 'numpy.float64' object has no attribute 'k0'
 
-    SceneList(unit_size=(10, 3), tight_layout=False, transparent_background=False, title='Effective index vs core index', ax_orientation='vertical')
 
 
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.285 seconds)
+   **Total running time of the script:** (0 minutes 0.094 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_effective_index.py:

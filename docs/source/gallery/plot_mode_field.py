@@ -40,9 +40,9 @@ for mode in [HE11, HE12, HE22, LP01]:
         n_point=101
     )
 
-    e_x = field.Ex()
-
     ax = figure.append_ax(title=mode)
+
+    e_x = field.Ex()
 
     ax.add_mesh(scalar=e_x)
 

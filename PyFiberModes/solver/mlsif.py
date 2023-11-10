@@ -1,5 +1,5 @@
 from .solver import FiberSolver
-from PyFiberModes import Wavelength, Mode, ModeFamily
+from PyFiberModes import Mode, ModeFamily
 from PyFiberModes import constants
 from math import isnan
 import numpy
@@ -9,15 +9,12 @@ from scipy.special import kn, kvp, k0, k1, jn, jvp, yn, yvp, iv, ivp
 class NeffSolver(FiberSolver):
 
     def get_neff_lower_boundary(self,
-            wavelength: Wavelength,
             mode: Mode,
             lower_neff_boundary: float,
             delta_neff: float) -> float:
         """
         Gets the lower boundary for neff value.
 
-        :param      wavelength:           The wavelength
-        :type       wavelength:           Wavelength
         :param      mode:                 The mode to evaluate
         :type       mode:                 Mode
         :param      lower_neff_boundary:  The lower neff boundary
@@ -44,12 +41,11 @@ class NeffSolver(FiberSolver):
             lower_order_mode = Mode(mode.family, mode.nu, mode.m - 1)
 
         if lower_order_mode is None:
-            lower_neff_boundary = self.fiber.get_maximum_index(wavelength=wavelength)
+            lower_neff_boundary = self.fiber.get_maximum_index()
 
         else:
             lower_neff_boundary = self.fiber.get_effective_index(
                 mode=lower_order_mode,
-                wavelength=wavelength,
                 delta_neff=delta_neff
             )
 
@@ -61,7 +57,6 @@ class NeffSolver(FiberSolver):
 
             lb = self.fiber.get_effective_index(
                 mode=pm,
-                wavelength=wavelength,
                 delta_neff=delta_neff
             )
 
@@ -72,18 +67,15 @@ class NeffSolver(FiberSolver):
 
         return lower_neff_boundary
 
-    def solve(self, wavelength: float, mode: Mode, delta_neff: float, lower_neff_boundary: float):
-        wavelength = Wavelength(wavelength)
-
+    def solve(self, mode: Mode, delta_neff: float, lower_neff_boundary: float) -> float:
         lower_neff_boundary = self.get_neff_lower_boundary(
-            wavelength=wavelength,
             mode=mode,
             lower_neff_boundary=lower_neff_boundary,
             delta_neff=delta_neff
         )
 
         last_layer = self.fiber.layers[-1]
-        higher_neff_boundary = last_layer.get_minimum_index(wavelength=wavelength)
+        higher_neff_boundary = last_layer.get_minimum_index()
 
         match mode.family:
             case ModeFamily.LP:
@@ -106,42 +98,42 @@ class NeffSolver(FiberSolver):
 
         return self.find_function_first_root(
             function=function,
-            function_args=(wavelength, mode.nu),
+            function_args=(mode.nu,),
             lowbound=lower_neff_boundary - 1e-15,
             highbound=higher_neff_boundary + 1e-15,
             delta=-delta_neff
         )
 
-    def get_LP_field(self, wavelength: float, nu: int, neff: float, radius: float) -> tuple:
-        N = len(self.fiber.layers)
+    def get_LP_field(self, nu: int, neff: float, radius: float) -> tuple[float, float]:
+        n_layers = len(self.fiber.layers)
         C = numpy.array((1, 0))
 
-        for i in range(1, N):
-            rho = self.fiber.get_inner_radius(i)
+        for i in range(1, n_layers):
+            layer = self.fiber.layers[i]
+            previous_layer = self.fiber.layers[i - 1]
+            rho = layer.radius_in
+
             if radius < rho:
                 eval_layer = self.fiber.layers[i - 1]
                 break
 
-            current_layer = self.fiber.layers[i]
-            previous_layer = self.fiber.layers[i - 1]
-
-            A = previous_layer.Psi(rho, neff, wavelength, nu, C)
-            C = current_layer.lpConstants(rho, neff, wavelength, nu, A)
+            A = previous_layer.Psi(radius=rho, neff=neff, nu=nu, C=C)
+            C = layer.lpConstants(radius=rho, neff=neff, nu=nu, A=A)
 
         else:
             eval_layer = self.fiber.layers[-1]
-            u = eval_layer.get_U_W_parameter(radius=rho, neff=neff, wavelength=wavelength)
+            u = eval_layer.get_U_W_parameter(radius=rho, neff=neff)
             C = (0, A[0] / kn(nu, u))
 
-        ex, _ = eval_layer.Psi(radius, neff, wavelength, nu, C)
+        ex, _ = eval_layer.Psi(radius=radius, neff=neff, nu=nu, C=C)
         hy = neff * constants.Y0 * ex
 
         return numpy.array((ex, 0, 0)), numpy.array((0, hy, 0))
 
-    def get_TE_field(self, wavelength: float, nu, neff, radius: float) -> tuple:
+    def get_TE_field(self, wavelength: float, nu, neff, radius: float) -> tuple[float, float]:
         pass
 
-    def get_TM_field(self, wavelength: float, nu, neff, radius: float) -> tuple:
+    def get_TM_field(self, wavelength: float, nu, neff, radius: float) -> tuple[float, float]:
         n_layer = len(self.fiber.layers)
         C = numpy.array((1, 0))
         EH = numpy.zeros(4)
@@ -151,22 +143,21 @@ class NeffSolver(FiberSolver):
             radius_out = self.fiber.get_outer_radius(layer_idx=i)
             layer = self.fiber.layers[i]
 
-            n = layer.get_maximum_index(wavelength=wavelength)
+            n = layer.get_maximum_index()
 
-            u = layer.get_U_W_parameter(radius=radius_out, neff=neff, wavelength=wavelength)
+            u = layer.get_U_W_parameter(radius=radius_out, neff=neff)
 
             if i > 0:
                 C = layer.tetmConstants(
                     radius_in=radius_in,
                     radius_out=radius_out,
                     neff=neff,
-                    wavelength=wavelength,
                     EH=EH,
                     c=constants.Y0 * n**2,
                     idx=(0, 3)
                 )
 
-            if r < radius_out:
+            if radius < radius_out:
                 break
 
             if neff < n:
@@ -186,20 +177,19 @@ class NeffSolver(FiberSolver):
             radius_in = radius_out
         else:
             last_layer = self.fiber.layers[-1]
-            u = last_layer.get_U_W_parameter(radius=radius_out, neff=neff, wavelength=wavelength)
+            u = last_layer.get_U_W_parameter(radius=radius_out, neff=neff)
 
         return numpy.array((0, ephi, 0)), numpy.array((hr, 0, hz))
 
-    def get_EH_field(self, wavelength: float, nu, neff, radius: float) -> tuple:
+    def get_EH_field(self, nu, neff, radius: float) -> tuple[float, float]:
         return self.get_HE_field(
-            wavelength=wavelength,
             nu=nu,
             neff=neff,
             radius=radius
         )
 
-    def get_HE_field(self, wavelength: float, nu, neff, radius: float) -> tuple:
-        self._heceq(neff=neff, wavelength=wavelength, nu=nu)
+    def get_HE_field(self, nu, neff, radius: float) -> tuple[float, float]:
+        self._heceq(neff=neff, nu=nu)
 
         for current_layer_idx, rho in enumerate(self.fiber.layer_radius):
             if radius < rho:
@@ -208,12 +198,15 @@ class NeffSolver(FiberSolver):
             current_layer_idx += 1
 
         layer = self.fiber.layers[current_layer_idx]
-        n = layer.get_maximum_index(wavelength=wavelength)
-        u = layer.get_U_W_parameter(radius=rho, neff=neff, wavelength=wavelength)
+
+        n = layer.get_maximum_index()
+
+        u = layer.get_U_W_parameter(radius=rho, neff=neff)
+
         urp = u * radius / rho
 
         c1 = rho / u
-        c2 = wavelength.k0 * c1
+        c2 = self.wavelength.k0 * c1
         c3 = nu * c1 / radius if radius else 0  # To avoid div by 0
         c6 = constants.Y0 * n * n
 
@@ -261,7 +254,7 @@ class NeffSolver(FiberSolver):
 
         return numpy.array((Er, Ep, Ez)), numpy.array((Hr, Hp, Hz))
 
-    def _lpceq(self, neff: float, wavelength: float, nu: int) -> float:
+    def _lpceq(self, neff: float, nu: int) -> tuple[float, float]:
         n_layer = len(self.fiber.layers)
         C = numpy.zeros((n_layer - 1, 2))
         C[0, 0] = 1
@@ -273,7 +266,6 @@ class NeffSolver(FiberSolver):
             A = previous_layer.Psi(
                 radius=current_layer.radius_in,
                 neff=neff,
-                wavelength=wavelength,
                 nu=nu,
                 C=C[idx - 1, :]
             )
@@ -281,7 +273,6 @@ class NeffSolver(FiberSolver):
             C[idx, :] = current_layer.lpConstants(
                 radius=current_layer.radius_in,
                 neff=neff,
-                wavelength=wavelength,
                 nu=nu,
                 A=A
             )
@@ -292,7 +283,6 @@ class NeffSolver(FiberSolver):
         A = penultimate_layer.Psi(
             radius=last_layer.radius_in,
             neff=neff,
-            wavelength=wavelength,
             nu=nu,
             C=C[-1, :]
         )
@@ -300,12 +290,11 @@ class NeffSolver(FiberSolver):
         u = last_layer.get_U_W_parameter(
             radius=last_layer.radius_in,
             neff=neff,
-            wavelength=wavelength
         )
 
         return u * kvp(nu, u) * A[0] - kn(nu, u) * A[1]
 
-    def _teceq(self, neff: float, wavelength: float, nu: int) -> float:
+    def _teceq(self, neff: float, nu: int) -> tuple[float, float]:
         EH = numpy.empty(4)
 
         for layer in self.fiber.layers[:-1]:
@@ -314,7 +303,6 @@ class NeffSolver(FiberSolver):
                 radius_out=layer.radius_out,
                 nu=nu,
                 neff=neff,
-                wavelength=wavelength,
                 EH=EH,
                 TM=False
             )
@@ -325,13 +313,12 @@ class NeffSolver(FiberSolver):
         u = last_layer.get_U_W_parameter(
             radius=last_layer.radius_in,
             neff=neff,
-            wavelength=wavelength
         )
 
         F4 = k1(u) / k0(u)
-        return Ep + wavelength.k0 * last_layer.radius_in / u * constants.eta0 * Hz * F4
+        return Ep + self.wavelength.k0 * last_layer.radius_in / u * constants.eta0 * Hz * F4
 
-    def _tmceq(self, neff: float, wavelength: float, nu) -> float:
+    def _tmceq(self, neff: float, nu) -> tuple[float, float]:
         EH = numpy.empty(4)
 
         for layer in self.fiber.layers[:-1]:
@@ -340,7 +327,6 @@ class NeffSolver(FiberSolver):
                 radius_out=layer.radius_out,
                 nu=nu,
                 neff=neff,
-                wavelength=wavelength,
                 EH=EH,
                 TM=True
             )
@@ -352,16 +338,15 @@ class NeffSolver(FiberSolver):
         u = last_layer.get_U_W_parameter(
             radius=last_layer.radius_in,
             neff=neff,
-            wavelength=wavelength
         )
 
-        last_layer_index = last_layer.get_maximum_index(wavelength=wavelength)
+        last_layer_index = last_layer.get_maximum_index()
 
         F4 = k1(u) / k0(u)
 
-        return Hp - wavelength.k0 * last_layer.radius_in / u * constants.Y0 * last_layer_index**2 * Ez * F4
+        return Hp - self.wavelength.k0 * last_layer.radius_in / u * constants.Y0 * last_layer_index**2 * Ez * F4
 
-    def _heceq(self, neff: float, wavelength: float, nu: int) -> float:
+    def _heceq(self, neff: float, nu: int) -> float:
         EH = numpy.empty((4, 2))
 
         for layer in self.fiber.layers[:-1]:
@@ -371,7 +356,6 @@ class NeffSolver(FiberSolver):
                     radius_out=layer.radius_out,
                     nu=nu,
                     neff=neff,
-                    wavelength=wavelength,
                     EH=EH
                 )
             except ZeroDivisionError:
@@ -389,13 +373,12 @@ class NeffSolver(FiberSolver):
         u = last_layer.get_U_W_parameter(
             radius=last_layer.radius_in,
             neff=neff,
-            wavelength=wavelength
         )
 
-        last_layer_index = last_layer.get_maximum_index(wavelength=wavelength)
+        last_layer_index = last_layer.get_maximum_index()
 
         F4 = kvp(nu, u) / kn(nu, u)
-        c1 = -wavelength.k0 * last_layer.radius_in / u
+        c1 = -self.wavelength.k0 * last_layer.radius_in / u
         c2 = neff * nu / u * c1
         c3 = constants.eta0 * c1
         c4 = constants.Y0 * last_layer_index**2 * c1
@@ -410,10 +393,9 @@ class NeffSolver(FiberSolver):
 
         return E[0] * H[1] - E[1] * H[0]
 
-    def _ehceq(self, neff: float, wavelength: float, nu: int) -> float:
+    def _ehceq(self, neff: float, nu: int) -> float:
         return self._heceq(
             neff=neff,
-            wavelength=wavelength,
             nu=nu
         )
 

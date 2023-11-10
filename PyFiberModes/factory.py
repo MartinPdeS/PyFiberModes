@@ -43,10 +43,11 @@ class FiberFactory(object):
                   empty Fiberfactory object.
 
     """
-    def __init__(self):
+    def __init__(self, wavelength):
         self.layers_list = []
         self.neff_solver = None
         self.cutoff_solver = None
+        self.wavelength = wavelength
 
     def add_layer(self,
             index: float,
@@ -107,7 +108,7 @@ class FiberFactory(object):
 
         structure = list(generator)[index]
 
-        fiber = Fiber()
+        fiber = Fiber(wavelength=self.wavelength)
 
         for name, radius, index in structure:
             fiber.add_layer(
@@ -131,7 +132,7 @@ class FiberFactory(object):
         """
         generator = self.get_overall_generator()
         for structure in generator:
-            fiber = Fiber()
+            fiber = Fiber(wavelength=self.wavelength)
 
             for name, radius, index in structure:
                 fiber.add_layer(
