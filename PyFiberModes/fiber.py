@@ -564,7 +564,10 @@ class Fiber(object):
             delta_neff: float = 1e-6,
             lower_neff_boundary: float = None) -> float:
         r"""
-        Gets the modal dispersion :math:`\frac{2 * \pi * c}{\lambda^2} * \frac{\partial^2 beta}{\partial omega}`.
+        Gets the modal dispersion defined as:
+
+        .. math:
+            \frac{2 * \pi * c}{\lambda^2} * \frac{\partial^2 \beta}{\partial \omega}
 
         :param      mode:                   The mode to consider
         :type       mode:                   Mode
