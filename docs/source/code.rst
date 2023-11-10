@@ -11,7 +11,6 @@ Fiber
      :member-order: bysource
 
 
-
 Field
 -----
  .. automodule:: PyFiberModes.field
