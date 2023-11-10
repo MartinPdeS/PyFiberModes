@@ -22,7 +22,6 @@ smf28 = load_fiber(fiber_name='DCF1300S_20', wavelength=1550e-9)
 
 effective_index = smf28.get_effective_index(
     mode=HE11,
-    wavelength=1550e-9
 )
 
 print(effective_index)
