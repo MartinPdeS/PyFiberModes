@@ -38,7 +38,6 @@ class Field(object):
             -self.limit: self.limit: complex(self.n_point),
             -self.limit: self.limit: complex(self.n_point)
         ]
-
         self.radius_mesh = numpy.sqrt(numpy.square(self.x_mesh) + numpy.square(self.y_mesh))
 
         self.phi_mesh = numpy.arctan2(self.y_mesh, self.x_mesh)
@@ -95,6 +94,12 @@ class Field(object):
         if self.mode.family is ModeFamily.LP:
             array = numpy.zeros(self.x_mesh.shape)
             azimuthal_dependency = self.get_azimuthal_dependency_f(phi=phi)
+
+            # er, hr = self.fiber.get_radial_field(
+            #     mode=self.mode,
+            #     wavelength=self.fiber.wavelength,
+            #     radius=self.radius_mesh
+            # )
 
             for index in self.get_index_iterator(array):
                 er, hr = self.fiber.get_radial_field(

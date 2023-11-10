@@ -22,7 +22,7 @@ Field
 
 Step-index
 ----------
- .. automodule:: PyFiberModes.fiber_geometry.stepindex
+ .. automodule:: PyFiberModes.stepindex
      :members:
      :inherited-members:
      :member-order: bysource

@@ -50,9 +50,9 @@ class CutoffSolver(FiberSolver):
 
         self.fiber.update_wavelength(cutoff_wavelength)
 
-        n_core = core.get_maximum_index()
+        n_core = core.refractive_index
 
-        n_clad = clad.get_minimum_index()
+        n_clad = clad.refractive_index
 
         ratio = n_core**2 / n_clad**2
 
@@ -116,7 +116,7 @@ class NeffSolver(FiberSolver):
         if self.fiber.get_V0() < cutoff:
             return float("nan")
 
-        n_core = core.get_maximum_index()
+        n_core = core.refractive_index
 
         higher_neff_boundary = numpy.sqrt(n_core**2 - (cutoff / (core.radius_out * self.wavelength.k0))**2) - epsilon
 
@@ -135,7 +135,7 @@ class NeffSolver(FiberSolver):
         try:
             value_0 = numpy.sqrt(n_core**2 - (cutoff / (core.radius_out * self.wavelength.k0))**2) + epsilon
 
-            value_1 = clad.get_minimum_index() + epsilon
+            value_1 = clad.refractive_index + epsilon
 
             lower_neff_boundary = max(value_0, value_1)
 
@@ -304,9 +304,9 @@ class NeffSolver(FiberSolver):
 
         k = self.wavelength.k0
 
-        n_core = core.get_maximum_index(wavelength=self.wavelength)
+        n_core = core.refractive_index
 
-        n_clad = clad.get_minimum_index(wavelength=self.wavelength)
+        n_clad = clad.refractive_index
 
         u, w, _ = self.get_U_W_V_parameter(neff=neff)
 
@@ -345,9 +345,9 @@ class NeffSolver(FiberSolver):
 
         k = self.wavelength.k0
 
-        n_core_square = core.get_maximum_index()**2
+        n_core_square = core.refractive_index**2
 
-        n_clad_square = clad.get_minimum_index()**2
+        n_clad_square = clad.refractive_index**2
 
         u, w, v = self.get_U_W_V_parameter(neff=neff)
 
@@ -433,9 +433,9 @@ class NeffSolver(FiberSolver):
         """
         core, clad = self.fiber.layers
 
-        n_core = core.get_maximum_index()
+        n_core = core.refractive_index
 
-        n_clad = clad.get_minimum_index()
+        n_clad = clad.refractive_index
 
         U = core.radius_out * self.wavelength.k0 * numpy.sqrt(n_core**2 - neff**2)
         W = core.radius_out * self.wavelength.k0 * numpy.sqrt(neff**2 - n_clad**2)
@@ -500,9 +500,9 @@ class NeffSolver(FiberSolver):
 
         U, W, V = self.get_U_W_V_parameter(neff=neff)
 
-        n_core = core.get_maximum_index(wavelength=self.wavelength)
+        n_core = core.refractive_index
 
-        n_clad = clad.get_minimum_index(wavelength=self.wavelength)
+        n_clad = clad.refractive_index
 
         return U * j0(U) * k1(W) * n_clad**2 + W * j1(U) * k0(W) * n_core**2
 
@@ -522,9 +522,9 @@ class NeffSolver(FiberSolver):
 
         u, w, v = self.get_U_W_V_parameter(neff=neff)
 
-        n_core = core.get_maximum_index()
+        n_core = core.refractive_index
 
-        n_clad = clad.get_minimum_index()
+        n_clad = clad.refractive_index
 
         delta = (1 - n_clad**2 / n_core**2) / 2
         jnu = jn(nu, u)

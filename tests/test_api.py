@@ -27,7 +27,7 @@ attribute_function = [
     "get_group_index",
     "get_groupe_velocity",
     "get_S_parameter",
-    "get_field"
+    "get_mode_field"
 ]
 
 

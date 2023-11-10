@@ -26,13 +26,12 @@ Modal dispersion VS core index
 Imports
 ~~~~~~~
 
-.. GENERATED FROM PYTHON SOURCE LINES 10-15
+.. GENERATED FROM PYTHON SOURCE LINES 10-14
 
 .. code-block:: python3
 
-    from PyFiberModes import FiberFactory, HE11, HE12, LP01, LP11, LP02
+    from PyFiberModes import HE11, HE12, LP01, LP11, LP02
     from PyFiberModes.fiber import load_fiber
-    from MPSPlots.render2D import SceneList
     import numpy
 
 
@@ -42,13 +41,13 @@ Imports
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 16-19
+.. GENERATED FROM PYTHON SOURCE LINES 15-18
 
 Generating the fiber structures
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Here we create the different fiber design that we want to explore
 
-.. GENERATED FROM PYTHON SOURCE LINES 19-30
+.. GENERATED FROM PYTHON SOURCE LINES 18-26
 
 .. code-block:: python3
 
@@ -56,30 +55,32 @@ Here we create the different fiber design that we want to explore
 
     smf28 = load_fiber(fiber_name='DCF1300S_20', wavelength=1550e-9)
 
-    effective_index = smf28.get_effective_index(
-        mode=HE11,
-        wavelength=1550e-9
-    )
+    mode_field = smf28.get_mode_field(mode=LP11, n_point=10)
 
-    print(effective_index)
+    mode_field.plot(['Ex']).show()
     # -
 
 
+
+.. image-sg:: /gallery/images/sphx_glr_plot_smf28_001.png
+   :alt: , Ex
+   :srcset: /gallery/images/sphx_glr_plot_smf28_001.png
+   :class: sphx-glr-single-img
 
 
 .. rst-class:: sphx-glr-script-out
 
  .. code-block:: none
 
-    1.4573283756931428
 
+    SceneList(unit_size=(4, 4), tight_layout=True, transparent_background=False, title='', ax_orientation='horizontal')
 
 
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.168 seconds)
+   **Total running time of the script:** (0 minutes 15.471 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_smf28.py:

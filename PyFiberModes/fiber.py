@@ -9,7 +9,7 @@ from scipy.optimize import fixed_point
 from dataclasses import dataclass, field
 from scipy import constants
 
-from PyFiberModes.fiber_geometry.stepindex import StepIndex
+from PyFiberModes.stepindex import StepIndex
 from PyFiberModes import Wavelength, Mode, ModeFamily
 from PyFiberModes.functions import get_derivative
 from PyFiberModes.field import Field
@@ -181,7 +181,7 @@ class Fiber(object):
         :rtype:     float
         """
         layer_radius = [
-            layer.radius_out for layer in self.layers
+            layer.radius_out for layer in self.layers[:-1]
         ]
 
         largest_radius = numpy.max(layer_radius)
@@ -214,7 +214,7 @@ class Fiber(object):
         """
         layer = self.layers[layer_idx]
 
-        return layer.get_minimum_index()
+        return layer.refractive_index
 
     def get_maximum_index(self) -> float:
         """
@@ -227,7 +227,7 @@ class Fiber(object):
         :rtype:     float
         """
         layers_maximum_index = [
-            layer.get_maximum_index() for layer in self.layers
+            layer.refractive_index for layer in self.layers
         ]
 
         return numpy.max(layers_maximum_index)
@@ -243,7 +243,7 @@ class Fiber(object):
         :rtype:     float
         """
         layers_maximum_index = [
-            layer.get_minimum_index() for layer in self.layers
+            layer.refractive_index for layer in self.layers
         ]
 
         return numpy.min(layers_maximum_index)
@@ -260,7 +260,7 @@ class Fiber(object):
         """
         layer = self.layers[layer_idx]
 
-        return layer.get_maximum_index()
+        return layer.refractive_index
 
     def get_NA(self) -> float:
         """
@@ -273,7 +273,7 @@ class Fiber(object):
 
         last_layer = self.layers[-1]
 
-        n_min = last_layer.get_minimum_index()
+        n_min = last_layer.refractive_index
 
         return numpy.sqrt(n_max**2 - n_min**2)
 
@@ -470,7 +470,7 @@ class Fiber(object):
 
         n_max = self.get_maximum_index()
 
-        n_min = last_layer.get_minimum_index()
+        n_min = last_layer.refractive_index
 
         numerator = neff**2 - n_min**2
 
@@ -536,8 +536,12 @@ class Fiber(object):
             mode: Mode,
             delta_neff: float = 1e-6,
             lower_neff_boundary: float = None) -> float:
-        """
-        Gets the groupe velocity.
+        r"""
+        Gets the groupe velocity defined as:
+
+
+        .. math::
+            \left( \frac{\partial \beta}{\partial \omega} \right)^{-1}
 
         :param      mode:                  The mode to consider
         :type       mode:                  Mode
@@ -566,8 +570,8 @@ class Fiber(object):
         r"""
         Gets the modal dispersion defined as:
 
-        .. math:
-            \frac{2 * \pi * c}{\lambda^2} * \frac{\partial^2 \beta}{\partial \omega}
+        .. math::
+            10^6 * \frac{2 \pi c}{\lambda^2} * \frac{\partial^2 \beta}{\partial \omega}
 
         :param      mode:                   The mode to consider
         :type       mode:                   Mode
@@ -595,8 +599,11 @@ class Fiber(object):
             mode: Mode,
             delta_neff: float = 1e-6,
             lower_neff_boundary: float = None) -> float:
-        """
-        Gets the s parameter.
+        r"""
+        Gets the s parameter defined as:
+
+        .. math::
+            10^{-3} * \left( \frac{2 \pi c}{\lambda^2} \right)^2 * \frac{\partial^3 \beta}{\partial \omega}
 
         :param      mode:                   The mode to consider
         :type       mode:                   Mode
@@ -756,7 +763,7 @@ class Fiber(object):
                     break
         return modes
 
-    def get_field(self,
+    def get_mode_field(self,
             mode: Mode,
             limit: float = None,
             n_point: int = 101) -> Field:
