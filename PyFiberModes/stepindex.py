@@ -145,12 +145,26 @@ class StepIndex(Geometry):
             radius_out: float,
             nu: int,
             neff: float,
-            EH: object,
-            TM: bool = True):
+            EH: list,
+            TM: bool = True) -> list:
         """
+        Returns EH field component
 
-        modify EH in-place (for speed)
+        :param      radius_in:   The radius in
+        :type       radius_in:   float
+        :param      radius_out:  The radius out
+        :type       radius_out:  float
+        :param      nu:          The nu parameter of the mode
+        :type       nu:          int
+        :param      neff:        The neff
+        :type       neff:        float
+        :param      EH:          { parameter_description }
+        :type       EH:          list
+        :param      TM:          { parameter_description }
+        :type       TM:          bool
 
+        :returns:   The EH field
+        :rtype:     list
         """
         u = self.get_U_W_parameter(radius=radius_out, neff=neff)
 

@@ -455,14 +455,13 @@ class NeffSolver(FiberSolver):
 
         # Last layer
         _, Hz, Ep, _ = EH
-        last_layer = self.fiber.layers[-1]
-        u = last_layer.get_U_W_parameter(
-            radius=last_layer.radius_in,
+        u = self.fiber.last_layer.get_U_W_parameter(
+            radius=self.fiber.last_layer.radius_in,
             neff=neff,
         )
 
         F4 = k1(u) / k0(u)
-        return Ep + self.wavelength.k0 * last_layer.radius_in / u * eta0 * Hz * F4
+        return Ep + self.wavelength.k0 * self.fiber.last_layer.radius_in / u * eta0 * Hz * F4
 
     def _tmceq(self, neff: float, nu) -> tuple[float, float]:
         EH = numpy.empty(4)
@@ -496,16 +495,13 @@ class NeffSolver(FiberSolver):
         EH = numpy.empty((4, 2))
 
         for layer in self.fiber.layers[:-1]:
-            try:
-                layer.EH_fields(
-                    radius_in=layer.radius_in,
-                    radius_out=layer.radius_out,
-                    nu=nu,
-                    neff=neff,
-                    EH=EH
-                )
-            except ZeroDivisionError:
-                return numpy.inf
+            layer.EH_fields(
+                radius_in=layer.radius_in,
+                radius_out=layer.radius_out,
+                nu=nu,
+                neff=neff,
+                EH=EH
+            )
 
         # Last layer
         C = numpy.zeros((4, 2))
