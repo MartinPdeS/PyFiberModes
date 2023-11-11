@@ -2,15 +2,13 @@
 # -*- coding: utf-8 -*-
 
 import numpy
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 from scipy.special import jn, yn, iv, kn
 from scipy.special import j0, y0, i0, k0
 from scipy.special import j1, y1, i1, k1
 from scipy.special import jvp, yvp, ivp, kvp
 from scipy.constants import mu_0, epsilon_0, physical_constants
-
-from PyFiberModes.material.fixed import Fixed
 
 eta0 = physical_constants['characteristic impedance of vacuum'][0]
 
@@ -23,15 +21,10 @@ class Geometry(object):
     """ Maximum radius of the structure """
     index_list: list
     """ Refractive index of the structure """
-    material_type: object = field(default_factory=None)
-    """ Material type """
 
     def __post_init__(self):
         self.index_list = self.index_list[0]
         self.refractive_index = self.index_list
-        # print(self.index_list)
-        if self.material_type.lower() == 'fixed':
-            self.material_type = Fixed()
 
 
 class StepIndex(Geometry):
@@ -77,7 +70,7 @@ class StepIndex(Geometry):
 
         return U
 
-    def Psi(self, radius: float, neff: float, nu: int, C: list) -> tuple:
+    def get_psi(self, radius: float, neff: float, nu: int, C: list) -> tuple:
         r"""
         Return the :math:`\psi` function
 

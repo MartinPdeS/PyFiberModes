@@ -34,8 +34,6 @@ class Fiber(object):
     """ Radius of each layers """
     layer_types: list = field(default_factory=list)
     """ Type of each layers """
-    material_types: list = field(default_factory=list)
-    """ Material of each layers """
     index_list: list = field(default_factory=list)
     """ Refractive index of each layers """
 
@@ -51,11 +49,35 @@ class Fiber(object):
     def n_layer(self) -> int:
         return len(self.layer_names)
 
+    @property
+    def last_layer(self):
+        return self.layers[-1]
+
+    @property
+    def penultimate_layer(self):
+        return self.layers[-2]
+
+    @property
+    def first_layer(self):
+        return self.layers[0]
+
     def __hash__(self):
         return hash(tuple(self.layer_radius))
 
     def __getitem__(self, index: int) -> object:
         return self.layers[index]
+
+    def iterate_interfaces(self) -> tuple[object, object]:
+        """
+        Iterates through pair of layers that forms interfaces
+
+        :returns:   The two layers that form the interfaces.
+        :rtype:     tuple[object, object]
+        """
+        for layer_idx in range(1, self.n_layer):
+            layer_in = self.layers[layer_idx - 1]
+            layer_out = self.layers[layer_idx]
+            yield layer_in, layer_out
 
     def update_wavelength(self, wavelength: Wavelength) -> None:
         """
@@ -71,10 +93,8 @@ class Fiber(object):
         for layer in self.layers:
             layer.wavelength = wavelength
 
-    def add_layer(self, name: str, radius: float, index: float, material_type: str, layer_type: str) -> None:
+    def add_layer(self, name: str, radius: float, index: float) -> None:
         self.layer_names.append(name)
-        self.layer_types.append(layer_type)
-        self.material_types.append(material_type)
         self.index_list.append(index)
 
         if name != 'cladding':
@@ -83,9 +103,10 @@ class Fiber(object):
         layer = StepIndex(
             radius_in=self.radius_in,
             radius_out=radius,
-            material_type=material_type,
             index_list=[index],
         )
+        layer.is_last_layer = False
+        layer.is_first_layer = False
         layer.wavelength = self.wavelength
 
         self.layers.append(layer)
@@ -99,6 +120,9 @@ class Fiber(object):
         :returns:   No returns
         :rtype:     None
         """
+        self.layers[-1].is_last_layer = True
+        self.layers[0].is_first_layer = True
+
         self.layers[-1].radius_out = numpy.inf
 
     def get_layer_name(self, layer_index: int) -> str:
@@ -846,7 +870,7 @@ def load_fiber(fiber_name: str, wavelength: float = None) -> Fiber:
         if layer.get('name') in ['air']:
             continue
 
-        fiber.add_layer(material_type='Fixed', layer_type='StepIndex', **layer)
+        fiber.add_layer(**layer)
 
     fiber.initialize_layers()
 

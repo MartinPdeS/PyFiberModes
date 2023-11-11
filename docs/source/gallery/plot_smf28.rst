@@ -30,7 +30,7 @@ Imports
 
 .. code-block:: python3
 
-    from PyFiberModes import HE11, HE12, LP01, LP11, LP02
+    from PyFiberModes import HE11, HE12, LP01, LP11, LP02, LP21
     from PyFiberModes.fiber import load_fiber
     import numpy
 
@@ -55,7 +55,7 @@ Here we create the different fiber design that we want to explore
 
     smf28 = load_fiber(fiber_name='DCF1300S_20', wavelength=1550e-9)
 
-    mode_field = smf28.get_mode_field(mode=LP11, n_point=10)
+    mode_field = smf28.get_mode_field(mode=HE11, n_point=20)
 
     mode_field.plot(['Ex']).show()
     # -
@@ -80,7 +80,7 @@ Here we create the different fiber design that we want to explore
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 15.471 seconds)
+   **Total running time of the script:** (0 minutes 14.769 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_smf28.py:

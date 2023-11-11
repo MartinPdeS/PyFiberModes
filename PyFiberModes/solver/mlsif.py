@@ -52,6 +52,8 @@ class NeffSolver(FiberSolver):
         if lower_order_mode is None:
             lower_neff_boundary = self.fiber.get_maximum_index()
 
+
+
         else:
             lower_neff_boundary = self.fiber.get_effective_index(
                 mode=lower_order_mode,
@@ -144,7 +146,7 @@ class NeffSolver(FiberSolver):
             #     eval_layer = self.fiber.layers[i - 1]
             #     break
 
-            A = layer_in.Psi(
+            A = layer_in.get_psi(
                 radius=layer_in.radius_out,
                 neff=neff,
                 nu=nu,
@@ -176,7 +178,7 @@ class NeffSolver(FiberSolver):
         for layer, index, C in zip(test.layer, test.index, test.C):
             pass
 
-        ex, _ = eval_layer.Psi(
+        ex, _ = eval_layer.get_psi(
             radius=radius,
             neff=neff,
             nu=nu,
@@ -202,20 +204,16 @@ class NeffSolver(FiberSolver):
         :type       radius:  float
 
         :returns:   The LP electric and magnetic field in a tuple.
-        :rtype:     tuple
+        :rtype:     tuple[float, float]
         """
-        n_layers = len(self.fiber.layers)
         C = numpy.array((1, 0))
 
-        for i in range(1, n_layers):
-            layer_out = self.fiber.layers[i]
-            layer_in = self.fiber.layers[i - 1]
-
+        for layer_in, layer_out in self.fiber.iterate_interfaces():
             if radius < layer_in.radius_out:
                 eval_layer = layer_in
                 break
 
-            A = layer_in.Psi(
+            A = layer_in.get_psi(
                 radius=layer_in.radius_out,
                 neff=neff,
                 nu=nu,
@@ -230,16 +228,47 @@ class NeffSolver(FiberSolver):
             )
 
         else:
-            eval_layer = self.fiber.layers[-1]
+            eval_layer = self.fiber.last_layer
 
             u = eval_layer.get_U_W_parameter(
-                radius=layer_in.radius_out,
+                radius=eval_layer.radius_in,
                 neff=neff
             )
 
             C = (0, A[0] / kn(nu, u))
 
-        ex, _ = eval_layer.Psi(
+        return self.get_LP_field_from_parameters(
+            eval_layer=eval_layer,
+            radius=radius,
+            neff=neff,
+            nu=nu,
+            C=C
+        )
+
+    def get_LP_field_from_parameters(self,
+            eval_layer: object,
+            radius: float,
+            neff: float,
+            nu: int,
+            C: tuple) -> tuple[float, float]:
+        """
+        Gets the LP field evaluation from parameters.
+
+        :param      eval_layer:  The layer at which the field is evaluated
+        :type       eval_layer:  object
+        :param      nu:          The nu parameter of the LP mode
+        :type       nu:          int
+        :param      neff:        The effective index
+        :type       neff:        float
+        :param      radius:      The radius for evaluation
+        :type       radius:      float
+        :param      C:           Constants
+        :type       C:           tuple
+
+        :returns:   The LP field.
+        :rtype:     tuple[float, float]
+        """
+        ex, _ = eval_layer.get_psi(
             radius=radius,
             neff=neff,
             nu=nu,
@@ -253,10 +282,10 @@ class NeffSolver(FiberSolver):
 
         return e_field, h_field
 
-    def get_TE_field(self, wavelength: float, nu, neff, radius: float) -> tuple[float, float]:
+    def get_TE_field(self, wavelength: float, nu: int, neff: float, radius: float) -> tuple[float, float]:
         pass
 
-    def get_TM_field(self, wavelength: float, nu, neff, radius: float) -> tuple[float, float]:
+    def get_TM_field(self, wavelength: float, nu: int, neff: float, radius: float) -> tuple[float, float]:
         n_layer = len(self.fiber.layers)
         C = numpy.array((1, 0))
         EH = numpy.zeros(4)
@@ -271,7 +300,7 @@ class NeffSolver(FiberSolver):
             u = layer.get_U_W_parameter(radius=radius_out, neff=neff)
 
             if i > 0:
-                C = layer.tetmConstants(
+                C = layer.get_TE_TM_constants(
                     radius_in=radius_in,
                     radius_out=radius_out,
                     neff=neff,
@@ -314,15 +343,9 @@ class NeffSolver(FiberSolver):
     def get_HE_field(self, nu, neff, radius: float) -> tuple[float, float]:
         self._heceq(neff=neff, nu=nu)
 
-        for current_layer_idx, rho in enumerate(self.fiber.layer_radius):
-            if radius < rho:
-                break
-        else:
-            current_layer_idx += 1
+        layer = self.fiber.get_layer_at_radius(radius)
 
-        layer = self.fiber.layers[current_layer_idx]
-
-        n = layer.refractive_index
+        rho = layer.radius_out if not layer.is_last_layer else self.fiber.penultimate_layer.radius_out
 
         u = layer.get_U_W_parameter(radius=rho, neff=neff)
 
@@ -331,23 +354,23 @@ class NeffSolver(FiberSolver):
         c1 = rho / u
         c2 = self.wavelength.k0 * c1
         c3 = nu * c1 / radius if radius else 0  # To avoid div by 0
-        c6 = numpy.sqrt(epsilon_0 / mu_0) * n**2
+        c6 = numpy.sqrt(epsilon_0 / mu_0) * layer.refractive_index**2
 
-        if neff < n:
+        if neff < layer.refractive_index:
             B1 = jn(nu, u)
             B2 = yn(nu, u)
             F1 = jn(nu, urp) / B1
-            F2 = yn(nu, urp) / B2 if current_layer_idx > 0 else 0
+            F2 = yn(nu, urp) / B2 if layer.radius_in > 0 else 0
             F3 = jvp(nu, urp) / B1
-            F4 = yvp(nu, urp) / B2 if current_layer_idx > 0 else 0
+            F4 = yvp(nu, urp) / B2 if layer.radius_in > 0 else 0
         else:
             c2 = -c2
             B1 = iv(nu, u)
             B2 = kn(nu, u)
             F1 = iv(nu, urp) / B1
-            F2 = kn(nu, urp) / B2 if current_layer_idx > 0 else 0
+            F2 = kn(nu, urp) / B2 if layer.radius_in > 0 else 0
             F3 = ivp(nu, urp) / B1
-            F4 = kvp(nu, urp) / B2 if current_layer_idx > 0 else 0
+            F4 = kvp(nu, urp) / B2 if layer.radius_in > 0 else 0
 
         A, B, Ap, Bp = layer.C[:, 0] + layer.C[:, 1] * self.alpha
 
@@ -359,7 +382,7 @@ class NeffSolver(FiberSolver):
         if radius == 0 and nu == 1:
             # Asymptotic expansion of Ez (or Hz):
             # J1(ur/p)/r (r->0) = u/(2p)
-            if neff < n:
+            if neff < layer.refractive_index:
                 f = 1 / (2 * jn(nu, u))
             else:
                 f = 1 / (2 * iv(nu, u))
@@ -386,7 +409,7 @@ class NeffSolver(FiberSolver):
             current_layer = self.fiber.layers[idx]
             previous_layer = self.fiber.layers[idx - 1]
 
-            A = previous_layer.Psi(
+            A = previous_layer.get_psi(
                 radius=current_layer.radius_in,
                 neff=neff,
                 nu=nu,
@@ -403,7 +426,7 @@ class NeffSolver(FiberSolver):
         last_layer = self.fiber.layers[-1]
         penultimate_layer = self.fiber.layers[-2]
 
-        A = penultimate_layer.Psi(
+        A = penultimate_layer.get_psi(
             radius=last_layer.radius_in,
             neff=neff,
             nu=nu,

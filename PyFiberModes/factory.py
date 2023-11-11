@@ -12,8 +12,6 @@ class ProxyLayer():
     name: str
     radius: list
     index: list
-    material: str = 'Fixed'
-    geometry: str = "StepIndex"
 
     def __post_init__(self):
         self.name = [self.name]
@@ -52,9 +50,7 @@ class FiberFactory(object):
     def add_layer(self,
             index: float,
             name: str = "",
-            radius: float = 0,
-            material: str = "Fixed",
-            geometry: str = "StepIndex") -> None:
+            radius: float = 0) -> None:
         """
         Insert a new layer in the factory.
 
@@ -62,10 +58,6 @@ class FiberFactory(object):
         :type       name:      str
         :param      radius:    Radius of the layer (in meters).
         :type       radius:    float
-        :param      material:  Name of the Material (default: Fixed)
-        :type       material:  str
-        :param      geometry:  Name of the Geometry (default: StepIndex)
-        :type       geometry:  str
         :param      kwargs:    The keywords arguments
         :type       kwargs:    dictionary
         """
@@ -73,8 +65,6 @@ class FiberFactory(object):
             name=name,
             radius=radius,
             index=index,
-            material="Fixed",
-            geometry="StepIndex"
         )
 
         self.layers_list.append(layer)
@@ -115,8 +105,6 @@ class FiberFactory(object):
                 name=name,
                 radius=radius,
                 index=index,
-                material_type='Fixed',
-                layer_type='StepIndex'
             )
 
         fiber.initialize_layers()
@@ -139,8 +127,6 @@ class FiberFactory(object):
                     name=name,
                     radius=radius,
                     index=index,
-                    material_type='Fixed',
-                    layer_type='StepIndex'
                 )
 
             fiber.initialize_layers()
