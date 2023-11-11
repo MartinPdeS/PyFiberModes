@@ -173,14 +173,14 @@ class NeffSolver(FiberSolver):
         In the core:
 
         .. math::
-            E_x &= j_0\left( U * r \ r_{core} \right) / j_0(U) \\
-            H_y &= n_{eff} * \sqrt{\epsilon_0 / \mu_0} * E_x \\
+            E_x &= j_0\left( U * r \ r_{core} \right) / j_0(U) \\[10pt]
+            H_y &= n_{eff} * \sqrt{\epsilon_0 / \mu_0} * E_x \\[10pt]
 
         In the clad:
 
         .. math::
-            E_x &= k_0\left( W * r \ r_{core} \right) / k_0(W) \\
-            H_y &= n_{eff} * \sqrt{\epsilon_0 / \mu_0} * E_x \\
+            E_x &= k_0\left( W * r \ r_{core} \right) / k_0(W) \\[10pt]
+            H_y &= n_{eff} * \sqrt{\epsilon_0 / \mu_0} * E_x \\[10pt]
 
         :param      nu:          The nu parameter of the mode
         :type       nu:          int
@@ -218,17 +218,17 @@ class NeffSolver(FiberSolver):
         In the core
 
         .. math::
-            H_z    &= \frac{\sqrt{\epsilon_0 / \mu_0} * U}{k_0 r_{core}} * \frac{j_0(U * r/r_{core})}{j_1(U)} \\
-            E_\phi &= -j_1(U * r/r_{core}) / j_1(U) \\
-            H_r &= n_{eff} * \sqrt{\epsilon_0 / \mu_0} * E_\phi \\
+            H_z    &= \frac{\sqrt{\epsilon_0 / \mu_0} * U}{k_0 r_{core}} * \frac{j_0(U * r/r_{core})}{j_1(U)} \\[10pt]
+            E_\phi &= -j_1(U * r/r_{core}) / j_1(U) \\[10pt]
+            H_r &= n_{eff} * \sqrt{\epsilon_0 / \mu_0} * E_\phi \\[10pt]
 
 
         In the clad
 
         .. math::
-            H_z    &= \frac{\sqrt{\epsilon_0 / \mu_0} * W}{k_0 r_{core}} * \frac{k_0(W * r/r_{core})}{k_1(U)} \\
-            E_\phi &= -k_1(W * r/r_{core}) / k_1(W) \\
-            H_r &= n_{eff} * \sqrt{\epsilon_0 / \mu_0} * E_\phi \\
+            H_z    &= \frac{\sqrt{\epsilon_0 / \mu_0} * W}{k_0 r_{core}} * \frac{k_0(W * r/r_{core})}{k_1(U)} \\[10pt]
+            E_\phi &= -k_1(W * r/r_{core}) / k_1(W) \\[10pt]
+            H_r &= n_{eff} * \sqrt{\epsilon_0 / \mu_0} * E_\phi \\[10pt]
 
         :param      nu:          The nu parameter of the mode
         :type       nu:          int
@@ -273,18 +273,18 @@ class NeffSolver(FiberSolver):
 
         .. math::
 
-            E_z &= \frac{-U}{k_0 * n_{eff} * r_{core}} * \frac{j_0(U * r / r_{core})}{j_1(U)} \\
-            E_r &= j_1(U * r/r_{core}) / j_1(U) \\
-            H_\phi &= \sqrt{\epsilon_0 / \mu_0} * n_{core} / n_{eff} * E_r \\
+            E_z &= \frac{-U}{k_0 * n_{eff} * r_{core}} * \frac{j_0(U * r / r_{core})}{j_1(U)} \\[10pt]
+            E_r &= j_1(U * r/r_{core}) / j_1(U) \\[10pt]
+            H_\phi &= \sqrt{\epsilon_0 / \mu_0} * n_{core} / n_{eff} * E_r \\[10pt]
 
 
         In the clad
 
         .. math::
 
-            E_z &= \frac{n_{core}}{n_{clad}} \frac{W}{k_0 * n_{eff} * r_{core}} * \frac{k_0(W * r / r_{core})}{k_1(W)} \\
-            E_r &= \frac{n_{core}}{n_{clad}} k_1(W * r/r_{core}) / k_1(W)\\
-            H_\phi &= \sqrt{\epsilon_0 / \mu_0} * \frac{n_{core}}{n_{clad}} * k_1(W * r/r_{core}) / k_1(W) \\
+            E_z &= \frac{n_{core}}{n_{clad}} \frac{W}{k_0 * n_{eff} * r_{core}} * \frac{k_0(W * r / r_{core})}{k_1(W)} \\[10pt]
+            E_r &= \frac{n_{core}}{n_{clad}} k_1(W * r/r_{core}) / k_1(W)\\[10pt]
+            H_\phi &= \sqrt{\epsilon_0 / \mu_0} * \frac{n_{core}}{n_{clad}} * k_1(W * r/r_{core}) / k_1(W) \\[10pt]
 
         :param      nu:          The nu parameter of the mode
         :type       nu:          int
@@ -419,9 +419,9 @@ class NeffSolver(FiberSolver):
 
         .. math:
 
-            U &= r_{core} * k_0 * \sqrt{n_{core}^2 - n_{eff}^2} \\
-            W &= r_{core} * k_0 * \sqrt{n_{eff}^2 - n_{core}^2} \\
-            V &= \sqrt{U^2 + W^2} \\
+            U &= r_{core} * k_0 * \sqrt{n_{core}^2 - n_{eff}^2} \\[10pt]
+            W &= r_{core} * k_0 * \sqrt{n_{eff}^2 - n_{core}^2} \\[10pt]
+            V &= \sqrt{U^2 + W^2} \\[10pt]
 
         :param      neff:        The effective index
         :type       neff:        float
