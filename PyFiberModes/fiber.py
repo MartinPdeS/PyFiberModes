@@ -309,9 +309,28 @@ class Fiber(object):
 
         return numpy.sqrt(n_max**2 - n_min**2)
 
-    def get_V0(self) -> float:
+    def get_M_number(self) -> float:
+        r"""
+        Gets the m number representing an approximation of the number of existing mode
+        in the fiber. It's valide only for highly multimode fibers
+        M number is defined as:
+
+        .. math::
+            M = \frac{V^2}{2}
+
+        :returns:   The M number.
+        :rtype:     float
         """
-        Gets the V0 parameter.
+        pass
+
+    def get_V0(self) -> float:
+        r"""
+        Gets the V number parameter defined as:
+
+        .. math::
+            V = \frac{2 * pi * a}{\lambda} * NA
+
+        reference: https://www.thorlabs.com/newgrouppage9.cfm?objectgroup_id=10417#:~:text=Single%20mode%20fibers%20are%20defined,fiber%20at%20the%20same%20wavelength.
 
         :returns:   The parameter V0.
         :rtype:     float

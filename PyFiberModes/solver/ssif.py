@@ -41,10 +41,10 @@ class CutoffSolver(FiberSolver):
 
         return jn_zeros(nu, m)[m - 1]
 
-    def get_cutoff_HE(self, V0: float, nu: int) -> float:
-        core, clad = self.fiber.first_layer, self.fiber.last_layer
+    def get_cutoff_HE(self, V0: float, nu: int, mode: Mode) -> float:
+        core, clad = self.fiber.layers
 
-        cutoff_wavelength = self.fiber.V0_to_wavelength(V0=V0)
+        cutoff_wavelength = self.fiber.get_cutoff_wavelength(mode=mode)
 
         normal_wavelength = core.wavelength
 
