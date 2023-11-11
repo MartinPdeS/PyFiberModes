@@ -28,20 +28,20 @@ class CutoffSolver(solver.solver.FiberSolver):
                 pm = Mode(ModeFamily.TE, 0, 1)
             elif pm == Mode(ModeFamily.LP, 0, 1):
                 pm = Mode(ModeFamily.LP, 1, 1)
-            lowbound = self.fiber.get_cutoff(mode=pm)
+            lowbound = self.fiber.get_cutoff_v0(mode=pm)
             delta = 0.05 / lowbound if lowbound > 4 else self._MCD
             lowbound += delta / 100
 
         elif mode.family is ModeFamily.EH:
             pm = Mode(ModeFamily.HE, mode.nu, mode.m)
-            lowbound = self.fiber.get_cutoff(pm)
+            lowbound = self.fiber.get_cutoff_v0(mode=pm)
             delta = 0.05 / lowbound if lowbound > 4 else self._MCD
             lowbound += delta / 100
 
         elif mode.nu > 0:
             # TE(0,1) is single-mode condition. Roots below TE(0,1) are false-positive
             pm = Mode(ModeFamily.TE, 0, 1)
-            lowbound = self.fiber.cutoff(pm)
+            lowbound = self.fiber.get_cutoff_v0(mode=pm)
 
             delta = 0.05 / lowbound
             lowbound -= delta / 100
@@ -88,7 +88,7 @@ class CutoffSolver(solver.solver.FiberSolver):
             wavelength = Wavelength(k0=1)  # because it causes troubles if 0
 
         layers_minimum_index_squared = [
-            layer.get_minimum_index(wavelength=wavelength)**2 for layer in self.fiber
+            layer.refractive_index**2 for layer in self.fiber.layers()
         ]
 
         n1sq, n2sq, n3sq = layers_minimum_index_squared

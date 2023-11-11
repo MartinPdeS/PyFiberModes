@@ -8,12 +8,13 @@ from functools import cache
 from scipy.optimize import fixed_point
 from dataclasses import dataclass, field
 from scipy import constants
+from copy import deepcopy
 
 from PyFiberModes.stepindex import StepIndex
 from PyFiberModes import Wavelength, Mode, ModeFamily
 from PyFiberModes.functions import get_derivative
 from PyFiberModes.field import Field
-from PyFiberModes.fundamentals import get_effective_index, get_cutoff_V0, get_radial_field
+from PyFiberModes.fundamentals import get_effective_index, get_cutoff_v0, get_radial_field
 
 from MPSTools.fiber_catalogue import loader
 
@@ -47,7 +48,11 @@ class Fiber(object):
 
     @property
     def n_layer(self) -> int:
-        return len(self.layer_names)
+        return len(self.layers)
+
+    @property
+    def n_interface(self) -> int:
+        return len(self.layers) - 1
 
     @property
     def last_layer(self):
@@ -124,6 +129,9 @@ class Fiber(object):
         self.layers[0].is_first_layer = True
 
         self.layers[-1].radius_out = numpy.inf
+
+        for position, layer in enumerate(self.layers):
+            layer.position = position
 
     def get_layer_name(self, layer_index: int) -> str:
         """
@@ -310,60 +318,13 @@ class Fiber(object):
         """
         NA = self.get_NA()
 
-        inner_radius = self.layers[-1].radius_in
+        inner_radius = self.last_layer.radius_in
 
         V0 = self.wavelength.k0 * inner_radius * NA
 
         return V0
 
-    def V0_to_wavelength(self, V0: float, maxiter: int = 500, tolerance: float = 1e-15) -> float:
-        """
-        Convert V0 number to wavelength.
-        An iterative method is used, since the index can be wavelength dependant.
-
-        :param      V0:       The V0
-        :type       V0:       float
-        :param      maxiter:  The maxiter
-        :type       maxiter:  int
-        :param      tol:      The tolerance
-        :type       tol:      float
-
-        :returns:   The associated wavelength
-        :rtype:     float
-        """
-        if V0 == 0:
-            return numpy.inf
-
-        if numpy.isinf(V0):
-            return 0
-
-        def model(wl):
-            last_layer = self.layers[-1]
-            NA = self.get_NA()
-            return 2 * numpy.pi / V0 * last_layer.radius_in * NA
-
-        wavelength = model(wl=1.55e-6)
-
-        if abs(wavelength - model(wl=wavelength)) > tolerance:
-            for w in (1.55e-6, 5e-6, 10e-6):
-                try:
-                    wavelength = fixed_point(model, w, xtol=tolerance, maxiter=maxiter)
-                except RuntimeError:
-                    # FIXME: What should we do if it does not converge?
-                    self.logger.info(
-                        f"V0_to_wavelength: did not converged from {w * 1e6}µm for {V0=} ({wavelength=})"
-                    )
-                if wavelength > 0:
-                    break
-
-        if wavelength == 0:
-            self.logger.error(
-                f"V0_to_wavelength: did not converged for {V0=} {wavelength=})"
-            )
-
-        return Wavelength(wavelength)
-
-    def get_cutoff_V0(self, mode: Mode) -> float:
+    def get_cutoff_v0(self, mode: Mode) -> float:
         """
         Gets the cutoff wavelength of the fiber.
 
@@ -373,7 +334,7 @@ class Fiber(object):
         :returns:   The cutoff wavelength.
         :rtype:     float
         """
-        cutoff_V0 = get_cutoff_V0(
+        cutoff_V0 = get_cutoff_v0(
             mode=mode,
             fiber=self,
             wavelength=self.wavelength
@@ -391,9 +352,21 @@ class Fiber(object):
         :returns:   The cutoff wavelength.
         :rtype:     float
         """
-        cutoff_V0 = self.get_cutoff_V0(mode=mode)
-        wavelength = self.V0_to_wavelength(V0=cutoff_V0)
-        return wavelength
+        cutoff_V0 = self.get_cutoff_v0(mode=mode)
+
+        if cutoff_V0 == 0:
+            return numpy.inf
+
+        if numpy.isinf(cutoff_V0):
+            return 0
+
+        NA = self.get_NA()
+
+        inner_radius = self.last_layer.radius_in
+
+        cutoff_wavelength = 2 * numpy.pi / cutoff_V0 * inner_radius * NA
+
+        return Wavelength(cutoff_wavelength)
 
     def get_effective_index(self,
             mode: Mode,
@@ -490,15 +463,13 @@ class Fiber(object):
             lower_neff_boundary=lower_neff_boundary
         )
 
-        last_layer = self.layers[-1]
-
         n_max = self.get_maximum_index()
 
-        n_min = last_layer.refractive_index
+        n_last_layer = self.last_layer.refractive_index
 
-        numerator = neff**2 - n_min**2
+        numerator = neff**2 - n_last_layer**2
 
-        denominator = n_max**2 - n_min**2
+        denominator = n_max**2 - n_last_layer**2
 
         return numerator / denominator
 
@@ -744,7 +715,7 @@ class Fiber(object):
         :rtype:     set
         """
         modes = set()
-        v0 = self.get_V0(wavelength=wavelength)
+        v0 = self.get_V0()
 
         for family in families:
             for nu in count(0):
@@ -772,7 +743,7 @@ class Fiber(object):
                     mode = Mode(family, nu, m)
 
                     try:
-                        if self.get_cutoff_V0(mode=mode) > v0:
+                        if self.get_cutoff_v0(mode=mode) > v0:
                             break
 
                     except (NotImplementedError, ValueError):
@@ -807,7 +778,7 @@ class Fiber(object):
         :rtype:     Field
         """
         if limit is None:
-            limit = self.get_fiber_radius()
+            limit = self.get_fiber_radius() * 1.2
 
         field = Field(
             fiber=self,
@@ -844,6 +815,28 @@ class Fiber(object):
         )
 
         return radial_field
+
+    def print_data(self, data_type_list: list[str], mode_list: list[Mode]) -> None:
+        """
+        Prints the given data for the given modes.
+
+        :param      data_type_list:  The data type list
+        :type       data_type_list:  list[str]
+        :param      mode_list:       The mode list
+        :type       mode_list:       list[Mode]
+
+        :returns:   No return
+        :rtype:     None
+        """
+        for data_type in data_type_list:
+            print(f"{data_type} @ wavelength: {self.wavelength}", '\n')
+            for mode in mode_list:
+                data_type_string = f"get_{data_type.lower()}"
+                data = getattr(self, data_type_string)(mode=mode)
+                output_string = f"{mode = } \t {data_type}: {data}"
+                print(output_string)
+
+            print('\n\n')
 
 
 def load_fiber(fiber_name: str, wavelength: float = None) -> Fiber:

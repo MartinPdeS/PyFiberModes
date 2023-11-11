@@ -401,40 +401,36 @@ class NeffSolver(FiberSolver):
         return numpy.array((Er, Ep, Ez)), numpy.array((Hr, Hp, Hz))
 
     def _lpceq(self, neff: float, nu: int) -> tuple[float, float]:
-        n_layer = len(self.fiber.layers)
-        C = numpy.zeros((n_layer - 1, 2))
+        C = numpy.zeros((self.fiber.n_interface, 2))
         C[0, 0] = 1
 
-        for idx in range(1, n_layer - 1):
-            current_layer = self.fiber.layers[idx]
-            previous_layer = self.fiber.layers[idx - 1]
+        for layer_in, layer_out in self.fiber.iterate_interfaces():
+            if layer_out.is_last_layer:
+                continue
 
-            A = previous_layer.get_psi(
-                radius=current_layer.radius_in,
+            A = layer_in.get_psi(
+                radius=layer_out.radius_in,
                 neff=neff,
                 nu=nu,
-                C=C[idx - 1, :]
+                C=C[layer_in.position, :]
             )
 
-            C[idx, :] = current_layer.get_LP_constants(
-                radius=current_layer.radius_in,
+            C[layer_out.position, :] = layer_out.get_LP_constants(
+                radius=layer_out.radius_in,
                 neff=neff,
                 nu=nu,
                 A=A
             )
 
-        last_layer = self.fiber.layers[-1]
-        penultimate_layer = self.fiber.layers[-2]
-
-        A = penultimate_layer.get_psi(
-            radius=last_layer.radius_in,
+        A = self.fiber.penultimate_layer.get_psi(
+            radius=self.fiber.last_layer.radius_in,
             neff=neff,
             nu=nu,
             C=C[-1, :]
         )
 
-        u = last_layer.get_U_W_parameter(
-            radius=last_layer.radius_in,
+        u = self.fiber.last_layer.get_U_W_parameter(
+            radius=self.fiber.last_layer.radius_in,
             neff=neff,
         )
 
@@ -476,20 +472,17 @@ class NeffSolver(FiberSolver):
                 TM=True
             )
 
-        # Last layer
+        # At last layer the equation are differents.
         Ez, _, _, Hp = EH
-        last_layer = self.fiber.layers[-1]
 
-        u = last_layer.get_U_W_parameter(
-            radius=last_layer.radius_in,
+        u = self.fiber.last_layers.get_U_W_parameter(
+            radius=self.fiber.last_layers.radius_in,
             neff=neff,
         )
 
-        last_layer_index = last_layer.refractive_index
-
         F4 = k1(u) / k0(u)
 
-        return Hp - self.wavelength.k0 * last_layer.radius_in / u * numpy.sqrt(epsilon_0 / mu_0) * last_layer_index**2 * Ez * F4
+        return Hp - self.wavelength.k0 * self.fiber.last_layers.radius_in / u * numpy.sqrt(epsilon_0 / mu_0) * self.fiber.last_layers.refractive_index**2 * Ez * F4
 
     def _heceq(self, neff: float, nu: int) -> float:
         EH = numpy.empty((4, 2))
@@ -517,13 +510,11 @@ class NeffSolver(FiberSolver):
             neff=neff,
         )
 
-        last_layer_index = last_layer.refractive_index
-
         F4 = kvp(nu, u) / kn(nu, u)
         c1 = -self.wavelength.k0 * last_layer.radius_in / u
         c2 = neff * nu / u * c1
         c3 = eta0 * c1
-        c4 = numpy.sqrt(epsilon_0 / mu_0) * last_layer_index**2 * c1
+        c4 = numpy.sqrt(epsilon_0 / mu_0) * last_layer.refractive_index**2 * c1
 
         E = EH[2, :] - (c2 * EH[0, :] - c3 * F4 * EH[1, :])
         H = EH[3, :] - (c4 * F4 * EH[0, :] - c2 * EH[1, :])

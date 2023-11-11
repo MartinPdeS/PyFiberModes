@@ -4,6 +4,10 @@
 import pytest
 import numpy
 
+from PyFiberModes import HE11, LP01, LP11, LP21, LP12
+from PyFiberModes.fiber import load_fiber
+from PyFiberModes import FiberFactory
+
 
 def test_fiber_factory():
     from PyFiberModes import FiberFactory
@@ -19,7 +23,7 @@ def test_fiber_factory():
     factory.add_layer(name="cladding", index=1.4444)
 
 
-attribute_function = [
+function_list = [
     "get_dispersion",
     "get_effective_index",
     "get_normalized_beta",
@@ -30,10 +34,17 @@ attribute_function = [
     "get_mode_field"
 ]
 
+attribute_list = [
+    "dispersion",
+    "effective_index",
+    "normalized_beta",
+    "phase_velocity",
+    "groupe_velocity",
+]
 
-@pytest.mark.parametrize('function_string', attribute_function, ids=attribute_function)
+
+@pytest.mark.parametrize('function_string', function_list, ids=function_list)
 def test_get_attribute(function_string):
-    from PyFiberModes import FiberFactory, HE11
     factory = FiberFactory(wavelength=1550e-9)
 
     factory.add_layer(
@@ -50,6 +61,12 @@ def test_get_attribute(function_string):
         function = getattr(fiber, function_string)
 
         _ = function(mode=HE11)
+
+
+def test_print_data():
+    smf28 = load_fiber(fiber_name='SMF28', wavelength=1310e-9)
+
+    smf28.print_data(data_type_list=attribute_list, mode_list=[LP01, LP11, LP21, LP12])
 
 
 if __name__ == '__main__':

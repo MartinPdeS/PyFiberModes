@@ -30,7 +30,7 @@ ax = figure.append_ax(show_legend=True)
 for mode in [HE11, HE12, HE22]:
     data = []
     for fiber in factory:
-        group_index = fiber.get_group_index(mode, 1550e-9)
+        group_index = fiber.get_group_index(mode=mode)
         data.append(group_index)
 
     ax.add_line(

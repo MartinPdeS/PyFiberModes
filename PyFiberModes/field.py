@@ -587,7 +587,6 @@ class Field(object):
         Gets the intensity value of the mode.
 
         .. math::
-
             I = \frac{n_{eff}}{n_{eff}^{HE11}} * \int E_T^2 * dx * dy
 
         :returns:   The intensity.
@@ -612,8 +611,7 @@ class Field(object):
         Gets the normalization constant :math:`N`.
 
         .. math::
-
-            N = \frac{I}{2} * \epsilon_0 * n_{eff} * c
+            N = \frac{I}{2} * \epsilon_0 * n_{eff}^{HE11} * c
 
         :returns:   The normalization constant.
         :rtype:     float

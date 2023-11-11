@@ -42,7 +42,7 @@ class CutoffSolver(FiberSolver):
         return jn_zeros(nu, m)[m - 1]
 
     def get_cutoff_HE(self, V0: float, nu: int) -> float:
-        core, clad = self.fiber.layers
+        core, clad = self.fiber.first_layer, self.fiber.last_layer
 
         cutoff_wavelength = self.fiber.V0_to_wavelength(V0=V0)
 
@@ -69,7 +69,7 @@ class CutoffSolver(FiberSolver):
                 m=mode.m - 1
             )
 
-            lower_neff_boundary = self.fiber.get_cutoff_V0(mode=lower_boundary_mode)
+            lower_neff_boundary = self.fiber.get_cutoff_v0(mode=lower_boundary_mode)
 
             if numpy.isnan(lower_neff_boundary) or numpy.isinf(lower_neff_boundary):
                 raise AssertionError(f"find_HE_mode_cutoff: no previous cutoff for {mode} mode")
@@ -111,10 +111,10 @@ class NeffSolver(FiberSolver):
 
         epsilon = 1e-12
 
-        cutoff = self.fiber.get_cutoff_V0(mode=mode)
+        cutoff = self.fiber.get_cutoff_v0(mode=mode)
 
         if self.fiber.get_V0() < cutoff:
-            return float("nan")
+            return numpy.nan
 
         n_core = core.refractive_index
 
@@ -130,7 +130,7 @@ class NeffSolver(FiberSolver):
             case _:
                 upper_boundary_mode = Mode(ModeFamily.LP, 1, mode.m + 1)
 
-        cutoff = self.fiber.get_cutoff_V0(mode=upper_boundary_mode)
+        cutoff = self.fiber.get_cutoff_v0(mode=upper_boundary_mode)
 
         try:
             value_0 = numpy.sqrt(n_core**2 - (cutoff / (core.radius_out * self.wavelength.k0))**2) + epsilon
@@ -218,7 +218,7 @@ class NeffSolver(FiberSolver):
         In the core
 
         .. math::
-            H_z    &= \frac{\sqrt{\epsilon_0 / \mu_0} * U}{k_0 r_{core}} * \frac{j_0(U * r/r_{core})}{j_1(U)} \\[10pt]
+            H_z &= \frac{\sqrt{\epsilon_0 / \mu_0} * U}{k_0 r_{core}} * \frac{j_0(U * r/r_{core})}{j_1(U)} \\[10pt]
             E_\phi &= -j_1(U * r/r_{core}) / j_1(U) \\[10pt]
             H_r &= n_{eff} * \sqrt{\epsilon_0 / \mu_0} * E_\phi \\[10pt]
 
@@ -226,7 +226,7 @@ class NeffSolver(FiberSolver):
         In the clad
 
         .. math::
-            H_z    &= \frac{\sqrt{\epsilon_0 / \mu_0} * W}{k_0 r_{core}} * \frac{k_0(W * r/r_{core})}{k_1(U)} \\[10pt]
+            H_z &= \frac{\sqrt{\epsilon_0 / \mu_0} * W}{k_0 r_{core}} * \frac{k_0(W * r/r_{core})}{k_1(U)} \\[10pt]
             E_\phi &= -k_1(W * r/r_{core}) / k_1(W) \\[10pt]
             H_r &= n_{eff} * \sqrt{\epsilon_0 / \mu_0} * E_\phi \\[10pt]
 
@@ -293,7 +293,7 @@ class NeffSolver(FiberSolver):
         :param      radius:      The radius
         :type       radius:      float
 
-        :returns:   The lp field.
+        :returns:   The LP field.
         :rtype:     tuple
         """
         core, clad = self.fiber.layers
@@ -371,12 +371,14 @@ class NeffSolver(FiberSolver):
             jpur = jn(nu + 1, term_0)
             jnur = jn(nu, term_0)
 
+            Y0 = numpy.sqrt(epsilon_0 / mu_0)
+
             er = -(a1 * jmur + a2 * jpur) / jnu
             ephi = -(a1 * jmur - a2 * jpur) / jnu
             ez = u / (k * neff * rho) * jnur / jnu
-            hr = numpy.sqrt(epsilon_0 / mu_0) * n_core_square / neff * (a3 * jmur - a4 * jpur) / jnu
-            hphi = -numpy.sqrt(epsilon_0 / mu_0) * n_core_square / neff * (a3 * jmur + a4 * jpur) / jnu
-            hz = numpy.sqrt(epsilon_0 / mu_0) * u * F2 / (k * rho) * jnur / jnu
+            hr = Y0 * n_core_square / neff * (a3 * jmur - a4 * jpur) / jnu
+            hphi = -Y0 * n_core_square / neff * (a3 * jmur + a4 * jpur) / jnu
+            hz = Y0 * u * F2 / (k * rho) * jnur / jnu
         else:
             term_1 = w * radius / rho
 
@@ -387,9 +389,9 @@ class NeffSolver(FiberSolver):
             er = -u / w * (a1 * kmur - a2 * kpur) / knw
             ephi = -u / w * (a1 * kmur + a2 * kpur) / knw
             ez = u / (k * neff * rho) * knur / knw
-            hr = numpy.sqrt(epsilon_0 / mu_0) * n_core_square / neff * u / w * (a5 * kmur + a6 * kpur) / knw
-            hphi = -numpy.sqrt(epsilon_0 / mu_0) * n_core_square / neff * u / w * (a5 * kmur - a6 * kpur) / knw
-            hz = numpy.sqrt(epsilon_0 / mu_0) * u * F2 / (k * rho) * knur / knw
+            hr = Y0 * n_core_square / neff * u / w * (a5 * kmur + a6 * kpur) / knw
+            hphi = -Y0 * n_core_square / neff * u / w * (a5 * kmur - a6 * kpur) / knw
+            hz = Y0 * u * F2 / (k * rho) * knur / knw
 
         E_field = numpy.array((er, ephi, ez))
         H_field = numpy.array((hr, hphi, hz))
@@ -408,7 +410,7 @@ class NeffSolver(FiberSolver):
         :param      radius:      The radius
         :type       radius:      float
 
-        :returns:   The lp field.
+        :returns:   The LP field.
         :rtype:     tuple
         """
         return self.get_HE_field(*args, **kwargs)
@@ -518,21 +520,21 @@ class NeffSolver(FiberSolver):
         """
         core, clad = self.fiber.layers
 
-        u, w, v = self.get_U_W_V_parameter(neff=neff)
+        U, W, V = self.get_U_W_V_parameter(neff=neff)
 
         n_core = core.refractive_index
 
         n_clad = clad.refractive_index
 
         delta = (1 - n_clad**2 / n_core**2) / 2
-        jnu = jn(nu, u)
-        knu = kn(nu, w)
-        kp = kvp(nu, w)
+        jnu = jn(nu, U)
+        knu = kn(nu, W)
+        kp = kvp(nu, W)
 
-        term_0 = jvp(nu, u) * w * knu + kp * u * jnu * (1 - delta)
-        term_1 = (nu * neff * v**2 * knu)
-        term_2 = n_core * u * w
-        term_3 = u * kp * delta
+        term_0 = jvp(nu, U) * W * knu + kp * U * jnu * (1 - delta)
+        term_1 = (nu * neff * V**2 * knu)
+        term_2 = n_core * U * W
+        term_3 = U * kp * delta
         term_4 = jnu * numpy.sqrt(term_3**2 + (term_1 / term_2)**2)
 
         return term_0, term_4
