@@ -26,12 +26,13 @@ def get_derivative(function, x: float, order: int, delta: float, function_kwargs
     """
     coefficients = FiniteCoefficients(
         derivative=order,
-        accuracy=4,
+        accuracy=accuracy,
         coefficient_type='central'
     )
 
     summation = 0
     for index, value in coefficients:
+
         x_eval = x + index * delta
 
         y = function(x_eval, **function_kwargs)

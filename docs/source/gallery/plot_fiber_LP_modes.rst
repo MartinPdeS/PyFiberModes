@@ -105,7 +105,7 @@ Preparing the figure
 
  .. code-block:: none
 
-    /Users/martinpdes/Desktop/GitProject/PyFiberModes/PyFiberModes/solver/ssif.py:441: RuntimeWarning: invalid value encountered in sqrt
+    /Users/martinpdes/Desktop/GitProject/PyFiberModes/PyFiberModes/solver/ssif.py:447: RuntimeWarning: invalid value encountered in sqrt
       W = core.radius_out * self.wavelength.k0 * numpy.sqrt(neff**2 - n_clad**2)
     Couldn't converge to value as max iteration is reached
 
@@ -116,7 +116,7 @@ Preparing the figure
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.910 seconds)
+   **Total running time of the script:** (0 minutes 0.780 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_fiber_LP_modes.py:

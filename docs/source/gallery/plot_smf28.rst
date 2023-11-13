@@ -26,13 +26,12 @@ Modal dispersion VS core index
 Imports
 ~~~~~~~
 
-.. GENERATED FROM PYTHON SOURCE LINES 10-14
+.. GENERATED FROM PYTHON SOURCE LINES 10-13
 
 .. code-block:: python3
 
-    from PyFiberModes import HE11, HE12, LP01, LP11, LP02, LP21
+    from PyFiberModes import HE11, HE22, LP01, LP11, LP02, LP21, LP12, TE01, LP22
     from PyFiberModes.fiber import load_fiber
-    import numpy
 
 
 
@@ -41,46 +40,54 @@ Imports
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 15-18
+.. GENERATED FROM PYTHON SOURCE LINES 14-17
 
 Generating the fiber structures
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Here we create the different fiber design that we want to explore
 
-.. GENERATED FROM PYTHON SOURCE LINES 18-26
+.. GENERATED FROM PYTHON SOURCE LINES 17-23
 
 .. code-block:: python3
 
-    wavelength_list = numpy.linspace(1310e-9, 1550e-9, 10)
-
     smf28 = load_fiber(fiber_name='DCF1300S_20', wavelength=1550e-9)
 
-    mode_field = smf28.get_mode_field(mode=HE11, n_point=20)
+    smf28.print_data(data_type_list=['cutoff_V0', 'cutoff_wavelength'], mode_list=[LP01, LP11, LP22])
 
-    mode_field.plot(['Ex']).show()
+
     # -
 
 
-
-.. image-sg:: /gallery/images/sphx_glr_plot_smf28_001.png
-   :alt: , Ex
-   :srcset: /gallery/images/sphx_glr_plot_smf28_001.png
-   :class: sphx-glr-single-img
 
 
 .. rst-class:: sphx-glr-script-out
 
  .. code-block:: none
 
+    cutoff_V0 @ wavelength: 1550.00 nm 
 
-    SceneList(unit_size=(4, 4), tight_layout=True, transparent_background=False, title='', ax_orientation='horizontal')
+    mode = LP01      cutoff_V0: 0
+    mode = LP11      cutoff_V0: 3.605301694991108
+    mode = LP22      cutoff_V0: 5.78980181250092
+
+
+
+    cutoff_wavelength @ wavelength: 1550.00 nm 
+
+    mode = LP01      cutoff_wavelength: inf
+    mode = LP11      cutoff_wavelength: 4788.04 nm
+    mode = LP22      cutoff_wavelength: 2981.51 nm
+
+
+
+
 
 
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 14.769 seconds)
+   **Total running time of the script:** (0 minutes 0.005 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_smf28.py:

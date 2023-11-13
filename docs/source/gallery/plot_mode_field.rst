@@ -95,7 +95,7 @@ Preparing the figure
 
 
 .. image-sg:: /gallery/images/sphx_glr_plot_mode_field_001.png
-   :alt: Mode fields for vectorial mode if x-direction, HE(1,1), HE(1,2), LP(0,1), LP(1,1)
+   :alt: Mode fields for vectorial mode if x-direction, HE11, HE12, LP01, LP11
    :srcset: /gallery/images/sphx_glr_plot_mode_field_001.png
    :class: sphx-glr-single-img
 
@@ -112,7 +112,7 @@ Preparing the figure
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 1.580 seconds)
+   **Total running time of the script:** (0 minutes 1.500 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_mode_field.py:

@@ -2,7 +2,10 @@
 # -*- coding: utf-8 -*-
 
 from PyFiberModes import solver
-from PyFiberModes import Mode, ModeFamily, Wavelength, HE11
+from PyFiberModes import Mode, ModeFamily, Wavelength
+from PyFiberModes.mode_instances import HE11, LP01, LP11, TE01
+from PyFiberModes.fundamentals import get_wavelength_from_V0
+
 from math import sqrt, isinf, isnan
 import numpy
 from scipy.special import j0, y0, i0, k0
@@ -17,39 +20,45 @@ Solver for three layer step-index solver: TLSIF
 
 
 class CutoffSolver(solver.solver.FiberSolver):
+    def get_lower_neff_mode(self, mode: Mode) -> Mode:
+        lower_neff_mode = None
 
-    def solve(self, mode: Mode):
-        if mode.m > 1:
-            if mode.family is ModeFamily.HE:
-                pm = Mode(ModeFamily.EH, mode.nu, mode.m - 1)
-            else:
-                pm = Mode(mode.family, mode.nu, mode.m - 1)
-            if pm == HE11:
-                pm = Mode(ModeFamily.TE, 0, 1)
-            elif pm == Mode(ModeFamily.LP, 0, 1):
-                pm = Mode(ModeFamily.LP, 1, 1)
-            lowbound = self.fiber.get_cutoff_v0(mode=pm)
-            delta = 0.05 / lowbound if lowbound > 4 else self._MCD
-            lowbound += delta / 100
+        if mode.family is ModeFamily.HE:
+            lower_neff_mode = Mode(ModeFamily.EH, mode.nu, mode.m - 1)
+        else:
+            lower_neff_mode = Mode(mode.family, mode.nu, mode.m - 1)
+
+        if lower_neff_mode == HE11:
+            lower_neff_mode = TE01
+
+        elif lower_neff_mode == LP01:
+            lower_neff_mode = LP11
 
         elif mode.family is ModeFamily.EH:
-            pm = Mode(ModeFamily.HE, mode.nu, mode.m)
-            lowbound = self.fiber.get_cutoff_v0(mode=pm)
-            delta = 0.05 / lowbound if lowbound > 4 else self._MCD
-            lowbound += delta / 100
+            lower_neff_mode = Mode(ModeFamily.HE, mode.nu, mode.m)
 
-        elif mode.nu > 0:
-            # TE(0,1) is single-mode condition. Roots below TE(0,1) are false-positive
-            pm = Mode(ModeFamily.TE, 0, 1)
-            lowbound = self.fiber.get_cutoff_v0(mode=pm)
+        elif mode.nu >= 1:  # TE(0,1) is single-mode condition. Roots below TE(0,1) are false-positive
+            lower_neff_mode = TE01
 
-            delta = 0.05 / lowbound
-            lowbound -= delta / 100
+        return lower_neff_mode
+
+    def solve(self, mode: Mode):
+        lower_neff_mode = self.get_lower_neff_mode(mode=mode)
+
+        if (mode.m >= 2 or mode.family is ModeFamily.EH):
+            v0_lowbound = self.fiber.get_cutoff_v0(mode=lower_neff_mode)
+            delta = 0.05 / v0_lowbound if v0_lowbound > 4 else self._MCD
+            v0_lowbound += delta / 100
+
+        elif mode.nu >= 1:
+            v0_lowbound = self.fiber.get_cutoff_v0(mode=lower_neff_mode)
+            delta = 0.05 / v0_lowbound
+            v0_lowbound -= delta / 100
         else:
-            lowbound = delta = self._MCD
+            v0_lowbound = delta = self._MCD
 
         if isnan(delta):
-            print(lowbound)
+            print(v0_lowbound)
 
         match mode.family:
             case ModeFamily.LP:
@@ -66,7 +75,7 @@ class CutoffSolver(solver.solver.FiberSolver):
         return self.find_function_first_root(
             function=function,
             function_args=(mode.nu,),
-            lowbound=lowbound,
+            lowbound=v0_lowbound,
             delta=delta,
             maxiter=int(250 / delta)
         )
@@ -83,12 +92,12 @@ class CutoffSolver(solver.solver.FiberSolver):
         """
         r1, r2 = self.fiber.layer_radius
 
-        wavelength = self.fiber.V0_to_wavelength(V0=V0)
+        wavelength = get_wavelength_from_V0(fiber=self.fiber, V0=V0)
         if isinf(wavelength):
             wavelength = Wavelength(k0=1)  # because it causes troubles if 0
 
         layers_minimum_index_squared = [
-            layer.refractive_index**2 for layer in self.fiber.layers()
+            layer.refractive_index**2 for layer in self.fiber.layers
         ]
 
         n1sq, n2sq, n3sq = layers_minimum_index_squared
@@ -104,7 +113,7 @@ class CutoffSolver(solver.solver.FiberSolver):
 
         return u1 * r1, u2 * r1, u2 * r2, s1, s2, n1sq, n2sq, n3sq
 
-    def __delta(self, nu, u1r1, u2r1, s1, s2, s3, n1sq, n2sq, n3sq):
+    def __delta(self, nu: int, u1r1: float, u2r1: float, s1: float, s2: float, s3: float, n1sq: float, n2sq: float, n3sq: float):
         """s3 is sign of Delta"""
         if s1 < 0:
             f = ivp(nu, u1r1) / (iv(nu, u1r1) * u1r1)  # c

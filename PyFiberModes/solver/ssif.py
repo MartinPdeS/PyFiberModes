@@ -11,6 +11,7 @@ from PyFiberModes import Mode, ModeFamily
 from scipy.special import jn, jn_zeros, kn, j0, j1, k0, k1, jvp, kvp
 from scipy.constants import mu_0, epsilon_0, physical_constants
 eta0 = physical_constants['characteristic impedance of vacuum'][0]
+Y0 = numpy.sqrt(epsilon_0 / mu_0)
 
 """
 Solver for standard layer step-index solver: SSIF
@@ -41,7 +42,7 @@ class CutoffSolver(FiberSolver):
 
         return jn_zeros(nu, m)[m - 1]
 
-    def get_cutoff_HE(self, V0: float, nu: int, mode: Mode) -> float:
+    def _get_cutoff_HE(self, V0: float, nu: int, mode: Mode) -> float:
         core, clad = self.fiber.layers
 
         cutoff_wavelength = self.fiber.get_cutoff_wavelength(mode=mode)
@@ -60,16 +61,22 @@ class CutoffSolver(FiberSolver):
 
         return (1 + ratio) * jn(nu - 2, V0) - (1 - ratio) * jn(nu, V0)
 
+    def get_cutoff_HE(self, V0, nu):
+        core, clad = self.fiber.layers
+
+        n_ratio = core.refractive_index**2 / clad.refractive_index**2
+
+        return (1 + n_ratio) * jn(nu - 2, V0) - (1 - n_ratio) * jn(nu, V0)
+
     def find_HE_mode_cutoff(self, mode: Mode) -> float:
         if mode.m > 1:
-
-            lower_boundary_mode = Mode(
+            lower_neff_mode = Mode(
                 family=mode.family,
                 nu=mode.nu,
                 m=mode.m - 1
             )
 
-            lower_neff_boundary = self.fiber.get_cutoff_v0(mode=lower_boundary_mode)
+            lower_neff_boundary = self.fiber.get_cutoff_v0(mode=lower_neff_mode)
 
             if numpy.isnan(lower_neff_boundary) or numpy.isinf(lower_neff_boundary):
                 raise AssertionError(f"find_HE_mode_cutoff: no previous cutoff for {mode} mode")
@@ -370,8 +377,6 @@ class NeffSolver(FiberSolver):
             jmur = jn(nu - 1, term_0)
             jpur = jn(nu + 1, term_0)
             jnur = jn(nu, term_0)
-
-            Y0 = numpy.sqrt(epsilon_0 / mu_0)
 
             er = -(a1 * jmur + a2 * jpur) / jnu
             ephi = -(a1 * jmur - a2 * jpur) / jnu

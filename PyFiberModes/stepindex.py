@@ -25,6 +25,7 @@ class Geometry(object):
     def __post_init__(self):
         self.index_list = self.index_list[0]
         self.refractive_index = self.index_list
+        self.thickness = self.radius_out - self.radius_in
 
 
 class StepIndex(Geometry):

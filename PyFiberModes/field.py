@@ -521,7 +521,6 @@ class Field(object):
         r"""
         Norm of the H vector :math:`\vec{H}`.
 
-
         :param      phi:                  The phi
         :type       phi:                  float
         :param      theta:                The theta
@@ -637,9 +636,9 @@ class Field(object):
     def add_to_ax(self, field_string: str, ax: Axis):
         field = getattr(self, field_string)()
 
-        ax.add_mesh(scalar=field)
+        image = ax.add_mesh(scalar=field)
 
-        ax.add_colorbar(symmetric=True)
+        ax.add_colorbar(symmetric=True, width='10%', artist=image)
 
     def plot(self, plot_type: list = []) -> SceneList:
         figure = SceneList(unit_size=(4, 4), ax_orientation='horizontal', tight_layout=True)

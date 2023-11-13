@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 from enum import Enum
-from colorsys import hsv_to_rgb
 from collections import namedtuple
 
 
@@ -42,6 +41,10 @@ class Mode(namedtuple('Mode', 'family nu m')):
             family = Family[family]
 
         return super(Mode, cls).__new__(cls, family, nu, m)
+
+    # def get_lower_neff_mode(self):
+    #     if self.family is ModeFamily.HE:
+    #         lower_neff_mode = Mode(ModeFamily.EH, mode.nu, mode.m - 1)
 
     def get_LP_equvalent_mode(self):  # previously lpEq
         """

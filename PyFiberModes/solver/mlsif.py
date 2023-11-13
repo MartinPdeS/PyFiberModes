@@ -52,8 +52,6 @@ class NeffSolver(FiberSolver):
         if lower_order_mode is None:
             lower_neff_boundary = self.fiber.get_maximum_index()
 
-
-
         else:
             lower_neff_boundary = self.fiber.get_effective_index(
                 mode=lower_order_mode,

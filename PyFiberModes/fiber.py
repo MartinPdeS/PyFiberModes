@@ -5,16 +5,20 @@ import numpy
 import logging
 from itertools import count
 from functools import cache
-from scipy.optimize import fixed_point
 from dataclasses import dataclass, field
 from scipy import constants
-from copy import deepcopy
 
 from PyFiberModes.stepindex import StepIndex
 from PyFiberModes import Wavelength, Mode, ModeFamily
 from PyFiberModes.functions import get_derivative
 from PyFiberModes.field import Field
-from PyFiberModes.fundamentals import get_effective_index, get_cutoff_v0, get_radial_field
+
+from PyFiberModes.fundamentals import (
+    get_effective_index,
+    get_cutoff_v0,
+    get_radial_field,
+    get_propagation_constant_from_omega
+)
 
 from MPSTools.fiber_catalogue import loader
 
@@ -133,18 +137,6 @@ class Fiber(object):
         for position, layer in enumerate(self.layers):
             layer.position = position
 
-    def get_layer_name(self, layer_index: int) -> str:
-        """
-        Gets the layer name.
-
-        :param      layer_index:  The layer index
-        :type       layer_index:  int
-
-        :returns:   The layer name.
-        :rtype:     str
-        """
-        return self.layer_names[layer_index]
-
     def get_layer_at_radius(self, radius: float):
         """
         Gets the layer that is associated to a given radius.
@@ -153,57 +145,9 @@ class Fiber(object):
         :type       radius:  float
         """
         radius = abs(radius)
-        for idx, layer_radius in enumerate(self.layer_radius):
-            if radius < layer_radius:
-                return self.layers[idx]
-
-        return self.layers[-1]
-
-    def get_inner_radius(self, layer_idx: int) -> float:
-        """
-        Gets the radius of the inner most layer
-
-        :param      layer_idx:  The layer index
-        :type       layer_idx:  int
-
-        :returns:   The inner radius.
-        :rtype:     float
-        """
-        if layer_idx < 0:
-            layer_idx = len(self.layer_radius) + layer_idx + 1
-
-        if layer_idx != 0:
-            return self.layer_radius[layer_idx - 1]
-
-        return 0
-
-    def get_outer_radius(self, layer_idx: int) -> float:
-        """
-        Gets the radius of the outer most layer
-
-        :param      layer_idx:  The layer index
-        :type       layer_idx:  int
-
-        :returns:   The inner radius.
-        :rtype:     float
-        """
-        if layer_idx < len(self.layer_radius):
-            return self.layer_radius[layer_idx]
-        return float("inf")
-
-    def get_layer_thickness(self, layer_idx: int) -> float:
-        """
-        Gets the thickness of a specific layer.
-
-        :param      layer_idx:  The layer index
-        :type       layer_idx:  int
-
-        :returns:   The thickness.
-        :rtype:     float
-        """
-        outer_radius = self.get_outer_radius(layer_idx=layer_idx)
-        inner_radius = self.get_inner_radius(layer_idx=layer_idx)
-        return outer_radius - inner_radius
+        for layer in self.layers:
+            if (radius > layer.radius_in) and (radius < layer.radius_out):
+                return layer
 
     def get_fiber_radius(self) -> float:
         """
@@ -414,62 +358,12 @@ class Fiber(object):
 
         return neff
 
-    def get_derivative_beta_vs_omega(self,
-            omega: float,
-            mode: Mode,
-            order: float = 0,
-            delta_neff: float = 1e-6,
-            lower_neff_boundary: float = None) -> float:
-        """
-        Gets the derivative of beta vs omega.
-
-        :param      mode:                 The mode to consider
-        :type       mode:                 Mode
-        :param      order:                The order of the derivative
-        :type       order:                float
-        :param      delta_neff:           The discretization for research of neff value
-        :type       delta_neff:           float
-        :param      lower_neff_boundary:  The minimum value neff can reach
-        :type       lower_neff_boundary:  float
-
-        :returns:   The derivative beta vs omega.
-        :rtype:     float
-        """
-
-        wl = Wavelength(omega=omega)
-        if order == 0:
-            neff = get_effective_index(fiber=self, wavelength=wl, mode=mode, delta_neff=delta_neff, lower_neff_boundary=lower_neff_boundary)
-            return neff * wl.k0
-
-        function_kwargs = dict(
-            mode=mode,
-            order=0,
-            delta_neff=delta_neff,
-            lower_neff_boundary=lower_neff_boundary
-        )
-
-        return get_derivative(
-            function=self.get_derivative_beta_vs_omega,
-            x=omega,
-            order=order,
-            accuracy=4,
-            delta=1e12,  # This value is critical for accurate computation
-            function_kwargs=function_kwargs
-        )
-
-    def get_normalized_beta(self,
-            mode: Mode,
-            delta_neff: float = 1e-6,
-            lower_neff_boundary: float = None) -> float:
+    def get_normalized_beta(self, mode: Mode) -> float:
         """
         Gets the normalized propagation constant [beta].
 
         :param      mode:                   The mode to consider
         :type       mode:                   Mode
-        :param      delta_neff:             The discretization for research of neff value
-        :type       delta_neff:             float
-        :param      lower_neff_boundary:    The minimum value neff can reach
-        :type       lower_neff_boundary:    float
 
         :returns:   The normalized propagation constant.
         :rtype:     float
@@ -478,8 +372,6 @@ class Fiber(object):
             fiber=self,
             wavelength=self.wavelength,
             mode=mode,
-            delta_neff=delta_neff,
-            lower_neff_boundary=lower_neff_boundary
         )
 
         n_max = self.get_maximum_index()
@@ -492,19 +384,12 @@ class Fiber(object):
 
         return numerator / denominator
 
-    def get_phase_velocity(self,
-            mode: Mode,
-            delta_neff: float = 1e-6,
-            lower_neff_boundary: float = None) -> float:
+    def get_phase_velocity(self, mode: Mode) -> float:
         """
         Gets the phase velocity.
 
         :param      mode:                   The mode to consider
         :type       mode:                   Mode
-        :param      delta_neff:             The discretization for research of neff value
-        :type       delta_neff:             float
-        :param      lower_neff_boundary:    The minimum value neff can reach
-        :type       lower_neff_boundary:    float
 
         :returns:   The phase velocity.
         :rtype:     float
@@ -513,106 +398,99 @@ class Fiber(object):
             fiber=self,
             wavelength=self.wavelength,
             mode=mode,
-            delta_neff=delta_neff,
-            lower_neff_boundary=lower_neff_boundary
         )
 
         return constants.c / n_eff
 
-    def get_group_index(self,
-            mode: Mode,
-            delta_neff: float = 1e-6,
-            lower_neff_boundary: float = None) -> float:
+    def get_group_index(self, mode: Mode) -> float:
         """
         Gets the group index.
 
         :param      mode:                   The mode to consider
         :type       mode:                   Mode
-        :param      delta_neff:             The discretization for research of neff value
-        :type       delta_neff:             float
-        :param      lower_neff_boundary:    The minimum value neff can reach
-        :type       lower_neff_boundary:    float
 
         :returns:   The group index.
         :rtype:     float
         """
-        derivative = self.get_derivative_beta_vs_omega(
-            omega=self.wavelength.omega,
-            mode=mode,
+        derivative = get_derivative(
+            function=get_propagation_constant_from_omega,
+            x=self.wavelength.omega,
             order=1,
-            delta_neff=delta_neff,
-            lower_neff_boundary=lower_neff_boundary
+            accuracy=4,
+            delta=1e12,  # This value is critical for accurate computation
+            function_kwargs=dict(fiber=self, mode=mode)
         )
 
         return derivative * constants.c
 
-    def get_groupe_velocity(self,
-            mode: Mode,
-            delta_neff: float = 1e-6,
-            lower_neff_boundary: float = None) -> float:
+    def get_groupe_velocity(self, mode: Mode) -> float:
         r"""
         Gets the groupe velocity defined as:
-
 
         .. math::
             \left( \frac{\partial \beta}{\partial \omega} \right)^{-1}
 
         :param      mode:                  The mode to consider
         :type       mode:                  Mode
-        :param      delta_neff:            The discretization for research of neff value
-        :type       delta_neff:            float
-        :param      lower_neff_boundary:   The minimum value neff can reach
-        :type       lower_neff_boundary:   float
 
         :returns:   The groupe velocity.
         :rtype:     float
         """
-        derivative = self.get_derivative_beta_vs_omega(
-            omega=self.wavelength.omega,
-            mode=mode,
+        derivative = get_derivative(
+            function=get_propagation_constant_from_omega,
+            x=self.wavelength.omega,
             order=1,
-            delta_neff=delta_neff,
-            lower_neff_boundary=lower_neff_boundary
+            accuracy=4,
+            delta=1e12,  # This value is critical for accurate computation
+            function_kwargs=dict(fiber=self, mode=mode)
         )
 
         return 1 / derivative
 
-    def get_dispersion(self,
-            mode: Mode,
-            delta_neff: float = 1e-6,
-            lower_neff_boundary: float = None) -> float:
+    def get_group_velocity_dispersion(self, mode: Mode) -> float:
         r"""
-        Gets the modal dispersion defined as:
+        Gets the fiber group velocity dispersion defined as:
+
+        .. math::
+            \frac{\partial^2 \beta}{\partial \omega^2}
+
+        :param      mode:   The mode to consider
+        :type       mode:   Mode
+
+        :returns:   The group_velocity dispersion
+        :rtype:     float
+        """
+        derivative = get_derivative(
+            function=get_propagation_constant_from_omega,
+            x=self.wavelength.omega,
+            order=2,
+            accuracy=4,
+            delta=1e12,  # This value is critical for accurate computation
+            function_kwargs=dict(fiber=self, mode=mode)
+        )
+
+        return derivative
+
+    def get_dispersion(self, mode: Mode) -> float:
+        r"""
+        Gets the fiber dispersion defined as:
 
         .. math::
             10^6 * \frac{2 \pi c}{\lambda^2} * \frac{\partial^2 \beta}{\partial \omega}
 
-        :param      mode:                   The mode to consider
-        :type       mode:                   Mode
-        :param      delta_neff:             The discretization for research of neff value
-        :type       delta_neff:             float
-        :param      lower_neff_boundary:    The minimum value neff can reach
-        :type       lower_neff_boundary:    float
+        :param      mode:   The mode to consider
+        :type       mode:   Mode
 
-        :returns:   The modal dispersion.
+        :returns:   The modal dispersion in units of ps/nm/km.
         :rtype:     float
         """
-        derivative = self.get_derivative_beta_vs_omega(
-            omega=self.wavelength.omega,
-            mode=mode,
-            order=2,
-            delta_neff=delta_neff,
-            lower_neff_boundary=lower_neff_boundary
-        )
+        gvd = self.get_group_velocity_dispersion(mode=mode)
 
-        factor = 2 * numpy.pi * constants.c / self.wavelength**2
+        factor = - 2 * numpy.pi * constants.c / self.wavelength**2
 
-        return 1e6 * -derivative * factor
+        return 1e6 * factor * gvd
 
-    def get_S_parameter(self,
-            mode: Mode,
-            delta_neff: float = 1e-6,
-            lower_neff_boundary: float = None) -> float:
+    def get_S_parameter(self, mode: Mode) -> float:
         r"""
         Gets the s parameter defined as:
 
@@ -621,20 +499,17 @@ class Fiber(object):
 
         :param      mode:                   The mode to consider
         :type       mode:                   Mode
-        :param      delta_neff:             The discretization for research of neff value
-        :type       delta_neff:             float
-        :param      lower_neff_boundary:    The minimum value neff can reach
-        :type       lower_neff_boundary:    float
 
         :returns:   The s parameter.
         :rtype:     float
         """
-        derivative = self.get_derivative_beta_vs_omega(
-            omega=self.wavelength.omega,
-            mode=mode,
+        derivative = get_derivative(
+            function=get_propagation_constant_from_omega,
+            x=self.wavelength.omega,
             order=3,
-            delta_neff=delta_neff,
-            lower_neff_boundary=lower_neff_boundary
+            accuracy=4,
+            delta=1e12,  # This value is critical for accurate computation
+            function_kwargs=dict(fiber=self, mode=mode)
         )
 
         factor = 2 * numpy.pi * constants.c / self.wavelength**2
@@ -813,8 +688,9 @@ class Fiber(object):
             mode: Mode,
             wavelength: float,
             radius: float) -> float:
-        """
+        r"""
         Gets the mode field without the azimuthal component.
+        Tuple structure is [:math:`E_{r}`, :math:`E_{\phi}`, :math:`E_{z}`], [:math:`H_{r}`, :math:`H_{\phi}`, :math:`H_{z}`]
 
         :param      mode:        The mode to consider
         :type       mode:        Mode

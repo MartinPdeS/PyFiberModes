@@ -79,7 +79,7 @@ Preparing the figure
     for mode in [HE11, HE12, HE22]:
         data = []
         for fiber in factory:
-            group_index = fiber.get_group_index(mode, 1550e-9)
+            group_index = fiber.get_group_index(mode=mode)
             data.append(group_index)
 
         ax.add_line(
@@ -113,7 +113,7 @@ Preparing the figure
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.398 seconds)
+   **Total running time of the script:** (0 minutes 0.297 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_group_index.py:

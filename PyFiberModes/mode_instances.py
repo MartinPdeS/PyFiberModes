@@ -9,6 +9,11 @@ HE12 = Mode(Family.HE, 1, 2)
 HE22 = Mode(Family.HE, 2, 2)
 HE31 = Mode(Family.HE, 3, 1)
 
+
+#: Predefined TE- TM modes
+TE01 = Mode(Family.TE, 0, 1)
+TM01 = Mode(Family.TM, 0, 1)
+
 #: Predefined LP modes
 LP01 = Mode(Family.LP, 0, 1)
 LP11 = Mode(Family.LP, 1, 1)
