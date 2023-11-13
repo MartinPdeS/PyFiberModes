@@ -8,7 +8,7 @@ from scipy import constants
 
 from PyFiberModes.stepindex import StepIndex
 from PyFiberModes import Wavelength, Mode
-from PyFiberModes.functions import get_derivative
+from PyFinitDiff.tools.derivatives import get_derivative_1d
 from PyFiberModes.field import Field
 
 from PyFiberModes.fundamentals import (
@@ -42,26 +42,56 @@ class Fiber(object):
 
     @property
     def n_layer(self) -> int:
+        """
+        Returns the number of layers in the fiber.
+
+        :returns:   The number of layers
+        :rtype:     int
+        """
         return len(self.layers)
 
     @property
     def n_interface(self) -> int:
+        """
+        Returns the number of layer interfaces in the fiber.
+
+        :returns:   The number of interface
+        :rtype:     int
+        """
         return len(self.layers) - 1
 
     @property
-    def last_layer(self):
+    def last_layer(self) -> StepIndex:
+        """
+        Returns the last layer
+
+        :returns:   The last layer.
+        :rtype:     StepIndex
+        """
         return self.layers[-1]
 
     @property
-    def penultimate_layer(self):
+    def penultimate_layer(self) -> StepIndex:
+        """
+        Returns the second to last layer
+
+        :returns:   The second to last layer.
+        :rtype:     StepIndex
+        """
         return self.layers[-2]
 
     @property
     def first_layer(self):
+        """
+        Returns the first layer
+
+        :returns:   The first layer.
+        :rtype:     StepIndex
+        """
         return self.layers[0]
 
     def __hash__(self):
-        return hash(tuple(self.layer_radius))
+        return hash(tuple(self.layers))
 
     def __getitem__(self, index: int) -> object:
         return self.layers[index]
@@ -229,8 +259,11 @@ class Fiber(object):
         return layer.refractive_index
 
     def get_NA(self) -> float:
-        """
-        Gets the numerical aperture NA.
+        r"""
+        Gets the numerical aperture NA defined as:
+
+        .. math::
+            NA = \sqrt{n_{max}^2-n_{min}^2}
 
         :returns:   The numerical aperture.
         :rtype:     float
@@ -396,9 +429,9 @@ class Fiber(object):
         :returns:   The group index.
         :rtype:     float
         """
-        derivative = get_derivative(
+        derivative = get_derivative_1d(
             function=get_propagation_constant_from_omega,
-            x=self.wavelength.omega,
+            x_eval=self.wavelength.omega,
             order=1,
             accuracy=4,
             delta=1e12,  # This value is critical for accurate computation
@@ -420,9 +453,9 @@ class Fiber(object):
         :returns:   The groupe velocity.
         :rtype:     float
         """
-        derivative = get_derivative(
+        derivative = get_derivative_1d(
             function=get_propagation_constant_from_omega,
-            x=self.wavelength.omega,
+            x_eval=self.wavelength.omega,
             order=1,
             accuracy=4,
             delta=1e12,  # This value is critical for accurate computation
@@ -444,9 +477,9 @@ class Fiber(object):
         :returns:   The group_velocity dispersion
         :rtype:     float
         """
-        derivative = get_derivative(
+        derivative = get_derivative_1d(
             function=get_propagation_constant_from_omega,
-            x=self.wavelength.omega,
+            x_eval=self.wavelength.omega,
             order=2,
             accuracy=4,
             delta=1e12,  # This value is critical for accurate computation
@@ -487,9 +520,9 @@ class Fiber(object):
         :returns:   The s parameter.
         :rtype:     float
         """
-        derivative = get_derivative(
+        derivative = get_derivative_1d(
             function=get_propagation_constant_from_omega,
-            x=self.wavelength.omega,
+            x_eval=self.wavelength.omega,
             order=3,
             accuracy=4,
             delta=1e12,  # This value is critical for accurate computation
@@ -580,6 +613,23 @@ class Fiber(object):
                 print(output_string)
 
             print('\n\n')
+
+
+def get_fiber_from_delta_and_V0(delta: float, V0: float, wavelength: float) -> Fiber:
+    fiber = load_fiber(fiber_name='SMF28', wavelength=wavelength)
+
+    core, clad = fiber.layers
+
+    n_clad = clad.refractive_index
+    n_core = n_clad / numpy.sqrt(1 - 2 * delta)
+
+    r_core = V0 / numpy.sqrt(n_core**2 - n_clad**2) * wavelength / (2 * numpy.pi)
+
+    fiber.layers[0].radius_out = r_core
+    fiber.layers[1].radius_in = r_core
+    fiber.layers[0].refractive_index = n_core
+
+    return fiber
 
 
 def load_fiber(fiber_name: str, wavelength: float = None) -> Fiber:

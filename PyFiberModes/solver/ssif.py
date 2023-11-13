@@ -113,20 +113,7 @@ class NeffSolver(FiberSolver):
     """
     Effective index solver for standard step-index fiber
     """
-    def solve(self, mode: Mode, delta_neff: float, lower_neff_boundary: float):
-        core, clad = self.fiber.layers
-
-        epsilon = 1e-12
-
-        cutoff = self.fiber.get_cutoff_v0(mode=mode)
-
-        if self.fiber.get_V0() < cutoff:
-            return numpy.nan
-
-        n_core = core.refractive_index
-
-        higher_neff_boundary = numpy.sqrt(n_core**2 - (cutoff / (core.radius_out * self.wavelength.k0))**2) - epsilon
-
+    def get_mode_with_lower_neff(self, mode: Mode) -> Mode:
         match mode.family:
             case ModeFamily.LP:
                 upper_boundary_mode = Mode(ModeFamily.LP, mode.nu + 1, mode.m)
@@ -137,17 +124,67 @@ class NeffSolver(FiberSolver):
             case _:
                 upper_boundary_mode = Mode(ModeFamily.LP, 1, mode.m + 1)
 
-        cutoff = self.fiber.get_cutoff_v0(mode=upper_boundary_mode)
+        return upper_boundary_mode
 
-        try:
-            value_0 = numpy.sqrt(n_core**2 - (cutoff / (core.radius_out * self.wavelength.k0))**2) + epsilon
+    def get_clad_index_from_V0(self, V0: float) -> float:
+        """
+        Gets a clad index value associated to a certain V0 parameter for the same exact fiber.
 
-            value_1 = clad.refractive_index + epsilon
+        :param      V0:   The V number
+        :type       V0:   float
 
-            lower_neff_boundary = max(value_0, value_1)
+        :returns:   The clad index
+        :rtype:     float
+        """
+        core = self.fiber.first_layer
 
-        except ValueError:
-            lower_neff_boundary = n_core
+        n_core = core.refractive_index
+
+        NA = V0 / (self.wavelength.k0 * core.radius_out)
+
+        n_clad_2 = n_core**2 - NA**2
+
+        if n_clad_2 < 0:
+            return numpy.nan
+
+        return numpy.sqrt(n_clad_2)
+
+    def get_low_neff_boundary(self, mode: Mode) -> float:
+        """
+        Gets the lower neff boundary using a lower neff mode.
+
+        :param      mode:  The current mode
+        :type       mode:  Mode
+
+        :returns:   The low neff boundary.
+        :rtype:     float
+        """
+        core, clad = self.fiber.layers
+
+        mode_low_neff = self.get_mode_with_lower_neff(mode=mode)
+
+        lower_neff_cutoff_V0 = self.fiber.get_cutoff_v0(mode=mode_low_neff)
+
+        lower_neff_clad_index = self.get_clad_index_from_V0(V0=lower_neff_cutoff_V0,)
+
+        lower_neff_boundary = max(lower_neff_clad_index, clad.refractive_index)
+
+        if numpy.isnan(lower_neff_boundary):
+            lower_neff_boundary = clad.refractive_index
+
+        return lower_neff_boundary
+
+    def solve(self, mode: Mode, delta_neff: float, lower_neff_boundary: float, epsilon: float = 1e-12):
+        mode_cutoff_V0 = self.fiber.get_cutoff_v0(mode=mode)
+
+        fiber_cutoff = self.fiber.get_V0()
+
+        if fiber_cutoff < mode_cutoff_V0:
+            return numpy.nan
+
+        n_clad_equivalent = self.get_clad_index_from_V0(V0=mode_cutoff_V0)  # High neff boundary
+
+        lower_neff_boundary = self.get_low_neff_boundary(mode=mode)
 
         match mode.family:
             case ModeFamily.LP:
@@ -163,9 +200,10 @@ class NeffSolver(FiberSolver):
 
         result = self.find_root_within_range(
             function=function,
-            lowbound=lower_neff_boundary,
-            highbound=higher_neff_boundary,
-            function_kwargs=dict(nu=mode.nu)
+            lowbound=lower_neff_boundary + epsilon,
+            highbound=n_clad_equivalent - epsilon,
+            function_kwargs=dict(nu=mode.nu),
+            max_iteration=14
         )
 
         return result

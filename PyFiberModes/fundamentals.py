@@ -7,6 +7,13 @@ from PyFiberModes import Wavelength, Mode, ModeFamily
 from PyFiberModes.mode_instances import HE11, LP01
 
 
+def get_delta_from_fiber(fiber):
+    """ Reference Eq. 3.82 of Jacques Bures """
+    core, clad = fiber.layers
+    n_ratio = clad.refractive_index**2 / core.refractive_index**2
+    return 0.5 * (1 - n_ratio)
+
+
 def get_wavelength_from_V0(fiber: object, V0: float) -> float:
     """
     Gets the wavelength associated to the V number V0.
@@ -66,6 +73,45 @@ def get_propagation_constant_from_omega(
     )
 
     return neff * wavelength.k0
+
+
+def get_U_parameter(
+        fiber,
+        wavelength: Wavelength,
+        mode: Mode,
+        delta_neff: float = 1e-6,
+        lower_neff_boundary: float = None) -> float:
+    """
+    Gets the U parameter for a given fiber and mode.
+
+    :param      fiber:                The fiber to evaluate
+    :type       fiber:                Fiber
+    :param      wavelength:           The wavelength to consider
+    :type       wavelength:           Wavelength
+    :param      mode:                 The mode
+    :type       mode:                 Mode
+    :param      delta_neff:           The delta neff
+    :type       delta_neff:           float
+    :param      lower_neff_boundary:  The lower neff boundary
+    :type       lower_neff_boundary:  float
+
+    :returns:   The U parameter.
+    :rtype:     float
+    """
+    from PyFiberModes import solver
+    assert fiber.n_layer == 2, "Cannot compute U number for more than two layers"
+
+    neff_solver = solver.ssif.NeffSolver(fiber=fiber, wavelength=wavelength)
+
+    neff = neff_solver.solve(
+        mode=mode,
+        delta_neff=delta_neff,
+        lower_neff_boundary=lower_neff_boundary
+    )
+
+    U, _, _ = neff_solver.get_U_W_V_parameter(neff=neff)
+
+    return U
 
 
 def get_effective_index(
