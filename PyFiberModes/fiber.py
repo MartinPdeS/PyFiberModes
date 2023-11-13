@@ -2,14 +2,12 @@
 # -*- coding: utf-8 -*-
 
 import numpy
-import logging
-from itertools import count
 from functools import cache
 from dataclasses import dataclass, field
 from scipy import constants
 
 from PyFiberModes.stepindex import StepIndex
-from PyFiberModes import Wavelength, Mode, ModeFamily
+from PyFiberModes import Wavelength, Mode
 from PyFiberModes.functions import get_derivative
 from PyFiberModes.field import Field
 
@@ -21,12 +19,6 @@ from PyFiberModes.fundamentals import (
 )
 
 from MPSTools.fiber_catalogue import loader
-
-
-class NameSpace():
-    def __init__(self, **kwargs):
-        for key, value in kwargs.items():
-            setattr(self, key, value)
 
 
 @dataclass
@@ -41,8 +33,6 @@ class Fiber(object):
     """ Type of each layers """
     index_list: list = field(default_factory=list)
     """ Refractive index of each layers """
-
-    logger = logging.getLogger(__name__)
 
     def __post_init__(self):
         self.wavelength = Wavelength(self.wavelength)
@@ -338,12 +328,8 @@ class Fiber(object):
         """
         Gets the effective index.
 
-        :param      mode:                   The mode to consider
-        :type       mode:                   Mode
-        :param      delta_neff:             The discretization for research of neff value
-        :type       delta_neff:             float
-        :param      lower_neff_boundary:    The minimum value neff can reach
-        :type       lower_neff_boundary:    float
+        :param      mode:    The mode to consider
+        :type       mode:    Mode
 
         :returns:   The effective index.
         :rtype:     float
@@ -351,9 +337,7 @@ class Fiber(object):
         neff = get_effective_index(
             fiber=self,
             wavelength=self.wavelength,
-            mode=mode,
-            delta_neff=delta_neff,
-            lower_neff_boundary=lower_neff_boundary
+            mode=mode
         )
 
         return neff
@@ -362,8 +346,8 @@ class Fiber(object):
         """
         Gets the normalized propagation constant [beta].
 
-        :param      mode:                   The mode to consider
-        :type       mode:                   Mode
+        :param      mode:    The mode to consider
+        :type       mode:    Mode
 
         :returns:   The normalized propagation constant.
         :rtype:     float
@@ -388,8 +372,8 @@ class Fiber(object):
         """
         Gets the phase velocity.
 
-        :param      mode:                   The mode to consider
-        :type       mode:                   Mode
+        :param      mode:    The mode to consider
+        :type       mode:    Mode
 
         :returns:   The phase velocity.
         :rtype:     float
@@ -406,8 +390,8 @@ class Fiber(object):
         """
         Gets the group index.
 
-        :param      mode:                   The mode to consider
-        :type       mode:                   Mode
+        :param      mode:    The mode to consider
+        :type       mode:    Mode
 
         :returns:   The group index.
         :rtype:     float
@@ -430,8 +414,8 @@ class Fiber(object):
         .. math::
             \left( \frac{\partial \beta}{\partial \omega} \right)^{-1}
 
-        :param      mode:                  The mode to consider
-        :type       mode:                  Mode
+        :param      mode:    The mode to consider
+        :type       mode:    Mode
 
         :returns:   The groupe velocity.
         :rtype:     float
@@ -497,8 +481,8 @@ class Fiber(object):
         .. math::
             10^{-3} * \left( \frac{2 \pi c}{\lambda^2} \right)^2 * \frac{\partial^3 \beta}{\partial \omega}
 
-        :param      mode:                   The mode to consider
-        :type       mode:                   Mode
+        :param      mode:    The mode to consider
+        :type       mode:    Mode
 
         :returns:   The s parameter.
         :rtype:     float
@@ -515,142 +499,6 @@ class Fiber(object):
         factor = 2 * numpy.pi * constants.c / self.wavelength**2
 
         return 1e-3 * derivative * factor**2
-
-    def get_vectorial_modes(self,
-            wavelength: float,
-            nu_max=None,
-            m_max=None,
-            delta: float = 1e-6) -> set:
-        """
-        Gets the family of vectorial modes.
-
-        :param      wavelength:  The wavelength to consider
-        :type       wavelength:  float
-        :param      nu_max:      The maximum value of nu parameter
-        :type       nu_max:      int
-        :param      m_max:       The maximum value of m parameter
-        :type       m_max:       int
-        :param      delta_neff:  The discretization for research of neff value
-        :type       delta_neff:  float
-
-        :returns:   The vectorial modes.
-        :rtype:     set
-        """
-        families = (
-            ModeFamily.HE,
-            ModeFamily.EH,
-            ModeFamily.TE,
-            ModeFamily.TM
-        )
-
-        modes = self.get_modes_from_familly(
-            families=families,
-            wavelength=wavelength,
-            nu_max=nu_max,
-            m_max=m_max,
-            delta=delta
-        )
-
-        return modes
-
-    def get_LP_modes(self,
-            wavelength: float,
-            ellmax: int = None,
-            m_max: int = None,
-            delta_neff: float = 1e-6) -> set:
-        """
-        Gets the family of LP modes.
-
-        :param      wavelength:  The wavelength to consider
-        :type       wavelength:  float
-        :param      ellmax:      The ellmax
-        :type       ellmax:      int
-        :param      mmax:        The maximum value of m parameter
-        :type       mmax:        int
-        :param      delta_neff:  The discretization for research of neff value
-        :type       delta_neff:  float
-
-        :returns:   The lp modes.
-        :rtype:     set
-        """
-        families = (ModeFamily.LP,)
-
-        modes = self.get_modes_from_familly(
-            families=families,
-            wavelength=wavelength,
-            nu_max=ellmax,
-            m_max=m_max,
-            delta_neff=delta_neff
-        )
-
-        return modes
-
-    def get_modes_from_familly(self,
-            families,
-            wavelength: float,
-            nu_max: int = numpy.inf,
-            m_max: int = numpy.inf,
-            delta_neff: float = 1e-6) -> set:
-        """
-        Find all modes of given families, within given constraints
-
-        :param      families:         The families
-        :type       families:         object
-        :param      wavelength:       The wavelength to consider
-        :type       wavelength:       float
-        :param      nu_max:           The radial number nu maximum to reach
-        :type       nu_max:           int
-        :param      m_max:            The azimuthal number m maximum to reach
-        :type       m_max:            int
-        :param      delta_neff:       The discretization for research of neff value
-        :type       delta_neff:       float
-
-        :returns:   The mode to considers from familly.
-        :rtype:     set
-        """
-        modes = set()
-        v0 = self.get_V0()
-
-        for family in families:
-            for nu in count(0):
-
-                try:
-                    _mmax = m_max[nu]
-                except IndexError:
-                    _mmax = m_max[-1]
-                except TypeError:
-                    _mmax = m_max
-
-                if family in [ModeFamily.TE, ModeFamily.TM] and nu > 0:
-                    break
-
-                if family in [ModeFamily.HE, ModeFamily.EH] and nu == 0:
-                    continue
-
-                if nu > nu_max:
-                    break
-
-                for m in count(1):
-                    if m > _mmax:
-                        break
-
-                    mode = Mode(family, nu, m)
-
-                    try:
-                        if self.get_cutoff_v0(mode=mode) > v0:
-                            break
-
-                    except (NotImplementedError, ValueError):
-                        neff = get_effective_index(fiber=self, wavelength=self.wavelength, mode=mode, delta_neff=delta_neff)
-
-                        if numpy.isnan(neff):
-                            break
-
-                    modes.add(mode)
-
-                if m == 1:
-                    break
-        return modes
 
     def get_mode_field(self,
             mode: Mode,
