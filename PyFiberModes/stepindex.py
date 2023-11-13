@@ -22,6 +22,9 @@ class Geometry(object):
     index_list: list
     """ Refractive index of the structure """
 
+    def __hash__(self):
+        hash([self.radius_in, self.radius_out, self.index_list])
+
     def __post_init__(self):
         self.index_list = self.index_list[0]
         self.refractive_index = self.index_list

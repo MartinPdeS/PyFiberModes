@@ -20,22 +20,4 @@ def test_validation_cutoff_wavelength():
         cutoff_V0 = fiber.get_cutoff_v0(mode=mode)
         assert numpy.isclose(cutoff_V0, val, atol=1e-3), f"Mode {mode} cutoff V0 do not match validation data."
 
-
-plt.figure()
-V0_list = numpy.linspace(0, 12, 50)
-
-for mode in [HE11, TE01, TM01, HE21, EH11, HE31, HE12]:
-    data_list = []
-    for V0 in V0_list:
-        fiber = get_fiber_from_delta_and_V0(delta=0.3, V0=V0, wavelength=1310e-9)
-
-        data = get_U_parameter(fiber=fiber, mode=mode, wavelength=fiber.wavelength)
-        data_list.append(data)
-
-    plt.plot(V0_list, data_list)
-
-
-plt.plot(V0_list, V0_list)
-plt.show()
-
 # -

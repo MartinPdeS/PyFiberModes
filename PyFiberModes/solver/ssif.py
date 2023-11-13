@@ -174,7 +174,48 @@ class NeffSolver(FiberSolver):
 
         return lower_neff_boundary
 
-    def solve(self, mode: Mode, delta_neff: float, lower_neff_boundary: float, epsilon: float = 1e-12):
+    def get_ceq_function(self, mode: Mode) -> object:
+        """
+        Gets the adequat ceq function.
+
+        :param      mode:  The mode
+        :type       mode:  Mode
+
+        :returns:   The ceq function.
+        :rtype:     object
+        """
+        match mode.family:
+            case ModeFamily.LP:
+                return self._lpceq
+            case ModeFamily.TE:
+                return self._teceq
+            case ModeFamily.TM:
+                return self._tmceq
+            case ModeFamily.EH:
+                return self._ehceq
+            case ModeFamily.HE:
+                return self._heceq
+
+    def solve(self,
+            mode: Mode,
+            delta_neff: float,
+            lower_neff_boundary: float,
+            epsilon: float = 1e-12) -> float:
+        """
+        Solve and return the effective index (neff) for a given mode.
+
+        :param      mode:                 The mode
+        :type       mode:                 Mode
+        :param      delta_neff:           The delta neff
+        :type       delta_neff:           float
+        :param      lower_neff_boundary:  The lower neff boundary
+        :type       lower_neff_boundary:  float
+        :param      epsilon:              The epsilon
+        :type       epsilon:              float
+
+        :returns:   { description_of_the_return_value }
+        :rtype:     float
+        """
         mode_cutoff_V0 = self.fiber.get_cutoff_v0(mode=mode)
 
         fiber_cutoff = self.fiber.get_V0()
@@ -186,17 +227,7 @@ class NeffSolver(FiberSolver):
 
         lower_neff_boundary = self.get_low_neff_boundary(mode=mode)
 
-        match mode.family:
-            case ModeFamily.LP:
-                function = self._lpceq
-            case ModeFamily.TE:
-                function = self._teceq
-            case ModeFamily.TM:
-                function = self._tmceq
-            case ModeFamily.EH:
-                function = self._ehceq
-            case ModeFamily.HE:
-                function = self._heceq
+        function = self.get_ceq_function(mode=mode)
 
         result = self.find_root_within_range(
             function=function,
@@ -248,10 +279,10 @@ class NeffSolver(FiberSolver):
 
         hy = neff * numpy.sqrt(epsilon_0 / mu_0) * ex  # Snyder & Love uses nco, but Bures uses neff
 
-        E_field = numpy.array((ex, 0, 0))
-        H_field = numpy.array((0, hy, 0))
+        e_field = numpy.array((ex, 0, 0))
+        h_field = numpy.array((0, hy, 0))
 
-        return E_field, H_field
+        return e_field, h_field
 
     def get_TE_field(self, nu, neff: float, radius: float) -> numpy.ndarray:
         r"""
@@ -301,10 +332,10 @@ class NeffSolver(FiberSolver):
 
         hr = -neff * numpy.sqrt(epsilon_0 / mu_0) * ephi
 
-        E_field = numpy.array((0, ephi, 0))
-        H_field = numpy.array((hr, 0, hz))
+        e_field = numpy.array((0, ephi, 0))
+        h_field = numpy.array((hr, 0, hz))
 
-        return E_field, H_field
+        return e_field, h_field
 
     def get_TM_field(self, nu, neff: float, radius: float) -> tuple:
         r"""
@@ -365,7 +396,10 @@ class NeffSolver(FiberSolver):
             er = index_ratio * k1(w * radius_ratio) / k1(w)
             hphi = numpy.sqrt(epsilon_0 / mu_0) * index_ratio * k1(w * radius_ratio) / k1(w)
 
-        return numpy.array((er, 0, ez)), numpy.array((0, hphi, 0))
+        e_field = numpy.array((er, 0, ez))
+        h_field = numpy.array((0, hphi, 0))
+
+        return e_field, h_field
 
     def get_HE_field(self, nu: float, neff: float, radius: float) -> tuple:
         r"""
@@ -436,10 +470,10 @@ class NeffSolver(FiberSolver):
             hphi = -Y0 * n_core_square / neff * u / w * (a5 * kmur - a6 * kpur) / knw
             hz = Y0 * u * F2 / (k * rho) * knur / knw
 
-        E_field = numpy.array((er, ephi, ez))
-        H_field = numpy.array((hr, hphi, hz))
+        e_field = numpy.array((er, ephi, ez))
+        h_field = numpy.array((hr, hphi, hz))
 
-        return E_field, H_field
+        return e_field, h_field
 
     def get_EH_field(self, *args, **kwargs) -> tuple:
         r"""
