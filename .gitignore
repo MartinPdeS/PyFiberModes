@@ -6,7 +6,6 @@ dist/
 *.npy
 *.npz
 _build/
-scripts/*.tex
 *.tab
 *.zip
 *.pdf
@@ -20,5 +19,6 @@ scripts/*.tex
 .coverage
 *.DS_Store
 *.pytest_cache
-# *perso
+*perso
 .ipynb_checkpoints
+docs/source/gallery
