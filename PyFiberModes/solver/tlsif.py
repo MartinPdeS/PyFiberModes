@@ -1,25 +1,29 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from PyFiberModes import solver
 from PyFiberModes import Mode, ModeFamily, Wavelength
 from PyFiberModes.mode_instances import HE11, LP01, LP11, TE01
 from PyFiberModes.fundamentals import get_wavelength_from_V0
+from PyFiberModes.solver.base_solver import BaseSolver
 
-from math import sqrt, isinf, isnan
 import numpy
 from scipy.special import j0, y0, i0, k0
 from scipy.special import j1, y1, i1, k1
 from scipy.special import jn, yn, iv, kn
 from scipy.special import jvp, ivp
 
-
 """
 Solver for three layer step-index solver: TLSIF
 """
 
 
-class CutoffSolver(solver.solver.FiberSolver):
+class NameSpace():
+    def __init__(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+
+
+class CutoffSolver(BaseSolver):
     def get_lower_neff_mode(self, mode: Mode) -> Mode:
         lower_neff_mode = None
 
@@ -57,7 +61,7 @@ class CutoffSolver(solver.solver.FiberSolver):
         else:
             v0_lowbound = delta = self._MCD
 
-        if isnan(delta):
+        if numpy.isnan(delta):
             print(v0_lowbound)
 
         match mode.family:
@@ -80,14 +84,14 @@ class CutoffSolver(solver.solver.FiberSolver):
             maxiter=int(250 / delta)
         )
 
-    def get_parameters(self, V0: float) -> tuple:
+    def get_parameters(self, V0: float, nu: int) -> tuple:
         """
         { function_description }
 
         :param      V0:   The V0 parameter
         :type       V0:   float
 
-        :returns:   { description_of_the_return_value }
+        :returns:   The computed parameters
         :rtype:     tuple
         """
         r1 = self.fiber.layers[0].radius_out
@@ -95,7 +99,7 @@ class CutoffSolver(solver.solver.FiberSolver):
 
         wavelength = get_wavelength_from_V0(fiber=self.fiber, V0=V0)
 
-        if isinf(wavelength):
+        if numpy.isinf(wavelength):
             wavelength = Wavelength(k0=1)  # because it causes troubles if 0
 
         layers_minimum_index_squared = [
@@ -104,200 +108,285 @@ class CutoffSolver(solver.solver.FiberSolver):
 
         n1sq, n2sq, n3sq = layers_minimum_index_squared
 
-        if wavelength == 0:
-            # Avoid floating point error. But there should be a
-            # way to do it better.
+        if wavelength == 0:  # Avoid floating point error. But there should be a way to do it better.
             Usq = [numpy.inf, numpy.inf, numpy.inf]
         else:
             Usq = [wavelength.k0**2 * (nsq - n3sq) for nsq in layers_minimum_index_squared]
+
         s1, s2, s3 = numpy.sign(Usq)
         u1, u2, u3 = numpy.sqrt(numpy.abs(Usq))
 
-        return u1 * r1, u2 * r1, u2 * r2, s1, s2, n1sq, n2sq, n3sq
+        data_structure = NameSpace(
+            nu=nu,
+            u1r1=u1 * r1,
+            u2r1=u2 * r1,
+            u2r2=u2 * r2,
+            s1=s1,
+            s2=s2,
+            n1sq=n1sq,
+            n2sq=n2sq,
+            n3sq=n3sq,
+            s3=s3
+        )
 
-    def __delta(self, nu: int, u1r1: float, u2r1: float, s1: float, s2: float, s3: float, n1sq: float, n2sq: float, n3sq: float):
-        """s3 is sign of Delta"""
-        if s1 < 0:
-            f = ivp(nu, u1r1) / (iv(nu, u1r1) * u1r1)  # c
+        return data_structure
+
+    def _get_delta_(self, p: NameSpace) -> float:
+        """
+        Gets the delta. s3 is sign of Delta
+
+        :param      p:    { parameter_description }
+        :type       p:    NameSpace
+
+        :returns:   The delta.
+        :rtype:     float
+        """
+        if p.s1 < 0:
+            f = ivp(p.nu, p.u1r1) / (iv(p.nu, p.u1r1) * p.u1r1)  # c
         else:
-            jnnuu1r1 = jn(nu, u1r1)
+            jnnuu1r1 = jn(p.nu, p.u1r1)
             if jnnuu1r1 == 0:  # Avoid zero division error
-                return float("inf")
-            f = jvp(nu, u1r1) / (jnnuu1r1 * u1r1)  # a b d
+                return numpy.inf
+            f = jvp(p.nu, p.u1r1) / (jnnuu1r1 * p.u1r1)  # a b d
 
-        if s1 == s2:
+        if p.s1 == p.s2:
             # b d
-            kappa1 = -(n1sq + n2sq) * f / n2sq
-            kappa2 = n1sq * f * f / n2sq - nu**2 * n3sq / n2sq * (1 / u1r1**2 - 1 / u2r1**2)**2
+            kappa1 = -(p.n1sq + p.n2sq) * f / p.n2sq
+            kappa2 = p.n1sq * f * f / p.n2sq - p.nu**2 * p.n3sq / p.n2sq * (1 / p.u1r1**2 - 1 / p.u2r1**2)**2
         else:
             # a c
-            kappa1 = (n1sq + n2sq) * f / n2sq
-            kappa2 = n1sq * f * f / n2sq - nu**2 * n3sq / n2sq * (1 / u1r1**2 + 1 / u2r1**2)**2
+            kappa1 = (p.n1sq + p.n2sq) * f / p.n2sq
+            kappa2 = p.n1sq * f * f / p.n2sq - p.nu**2 * p.n3sq / p.n2sq * (1 / p.u1r1**2 + 1 / p.u2r1**2)**2
 
         d = kappa1**2 - 4 * kappa2
         if d < 0:
             return numpy.nan
-        return u2r1 * (nu / u2r1**2 + (kappa1 + s3 * sqrt(d)) * 0.5)
+        return p.u2r1 * (p.nu / p.u2r1**2 + (kappa1 + p.s3 * numpy.sqrt(d)) * 0.5)
 
     def _lpcoeq(self, v0: float, nu: int) -> float:
-        u1r1, u2r1, u2r2, s1, s2, n1sq, n2sq, n3sq = self.get_parameters(v0)
+        """
+        Not sure here.
 
-        if s1 == 0:  # e
-            return jn(nu + 1, u2r1) * yn(nu - 1, u2r2) - yn(nu + 1, u2r1) * jn(nu - 1, u2r2)
+        :param      v0:   The V parameter
+        :type       v0:   float
+        :param      nu:   The radial parameter of the mode.
+        :type       nu:   int
 
-        (f11a, f11b) = ((jn(nu - 1, u1r1), jn(nu, u1r1)) if s1 > 0 else
-                        (iv(nu - 1, u1r1), iv(nu, u1r1)))
-        if s2 > 0:
-            f22a, f22b = jn(nu - 1, u2r2), yn(nu - 1, u2r2)
-            f2a = jn(nu, u2r1) * f22b - yn(nu, u2r1) * f22a
-            f2b = jn(nu - 1, u2r1) * f22b - yn(nu - 1, u2r1) * f22a
+        :returns:   Not to sure
+        :rtype:     float
+        """
+        p = self.get_parameters(v0, nu)
+
+        if p.s1 == 0:  # e
+            return jn(nu + 1, p.u2r1) * yn(nu - 1, p.u2r2) - yn(nu + 1, p.u2r1) * jn(nu - 1, p.u2r2)
+
+        if p.s1 > 0:
+            f11a, f11b = jn(nu - 1, p.u1r1), jn(nu, p.u1r1)
+        else:
+            f11a, f11b = iv(nu - 1, p.u1r1), iv(nu, p.u1r1)
+
+        if p.s2 > 0:
+            f22a, f22b = jn(nu - 1, p.u2r2), yn(nu - 1, p.u2r2)
+            f2a = jn(nu, p.u2r1) * f22b - yn(nu, p.u2r1) * f22a
+            f2b = jn(nu - 1, p.u2r1) * f22b - yn(nu - 1, p.u2r1) * f22a
         else:  # a
-            f22a, f22b = iv(nu - 1, u2r2), kn(nu - 1, u2r2)
-            f2a = iv(nu, u2r1) * f22b + kn(nu, u2r1) * f22a
-            f2b = iv(nu - 1, u2r1) * f22b - kn(nu - 1, u2r1) * f22a
-        return f11a * f2a * u1r1 - f11b * f2b * u2r1
+            f22a, f22b = iv(nu - 1, p.u2r2), kn(nu - 1, p.u2r2)
+            f2a = iv(nu, p.u2r1) * f22b + kn(nu, p.u2r1) * f22a
+            f2b = iv(nu - 1, p.u2r1) * f22b - kn(nu - 1, p.u2r1) * f22a
+
+        return f11a * f2a * p.u1r1 - f11b * f2b * p.u2r1
 
     def _tecoeq(self, v0: float, nu: int) -> float:
-        u1r1, u2r1, u2r2, s1, s2, n1sq, n2sq, n3sq = self.get_parameters(v0)
-        (f11a, f11b) = ((j0(u1r1), jn(2, u1r1)) if s1 > 0 else
-                        (i0(u1r1), -iv(2, u1r1)))
-        if s2 > 0:
-            f22a, f22b = j0(u2r2), y0(u2r2)
-            f2a = jn(2, u2r1) * f22b - yn(2, u2r1) * f22a
-            f2b = j0(u2r1) * f22b - y0(u2r1) * f22a
+        """
+        Not sure here.
+
+        :param      v0:   The V parameter
+        :type       v0:   float
+        :param      nu:   The radial parameter of the mode.
+        :type       nu:   int
+
+        :returns:   Not to sure
+        :rtype:     float
+        """
+        p = self.get_parameters(v0, nu)
+
+        if p.s1 > 0:
+            f11a, f11b = j0(p.u1r1), jn(2, p.u1r1)
+        else:
+            f11a, f11b = i0(p.u1r1), -iv(2, p.u1r1)
+        if p.s2 > 0:
+            f22a, f22b = j0(p.u2r2), y0(p.u2r2)
+            f2a = jn(2, p.u2r1) * f22b - yn(2, p.u2r1) * f22a
+            f2b = j0(p.u2r1) * f22b - y0(p.u2r1) * f22a
         else:  # a
-            f22a, f22b = i0(u2r2), k0(u2r2)
-            f2a = kn(2, u2r1) * f22a - iv(2, u2r1) * f22b
-            f2b = i0(u2r1) * f22b - k0(u2r1) * f22a
+            f22a, f22b = i0(p.u2r2), k0(p.u2r2)
+            f2a = kn(2, p.u2r1) * f22a - iv(2, p.u2r1) * f22b
+            f2b = i0(p.u2r1) * f22b - k0(p.u2r1) * f22a
         return f11a * f2a - f11b * f2b
 
     def _tmcoeq(self, v0: float, nu: int) -> float:
-        u1r1, u2r1, u2r2, s1, s2, n1sq, n2sq, n3sq = self.get_parameters(v0)
-        if s1 == 0:  # e
+        """
+        Not sure here.
+
+        :param      v0:   The V parameter
+        :type       v0:   float
+        :param      nu:   The radial parameter of the mode.
+        :type       nu:   int
+
+        :returns:   Not to sure
+        :rtype:     float
+        """
+        p = self.get_parameters(v0, nu)
+
+        if p.s1 == 0:  # e
             f11a, f11b = 2, 1
-        elif s1 > 0:  # a, b, d
-            f11a, f11b = j0(u1r1) * u1r1, j1(u1r1)
+        elif p.s1 > 0:  # a, b, d
+            f11a, f11b = j0(p.u1r1) * p.u1r1, j1(p.u1r1)
         else:  # c
-            f11a, f11b = i0(u1r1) * u1r1, i1(u1r1)
-        if s2 > 0:
-            f22a, f22b = j0(u2r2), y0(u2r2)
-            f2a = j1(u2r1) * f22b - y1(u2r1) * f22a
-            f2b = j0(u2r1) * f22b - y0(u2r1) * f22a
+            f11a, f11b = i0(p.u1r1) * p.u1r1, i1(p.u1r1)
+        if p.s2 > 0:
+            f22a, f22b = j0(p.u2r2), y0(p.u2r2)
+            f2a = j1(p.u2r1) * f22b - y1(p.u2r1) * f22a
+            f2b = j0(p.u2r1) * f22b - y0(p.u2r1) * f22a
         else:  # a
-            f22a, f22b = i0(u2r2), k0(u2r2)
-            f2a = i1(u2r1) * f22b + k1(u2r1) * f22a
-            f2b = i0(u2r1) * f22b - k0(u2r1) * f22a
-        return f11a * n2sq * f2a - f11b * n1sq * f2b * u2r1
+            f22a, f22b = i0(p.u2r2), k0(p.u2r2)
+            f2a = i1(p.u2r1) * f22b + k1(p.u2r1) * f22a
+            f2b = i0(p.u2r1) * f22b - k0(p.u2r1) * f22a
+        return f11a * p.n2sq * f2a - f11b * p.n1sq * f2b * p.u2r1
 
     def _ehcoeq(self, v0: float, nu: int) -> float:
-        u1r1, u2r1, u2r2, s1, s2, n1sq, n2sq, n3sq = self.get_parameters(v0)
-        if s1 == 0:
-            return self.__fct3(nu, u2r1, u2r2, 2, n2sq, n3sq)
-        else:
-            s3 = 1 if s1 == s2 else -1
+        """
+        Not sure here.
 
-            # if n1sq > n2sq > n3sq:
-            #     # s3 = 1 if nu == 1 else -1
-            #     return self.__fct2(nu, u1r1, u2r1, u2r2,
-            #                        s1, s2, s3,
-            #                        n1sq, n2sq, n3sq)
-            # else:
-            return self.__fct1(nu, u1r1, u2r1, u2r2,
-                               s1, s2, s3,
-                               n1sq, n2sq, n3sq)
+        :param      v0:   The V parameter
+        :type       v0:   float
+        :param      nu:   The radial parameter of the mode.
+        :type       nu:   int
+
+        :returns:   Not to sure
+        :rtype:     float
+        """
+        p = self.get_parameters(v0, nu)
+
+        if p.s1 == 0:
+            value = self._function_3_(
+                nu=nu,
+                u2r1=p.u2r1,
+                u2r2=p.u2r2,
+                dn=2,
+                n2sq=p.n2sq,
+                n3sq=p.n3sq
+            )
+        else:
+            p.s3 = 1 if p.s1 == p.s2 else -1
+
+            value = self._function_1_(p=p)
+
+        return value
 
     def _hecoeq(self, v0: float, nu: int):
-        u1r1, u2r1, u2r2, s1, s2, n1sq, n2sq, n3sq = self.get_parameters(v0)
-        if s1 == 0:
-            return self.__fct3(nu, u2r1, u2r2, -2, n2sq, n3sq)
-        else:
-            s3 = -1 if s1 == s2 else 1
-            if n1sq > n2sq > n3sq:
-                s3 = -1 if nu == 1 else 1
-            #     return self.__fct1(nu, u1r1, u2r1, u2r2,
-            #                        s1, s2, s3,
-            #                        n1sq, n2sq, n3sq)
-            # else:
-            return self.__fct2(nu, u1r1, u2r1, u2r2,
-                               s1, s2, s3,
-                               n1sq, n2sq, n3sq)
+        """
+        Not sure here.
 
-    def __fct1(self, nu: int, u1r1: float, u2r1: float, u2r2: float, s1: float, s2: float, s3: float, n1sq: float, n2sq: float, n3sq: float) -> float:
-        if s2 < 0:  # a
-            b11 = iv(nu, u2r1)
-            b12 = kn(nu, u2r1)
-            b21 = iv(nu, u2r2)
-            b22 = kn(nu, u2r2)
-            b31 = iv(nu + 1, u2r1)
-            b32 = kn(nu + 1, u2r1)
+        :param      v0:   The V parameter
+        :type       v0:   float
+        :param      nu:   The radial parameter of the mode.
+        :type       nu:   int
+
+        :returns:   Not to sure
+        :rtype:     float
+        """
+        p = self.get_parameters(v0, nu)
+
+        if p.s1 == 0:
+            p.dn = -2
+            return self._function_3_(p=p)
+
+        else:
+            p.s3 = -1 if p.s1 == p.s2 else 1
+            if p.n1sq > p.n2sq > p.n3sq:
+                p.s3 = -1 if p.nu == 1 else 1
+
+            return self._function_2_(p=p)
+
+    def _function_1_(self, p: NameSpace) -> float:
+        if p.s2 < 0:  # a
+            b11 = iv(p.nu, p.u2r1)
+            b12 = kn(p.nu, p.u2r1)
+            b21 = iv(p.nu, p.u2r2)
+            b22 = kn(p.nu, p.u2r2)
+            b31 = iv(p.nu + 1, p.u2r1)
+            b32 = kn(p.nu + 1, p.u2r1)
             f1 = b31 * b22 + b32 * b21
             f2 = b11 * b22 - b12 * b21
         else:
-            b11 = jn(nu, u2r1)
-            b12 = yn(nu, u2r1)
-            b21 = jn(nu, u2r2)
-            b22 = yn(nu, u2r2)
-            if s1 == 0:
+            b11 = jn(p.nu, p.u2r1)
+            b12 = yn(p.nu, p.u2r1)
+            b21 = jn(p.nu, p.u2r2)
+            b22 = yn(p.nu, p.u2r2)
+            if p.s1 == 0:
                 f1 = 0
             else:
-                b31 = jn(nu + 1, u2r1)
-                b32 = yn(nu + 1, u2r1)
+                b31 = jn(p.nu + 1, p.u2r1)
+                b32 = yn(p.nu + 1, p.u2r1)
                 f1 = b31 * b22 - b32 * b21
             f2 = b12 * b21 - b11 * b22
-        if s1 == 0:
+        if p.s1 == 0:
             delta = 1
         else:
-            delta = self.__delta(nu, u1r1, u2r1, s1, s2, s3, n1sq, n2sq, n3sq)
+            delta = self._get_delta_(p=p)
         return f1 + f2 * delta
 
-    def __fct2(self, nu: int, u1r1: float, u2r1: float, u2r2: float, s1: float, s2: float, s3: float, n1sq: float, n2sq: float, n3sq: float) -> float:
-        with numpy.errstate(invalid='ignore'):
-            delta = self.__delta(nu, u1r1, u2r1, s1, s2, s3, n1sq, n2sq, n3sq)
-            n0sq = (n3sq - n2sq) / (n2sq + n3sq)
+    def _function_2_(self, p: NameSpace) -> float:
 
-            if s2 < 0:  # a
-                b11 = iv(nu, u2r1)
-                b12 = kn(nu, u2r1)
-                b21 = iv(nu, u2r2)
-                b22 = kn(nu, u2r2)
-                b31 = iv(nu + 1, u2r1)
-                b32 = kn(nu + 1, u2r1)
-                b41 = iv(nu - 2, u2r2)
-                b42 = kn(nu - 2, u2r2)
+        with numpy.errstate(invalid='ignore'):
+            delta = self._get_delta_(p=p)
+
+            n0sq = (p.n3sq - p.n2sq) / (p.n2sq + p.n3sq)
+
+            if p.s2 < 0:  # a
+                b11 = iv(p.nu, p.u2r1)
+                b12 = kn(p.nu, p.u2r1)
+                b21 = iv(p.nu, p.u2r2)
+                b22 = kn(p.nu, p.u2r2)
+                b31 = iv(p.nu + 1, p.u2r1)
+                b32 = kn(p.nu + 1, p.u2r1)
+                b41 = iv(p.nu - 2, p.u2r2)
+                b42 = kn(p.nu - 2, p.u2r2)
                 g1 = b11 * delta + b31
                 g2 = b12 * delta - b32
                 f1 = b41 * g2 - b42 * g1
                 f2 = b21 * g2 - b22 * g1
             else:
-                b11 = jn(nu, u2r1)
-                b12 = yn(nu, u2r1)
-                b21 = jn(nu, u2r2)
-                b22 = yn(nu, u2r2)
-                b31 = jn(nu + 1, u2r1)
-                b32 = yn(nu + 1, u2r1)
-                b41 = jn(nu - 2, u2r2)
-                b42 = yn(nu - 2, u2r2)
+                b11 = jn(p.nu, p.u2r1)
+                b12 = yn(p.nu, p.u2r1)
+                b21 = jn(p.nu, p.u2r2)
+                b22 = yn(p.nu, p.u2r2)
+                b31 = jn(p.nu + 1, p.u2r1)
+                b32 = yn(p.nu + 1, p.u2r1)
+                b41 = jn(p.nu - 2, p.u2r2)
+                b42 = yn(p.nu - 2, p.u2r2)
                 g1 = b11 * delta - b31
                 g2 = b12 * delta - b32
                 f1 = b41 * g2 - b42 * g1
                 f2 = b22 * g1 - b21 * g2
             return f1 + n0sq * f2
 
-    def __fct3(self, nu: int, u2r1: float, u2r2: float, dn: int, n2sq: float, n3sq: float) -> float:
-        n0sq = (n3sq - n2sq) / (n2sq + n3sq)
-        b11 = jn(nu, u2r1)
-        b12 = yn(nu, u2r1)
-        b21 = jn(nu, u2r2)
-        b22 = yn(nu, u2r2)
+    def _function_3_(self, p: NameSpace) -> float:
+        n0sq = (p.n3sq - p.n2sq) / (p.n2sq + p.n3sq)
+        b11 = jn(p.nu, p.u2r1)
+        b12 = yn(p.nu, p.u2r1)
+        b21 = jn(p.nu, p.u2r2)
+        b22 = yn(p.nu, p.u2r2)
 
-        if dn > 0:
-            b31 = jn(nu + dn, u2r1)
-            b32 = yn(nu + dn, u2r1)
+        if p.dn > 0:
+            b31 = jn(p.nu + p.dn, p.u2r1)
+            b32 = yn(p.nu + p.dn, p.u2r1)
             f1 = b31 * b22 - b32 * b21
             f2 = b11 * b22 - b12 * b21
         else:
-            b31 = jn(nu + dn, u2r2)
-            b32 = yn(nu + dn, u2r2)
+            b31 = jn(p.nu + p.dn, p.u2r2)
+            b32 = yn(p.nu + p.dn, p.u2r2)
             f1 = b31 * b12 - b32 * b11
             f2 = b12 * b21 - b11 * b22
 

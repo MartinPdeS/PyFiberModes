@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from PyFiberModes.solver.solver import FiberSolver
-from PyFiberModes import Mode, ModeFamily
 import numpy
 from scipy.special import kn, kvp, k0, k1, jn, jvp, yn, yvp, iv, ivp
 from scipy.constants import mu_0, epsilon_0, physical_constants
+
+from PyFiberModes.solver.base_solver import BaseSolver
+from PyFiberModes import Mode, ModeFamily
+
 eta0 = physical_constants['characteristic impedance of vacuum'][0]
 
 
@@ -15,7 +17,7 @@ class NameSpace():
             setattr(self, key, value)
 
 
-class NeffSolver(FiberSolver):
+class NeffSolver(BaseSolver):
 
     def get_neff_lower_boundary(self,
             mode: Mode,
@@ -281,9 +283,41 @@ class NeffSolver(FiberSolver):
         return e_field, h_field
 
     def get_TE_field(self, wavelength: float, nu: int, neff: float, radius: float) -> tuple[float, float]:
-        pass
+        """
+        Gets the transverse electric TE field.
+
+        :param      wavelength:           The wavelength to consider
+        :type       wavelength:           float
+        :param      nu:                   The radial parameter of the mode
+        :type       nu:                   int
+        :param      neff:                 The effective index of the mode
+        :type       neff:                 float
+        :param      radius:               The radius at which field is evaluated
+        :type       radius:               float
+
+        :returns:   The TE field.
+        :rtype:     tuple[float, float]
+
+        :raises     NotImplementedError:  Method not yet implemented
+        """
+        raise NotImplementedError()
 
     def get_TM_field(self, wavelength: float, nu: int, neff: float, radius: float) -> tuple[float, float]:
+        """
+        Gets the transverse magnetic TM field.
+
+        :param      wavelength:           The wavelength to consider
+        :type       wavelength:           float
+        :param      nu:                   The radial parameter of the mode
+        :type       nu:                   int
+        :param      neff:                 The effective index of the mode
+        :type       neff:                 float
+        :param      radius:               The radius at which field is evaluated
+        :type       radius:               float
+
+        :returns:   The TM field.
+        :rtype:     tuple[float, float]
+        """
         n_layer = len(self.fiber.layers)
         C = numpy.array((1, 0))
         EH = numpy.zeros(4)
@@ -331,14 +365,44 @@ class NeffSolver(FiberSolver):
 
         return numpy.array((0, ephi, 0)), numpy.array((hr, 0, hz))
 
-    def get_EH_field(self, nu, neff, radius: float) -> tuple[float, float]:
+    def get_EH_field(self, nu: int, neff: float, radius: float) -> tuple[float, float]:
+        """
+        Gets the hybrid EH field.
+
+        :param      wavelength:           The wavelength to consider
+        :type       wavelength:           float
+        :param      nu:                   The radial parameter of the mode
+        :type       nu:                   int
+        :param      neff:                 The effective index of the mode
+        :type       neff:                 float
+        :param      radius:               The radius at which field is evaluated
+        :type       radius:               float
+
+        :returns:   The EH field.
+        :rtype:     tuple[float, float]
+        """
         return self.get_HE_field(
             nu=nu,
             neff=neff,
             radius=radius
         )
 
-    def get_HE_field(self, nu, neff, radius: float) -> tuple[float, float]:
+    def get_HE_field(self, nu: int, neff: float, radius: float) -> tuple[float, float]:
+        """
+        Gets the hybrid HE field.
+
+        :param      wavelength:           The wavelength to consider
+        :type       wavelength:           float
+        :param      nu:                   The radial parameter of the mode
+        :type       nu:                   int
+        :param      neff:                 The effective index of the mode
+        :type       neff:                 float
+        :param      radius:               The radius at which field is evaluated
+        :type       radius:               float
+
+        :returns:   The HE field.
+        :rtype:     tuple[float, float]
+        """
         self._heceq(neff=neff, nu=nu)
 
         layer = self.fiber.get_layer_at_radius(radius)
@@ -457,7 +521,7 @@ class NeffSolver(FiberSolver):
         F4 = k1(u) / k0(u)
         return Ep + self.wavelength.k0 * self.fiber.last_layer.radius_in / u * eta0 * Hz * F4
 
-    def _tmceq(self, neff: float, nu) -> tuple[float, float]:
+    def _tmceq(self, neff: float, nu: int) -> tuple[float, float]:
         EH = numpy.empty(4)
 
         for layer in self.fiber.layers[:-1]:

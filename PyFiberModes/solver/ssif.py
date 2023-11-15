@@ -4,7 +4,7 @@
 import numpy
 import logging
 
-from PyFiberModes.solver.solver import FiberSolver
+from PyFiberModes.solver.base_solver import BaseSolver
 from PyFiberModes import Mode, ModeFamily
 
 
@@ -18,7 +18,7 @@ Solver for standard layer step-index solver: SSIF
 """
 
 
-class CutoffSolver(FiberSolver):
+class CutoffSolver(BaseSolver):
     """
     Cutoff solver for standard step-index fiber.
     """
@@ -110,7 +110,7 @@ class CutoffSolver(FiberSolver):
         return cutoff
 
 
-class NeffSolver(FiberSolver):
+class NeffSolver(BaseSolver):
     """
     Effective index solver for standard step-index fiber
     """
