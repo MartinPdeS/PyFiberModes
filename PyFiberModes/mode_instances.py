@@ -24,8 +24,10 @@ LP21 = Mode(Family.LP, 2, 1)
 LP02 = Mode(Family.LP, 0, 2)
 LP31 = Mode(Family.LP, 3, 1)
 LP12 = Mode(Family.LP, 1, 2)
+LP31 = Mode(Family.LP, 3, 1)
 LP22 = Mode(Family.LP, 2, 2)
 LP03 = Mode(Family.LP, 0, 3)
 LP32 = Mode(Family.LP, 3, 2)
+LP41 = Mode(Family.LP, 4, 1)
 
 # -

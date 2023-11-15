@@ -5,8 +5,6 @@ import numpy
 
 from PyFiberModes.fiber import get_fiber_from_delta_and_V0
 from PyFiberModes import HE11, TE01, TM01, HE21, EH11, HE31, HE12
-from PyFiberModes.fundamentals import get_U_parameter
-import matplotlib.pyplot as plt
 
 
 def test_validation_cutoff_wavelength():

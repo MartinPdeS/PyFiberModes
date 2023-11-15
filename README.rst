@@ -42,14 +42,7 @@ As such, with the adequate configuration one can simply do
 
 Manual installation
 *******************
-
-To install manually (os independent) you will need to install:
-
-1. cmake (3.16+)
-
-In order to use the PyFiberModes Simulator Library, one must have installed the python dependencies:
-
-Then, download and install the PyFiberModes package:
+The following shell commands should do the trick.
 
 .. code-block:: python
 
@@ -64,7 +57,7 @@ Then, download and install the PyFiberModes package:
 Contact Information
 *******************
 
-As of 2021 the project is still under development if you want to collaborate it would be a pleasure. I encourage you to contact me.
+As of 2023 the project is still under development if you want to collaborate it would be a pleasure. I encourage you to contact me.
 
 PyMieSim was written by `Martin Poinsinet de Sivry-Houle <https://github.com/MartinPdS>`_  .
 

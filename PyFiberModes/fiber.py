@@ -592,6 +592,17 @@ class Fiber(object):
 
         return radial_field
 
+    def does_mode_exist(self, *mode_list) -> list:
+        mode_exist = []
+        for mode in mode_list:
+            neff = self.get_effective_index(mode=mode)
+            if neff is numpy.nan:
+                mode_exist.append(False)
+            else:
+                mode_exist.append(True)
+
+        return mode_exist
+
     def print_data(self, data_type_list: list[str], mode_list: list[Mode]) -> None:
         """
         Prints the given data for the given modes.
@@ -605,7 +616,8 @@ class Fiber(object):
         :rtype:     None
         """
         for data_type in data_type_list:
-            print(f"{data_type} @ wavelength: {self.wavelength}", '\n')
+            first_line = f"{data_type} @ wavelength: {self.wavelength}:\n"
+            print(first_line, "-" * len(first_line))
             for mode in mode_list:
                 data_type_string = f"get_{data_type.lower()}"
                 data = getattr(self, data_type_string)(mode=mode)

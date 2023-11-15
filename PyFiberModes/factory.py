@@ -41,7 +41,7 @@ class FiberFactory(object):
                   empty Fiberfactory object.
 
     """
-    def __init__(self, wavelength):
+    def __init__(self, wavelength: float):
         self.layers_list = []
         self.neff_solver = None
         self.cutoff_solver = None

@@ -30,7 +30,8 @@ class CutoffSolver(FiberSolver):
 
         if mode.family is ModeFamily.LP:
             if nu == 0:
-                nu, m = 1, -1
+                nu = 1
+                m -= 1
 
             else:
                 nu -= 1
@@ -200,6 +201,7 @@ class NeffSolver(FiberSolver):
             mode: Mode,
             delta_neff: float,
             lower_neff_boundary: float,
+            max_iteration: int = 14,
             epsilon: float = 1e-12) -> float:
         """
         Solve and return the effective index (neff) for a given mode.
@@ -210,10 +212,12 @@ class NeffSolver(FiberSolver):
         :type       delta_neff:           float
         :param      lower_neff_boundary:  The lower neff boundary
         :type       lower_neff_boundary:  float
+        :param      max_iteration:        The maximum iteration, compute time heavily depend on it.
+        :type       max_iteration:        int
         :param      epsilon:              The epsilon
         :type       epsilon:              float
 
-        :returns:   { description_of_the_return_value }
+        :returns:   The effective index of the mode
         :rtype:     float
         """
         mode_cutoff_V0 = self.fiber.get_cutoff_v0(mode=mode)
@@ -234,7 +238,7 @@ class NeffSolver(FiberSolver):
             lowbound=lower_neff_boundary + epsilon,
             highbound=n_clad_equivalent - epsilon,
             function_kwargs=dict(nu=mode.nu),
-            max_iteration=14
+            max_iteration=max_iteration
         )
 
         return result
