@@ -18,7 +18,6 @@ class NameSpace():
 
 
 class NeffSolver(BaseSolver):
-
     def get_neff_lower_boundary(self,
             mode: Mode,
             lower_neff_boundary: float,
