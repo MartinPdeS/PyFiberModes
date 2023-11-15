@@ -7,7 +7,7 @@ from dataclasses import dataclass
 Family = Enum('Family', 'LP HE EH TE TM', module=__name__)
 
 
-@dataclass
+@dataclass(frozen=True, eq=True)
 class Mode():
     family: object
     """ Family of the mode """
