@@ -126,8 +126,7 @@ class Fiber(object):
         self.layer_names.append(name)
         self.index_list.append(index)
 
-        if name != 'cladding':
-            self.layer_radius.append(radius)
+        self.layer_radius.append(radius)
 
         layer = StepIndex(
             radius_in=self.radius_in,

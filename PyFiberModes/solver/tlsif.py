@@ -90,9 +90,11 @@ class CutoffSolver(solver.solver.FiberSolver):
         :returns:   { description_of_the_return_value }
         :rtype:     tuple
         """
-        r1, r2 = self.fiber.layer_radius
+        r1 = self.fiber.layers[0].radius_out
+        r2 = self.fiber.layers[1].radius_out
 
         wavelength = get_wavelength_from_V0(fiber=self.fiber, V0=V0)
+
         if isinf(wavelength):
             wavelength = Wavelength(k0=1)  # because it causes troubles if 0
 
