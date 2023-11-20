@@ -10,8 +10,7 @@ Comparing two and three layers
 import numpy
 
 from PyFiberModes.fiber import load_fiber
-from PyFiberModes.tools.utils import get_mode_beta
-from PyFiberModes import HE11, TE01, TM01, HE21, EH11, HE31, HE12, LP01
+from PyFiberModes import LP01
 from MPSPlots.render2D import SceneList
 
 fiber_2L = load_fiber(

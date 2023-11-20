@@ -238,15 +238,15 @@ def get_radial_field(
     )
 
     match mode.family:
-        case Family.LP:
+        case 'LP':
             return neff_solver.get_LP_field(**kwargs)
-        case Family.TE:
+        case 'TE':
             return neff_solver.get_TE_field(**kwargs)
-        case Family.TM:
+        case 'TM':
             return neff_solver.get_TM_field(**kwargs)
-        case Family.EH:
+        case 'EH':
             return neff_solver.get_EH_field(**kwargs)
-        case Family.HE:
+        case 'HE':
             return neff_solver.get_HE_field(**kwargs)
 
 # -

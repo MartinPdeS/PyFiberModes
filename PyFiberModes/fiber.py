@@ -597,7 +597,7 @@ class Fiber(object):
             wavelength=self.wavelength,
             radius=radius
         )
-
+        
         return radial_field
 
     def does_mode_exist(self, *mode_list) -> list:
