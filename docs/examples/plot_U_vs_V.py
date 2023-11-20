@@ -10,7 +10,7 @@ Figure 3.13 of Jacques Bures
 import numpy
 
 from PyFiberModes.fiber import get_fiber_from_delta_and_V0
-from PyFiberModes import HE11, TE01, TM01, HE21, EH11, HE31, HE12
+from PyFiberModes import HE11, TE01, TM01, HE21, EH11, HE31, HE12, HE22, HE32
 from PyFiberModes.fundamentals import get_U_parameter
 from MPSPlots.render2D import SceneList
 
@@ -25,7 +25,7 @@ ax = figure.append_ax(
 
 V0_list = numpy.linspace(0.1, 12, 50)
 
-for mode in [HE11, TE01, TM01, HE21, EH11, HE31, HE12]:
+for mode in [HE11, TE01, TM01, HE21, EH11, HE31, HE12, HE22, HE32]:
     data_list = []
     for V0 in V0_list:
         fiber = get_fiber_from_delta_and_V0(

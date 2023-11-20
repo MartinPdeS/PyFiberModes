@@ -3,12 +3,21 @@
 
 import numpy
 
-from PyFiberModes import Wavelength, Mode, ModeFamily
+from PyFiberModes.mode import Mode, Family
+from PyFiberModes import Wavelength
 from PyFiberModes.mode_instances import HE11, LP01
 
 
-def get_delta_from_fiber(fiber):
-    """ Reference Eq. 3.82 of Jacques Bures """
+def get_delta_from_fiber(fiber) -> float:
+    """
+    Gets the delta from fiber as defined in reference Eq. 3.82 of Jacques Bures.
+
+    :param      fiber:  The fiber
+    :type       fiber:  Fiber
+
+    :returns:   The delta from fiber.
+    :rtype:     float
+    """
     core, clad = fiber.layers
     n_ratio = clad.refractive_index**2 / core.refractive_index**2
     return 0.5 * (1 - n_ratio)
@@ -23,7 +32,7 @@ def get_wavelength_from_V0(fiber: object, V0: float) -> float:
     :param      V0:     The V number
     :type       V0:     float
 
-    :returns:   The wavelength from v 0.
+    :returns:   The wavelength from V number.
     :rtype:     float
     """
     NA = fiber.get_NA()
@@ -229,15 +238,15 @@ def get_radial_field(
     )
 
     match mode.family:
-        case ModeFamily.LP:
+        case Family.LP:
             return neff_solver.get_LP_field(**kwargs)
-        case ModeFamily.TE:
+        case Family.TE:
             return neff_solver.get_TE_field(**kwargs)
-        case ModeFamily.TM:
+        case Family.TM:
             return neff_solver.get_TM_field(**kwargs)
-        case ModeFamily.EH:
+        case Family.EH:
             return neff_solver.get_EH_field(**kwargs)
-        case ModeFamily.HE:
+        case Family.HE:
             return neff_solver.get_HE_field(**kwargs)
 
 # -

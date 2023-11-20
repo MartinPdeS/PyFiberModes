@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from PyFiberModes import Mode, ModeFamily, Wavelength
+from PyFiberModes.mode import Mode
+from PyFiberModes.wavelength import Wavelength
 from PyFiberModes.mode_instances import HE11, LP01, LP11, TE01
 from PyFiberModes.fundamentals import get_wavelength_from_V0
 from PyFiberModes.solver.base_solver import BaseSolver
@@ -27,8 +28,8 @@ class CutoffSolver(BaseSolver):
     def get_lower_neff_mode(self, mode: Mode) -> Mode:
         lower_neff_mode = None
 
-        if mode.family is ModeFamily.HE:
-            lower_neff_mode = Mode(ModeFamily.EH, mode.nu, mode.m - 1)
+        if mode.family == 'HE':
+            lower_neff_mode = Mode('EH', mode.nu, mode.m - 1)
         else:
             lower_neff_mode = Mode(mode.family, mode.nu, mode.m - 1)
 
@@ -38,8 +39,8 @@ class CutoffSolver(BaseSolver):
         elif lower_neff_mode == LP01:
             lower_neff_mode = LP11
 
-        elif mode.family is ModeFamily.EH:
-            lower_neff_mode = Mode(ModeFamily.HE, mode.nu, mode.m)
+        elif mode.family == 'EH':
+            lower_neff_mode = Mode('HE', mode.nu, mode.m)
 
         elif mode.nu >= 1:  # TE(0,1) is single-mode condition. Roots below TE(0,1) are false-positive
             lower_neff_mode = TE01
@@ -49,7 +50,7 @@ class CutoffSolver(BaseSolver):
     def solve(self, mode: Mode):
         lower_neff_mode = self.get_lower_neff_mode(mode=mode)
 
-        if (mode.m >= 2 or mode.family is ModeFamily.EH):
+        if (mode.m >= 2 or mode.family is 'EH'):
             v0_lowbound = self.fiber.get_cutoff_v0(mode=lower_neff_mode)
             delta = 0.05 / v0_lowbound if v0_lowbound > 4 else self._MCD
             v0_lowbound += delta / 100
@@ -65,15 +66,15 @@ class CutoffSolver(BaseSolver):
             print(v0_lowbound)
 
         match mode.family:
-            case ModeFamily.LP:
+            case 'LP':
                 function = self._lpcoeq
-            case ModeFamily.TE:
+            case 'TE':
                 function = self._tecoeq
-            case ModeFamily.TM:
+            case 'TM':
                 function = self._tmcoeq
-            case ModeFamily.HE:
+            case 'HE':
                 function = self._hecoeq
-            case ModeFamily.EH:
+            case 'EH':
                 function = self._ehcoeq
 
         return self.find_function_first_root(

@@ -64,7 +64,7 @@ PyMieSim was written by `Martin Poinsinet de Sivry-Houle <https://github.com/Mar
 Email:`martin.poinsinet-de-sivry@polymtl.ca <mailto:martin.poinsinet-de-sivry@polymtl.ca?subject=PyFiberModes>`_ .
 
 
-.. |python| image:: https://img.shields.io/badge/Made%20with-Python-1f425f.svg
+.. |python| image:: https://img.shields.io/pypi/pyversions/pyfibermodes.svg
    :target: https://www.python.org/
 
 .. |docs| image:: https://readthedocs.org/projects/pyfibermodes/badge/?version=latest

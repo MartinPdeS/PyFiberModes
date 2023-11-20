@@ -65,7 +65,7 @@ class Wavelength(float):
         """
         Angular frequency (in rad/s).
         """
-        return scipy.constants.c * 2 * numpy.pi / self if self != 0 else float("inf")
+        return scipy.constants.c * 2 * numpy.pi / self if self != 0 else numpy.inf
 
     w = omega
 
@@ -81,7 +81,7 @@ class Wavelength(float):
         """
         Frequency (in Hertz).
         """
-        return scipy.constants.c / self if self != 0 else float("inf")
+        return scipy.constants.c / self if self != 0 else numpy.inf
 
     v = frequency
     f = frequency

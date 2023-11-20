@@ -1,5 +1,5 @@
 from PyFiberModes.wavelength import Wavelength
-from PyFiberModes.mode import Mode, Family as ModeFamily
+from PyFiberModes.mode import Mode, Family
 from PyFiberModes.mode_instances import *
 from PyFiberModes.factory import FiberFactory
 from PyFiberModes.field import Field

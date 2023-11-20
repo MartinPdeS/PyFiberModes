@@ -5,7 +5,7 @@ import numpy
 import logging
 
 from PyFiberModes.solver.base_solver import BaseSolver
-from PyFiberModes import Mode, ModeFamily
+from PyFiberModes.mode import Mode
 
 
 from scipy.special import jn, jn_zeros, kn, j0, j1, k0, k1, jvp, kvp
@@ -28,14 +28,14 @@ class CutoffSolver(BaseSolver):
         nu = mode.nu
         m = mode.m
 
-        if mode.family is ModeFamily.LP:
+        if mode.family == 'LP':
             if nu == 0:
                 nu = 1
                 m -= 1
 
             else:
                 nu -= 1
-        elif mode.family is ModeFamily.HE:
+        elif mode.family == 'HE':
             if nu == 1:
                 m -= 1
             else:
@@ -116,14 +116,14 @@ class NeffSolver(BaseSolver):
     """
     def get_mode_with_lower_neff(self, mode: Mode) -> Mode:
         match mode.family:
-            case ModeFamily.LP:
-                upper_boundary_mode = Mode(ModeFamily.LP, mode.nu + 1, mode.m)
-            case ModeFamily.HE:
-                upper_boundary_mode = Mode(ModeFamily.LP, mode.nu, mode.m)
-            case ModeFamily.EH:
-                upper_boundary_mode = Mode(ModeFamily.LP, mode.nu + 2, mode.m)
+            case 'LP':
+                upper_boundary_mode = Mode('LP', mode.nu + 1, mode.m)
+            case 'HE':
+                upper_boundary_mode = Mode('LP', mode.nu, mode.m)
+            case 'EH':
+                upper_boundary_mode = Mode('LP', mode.nu + 2, mode.m)
             case _:
-                upper_boundary_mode = Mode(ModeFamily.LP, 1, mode.m + 1)
+                upper_boundary_mode = Mode('LP', 1, mode.m + 1)
 
         return upper_boundary_mode
 
@@ -186,15 +186,15 @@ class NeffSolver(BaseSolver):
         :rtype:     object
         """
         match mode.family:
-            case ModeFamily.LP:
+            case 'LP':
                 return self._lpceq
-            case ModeFamily.TE:
+            case 'TE':
                 return self._teceq
-            case ModeFamily.TM:
+            case 'TM':
                 return self._tmceq
-            case ModeFamily.EH:
+            case 'EH':
                 return self._ehceq
-            case ModeFamily.HE:
+            case 'HE':
                 return self._heceq
 
     def solve(self,

@@ -3,7 +3,8 @@
 
 import numpy
 import scipy
-from PyFiberModes import ModeFamily, HE11
+from PyFiberModes.mode import Family
+from PyFiberModes.mode_instances import HE11
 from PyFiberModes.mode import Mode
 from dataclasses import dataclass
 from MPSPlots.render2D import SceneList, Axis
@@ -91,15 +92,9 @@ class Field(object):
         :returns:   The field in the x-direction
         :rtype:     numpy.ndarray
         """
-        if self.mode.family is ModeFamily.LP:
+        if self.mode.family is Family.LP:
             array = numpy.zeros(self.x_mesh.shape)
             azimuthal_dependency = self.get_azimuthal_dependency_f(phi=phi)
-
-            # er, hr = self.fiber.get_radial_field(
-            #     mode=self.mode,
-            #     wavelength=self.fiber.wavelength,
-            #     radius=self.radius_mesh
-            # )
 
             for index in self.get_index_iterator(array):
                 er, hr = self.fiber.get_radial_field(
@@ -128,7 +123,7 @@ class Field(object):
         :returns:   The field in the y-direction
         :rtype:     numpy.ndarray
         """
-        if self.mode.family is ModeFamily.LP:
+        if self.mode.family is Family.LP:
             array = numpy.zeros(self.x_mesh.shape)
             azimuthal_dependency = self.get_azimuthal_dependency_f(phi=phi)
 
@@ -186,7 +181,7 @@ class Field(object):
         :returns:   The field in the r-direction
         :rtype:     numpy.ndarray
         """
-        if self.mode.family is ModeFamily.LP:
+        if self.mode.family is Family.LP:
             polarisation = self.Epol(phi, theta) - self.phi_mesh
             array = self.Et(phi, theta) * numpy.cos(polarisation)
 
@@ -217,7 +212,7 @@ class Field(object):
         :returns:   The field in the phi-direction
         :rtype:     numpy.ndarray
         """
-        if self.mode.family is ModeFamily.LP:
+        if self.mode.family is Family.LP:
             polarisation = self.Epol(phi, theta) - self.phi_mesh
             array = self.Et(phi, theta) * numpy.sin(polarisation)
 
@@ -249,7 +244,7 @@ class Field(object):
         :returns:   The field in the transverse-direction
         :rtype:     numpy.ndarray
         """
-        if self.mode.family is ModeFamily.LP:
+        if self.mode.family is Family.LP:
             e_x = self.Ex(phi, theta)
             e_y = self.Ey(phi, theta)
             e_transverse = numpy.sqrt(
@@ -276,7 +271,7 @@ class Field(object):
         :returns:   The polarisation of the transverse field
         :rtype:     numpy.ndarray
         """
-        if self.mode.family is ModeFamily.LP:
+        if self.mode.family is Family.LP:
             e_y = self.Ey(phi, theta)
             e_x = self.Ex(phi, theta)
             e_polarization = numpy.arctan2(e_y, e_x)
@@ -299,7 +294,7 @@ class Field(object):
         :returns:   Norm of the H vector
         :rtype:     numpy.ndarray
         """
-        if self.mode.family is ModeFamily.LP:
+        if self.mode.family is Family.LP:
             e_x = self.Ex(phi, theta)
             e_y = self.Ey(phi, theta)
             e_z = self.Ez(phi, theta)
@@ -328,7 +323,7 @@ class Field(object):
         :returns:   The magnetic field in the x-direction
         :rtype:     numpy.ndarray
         """
-        if self.mode.family is ModeFamily.LP:
+        if self.mode.family is Family.LP:
             array = numpy.zeros(self.x_mesh.shape)
             azimuthal_dependency_f = self.get_azimuthal_dependency_f(phi=phi)
 
@@ -360,7 +355,7 @@ class Field(object):
         :returns:   The magnetic field in the y-direction
         :rtype:     numpy.ndarray
         """
-        if self.mode.family is ModeFamily.LP:
+        if self.mode.family is Family.LP:
             array = numpy.zeros(self.x_mesh.shape)
             azimuthal_dependency_f = self.get_azimuthal_dependency_f(phi=phi)
             for index in self.get_index_iterator(array):
@@ -416,7 +411,7 @@ class Field(object):
         :returns:   The magnetic field in the radial-direction
         :rtype:     numpy.ndarray
         """
-        if self.mode.family is ModeFamily.LP:
+        if self.mode.family is Family.LP:
             radial = self.Ht(phi, theta)
             polarisation = self.Hpol(phi, theta) - self.phi_mesh
             azimuthal = numpy.cos(polarisation)
@@ -450,7 +445,7 @@ class Field(object):
         :returns:   The magnetic field in the phi-direction
         :rtype:     numpy.ndarray
         """
-        if self.mode.family is ModeFamily.LP:
+        if self.mode.family is Family.LP:
             polarisation = self.Hpol(phi, theta) - self.phi_mesh
             array = self.Ht(phi, theta) * numpy.sin(polarisation)
         else:
@@ -481,7 +476,7 @@ class Field(object):
         :returns:   The magnetic field in the transverse-direction
         :rtype:     numpy.ndarray
         """
-        if self.mode.family is ModeFamily.LP:
+        if self.mode.family is Family.LP:
             h_x = self.Hx(phi, theta)
             h_y = self.Hy(phi, theta)
             return numpy.sqrt(numpy.square(h_x) + numpy.square(h_y))
@@ -502,7 +497,7 @@ class Field(object):
         :returns:   The polarisation of the transverse magnetic field
         :rtype:     numpy.ndarray
         """
-        if self.mode.family is ModeFamily.LP:
+        if self.mode.family is Family.LP:
             h_polarization = numpy.arctan2(
                 self.Hy(phi, theta),
                 self.Hx(phi, theta)
@@ -529,7 +524,7 @@ class Field(object):
         :returns:   Norm of the H vector
         :rtype:     numpy.ndarray
         """
-        if self.mode.family is ModeFamily.LP:
+        if self.mode.family is Family.LP:
             h_x = self.Hx(phi, theta)
             h_y = self.Hy(phi, theta)
             h_z = self.Hz(phi, theta)

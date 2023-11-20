@@ -6,7 +6,7 @@ from scipy.special import kn, kvp, k0, k1, jn, jvp, yn, yvp, iv, ivp
 from scipy.constants import mu_0, epsilon_0, physical_constants
 
 from PyFiberModes.solver.base_solver import BaseSolver
-from PyFiberModes import Mode, ModeFamily
+from PyFiberModes.mode import Mode
 
 eta0 = physical_constants['characteristic impedance of vacuum'][0]
 
@@ -40,12 +40,12 @@ class NeffSolver(BaseSolver):
 
         lower_order_mode = None
 
-        if mode.family is ModeFamily.HE:
+        if mode.family == 'HE':
             if mode.m > 1:
-                lower_order_mode = Mode(ModeFamily.EH, mode.nu, mode.m - 1)
+                lower_order_mode = Mode('EH', mode.nu, mode.m - 1)
 
-        elif mode.family is ModeFamily.EH:
-            lower_order_mode = Mode(ModeFamily.HE, mode.nu, mode.m)
+        elif mode.family == 'EH':
+            lower_order_mode = Mode('HE', mode.nu, mode.m)
 
         elif mode.m > 1:
             lower_order_mode = Mode(mode.family, mode.nu, mode.m - 1)
@@ -62,7 +62,7 @@ class NeffSolver(BaseSolver):
             if numpy.isnan(lower_neff_boundary):
                 return lower_neff_boundary
 
-        if mode.family is ModeFamily.LP and mode.nu > 0:
+        if mode.family == 'LP' and mode.nu > 0:
             pm = Mode(mode.family, mode.nu - 1, mode.m)
 
             lb = self.fiber.get_effective_index(
@@ -88,31 +88,39 @@ class NeffSolver(BaseSolver):
         higher_neff_boundary = last_layer.refractive_index
 
         match mode.family:
-            case ModeFamily.LP:
+            case 'LP':
                 function = self._lpceq
-            case ModeFamily.TE:
+            case 'TE':
                 function = self._teceq
-            case ModeFamily.TM:
+            case 'TM':
                 function = self._tmceq
-            case ModeFamily.HE:
+            case 'HE':
                 function = self._heceq
-            case ModeFamily.EH:
+            case 'EH':
                 function = self._heceq
 
         if lower_neff_boundary <= higher_neff_boundary:
             print("Impossible bound")
             return numpy.nan
 
-        if (lower_neff_boundary - higher_neff_boundary) < 10 * delta_neff:
-            delta_neff = (lower_neff_boundary - higher_neff_boundary) / 10
+        delta_boundary = lower_neff_boundary - higher_neff_boundary
+        delta_neff = min(delta_neff, delta_boundary / 20)
 
-        return self.find_function_first_root(
-            function=function,
-            function_args=(mode.nu,),
-            lowbound=lower_neff_boundary - 1e-15,
-            highbound=higher_neff_boundary + 1e-15,
-            delta=-delta_neff
-        )
+        extra = 1e-13
+
+        try:
+            value = self.find_function_first_root(
+                function=function,
+                function_args=(mode.nu,),
+                lowbound=lower_neff_boundary - extra,
+                highbound=higher_neff_boundary + extra,
+                delta=-delta_neff
+            )
+
+        except ValueError:
+            value = numpy.nan
+
+        return value
 
     def get_LP_field_for_future(self, nu: int, neff: float, radius: float) -> tuple[float, float]:
         """

@@ -5,6 +5,7 @@ import numpy
 from functools import cache
 from dataclasses import dataclass, field
 from scipy import constants
+from copy import deepcopy
 
 from PyFiberModes.stepindex import StepIndex
 from PyFiberModes import Wavelength, Mode
@@ -39,6 +40,14 @@ class Fiber(object):
         self.layers_parameters = []
         self.radius_in = 0
         self.layers = []
+
+    def scale(self, factor: float) -> None:
+        scaled_fiber = deepcopy(self)
+        for layer in scaled_fiber.layers:
+            layer.radius_in *= factor
+            layer.radius_out *= factor
+
+        return scaled_fiber
 
     @property
     def n_layer(self) -> int:
@@ -643,7 +652,7 @@ def get_fiber_from_delta_and_V0(delta: float, V0: float, wavelength: float) -> F
     return fiber
 
 
-def load_fiber(fiber_name: str, wavelength: float = None) -> Fiber:
+def load_fiber(fiber_name: str, wavelength: float = None, add_air_layer: bool = False) -> Fiber:
     """
     Loads a fiber as type that suit PyFiberModes.
 
@@ -664,10 +673,10 @@ def load_fiber(fiber_name: str, wavelength: float = None) -> Fiber:
     fiber = Fiber(wavelength=wavelength)
 
     for _, layer in fiber_dict['layers'].items():
-        if layer.get('name') in ['air']:
-            continue
-
         fiber.add_layer(**layer)
+
+    if add_air_layer:
+        fiber.add_layer(name='air', radius=numpy.inf, index=1.0)
 
     fiber.initialize_layers()
 

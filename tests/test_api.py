@@ -9,20 +9,6 @@ from PyFiberModes.fiber import load_fiber
 from PyFiberModes import FiberFactory
 
 
-def test_fiber_factory():
-    from PyFiberModes import FiberFactory
-
-    factory = FiberFactory(wavelength=1550e-9)
-
-    factory.add_layer(
-        name="core",
-        radius=4e-6,
-        index=numpy.linspace(1.464, 1.494, 10)
-    )
-
-    factory.add_layer(name="cladding", index=1.4444)
-
-
 function_list = [
     "get_dispersion",
     "get_effective_index",
@@ -68,7 +54,4 @@ def test_print_data():
 
     smf28.print_data(data_type_list=attribute_list, mode_list=[LP01, LP11, LP21, LP12])
 
-
-if __name__ == '__main__':
-    test_get_attribute(function_string='get_dispersion')
 # -
