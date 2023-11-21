@@ -117,15 +117,15 @@ class NeffSolver(BaseSolver):
     def get_mode_with_lower_neff(self, mode: Mode) -> Mode:
         match mode.family:
             case 'LP':
-                upper_boundary_mode = Mode('LP', mode.nu + 1, mode.m)
+                lower_neff_mode = Mode('LP', mode.nu + 1, mode.m)
             case 'HE':
-                upper_boundary_mode = Mode('LP', mode.nu, mode.m)
+                lower_neff_mode = Mode('LP', mode.nu, mode.m)
             case 'EH':
-                upper_boundary_mode = Mode('LP', mode.nu + 2, mode.m)
+                lower_neff_mode = Mode('LP', mode.nu + 2, mode.m)
             case _:
-                upper_boundary_mode = Mode('LP', 1, mode.m + 1)
+                lower_neff_mode = Mode('LP', 1, mode.m + 1)
 
-        return upper_boundary_mode
+        return lower_neff_mode
 
     def get_clad_index_from_V0(self, V0: float) -> float:
         """
@@ -162,9 +162,9 @@ class NeffSolver(BaseSolver):
         """
         core, clad = self.fiber.layers
 
-        mode_low_neff = self.get_mode_with_lower_neff(mode=mode)
+        lower_neff_mode = self.get_mode_with_lower_neff(mode=mode)
 
-        lower_neff_cutoff_V0 = self.fiber.get_cutoff_v0(mode=mode_low_neff)
+        lower_neff_cutoff_V0 = self.fiber.get_cutoff_v0(mode=lower_neff_mode)
 
         lower_neff_clad_index = self.get_clad_index_from_V0(V0=lower_neff_cutoff_V0,)
 
@@ -201,7 +201,7 @@ class NeffSolver(BaseSolver):
             mode: Mode,
             delta_neff: float,
             lower_neff_boundary: float,
-            max_iteration: int = 14,
+            max_iteration: int = 16,
             epsilon: float = 1e-12) -> float:
         """
         Solve and return the effective index (neff) for a given mode.
@@ -235,9 +235,11 @@ class NeffSolver(BaseSolver):
 
         result = self.find_root_within_range(
             function=function,
-            lowbound=lower_neff_boundary + epsilon,
-            highbound=n_clad_equivalent - epsilon,
-            function_kwargs=dict(nu=mode.nu),
+            x_low=lower_neff_boundary + epsilon,
+            x_high=n_clad_equivalent - epsilon,
+            # x_high=self.fiber.get_maximum_index(),
+            # x_low=self.fiber.get_minimum_index(),
+            function_args=(mode.nu, ),
             max_iteration=max_iteration
         )
 

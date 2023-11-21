@@ -1,7 +1,10 @@
-from itertools import count
-from scipy.optimize import brentq
+# #!/usr/bin/env python
+# # -*- coding: utf-8 -*-
+
 import logging
 import numpy
+
+from scipy.optimize import root, brentq, bisect
 
 
 class BaseSolver(object):
@@ -53,6 +56,7 @@ class BaseSolver(object):
 
                 if (fa > 0 and fb < 0) or (fa < 0 and fb > 0):
                     z = brentq(function, a, b, args=function_args, xtol=1e-20)
+
                     fz = function(z, *function_args)
                     if abs(fa) > abs(fz) < abs(fb):  # Skip discontinuities
                         self.logger.debug(f"skipped ({fa}, {fz}, {fb})")
@@ -70,47 +74,97 @@ class BaseSolver(object):
 
     def find_root_within_range(self,
             function,
-            lowbound: float,
-            highbound: float,
-            function_kwargs: tuple = (),
-            max_iteration: int = 15):
+            x_low: float,
+            x_high: float,
+            function_args: tuple = (),
+            max_iteration: int = 20) -> float:
+        """
+        Finds a root within range.
 
-        x_list = [lowbound, highbound]
+        :param      function:       The function
+        :type       function:       object
+        :param      x_low:          The x low
+        :type       x_low:          float
+        :param      x_high:         The x high
+        :type       x_high:         float
+        :param      function_args:  The function arguments
+        :type       function_args:  tuple
+        :param      max_iteration:  The maximum iteration
+        :type       max_iteration:  int
 
-        y_list = [
-            function(lowbound, **function_kwargs),
-            function(highbound, **function_kwargs)
-        ]
+        :returns:   The root value: x such as f(x) = 0
+        :rtype:     float
+        """
+        opt = root(fun=function, x0=x_low, args=function_args)
 
-        for j in count():  # probably not needed...
-            if j == max_iteration:
-                self.logger.warning("Couldn't converge to value as max iteration is reached")
-                return numpy.nan
+        if not (x_low < opt.x[0] < x_high):
+            self.logger.warning(f"Root found : {opt.x[0]} but outside of range: [{x_low:.16f}, {x_high:.16f}]")
 
-            for i in range(len(y_list) - 1):
-                x0, x1 = x_list[i], x_list[i + 1]
-                y0, y1 = y_list[i], y_list[i + 1]
+        return opt.x[0]
 
-                if (y0 > 0 and y1 < 0) or (y0 < 0 and y1 > 0):
-                    args = tuple(function_kwargs.values())
+    def _find_root_within_range(self,
+            function,
+            x_low: float,
+            x_high: float,
+            function_args: tuple = (),
+            max_iteration: int = 20):
 
-                    z = brentq(
-                        f=function,
-                        a=x0,
-                        b=x1,
-                        args=args
-                    )
+        y_low, y_high = function(x_low, *function_args), function(x_high, *function_args)
 
-                    y2 = function(z, **function_kwargs)
+        for j in range(max_iteration):
+            if numpy.sign(y_low) != numpy.sign(y_high):
+                x_root = brentq(f=function, a=x_low, b=x_high, args=function_args)  # Get x such as f(x) = 0
 
-                    if abs(y0) > abs(y2) < abs(y1):  # Skip discontinuities
-                        return z
+                y_root = function(x_root, *function_args)  # f(x)
 
-            ls = len(y_list)
-            for idx in range(ls - 1):
-                a, b = x_list[2 * idx], x_list[2 * idx + 1]
-                c = (a + b) / 2
-                x_list.insert(2 * idx + 1, c)
-                y_list.insert(2 * idx + 1, function(c, **function_kwargs))
+                if abs(y_low) > abs(y_root) < abs(y_high):  # Skip discontinuities
+                    return x_root
+
+            x_low, x_high, y_low, y_high = self.update_root_range(
+                function=function,
+                function_args=function_args,
+                x_low=x_low,
+                x_high=x_high,
+                y_low=y_low,
+                y_high=y_high
+            )
+
+        self.logger.warning("Couldn't converge to value as max iteration is reached")
+        return numpy.nan
+
+    def update_root_range(self, function, function_args: tuple, x_low: float, x_high: float, y_low: float, y_high: float) -> tuple:
+        """
+        Calculate the new x-range such that it updates the new x-y minimum or new x-y maximum.
+        The new evalution is midway between x_low and x_high.
+
+        :param      function:       The function
+        :type       function:       object
+        :param      function_args:  The function arguments
+        :type       function_args:  tuple
+        :param      x_low:          The x lower boundary
+        :type       x_low:          float
+        :param      x_high:         The x upper boundary
+        :type       x_high:         float
+        :param      y_low:          The y lower boundary
+        :type       y_low:          float
+        :param      y_high:         The y upper boundary
+        :type       y_high:         float
+
+        :returns:   The new x_low, x_high, y_low, y_high
+        :rtype:     tuple
+        """
+        x_mid = (x_low + x_high) / 2
+        y_mid = function(x_mid, *function_args)
+
+        if y_mid > 0:
+            y_high = y_mid
+            x_high = x_mid
+
+        else:
+            y_low = y_mid
+            x_low = x_mid
+
+        return x_low, x_high, y_low, y_high
+
 
 # -
