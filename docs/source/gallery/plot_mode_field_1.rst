@@ -109,14 +109,14 @@ Preparing the figure
  .. code-block:: none
 
 
-    SceneList(unit_size=(4, 4), tight_layout=True, transparent_background=False, title='', ax_orientation='horizontal')
+    SceneList(unit_size=(4, 4), tight_layout=True, transparent_background=False, title='', padding=1.0, ax_orientation='horizontal')
 
 
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 2.031 seconds)
+   **Total running time of the script:** (0 minutes 2.420 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_mode_field_1.py:

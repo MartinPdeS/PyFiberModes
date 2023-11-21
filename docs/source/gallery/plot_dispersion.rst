@@ -106,14 +106,14 @@ Preparing the figure
  .. code-block:: none
 
 
-    SceneList(unit_size=(10, 3), tight_layout=False, transparent_background=False, title='Effective index vs core index', ax_orientation='vertical')
+    SceneList(unit_size=(10, 3), tight_layout=True, transparent_background=False, title='Effective index vs core index', padding=1.0, ax_orientation='vertical')
 
 
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.446 seconds)
+   **Total running time of the script:** (0 minutes 0.388 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_dispersion.py:

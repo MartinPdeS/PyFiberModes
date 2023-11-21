@@ -3,11 +3,11 @@
 
 import numpy
 import scipy
-from PyFiberModes.mode import Family
 from PyFiberModes.mode_instances import HE11
 from PyFiberModes.mode import Mode
 from dataclasses import dataclass
 from MPSPlots.render2D import SceneList, Axis
+from MPSTools.tools.coordinates import CartesianCoordinates
 
 
 @dataclass
@@ -21,27 +21,13 @@ class Field(object):
     n_point: int = 101
     """ Number of points (field will be n_point x n_point) """
 
-    def __post_init__(self):
-        self.compute_meshes()
-
-    def compute_meshes(self) -> None:
-        r"""
-        Calculates the meshes and parameters necessary, which are:
-        dx - dy - x - y - r - phi
-
-        :returns:   No returns
-        :rtype:     None
+    def __post_init__(self) -> None:
         """
-        self.dx = 2 * self.limit / (self.n_point - 1)
-        self.dy = 2 * self.limit / (self.n_point - 1)
+        Generate the mesh coordinates that are used for field computation.
+        """
+        self.cartesian_coordinates = CartesianCoordinates.generate_from_square(size=2 * self.limit, n_points=self.n_point)
 
-        self.x_mesh, self.y_mesh = numpy.mgrid[
-            -self.limit: self.limit: complex(self.n_point),
-            -self.limit: self.limit: complex(self.n_point)
-        ]
-        self.radius_mesh = numpy.sqrt(numpy.square(self.x_mesh) + numpy.square(self.y_mesh))
-
-        self.phi_mesh = numpy.arctan2(self.y_mesh, self.x_mesh)
+        self.cylindrical_coordinates = self.cartesian_coordinates.to_cylindrical()
 
     def get_azimuthal_dependency_f(self, phi: float) -> numpy.ndarray:
         r"""
@@ -54,7 +40,7 @@ class Field(object):
         :returns:   The azimuthal dependency g values in [-1, 1].
         :rtype:     numpy.ndarray
         """
-        return numpy.cos(self.mode.nu * self.phi_mesh + phi)
+        return numpy.cos(self.mode.nu * self.cylindrical_coordinates.phi + phi)
 
     def get_azimuthal_dependency_g(self, phi: float) -> numpy.ndarray:
         r"""
@@ -67,7 +53,7 @@ class Field(object):
         :returns:   The azimuthal dependency g values in [-1, 1].
         :rtype:     numpy.ndarray
         """
-        return -numpy.sin(self.mode.nu * self.phi_mesh + phi)
+        return -numpy.sin(self.mode.nu * self.cylindrical_coordinates.phi + phi)
 
     def get_index_iterator(self, array: numpy.ndarray) -> tuple:
         iterator = numpy.nditer(array, flags=['multi_index'])
@@ -92,18 +78,17 @@ class Field(object):
         :returns:   The field in the x-direction
         :rtype:     numpy.ndarray
         """
-        if self.mode.family is Family.LP:
-            array = numpy.zeros(self.x_mesh.shape)
+        if self.mode.family == 'LP':
+            array = numpy.zeros(self.cartesian_coordinates.x.shape)
             azimuthal_dependency = self.get_azimuthal_dependency_f(phi=phi)
 
             for index in self.get_index_iterator(array):
-                er, hr = self.fiber.get_radial_field(
+                e_field, _ = self.fiber.get_radial_field(
                     mode=self.mode,
-                    wavelength=self.fiber.wavelength,
-                    radius=self.radius_mesh[index]
+                    radius=self.cylindrical_coordinates.rho[index]
                 )
 
-                array[index] = er[0] * azimuthal_dependency[index]
+                array[index] = e_field.rho * azimuthal_dependency[index]
 
         else:
             polarisation = self.Epol(phi, theta)
@@ -123,18 +108,17 @@ class Field(object):
         :returns:   The field in the y-direction
         :rtype:     numpy.ndarray
         """
-        if self.mode.family is Family.LP:
-            array = numpy.zeros(self.x_mesh.shape)
+        if self.mode.family == 'LP':
+            array = numpy.zeros(self.cartesian_coordinates.x.shape)
             azimuthal_dependency = self.get_azimuthal_dependency_f(phi=phi)
 
             for index in self.get_index_iterator(array):
-                er, hr = self.fiber.get_radial_field(
+                e_field, _ = self.fiber.get_radial_field(
                     mode=self.mode,
-                    wavelength=self.fiber.wavelength,
-                    radius=self.radius_mesh[index]
+                    radius=self.cylindrical_coordinates.rho[index]
                 )
 
-                array[index] = er[1] * azimuthal_dependency[index]
+                array[index] = e_field.phi * azimuthal_dependency[index]
             return array
         else:
             polarisation = self.Epol(phi, theta)
@@ -154,18 +138,17 @@ class Field(object):
         :returns:   The field in the z-direction
         :rtype:     numpy.ndarray
         """
-        array = numpy.zeros(self.x_mesh.shape)
+        array = numpy.zeros(self.cartesian_coordinates.x.shape)
 
         azimuthal_dependency = self.get_azimuthal_dependency_f(phi=phi)
 
         for index in self.get_index_iterator(array):
-            er, hr = self.fiber.get_radial_field(
+            e_field, _ = self.fiber.get_radial_field(
                 mode=self.mode,
-                wavelength=self.fiber.wavelength,
-                radius=self.radius_mesh[index]
+                radius=self.cylindrical_coordinates.rho[index]
             )
 
-            array[index] = er[2] * azimuthal_dependency[index]
+            array[index] = e_field.z * azimuthal_dependency[index]
 
         return array
 
@@ -181,22 +164,20 @@ class Field(object):
         :returns:   The field in the r-direction
         :rtype:     numpy.ndarray
         """
-        if self.mode.family is Family.LP:
-            polarisation = self.Epol(phi, theta) - self.phi_mesh
+        if self.mode.family == 'LP':
+            polarisation = self.Epol(phi, theta) - self.cylindrical_coordinates.phi
             array = self.Et(phi, theta) * numpy.cos(polarisation)
 
         else:
-            array = numpy.zeros(self.x_mesh.shape)
+            array = numpy.zeros(self.cartesian_coordinates.x.shape)
             azimuthal_dependency_f = self.get_azimuthal_dependency_f(phi=phi)
 
             for index in self.get_index_iterator(array):
-                er, hr = self.fiber.get_radial_field(
+                e_field, _ = self.fiber.get_radial_field(
                     mode=self.mode,
-                    wavelength=self.fiber.wavelength,
-                    radius=self.radius_mesh[index]
+                    radius=self.cylindrical_coordinates.rho[index]
                 )
-
-                array[index] = er[0] * azimuthal_dependency_f[index]
+                array[index] = e_field.rho * azimuthal_dependency_f[index]
 
         return array
 
@@ -212,23 +193,21 @@ class Field(object):
         :returns:   The field in the phi-direction
         :rtype:     numpy.ndarray
         """
-        if self.mode.family is Family.LP:
-            polarisation = self.Epol(phi, theta) - self.phi_mesh
+        if self.mode.family == 'LP':
+            polarisation = self.Epol(phi, theta) - self.cylindrical_coordinates.phi
             array = self.Et(phi, theta) * numpy.sin(polarisation)
 
         else:
-            array = numpy.zeros(self.x_mesh.shape)
+            array = numpy.zeros(self.cartesian_coordinates.x.shape)
             azimuthal_dependency_g = self.get_azimuthal_dependency_g(phi=phi)
 
             for index in self.get_index_iterator(array):
-
-                er, hr = self.fiber.get_radial_field(
+                e_field, h_field = self.fiber.get_radial_field(
                     mode=self.mode,
-                    wavelength=self.fiber.wavelength,
-                    radius=self.radius_mesh[index]
+                    radius=self.cylindrical_coordinates.rho[index]
                 )
 
-                array[index] = er[1] * azimuthal_dependency_g[index]
+                array[index] = e_field.phi * azimuthal_dependency_g[index]
 
         return array
 
@@ -244,7 +223,7 @@ class Field(object):
         :returns:   The field in the transverse-direction
         :rtype:     numpy.ndarray
         """
-        if self.mode.family is Family.LP:
+        if self.mode.family == 'LP':
             e_x = self.Ex(phi, theta)
             e_y = self.Ey(phi, theta)
             e_transverse = numpy.sqrt(
@@ -271,14 +250,14 @@ class Field(object):
         :returns:   The polarisation of the transverse field
         :rtype:     numpy.ndarray
         """
-        if self.mode.family is Family.LP:
+        if self.mode.family == 'LP':
             e_y = self.Ey(phi, theta)
             e_x = self.Ex(phi, theta)
             e_polarization = numpy.arctan2(e_y, e_x)
         else:
             e_phi = self.Ephi(phi, theta)
             e_r = self.Er(phi, theta)
-            e_polarization = numpy.arctan2(e_phi, e_r) + self.phi_mesh
+            e_polarization = numpy.arctan2(e_phi, e_r) + self.cylindrical_coordinates.phi
 
         return e_polarization
 
@@ -294,7 +273,7 @@ class Field(object):
         :returns:   Norm of the H vector
         :rtype:     numpy.ndarray
         """
-        if self.mode.family is Family.LP:
+        if self.mode.family == 'LP':
             e_x = self.Ex(phi, theta)
             e_y = self.Ey(phi, theta)
             e_z = self.Ez(phi, theta)
@@ -323,19 +302,18 @@ class Field(object):
         :returns:   The magnetic field in the x-direction
         :rtype:     numpy.ndarray
         """
-        if self.mode.family is Family.LP:
-            array = numpy.zeros(self.x_mesh.shape)
+        if self.mode.family == 'LP':
+            array = numpy.zeros(self.cartesian_coordinates.x.shape)
             azimuthal_dependency_f = self.get_azimuthal_dependency_f(phi=phi)
 
             for index in self.get_index_iterator(array):
 
-                er, hr = self.fiber.get_radial_field(
+                _, h_field = self.fiber.get_radial_field(
                     mode=self.mode,
-                    wavelength=self.fiber.wavelength,
-                    radius=self.radius_mesh[index]
+                    radius=self.cylindrical_coordinates.rho[index]
                 )
 
-                array[index] = hr[0] * azimuthal_dependency_f[index]
+                array[index] = h_field.rho * azimuthal_dependency_f[index]
 
         else:
             polarisation = self.Hpol(phi, theta)
@@ -355,18 +333,17 @@ class Field(object):
         :returns:   The magnetic field in the y-direction
         :rtype:     numpy.ndarray
         """
-        if self.mode.family is Family.LP:
-            array = numpy.zeros(self.x_mesh.shape)
+        if self.mode.family == 'LP':
+            array = numpy.zeros(self.cartesian_coordinates.x.shape)
             azimuthal_dependency_f = self.get_azimuthal_dependency_f(phi=phi)
             for index in self.get_index_iterator(array):
 
-                er, hr = self.fiber.get_radial_field(
+                _, h_field = self.fiber.get_radial_field(
                     mode=self.mode,
-                    wavelength=self.fiber.wavelength,
-                    radius=self.radius_mesh[index]
+                    radius=self.cylindrical_coordinates.rho[index]
                 )
 
-                array[index] = hr[1] * azimuthal_dependency_f[index]
+                array[index] = h_field.phi * azimuthal_dependency_f[index]
 
         else:
             polarisation = self.Hpol(phi, theta)
@@ -386,17 +363,16 @@ class Field(object):
         :returns:   The magnetic field in the z-direction
         :rtype:     numpy.ndarray
         """
-        array = numpy.zeros(self.x_mesh.shape)
+        array = numpy.zeros(self.cartesian_coordinates.x.shape)
         azimuthal_dependency_f = self.get_azimuthal_dependency_f(phi=phi)
         for index in self.get_index_iterator(array):
 
-            er, hr = self.fiber.get_radial_field(
+            _, h_field = self.fiber.get_radial_field(
                 mode=self.mode,
-                wavelength=self.fiber.wavelength,
-                radius=self.radius_mesh[index]
+                radius=self.cylindrical_coordinates.rho[index]
             )
 
-            array[index] = hr[2] * azimuthal_dependency_f[index]
+            array[index] = h_field.z * azimuthal_dependency_f[index]
         return array
 
     def Hr(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
@@ -411,22 +387,21 @@ class Field(object):
         :returns:   The magnetic field in the radial-direction
         :rtype:     numpy.ndarray
         """
-        if self.mode.family is Family.LP:
+        if self.mode.family == 'LP':
             radial = self.Ht(phi, theta)
-            polarisation = self.Hpol(phi, theta) - self.phi_mesh
+            polarisation = self.Hpol(phi, theta) - self.cylindrical_coordinates.phi
             azimuthal = numpy.cos(polarisation)
             array = radial * azimuthal
 
         else:
-            array = numpy.zeros(self.x_mesh.shape)
+            array = numpy.zeros(self.cartesian_coordinates.x.shape)
             azimuthal_dependency_f = self.get_azimuthal_dependency_f(phi=phi)
 
             for index in self.get_index_iterator(array):
 
                 er, hr = self.fiber.get_radial_field(
                     mode=self.mode,
-                    wavelength=self.fiber.wavelength,
-                    radius=self.radius_mesh[index]
+                    radius=self.cylindrical_coordinates.rho[index]
                 )
 
                 array[index] = hr[0] * azimuthal_dependency_f[index]
@@ -445,19 +420,18 @@ class Field(object):
         :returns:   The magnetic field in the phi-direction
         :rtype:     numpy.ndarray
         """
-        if self.mode.family is Family.LP:
-            polarisation = self.Hpol(phi, theta) - self.phi_mesh
+        if self.mode.family == 'LP':
+            polarisation = self.Hpol(phi, theta) - self.cylindrical_coordinates.phi
             array = self.Ht(phi, theta) * numpy.sin(polarisation)
         else:
-            array = numpy.zeros(self.x_mesh.shape)
+            array = numpy.zeros(self.cartesian_coordinates.x.shape)
             azimuthal_dependency_g = self.get_azimuthal_dependency_g(phi=phi)
 
             for index in self.get_index_iterator(array):
 
                 er, hr = self.fiber.get_radial_field(
                     mode=self.mode,
-                    wavelength=self.fiber.wavelength,
-                    radius=self.radius_mesh[index]
+                    radius=self.cylindrical_coordinates.rho[index]
                 )
 
                 array[index] = hr[1] * azimuthal_dependency_g[index]
@@ -476,7 +450,7 @@ class Field(object):
         :returns:   The magnetic field in the transverse-direction
         :rtype:     numpy.ndarray
         """
-        if self.mode.family is Family.LP:
+        if self.mode.family == 'LP':
             h_x = self.Hx(phi, theta)
             h_y = self.Hy(phi, theta)
             return numpy.sqrt(numpy.square(h_x) + numpy.square(h_y))
@@ -497,7 +471,7 @@ class Field(object):
         :returns:   The polarisation of the transverse magnetic field
         :rtype:     numpy.ndarray
         """
-        if self.mode.family is Family.LP:
+        if self.mode.family == 'LP':
             h_polarization = numpy.arctan2(
                 self.Hy(phi, theta),
                 self.Hx(phi, theta)
@@ -508,7 +482,7 @@ class Field(object):
                 self.Hphi(phi, theta),
                 self.Hr(phi, theta)
             )
-            h_polarization += self.phi_mesh
+            h_polarization += self.cylindrical_coordinates.phi
 
         return h_polarization
 
@@ -524,7 +498,7 @@ class Field(object):
         :returns:   Norm of the H vector
         :rtype:     numpy.ndarray
         """
-        if self.mode.family is Family.LP:
+        if self.mode.family == 'LP':
             h_x = self.Hx(phi, theta)
             h_y = self.Hy(phi, theta)
             h_z = self.Hz(phi, theta)
@@ -572,7 +546,7 @@ class Field(object):
 
         sum_square_field = numpy.sum(square_field)
 
-        integral = sum_square_field * self.dx * self.dy
+        integral = sum_square_field * self.cartesian_coordinates.dx * self.cartesian_coordinates.dy
 
         return integral
 
@@ -586,12 +560,12 @@ class Field(object):
         :returns:   The intensity.
         :rtype:     float
         """
-        HE11_n_eff = self.fiber.neff(
+        HE11_n_eff = self.fiber.get_effective_index(
             mode=HE11,
             wavelength=self.fiber.wavelength
         )
 
-        n_eff = self.fiber.neff(
+        n_eff = self.fiber.get_effective_index(
             mode=self.mode,
             wavelength=self.fiber.wavelength
         )

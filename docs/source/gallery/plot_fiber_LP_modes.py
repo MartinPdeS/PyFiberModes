@@ -30,7 +30,7 @@ ax = figure.append_ax(show_legend=True)
 for mode in [HE11, HE12, HE22]:
     neff = []
     for fiber in factory:
-        effective_index = fiber.get_group_index(mode, 1550e-9)
+        effective_index = fiber.get_group_index(mode)
         neff.append(effective_index)
 
     ax.add_line(

@@ -288,7 +288,7 @@ class NeffSolver(BaseSolver):
 
         return e_field, h_field
 
-    def get_TE_field(self, nu, neff: float, radius: float) -> numpy.ndarray:
+    def get_TE_field(self, nu: int, neff: float, radius: float) -> numpy.ndarray:
         r"""
         Gets the TE field in the form of a tuple containing two numpy arrays.
         Tuple structure is [0, :math:`E_{\phi}`, 0], [:math:`H_{r}`, 0, :math:`H_{z}`]
@@ -341,7 +341,7 @@ class NeffSolver(BaseSolver):
 
         return e_field, h_field
 
-    def get_TM_field(self, nu, neff: float, radius: float) -> tuple:
+    def get_TM_field(self, nu: int, neff: float, radius: float) -> tuple:
         r"""
         Gets the TM field in the form of a tuple containing two numpy arrays.
         Tuple structure is [:math:`E_{r}`, 0, :math:`E_{z}`], [0, :math:`H_{\phi}`, 0]

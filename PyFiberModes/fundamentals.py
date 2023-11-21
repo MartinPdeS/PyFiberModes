@@ -3,9 +3,11 @@
 
 import numpy
 
-from PyFiberModes.mode import Mode, Family
+from PyFiberModes.mode import Mode
 from PyFiberModes import Wavelength
 from PyFiberModes.mode_instances import HE11, LP01
+
+from MPSTools.tools.coordinates import CylindricalCoordinates
 
 
 def get_delta_from_fiber(fiber) -> float:
@@ -201,7 +203,7 @@ def get_radial_field(
         fiber,
         mode: Mode,
         wavelength: float,
-        radius: float) -> float:
+        radius: float) -> tuple:
     r"""
     Gets the mode field without the azimuthal component.
     Tuple structure is [:math:`E_{r}`, :math:`E_{\phi}`, :math:`E_{z}`], [:math:`H_{r}`, :math:`H_{\phi}`, :math:`H_{z}`]
@@ -215,8 +217,8 @@ def get_radial_field(
     :param      radius:      The radius
     :type       radius:      float
 
-    :returns:   The radial field.
-    :rtype:     float
+    :returns:   The radial field in a tupler of CylindricalCoordinates.
+    :rtype:     tuple
     """
     from PyFiberModes import solver
 
@@ -239,14 +241,19 @@ def get_radial_field(
 
     match mode.family:
         case 'LP':
-            return neff_solver.get_LP_field(**kwargs)
+            (er, ephi, ez), (hr, hphi, hz) = neff_solver.get_LP_field(**kwargs)
         case 'TE':
-            return neff_solver.get_TE_field(**kwargs)
+            (er, ephi, ez), (hr, hphi, hz) = neff_solver.get_TE_field(**kwargs)
         case 'TM':
-            return neff_solver.get_TM_field(**kwargs)
+            (er, ephi, ez), (hr, hphi, hz) = neff_solver.get_TM_field(**kwargs)
         case 'EH':
-            return neff_solver.get_EH_field(**kwargs)
+            (er, ephi, ez), (hr, hphi, hz) = neff_solver.get_EH_field(**kwargs)
         case 'HE':
-            return neff_solver.get_HE_field(**kwargs)
+            (er, ephi, ez), (hr, hphi, hz) = neff_solver.get_HE_field(**kwargs)
+
+    e_field = CylindricalCoordinates(rho=er, phi=ephi, z=ez)
+    h_field = CylindricalCoordinates(rho=hr, phi=hphi, z=hz)
+
+    return e_field, h_field
 
 # -

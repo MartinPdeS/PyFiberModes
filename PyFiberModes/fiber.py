@@ -20,6 +20,7 @@ from PyFiberModes.fundamentals import (
 )
 
 from MPSTools.fiber_catalogue import loader
+from MPSTools.tools.coordinates import CylindricalCoordinates
 
 
 @dataclass
@@ -177,7 +178,8 @@ class Fiber(object):
             if (radius > layer.radius_in) and (radius < layer.radius_out):
                 return layer
 
-    def get_fiber_radius(self) -> float:
+    @property
+    def radius(self) -> float:
         """
         Gets the fiber total radius taking account for all layers.
 
@@ -561,7 +563,7 @@ class Fiber(object):
         :rtype:     Field
         """
         if limit is None:
-            limit = self.get_fiber_radius() * 1.2
+            limit = self.radius * 5.5
 
         field = Field(
             fiber=self,
@@ -573,23 +575,18 @@ class Fiber(object):
         return field
 
     @cache
-    def get_radial_field(self,
-            mode: Mode,
-            wavelength: float,
-            radius: float) -> float:
+    def get_radial_field(self, mode: Mode, radius: float) -> CylindricalCoordinates:
         r"""
         Gets the mode field without the azimuthal component.
         Tuple structure is [:math:`E_{r}`, :math:`E_{\phi}`, :math:`E_{z}`], [:math:`H_{r}`, :math:`H_{\phi}`, :math:`H_{z}`]
 
         :param      mode:        The mode to consider
         :type       mode:        Mode
-        :param      wavelength:  The wavelength to consider
-        :type       wavelength:  float
         :param      radius:      The radius
         :type       radius:      float
 
         :returns:   The radial field.
-        :rtype:     float
+        :rtype:     CylindricalCoordinates
         """
         radial_field = get_radial_field(
             fiber=self,
@@ -597,8 +594,32 @@ class Fiber(object):
             wavelength=self.wavelength,
             radius=radius
         )
-        
+
         return radial_field
+
+    def get_radial_field_norm(self, mode: Mode, radius: float) -> float:
+        r"""
+        Gets the norm of the mode field without the azimuthal component.
+        Tuple structure is [:math:`E_{r}`, :math:`E_{\phi}`, :math:`E_{z}`], [:math:`H_{r}`, :math:`H_{\phi}`, :math:`H_{z}`]
+
+        :param      mode:        The mode to consider
+        :type       mode:        Mode
+        :param      radius:      The radius
+        :type       radius:      float
+
+        :returns:   The radial field.
+        :rtype:     float
+        """
+        e_field, h_field = get_radial_field(
+            fiber=self,
+            mode=mode,
+            wavelength=self.wavelength,
+            radius=radius
+        )
+
+        norm = numpy.sqrt(e_field.rho**2 + e_field.phi**2 + e_field.z**2)
+
+        return norm
 
     def does_mode_exist(self, *mode_list) -> list:
         mode_exist = []

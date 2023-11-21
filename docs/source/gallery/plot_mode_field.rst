@@ -30,7 +30,7 @@ Imports
 
 .. code-block:: python3
 
-    from PyFiberModes import HE11, HE12, LP01, LP11
+    from PyFiberModes import HE11, LP01, LP11
     from PyFiberModes.field import Field
     from PyFiberModes.fiber import load_fiber
     from MPSPlots.render2D import SceneList
@@ -52,7 +52,7 @@ Here we create the different fiber design that we want to explore
 
 .. code-block:: python3
 
-    fiber = load_fiber('SMF28', wavelength=700e-9)
+    fiber = load_fiber('SMF28', wavelength=1310e-9)
 
 
 
@@ -72,10 +72,10 @@ Preparing the figure
     figure = SceneList(
         title='Mode fields for vectorial mode if x-direction',
         unit_size=(4, 4),
-        ax_orientation='horizontal'
+        ax_orientation='horizontal',
     )
 
-    for mode in [HE11, HE12, LP01, LP11]:
+    for mode in [HE11, LP01, LP11]:
 
         field = Field(
             fiber=fiber,
@@ -95,7 +95,7 @@ Preparing the figure
 
 
 .. image-sg:: /gallery/images/sphx_glr_plot_mode_field_001.png
-   :alt: Mode fields for vectorial mode if x-direction, HE11, HE12, LP01, LP11
+   :alt: Mode fields for vectorial mode if x-direction, HE11, LP01, LP11
    :srcset: /gallery/images/sphx_glr_plot_mode_field_001.png
    :class: sphx-glr-single-img
 
@@ -105,14 +105,14 @@ Preparing the figure
  .. code-block:: none
 
 
-    SceneList(unit_size=(4, 4), tight_layout=False, transparent_background=False, title='Mode fields for vectorial mode if x-direction', ax_orientation='horizontal')
+    SceneList(unit_size=(4, 4), tight_layout=True, transparent_background=False, title='Mode fields for vectorial mode if x-direction', padding=1.0, ax_orientation='horizontal')
 
 
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 1.500 seconds)
+   **Total running time of the script:** (0 minutes 1.152 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_mode_field.py:

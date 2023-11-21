@@ -7,7 +7,7 @@ Mode fields
 # %%
 # Imports
 # ~~~~~~~
-from PyFiberModes import HE11, HE12, LP01, LP11
+from PyFiberModes import HE11, LP01, LP11
 from PyFiberModes.field import Field
 from PyFiberModes.fiber import load_fiber
 from MPSPlots.render2D import SceneList
@@ -16,17 +16,17 @@ from MPSPlots.render2D import SceneList
 # Generating the fiber structures
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Here we create the different fiber design that we want to explore
-fiber = load_fiber('SMF28', wavelength=700e-9)
+fiber = load_fiber('SMF28', wavelength=1310e-9)
 
 # %%
 # Preparing the figure
 figure = SceneList(
     title='Mode fields for vectorial mode if x-direction',
     unit_size=(4, 4),
-    ax_orientation='horizontal'
+    ax_orientation='horizontal',
 )
 
-for mode in [HE11, HE12, LP01, LP11]:
+for mode in [HE11, LP01, LP11]:
 
     field = Field(
         fiber=fiber,

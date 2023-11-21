@@ -79,7 +79,7 @@ Preparing the figure
     for mode in [HE11, HE12, HE22]:
         neff = []
         for fiber in factory:
-            effective_index = fiber.get_group_index(mode, 1550e-9)
+            effective_index = fiber.get_group_index(mode)
             neff.append(effective_index)
 
         ax.add_line(
@@ -105,18 +105,18 @@ Preparing the figure
 
  .. code-block:: none
 
-    /Users/martinpdes/Desktop/GitProject/PyFiberModes/PyFiberModes/solver/ssif.py:447: RuntimeWarning: invalid value encountered in sqrt
+    /Users/martinpdes/Desktop/GitProject/PyFiberModes/PyFiberModes/solver/ssif.py:522: RuntimeWarning: invalid value encountered in sqrt
       W = core.radius_out * self.wavelength.k0 * numpy.sqrt(neff**2 - n_clad**2)
     Couldn't converge to value as max iteration is reached
 
-    SceneList(unit_size=(10, 3), tight_layout=False, transparent_background=False, title='Effective index vs core index', ax_orientation='vertical')
+    SceneList(unit_size=(10, 3), tight_layout=True, transparent_background=False, title='Effective index vs core index', padding=1.0, ax_orientation='vertical')
 
 
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.780 seconds)
+   **Total running time of the script:** (0 minutes 0.529 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_fiber_LP_modes.py:

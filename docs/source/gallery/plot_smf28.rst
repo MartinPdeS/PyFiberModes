@@ -30,7 +30,7 @@ Imports
 
 .. code-block:: python3
 
-    from PyFiberModes import HE11, HE22, LP01, LP11, LP02, LP21, LP12, TE01, LP22
+    from PyFiberModes import HE11, HE22, LP01, LP11, LP02, LP21, LP12, TE01, LP31, LP22, LP41
     from PyFiberModes.fiber import load_fiber
 
 
@@ -46,13 +46,15 @@ Generating the fiber structures
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Here we create the different fiber design that we want to explore
 
-.. GENERATED FROM PYTHON SOURCE LINES 17-23
+.. GENERATED FROM PYTHON SOURCE LINES 17-25
 
 .. code-block:: python3
 
-    smf28 = load_fiber(fiber_name='DCF1300S_20', wavelength=1550e-9)
+    smf28 = load_fiber(fiber_name='DCF1300S_20', wavelength=1310e-9)
 
-    smf28.print_data(data_type_list=['cutoff_V0', 'cutoff_wavelength'], mode_list=[LP01, LP11, LP22])
+    a = smf28.does_mode_exist(LP01, LP11, )
+    # print(a)
+    smf28.print_data(data_type_list=['cutoff_wavelength'], mode_list=[LP01, HE11, HE22, TE01])
 
 
     # -
@@ -64,19 +66,12 @@ Here we create the different fiber design that we want to explore
 
  .. code-block:: none
 
-    cutoff_V0 @ wavelength: 1550.00 nm 
-
-    mode = LP01      cutoff_V0: 0
-    mode = LP11      cutoff_V0: 3.605301694991108
-    mode = LP22      cutoff_V0: 5.78980181250092
-
-
-
-    cutoff_wavelength @ wavelength: 1550.00 nm 
-
+    cutoff_wavelength @ wavelength: 1310.00 nm:
+     --------------------------------------------
     mode = LP01      cutoff_wavelength: inf
-    mode = LP11      cutoff_wavelength: 4788.04 nm
-    mode = LP22      cutoff_wavelength: 2981.51 nm
+    mode = HE11      cutoff_wavelength: inf
+    mode = HE22      cutoff_wavelength: 4783.07 nm
+    mode = TE01      cutoff_wavelength: 4788.04 nm
 
 
 
@@ -87,7 +82,7 @@ Here we create the different fiber design that we want to explore
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.005 seconds)
+   **Total running time of the script:** (0 minutes 0.221 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_smf28.py:
