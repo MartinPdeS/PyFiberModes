@@ -177,9 +177,9 @@ def get_cutoff_v0(
 
     match fiber.n_layer:
         case 2:  # Standard Step-Index Fiber [SSIF|
-            cutoff_solver = solver.ssif.CutoffSolver(fiber=fiber, wavelength=wavelength)
+            cutoff_solver = solver.ssif.cutoff.CutoffSolver(fiber=fiber, wavelength=wavelength)
         case 3:  # Three-Layer Step-Index Fiber [TLSIF]
-            cutoff_solver = solver.tlsif.CutoffSolver(fiber=fiber, wavelength=wavelength)
+            cutoff_solver = solver.tlsif.cutoff.CutoffSolver(fiber=fiber, wavelength=wavelength)
         case _:  # Multi-Layer Step-Index Fiber [MLSIF]
             cutoff_solver = solver.solver.FiberSolver(fiber=fiber, wavelength=wavelength)
 
@@ -212,9 +212,9 @@ def get_radial_field(
     from PyFiberModes import solver
 
     if fiber.n_layer == 2:  # Standard Step-Index Fiber [SSIF]
-        neff_solver = solver.ssif.NeffSolver(fiber=fiber, wavelength=wavelength)
+        neff_solver = solver.ssif.neff.NeffSolver(fiber=fiber, wavelength=wavelength)
     else:  # Multi-Layer Step-Index Fiber [MLSIF]
-        neff_solver = solver.mlsif.NeffSolver(fiber=fiber, wavelength=wavelength)
+        neff_solver = solver.mlsif.neff.NeffSolver(fiber=fiber, wavelength=wavelength)
 
     neff = get_effective_index(
         fiber=fiber,
