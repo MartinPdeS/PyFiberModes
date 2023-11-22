@@ -93,7 +93,7 @@ Here we create the different fiber design that we want to explore
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.185 seconds)
+   **Total running time of the script:** (0 minutes 0.234 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_smf28_dispersion_vs_wavelength.py:

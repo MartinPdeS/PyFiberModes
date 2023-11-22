@@ -133,6 +133,19 @@ class Fiber(object):
             layer.wavelength = wavelength
 
     def add_layer(self, name: str, radius: float, index: float) -> None:
+        """
+        Adds a layer to the fiber the center-most layer have to be settled first.
+
+        :param      name:    The name
+        :type       name:    str
+        :param      radius:  The radius
+        :type       radius:  float
+        :param      index:   The index
+        :type       index:   float
+
+        :returns:   No return
+        :rtype:     None
+        """
         self.layer_names.append(name)
         self.index_list.append(index)
 
@@ -166,7 +179,7 @@ class Fiber(object):
         for position, layer in enumerate(self.layers):
             layer.position = position
 
-    def get_layer_at_radius(self, radius: float):
+    def get_layer_at_radius(self, radius: float) -> StepIndex:
         """
         Gets the layer that is associated to a given radius.
 
@@ -208,21 +221,8 @@ class Fiber(object):
 
         return layer.index(radius)
 
-    def get_layer_minimum_index(self, layer_idx: int) -> float:
-        """
-        Gets the minimum refractive index of the layers.
-
-        :param      layer_idx:   The layer index
-        :type       layer_idx:   int
-
-        :returns:   The minimum index.
-        :rtype:     float
-        """
-        layer = self.layers[layer_idx]
-
-        return layer.refractive_index
-
-    def get_maximum_index(self) -> float:
+    @property
+    def maximum_index(self) -> float:
         """
         Gets the maximum refractive index of the fiber.
 
@@ -238,7 +238,8 @@ class Fiber(object):
 
         return numpy.max(layers_maximum_index)
 
-    def get_minimum_index(self) -> float:
+    @property
+    def minimum_index(self) -> float:
         """
         Gets the minimum refractive index of the fiber.
 
@@ -254,20 +255,6 @@ class Fiber(object):
 
         return numpy.min(layers_maximum_index)
 
-    def get_layer_maximum_index(self, layer_idx: int) -> float:
-        """
-        Gets the maximum refractive index of the layers.
-
-        :param      layer_idx:   The layer index
-        :type       layer_idx:   int
-
-        :returns:   The minimum index.
-        :rtype:     float
-        """
-        layer = self.layers[layer_idx]
-
-        return layer.refractive_index
-
     def get_NA(self) -> float:
         r"""
         Gets the numerical aperture NA defined as:
@@ -278,7 +265,7 @@ class Fiber(object):
         :returns:   The numerical aperture.
         :rtype:     float
         """
-        n_max = self.get_maximum_index()
+        n_max = self.maximum_index
 
         last_layer = self.layers[-1]
 

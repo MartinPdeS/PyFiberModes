@@ -46,7 +46,7 @@ Imports
     )
 
 
-    V0_list = numpy.linspace(0.1, 12, 50)
+    V0_list = numpy.linspace(0.5, 12, 150)
 
     for mode in [HE11, TE01, TM01, HE21, EH11, HE31, HE12, HE22, HE32]:
         data_list = []
@@ -79,20 +79,13 @@ Imports
    :class: sphx-glr-single-img
 
 
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    Couldn't converge to value as max iteration is reached
-    Couldn't converge to value as max iteration is reached
-
 
 
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.928 seconds)
+   **Total running time of the script:** (0 minutes 1.452 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_U_vs_V.py:

@@ -23,7 +23,7 @@ ax = figure.append_ax(
 )
 
 
-V0_list = numpy.linspace(0.1, 12, 50)
+V0_list = numpy.linspace(0.5, 12, 150)
 
 for mode in [HE11, TE01, TM01, HE21, EH11, HE31, HE12, HE22, HE32]:
     data_list = []

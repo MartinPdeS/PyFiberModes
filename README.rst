@@ -53,6 +53,31 @@ The following shell commands should do the trick.
 
 ----
 
+Testing
+*******
+
+To test localy (with cloning the GitHub repository) you'll need to install the dependencies and run the coverage command as
+
+.. code:: console
+
+   >>> git clone https://github.com/MartinPdeS/PyFiberModes.git
+   >>> cd PyFiberModes
+   >>> pip install -r requirements/requirements.txt
+   >>> coverage run --source=PyFiberModes --module pytest --verbose tests
+   >>> coverage report --show-missing
+
+----
+
+
+
+Coding examples
+***************
+Plenty of examples are available online, I invite you to check the `examples <https://pyfibermodes.readthedocs.io/en/master/gallery/index.html>`_
+section of the documentation.
+
+
+----
+
 
 Contact Information
 *******************
@@ -71,7 +96,7 @@ Email:`martin.poinsinet-de-sivry@polymtl.ca <mailto:martin.poinsinet-de-sivry@po
    :target: https://pyfibermodes.readthedocs.io/en/latest/
    :alt: Documentation Status
 
-.. |Unittest| image:: https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/MartinPdeS/f0955be398d59efac69042c1b0fbece2/raw/6b0b0ab45384e6c451f008c91f684bc8f1f6b76d/PyFiberModescoverage_badge.json
+.. |Unittest| image:: https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/MartinPdeS/f0955be398d59efac69042c1b0fbece2/raw/4c502d1ed25ca76bf1a73e2374d40960dae7e2dc/PyFiberModescoverage_badge.json
 
 .. |PyPi| image:: https://badge.fury.io/py/PyFiberModes.svg
    :target: https://pypi.org/project/PyFiberModes/

@@ -185,6 +185,23 @@ A gallery of examples and that showcase how PyFiberModes can be used. Some examp
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="Effective index for tapered multi-mode fiber">
+
+.. only:: html
+
+  .. image:: /gallery/images/thumb/sphx_glr_plot_neff_tapered_fiber_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_gallery_plot_neff_tapered_fiber.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Effective index for tapered multi-mode fiber</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="Modal dispersion VS core index">
 
 .. only:: html
@@ -252,6 +269,7 @@ A gallery of examples and that showcase how PyFiberModes can be used. Some examp
    /gallery/plot_mode_field
    /gallery/plot_mode_field_1
    /gallery/plot_mode_field_2
+   /gallery/plot_neff_tapered_fiber
    /gallery/plot_smf28
    /gallery/plot_smf28_dispersion_vs_wavelength
    /gallery/plot_smf28_group_index_vs_wavelength

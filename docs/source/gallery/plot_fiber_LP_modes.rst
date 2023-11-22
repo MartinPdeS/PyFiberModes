@@ -51,9 +51,9 @@ Here we create the different fiber design that we want to explore
 
 .. code-block:: python3
 
-    core_indexes = numpy.linspace(1.464, 1.494)
+    core_indexes = numpy.linspace(1.454, 1.494, 30)
     factory = FiberFactory(wavelength=1550e-9)
-    factory.add_layer(name="core", radius=4e-6, index=core_indexes)
+    factory.add_layer(name="core", radius=7e-6, index=core_indexes)
     factory.add_layer(name="cladding", index=1.4444)
 
 
@@ -105,9 +105,6 @@ Preparing the figure
 
  .. code-block:: none
 
-    /Users/martinpdes/Desktop/GitProject/PyFiberModes/PyFiberModes/solver/ssif.py:522: RuntimeWarning: invalid value encountered in sqrt
-      W = core.radius_out * self.wavelength.k0 * numpy.sqrt(neff**2 - n_clad**2)
-    Couldn't converge to value as max iteration is reached
 
     SceneList(unit_size=(10, 3), tight_layout=True, transparent_background=False, title='Effective index vs core index', padding=1.0, ax_orientation='vertical')
 
@@ -116,7 +113,7 @@ Preparing the figure
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.529 seconds)
+   **Total running time of the script:** (0 minutes 0.261 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_fiber_LP_modes.py:

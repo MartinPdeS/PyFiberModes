@@ -144,7 +144,7 @@ class BaseSolver(object):
 
         sign_change_idx = numpy.where(sign_change == 1)[0]
 
-        sign_change_idx = sign_change_idx[-1]
+        sign_change_idx = sign_change_idx[0]
 
         x_low, x_high = x_list[sign_change_idx], x_list[sign_change_idx + 1]
 
@@ -161,17 +161,18 @@ class BaseSolver(object):
 
         y_low, y_high = function(x_low, *function_args), function(x_high, *function_args)
 
-        x_low, x_high, y_low, y_high = self.get_new_x_low_x_high(function, function_args, x_low, x_high, 20)
+        x_low, x_high, y_low, y_high = self.get_new_x_low_x_high(function, function_args, x_low, x_high, 100)
 
-        x_root = brentq(f=function, a=x_low, b=x_high, args=function_args)  # Get x such as f(x) = 0
+        try:
+            x_root = brentq(f=function, a=x_low, b=x_high, args=function_args, maxiter=max_iteration, disp=True)  # Get x such as f(x) = 0
+        except RuntimeError:
+            self.logger.warning("Couldn't converge to value as max iteration is reached")
+            return numpy.nan
 
         y_root = function(x_root, *function_args)  # f(x)
 
         if abs(y_low) > abs(y_root) < abs(y_high):  # Skip discontinuities
             return x_root
-
-        self.logger.warning("Couldn't converge to value as max iteration is reached")
-        return numpy.nan
 
     def update_root_range(self, function, function_args: tuple, x_low: float, x_high: float, y_low: float, y_high: float) -> tuple:
         """
