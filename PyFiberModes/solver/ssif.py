@@ -237,8 +237,6 @@ class NeffSolver(BaseSolver):
             function=function,
             x_low=lower_neff_boundary + epsilon,
             x_high=n_clad_equivalent - epsilon,
-            # x_high=self.fiber.get_maximum_index(),
-            # x_low=self.fiber.get_minimum_index(),
             function_args=(mode.nu, ),
             max_iteration=max_iteration
         )

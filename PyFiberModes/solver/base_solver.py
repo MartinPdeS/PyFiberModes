@@ -4,7 +4,7 @@
 import logging
 import numpy
 
-from scipy.optimize import root, brentq, bisect
+from scipy.optimize import root, brentq, bisect, brenth
 
 
 class BaseSolver(object):
@@ -72,7 +72,7 @@ class BaseSolver(object):
         self.logger.info(f"maxiter reached ({maxiter}, {lowbound}, {highbound})")
         return numpy.nan
 
-    def find_root_within_range(self,
+    def _find_root_within_range(self,
             function,
             x_low: float,
             x_high: float,
@@ -95,6 +95,20 @@ class BaseSolver(object):
         :returns:   The root value: x such as f(x) = 0
         :rtype:     float
         """
+        return brenth(f=function, a=x_low, b=x_high, args=function_args)
+        try:
+            return brenth(f=function, a=x_low, b=x_high, args=function_args)
+        except ValueError:
+
+            delta_x = abs(x_high - x_low) / 2
+            print('DSADS')
+            return self.find_root_within_range(
+                function=function,
+                x_low=x_low + delta_x,
+                x_high=x_high,
+                function_args=function_args
+            )
+
         opt = root(fun=function, x0=x_low, args=function_args)
 
         if not (x_low < opt.x[0] < x_high):
@@ -102,7 +116,7 @@ class BaseSolver(object):
 
         return opt.x[0]
 
-    def _find_root_within_range(self,
+    def find_root_within_range(self,
             function,
             x_low: float,
             x_high: float,
