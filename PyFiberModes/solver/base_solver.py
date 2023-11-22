@@ -116,6 +116,42 @@ class BaseSolver(object):
 
         return opt.x[0]
 
+    def get_new_x_low_x_high(self,
+            function,
+            function_args,
+            x_low: float,
+            x_high: float,
+            n_iteration: int = 10):
+
+        x_list = [x_low, x_high]
+        x_list.sort()
+        x_list = numpy.linspace(*x_list, n_iteration)
+        y_list = [function(x, *function_args) for x in x_list]
+        y_list = numpy.asarray(y_list)
+
+        non_nan_idx = ~numpy.isnan(y_list)
+
+        x_list = x_list[non_nan_idx]
+        y_list = y_list[non_nan_idx]
+
+        if len(y_list) < 2:
+            return self.get_new_x_low_x_high(function, function_args, x_low, x_high, n_iteration=2 * n_iteration)
+
+        sign_change = (numpy.diff(numpy.sign(y_list)) != 0) * 1
+
+        if (sign_change == 0).all():
+            return self.get_new_x_low_x_high(function, function_args, x_low, x_high, n_iteration=2 * n_iteration)
+
+        sign_change_idx = numpy.where(sign_change == 1)[0]
+
+        sign_change_idx = sign_change_idx[-1]
+
+        x_low, x_high = x_list[sign_change_idx], x_list[sign_change_idx + 1]
+
+        y_low, y_high = y_list[sign_change_idx], y_list[sign_change_idx + 1]
+
+        return x_low, x_high, y_low, y_high
+
     def find_root_within_range(self,
             function,
             x_low: float,
@@ -125,23 +161,14 @@ class BaseSolver(object):
 
         y_low, y_high = function(x_low, *function_args), function(x_high, *function_args)
 
-        for j in range(max_iteration):
-            if numpy.sign(y_low) != numpy.sign(y_high):
-                x_root = brentq(f=function, a=x_low, b=x_high, args=function_args)  # Get x such as f(x) = 0
+        x_low, x_high, y_low, y_high = self.get_new_x_low_x_high(function, function_args, x_low, x_high, 20)
 
-                y_root = function(x_root, *function_args)  # f(x)
+        x_root = brentq(f=function, a=x_low, b=x_high, args=function_args)  # Get x such as f(x) = 0
 
-                if abs(y_low) > abs(y_root) < abs(y_high):  # Skip discontinuities
-                    return x_root
+        y_root = function(x_root, *function_args)  # f(x)
 
-            x_low, x_high, y_low, y_high = self.update_root_range(
-                function=function,
-                function_args=function_args,
-                x_low=x_low,
-                x_high=x_high,
-                y_low=y_low,
-                y_high=y_high
-            )
+        if abs(y_low) > abs(y_root) < abs(y_high):  # Skip discontinuities
+            return x_root
 
         self.logger.warning("Couldn't converge to value as max iteration is reached")
         return numpy.nan

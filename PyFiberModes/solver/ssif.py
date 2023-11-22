@@ -36,7 +36,6 @@ class CutoffSolver(BaseSolver):
             else:
                 nu -= 1
 
-
         elif mode.family == 'HE':
             if nu == 1:
                 m -= 1
@@ -116,6 +115,23 @@ class NeffSolver(BaseSolver):
     """
     Effective index solver for standard step-index fiber
     """
+
+    def get_fiber_delta(self) -> float:
+        r"""
+        Gets the fiber delta parameter defined parge 77 of Jacques Bures
+
+        .. math::
+            2 \Delta = 1 -\frac{n_clad^2}{n_core^2}
+
+        :returns:   The fiber delta parameter.
+        :rtype:     float
+        """
+        core, clad = self.fiber.layers
+        n_clad = clad.refractive_index
+        n_core = core.refractive_index
+
+        return 0.5 * (1 - n_clad**2 / n_core**2)
+
     def get_mode_with_lower_neff(self, mode: Mode) -> Mode:
         match mode.family:
             case 'LP':
@@ -168,7 +184,7 @@ class NeffSolver(BaseSolver):
 
         lower_neff_cutoff_V0 = self.fiber.get_cutoff_v0(mode=lower_neff_mode)
 
-        lower_neff_clad_index = self.get_clad_index_from_V0(V0=lower_neff_cutoff_V0,)
+        lower_neff_clad_index = self.get_clad_index_from_V0(V0=lower_neff_cutoff_V0)
 
         lower_neff_boundary = max(lower_neff_clad_index, clad.refractive_index)
 
@@ -179,7 +195,7 @@ class NeffSolver(BaseSolver):
 
     def get_ceq_function(self, mode: Mode) -> object:
         """
-        Gets the adequat ceq function.
+        Gets the adequat phase matching mode equation function.
 
         :param      mode:  The mode
         :type       mode:  Mode
@@ -229,6 +245,9 @@ class NeffSolver(BaseSolver):
         n_clad_equivalent = self.get_clad_index_from_V0(V0=mode_cutoff_V0)  # High neff boundary
 
         lower_neff_boundary = self.get_low_neff_boundary(mode=mode)
+
+        if n_clad_equivalent < lower_neff_boundary:
+            raise ValueError(f"Error in computation, most probably the given mode: {mode} does not exist in that configuration")
 
         function = self.get_ceq_function(mode=mode)
 
@@ -538,7 +557,9 @@ class NeffSolver(BaseSolver):
         """
         u, w, _ = self.get_U_W_V_parameter(neff=neff)
 
-        return u * jn(nu - 1, u) * kn(nu, w) + w * jn(nu, u) * kn(nu - 1, w)
+        value = u * jn(nu - 1, u) * kn(nu, w) + w * jn(nu, u) * kn(nu - 1, w)
+
+        return value
 
     def get_TE_equation(self, neff: float, nu: int) -> float:
         """
@@ -634,7 +655,9 @@ class NeffSolver(BaseSolver):
             nu=nu
         )
 
-        return term_0 + term_1
+        value = term_0 + term_1
+
+        return value
 
     def get_EH_equation(self, neff: float, nu: int) -> float:
         """

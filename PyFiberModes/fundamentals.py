@@ -71,6 +71,7 @@ def get_propagation_constant_from_omega(
 
     if fiber.n_layer == 2:  # Standard Step-Index Fiber [SSIF]
         neff_solver = solver.ssif.NeffSolver(fiber=fiber, wavelength=wavelength)
+
     else:  # Multi-Layer Step-Index Fiber [MLSIF]
         neff_solver = solver.mlsif.NeffSolver(fiber=fiber, wavelength=wavelength)
 
