@@ -35,7 +35,7 @@ fiber.add_layer(name='core', radius=20e-6, index=1.4494)
 fiber.add_layer(name='clad', radius=62.5e-6, index=1.4444)
 fiber.initialize_layers()
 
-itr_list = numpy.linspace(1.0, 0.1, 300)
+itr_list = numpy.linspace(1.0, 0.05, 300)
 
 data_dict = get_mode_beta(
     fiber=fiber,

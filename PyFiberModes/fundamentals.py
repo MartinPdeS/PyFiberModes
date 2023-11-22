@@ -49,8 +49,7 @@ def get_propagation_constant_from_omega(
         omega: float,
         fiber: object,
         mode: Mode,
-        delta_neff: float = 1e-6,
-        lower_neff_boundary: float = None) -> float:
+        delta_neff: float = 1e-6) -> float:
     """
     Gets the effective index of a given fiber and mode.
 
@@ -62,8 +61,6 @@ def get_propagation_constant_from_omega(
     :type       mode:                 Mode
     :param      delta_neff:           The delta neff
     :type       delta_neff:           float
-    :param      lower_neff_boundary:  The lower neff boundary
-    :type       lower_neff_boundary:  float
 
     :returns:   The effective index.
     :rtype:     float
@@ -79,8 +76,7 @@ def get_propagation_constant_from_omega(
 
     neff = neff_solver.solve(
         mode=mode,
-        delta_neff=delta_neff,
-        lower_neff_boundary=lower_neff_boundary
+        delta_neff=delta_neff
     )
 
     return neff * wavelength.k0
@@ -90,8 +86,7 @@ def get_U_parameter(
         fiber,
         wavelength: Wavelength,
         mode: Mode,
-        delta_neff: float = 1e-6,
-        lower_neff_boundary: float = None) -> float:
+        delta_neff: float = 1e-6) -> float:
     """
     Gets the U parameter for a given fiber and mode.
 
@@ -103,8 +98,6 @@ def get_U_parameter(
     :type       mode:                 Mode
     :param      delta_neff:           The delta neff
     :type       delta_neff:           float
-    :param      lower_neff_boundary:  The lower neff boundary
-    :type       lower_neff_boundary:  float
 
     :returns:   The U parameter.
     :rtype:     float
@@ -117,7 +110,6 @@ def get_U_parameter(
     neff = neff_solver.solve(
         mode=mode,
         delta_neff=delta_neff,
-        lower_neff_boundary=lower_neff_boundary
     )
 
     U, _, _ = neff_solver.get_U_W_V_parameter(neff=neff)
@@ -129,8 +121,7 @@ def get_effective_index(
         fiber,
         wavelength: Wavelength,
         mode: Mode,
-        delta_neff: float = 1e-6,
-        lower_neff_boundary: float = None) -> float:
+        delta_neff: float = 1e-6) -> float:
     """
     Gets the effective index of a given fiber and mode.
 
@@ -142,8 +133,6 @@ def get_effective_index(
     :type       mode:                 Mode
     :param      delta_neff:           The delta neff
     :type       delta_neff:           float
-    :param      lower_neff_boundary:  The lower neff boundary
-    :type       lower_neff_boundary:  float
 
     :returns:   The effective index.
     :rtype:     float
@@ -158,7 +147,6 @@ def get_effective_index(
     neff = neff_solver.solve(
         mode=mode,
         delta_neff=delta_neff,
-        lower_neff_boundary=lower_neff_boundary
     )
 
     return neff

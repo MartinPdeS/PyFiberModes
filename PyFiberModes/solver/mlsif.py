@@ -20,24 +20,19 @@ class NameSpace():
 class NeffSolver(BaseSolver):
     def get_neff_lower_boundary(self,
             mode: Mode,
-            lower_neff_boundary: float,
             delta_neff: float) -> float:
         """
         Gets the lower boundary for neff value.
 
         :param      mode:                 The mode to evaluate
         :type       mode:                 Mode
-        :param      lower_neff_boundary:  The lower neff boundary
-        :type       lower_neff_boundary:  float
         :param      delta_neff:           The delta neff
         :type       delta_neff:           float
 
         :returns:   The neff lower boundary.
         :rtype:     float
         """
-        if lower_neff_boundary is not None:
-            return lower_neff_boundary
-
+        lower_order_mode = None
         lower_order_mode = None
 
         if mode.family == 'HE':
@@ -77,10 +72,9 @@ class NeffSolver(BaseSolver):
 
         return lower_neff_boundary
 
-    def solve(self, mode: Mode, delta_neff: float, lower_neff_boundary: float) -> float:
+    def solve(self, mode: Mode, delta_neff: float) -> float:
         lower_neff_boundary = self.get_neff_lower_boundary(
             mode=mode,
-            lower_neff_boundary=lower_neff_boundary,
             delta_neff=delta_neff
         )
 
@@ -89,15 +83,15 @@ class NeffSolver(BaseSolver):
 
         match mode.family:
             case 'LP':
-                function = self._lpceq
+                function = self.get_LP_equation
             case 'TE':
-                function = self._teceq
+                function = self.get_TE_equation
             case 'TM':
-                function = self._tmceq
+                function = self.get_TM_equation
             case 'HE':
-                function = self._heceq
+                function = self.get_HE_equation
             case 'EH':
-                function = self._heceq
+                function = self.get_HE_equation
 
         if lower_neff_boundary <= higher_neff_boundary:
             print("Impossible bound")
@@ -410,7 +404,7 @@ class NeffSolver(BaseSolver):
         :returns:   The HE field.
         :rtype:     tuple[float, float]
         """
-        self._heceq(neff=neff, nu=nu)
+        self.get_HE_equation(neff=neff, nu=nu)
 
         layer = self.fiber.get_layer_at_radius(radius)
 
@@ -469,7 +463,7 @@ class NeffSolver(BaseSolver):
 
         return numpy.array((Er, Ep, Ez)), numpy.array((Hr, Hp, Hz))
 
-    def _lpceq(self, neff: float, nu: int) -> tuple[float, float]:
+    def get_LP_equation(self, neff: float, nu: int) -> tuple[float, float]:
         C = numpy.zeros((self.fiber.n_interface, 2))
         C[0, 0] = 1
 
@@ -505,7 +499,7 @@ class NeffSolver(BaseSolver):
 
         return u * kvp(nu, u) * A[0] - kn(nu, u) * A[1]
 
-    def _teceq(self, neff: float, nu: int) -> tuple[float, float]:
+    def get_TE_equation(self, neff: float, nu: int) -> tuple[float, float]:
         EH = numpy.empty(4)
 
         for layer in self.fiber.layers[:-1]:
@@ -528,7 +522,7 @@ class NeffSolver(BaseSolver):
         F4 = k1(u) / k0(u)
         return Ep + self.wavelength.k0 * self.fiber.last_layer.radius_in / u * eta0 * Hz * F4
 
-    def _tmceq(self, neff: float, nu: int) -> tuple[float, float]:
+    def get_TM_equation(self, neff: float, nu: int) -> tuple[float, float]:
         EH = numpy.empty(4)
 
         for layer in self.fiber.layers[:-1]:
@@ -553,7 +547,7 @@ class NeffSolver(BaseSolver):
 
         return Hp - self.wavelength.k0 * self.fiber.last_layers.radius_in / u * numpy.sqrt(epsilon_0 / mu_0) * self.fiber.last_layers.refractive_index**2 * Ez * F4
 
-    def _heceq(self, neff: float, nu: int) -> float:
+    def get_HE_equation(self, neff: float, nu: int) -> float:
         EH = numpy.empty((4, 2))
 
         for layer in self.fiber.layers[:-1]:
@@ -595,8 +589,8 @@ class NeffSolver(BaseSolver):
 
         return E[0] * H[1] - E[1] * H[0]
 
-    def _ehceq(self, neff: float, nu: int) -> float:
-        return self._heceq(
+    def get_EH_equation(self, neff: float, nu: int) -> float:
+        return self.get_HE_equation(
             neff=neff,
             nu=nu
         )

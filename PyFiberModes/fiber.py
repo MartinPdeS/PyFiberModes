@@ -366,8 +366,7 @@ class Fiber(object):
 
     def get_effective_index(self,
             mode: Mode,
-            delta_neff: float = 1e-6,
-            lower_neff_boundary: float = None) -> float:
+            delta_neff: float = 1e-6) -> float:
         """
         Gets the effective index.
 

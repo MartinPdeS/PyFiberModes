@@ -35,6 +35,8 @@ class CutoffSolver(BaseSolver):
 
             else:
                 nu -= 1
+
+
         elif mode.family == 'HE':
             if nu == 1:
                 m -= 1
@@ -187,20 +189,19 @@ class NeffSolver(BaseSolver):
         """
         match mode.family:
             case 'LP':
-                return self._lpceq
+                return self.get_LP_equation
             case 'TE':
-                return self._teceq
+                return self.get_TE_equation
             case 'TM':
-                return self._tmceq
+                return self.get_TM_equation
             case 'EH':
-                return self._ehceq
+                return self.get_EH_equation
             case 'HE':
-                return self._heceq
+                return self.get_HE_equation
 
     def solve(self,
             mode: Mode,
             delta_neff: float,
-            lower_neff_boundary: float,
             max_iteration: int = 16,
             epsilon: float = 1e-12) -> float:
         """
@@ -210,8 +211,6 @@ class NeffSolver(BaseSolver):
         :type       mode:                 Mode
         :param      delta_neff:           The delta neff
         :type       delta_neff:           float
-        :param      lower_neff_boundary:  The lower neff boundary
-        :type       lower_neff_boundary:  float
         :param      max_iteration:        The maximum iteration, compute time heavily depend on it.
         :type       max_iteration:        int
         :param      epsilon:              The epsilon
@@ -352,7 +351,6 @@ class NeffSolver(BaseSolver):
         In the core
 
         .. math::
-
             E_z &= \frac{-U}{k_0 * n_{eff} * r_{core}} * \frac{j_0(U * r / r_{core})}{j_1(U)} \\[10pt]
             E_r &= j_1(U * r/r_{core}) / j_1(U) \\[10pt]
             H_\phi &= \sqrt{\epsilon_0 / \mu_0} * n_{core} / n_{eff} * E_r \\[10pt]
@@ -361,7 +359,6 @@ class NeffSolver(BaseSolver):
         In the clad
 
         .. math::
-
             E_z &= \frac{n_{core}}{n_{clad}} \frac{W}{k_0 * n_{eff} * r_{core}} * \frac{k_0(W * r / r_{core})}{k_1(W)} \\[10pt]
             E_r &= \frac{n_{core}}{n_{clad}} k_1(W * r/r_{core}) / k_1(W)\\[10pt]
             H_\phi &= \sqrt{\epsilon_0 / \mu_0} * \frac{n_{core}}{n_{clad}} * k_1(W * r/r_{core}) / k_1(W) \\[10pt]
@@ -524,9 +521,9 @@ class NeffSolver(BaseSolver):
 
         return U, W, V
 
-    def _lpceq(self, neff: float, nu: int) -> float:
+    def get_LP_equation(self, neff: float, nu: int) -> float:
         """
-        I don't know what it returns.
+        Return the value of the phase matching equation for LP mode.
 
         .. math::
             U * j_{\nu -1}(U) * k_{\nu}(W) + W * j_{\nu}(U) * k_{\nu - 1}(W)
@@ -543,9 +540,9 @@ class NeffSolver(BaseSolver):
 
         return u * jn(nu - 1, u) * kn(nu, w) + w * jn(nu, u) * kn(nu - 1, w)
 
-    def _teceq(self, neff: float, nu: int) -> float:
+    def get_TE_equation(self, neff: float, nu: int) -> float:
         """
-        I don't know what it returns.
+        Return the value of the phase matching equation for TE mode.
 
         .. math::
             U * j_0(U) * k_1(W) + W * j_1(U) * k_0(W)
@@ -562,9 +559,9 @@ class NeffSolver(BaseSolver):
 
         return U * j0(U) * k1(W) + W * j1(U) * k0(W)
 
-    def _tmceq(self, neff: float, nu: int) -> float:
+    def get_TM_equation(self, neff: float, nu: int) -> float:
         """
-        I don't know what it returns.
+        Return the value of the phase matching equation for TM mode.
 
         .. math::
             U * j_0(U) * k_1(W) * n_{clad}^2 + W * j_1(U) * k_0(W) * n_{core}^2
@@ -589,7 +586,7 @@ class NeffSolver(BaseSolver):
 
     def get_HE_EH_terms(self, neff, nu: int) -> float:
         """
-        I don't know what it returns.
+        Return the value of the terms for the equation for HE or EH mode.
 
         :param      neff:        The effective index
         :type       neff:        float
@@ -620,9 +617,9 @@ class NeffSolver(BaseSolver):
 
         return term_0, term_4
 
-    def _heceq(self, neff: float, nu: int) -> float:
+    def get_HE_equation(self, neff: float, nu: int) -> float:
         """
-        I don't know what it returns.
+        Return the value of the phase matching equation for HE mode.
 
         :param      neff:        The effective index
         :type       neff:        float
@@ -639,9 +636,9 @@ class NeffSolver(BaseSolver):
 
         return term_0 + term_1
 
-    def _ehceq(self, neff: float, nu: int) -> float:
+    def get_EH_equation(self, neff: float, nu: int) -> float:
         """
-        I don't know what it returns.
+        Return the value of the phase matching equation for EH mode.
 
         :param      neff:        The effective index
         :type       neff:        float

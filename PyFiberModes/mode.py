@@ -37,4 +37,13 @@ class Mode():
     def __repr__(self) -> str:
         return f"{self.family}{self.nu}{self.m}"
 
+
+    def get_lower_neff_mode(self):
+        if self.family == 'LP':
+            if self.nu == 0:
+                return Mode(family='LP', nu=1, m=self.m)
+            else:
+                return Mode(family='LP', nu=self.nu + 1, m=self.m)
+
+
 # -
