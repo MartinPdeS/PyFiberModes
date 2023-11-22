@@ -387,7 +387,7 @@ class Fiber(object):
             mode=mode,
         )
 
-        n_max = self.get_maximum_index()
+        n_max = self.maximum_index
 
         n_last_layer = self.last_layer.refractive_index
 
