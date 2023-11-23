@@ -17,7 +17,7 @@ def test_validation_cutoff_wavelength():
     val_list = [0, 2.405, 2.405, 2.853, 3.832, 4.342, 3.832]
 
     for mode, val in zip(mode_list, val_list):
-        cutoff_V0 = fiber.get_cutoff_v0(mode=mode)
+        cutoff_V0 = fiber.get_mode_cutoff_v0(mode=mode)
         assert numpy.isclose(cutoff_V0, val, atol=1e-3), f"Mode {mode} cutoff V0 do not match validation data."
 
 
