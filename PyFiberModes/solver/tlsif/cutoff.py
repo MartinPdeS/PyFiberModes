@@ -51,12 +51,12 @@ class CutoffSolver(BaseSolver):
         lower_neff_mode = self.get_lower_neff_mode(mode=mode)
 
         if (mode.m >= 2 or mode.family == 'EH'):
-            v0_lowbound = self.fiber.get_cutoff_v0(mode=lower_neff_mode)
+            v0_lowbound = self.fiber.get_mode_cutoff_v0(mode=lower_neff_mode)
             delta = 0.05 / v0_lowbound if v0_lowbound > 4 else self._MCD
             v0_lowbound += delta / 100
 
         elif mode.nu >= 1:
-            v0_lowbound = self.fiber.get_cutoff_v0(mode=lower_neff_mode)
+            v0_lowbound = self.fiber.get_mode_cutoff_v0(mode=lower_neff_mode)
             delta = 0.05 / v0_lowbound
             v0_lowbound -= delta / 100
         else:

@@ -153,7 +153,7 @@ def get_effective_index(
     return neff
 
 
-def get_cutoff_v0(
+def get_mode_cutoff_v0(
         fiber,
         wavelength: Wavelength,
         mode: Mode) -> float:

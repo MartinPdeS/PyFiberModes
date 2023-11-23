@@ -73,7 +73,7 @@ class NeffSolver(BaseSolver):
 
         lower_neff_mode = self.get_mode_with_lower_neff(mode=mode)
 
-        lower_neff_cutoff_V0 = self.fiber.get_cutoff_v0(mode=lower_neff_mode)
+        lower_neff_cutoff_V0 = self.fiber.get_mode_cutoff_v0(mode=lower_neff_mode)
 
         lower_neff_clad_index = self.get_clad_index_from_V0(V0=lower_neff_cutoff_V0)
 
@@ -126,10 +126,10 @@ class NeffSolver(BaseSolver):
         :returns:   The effective index of the mode
         :rtype:     float
         """
-        mode_cutoff_V0 = self.fiber.get_cutoff_v0(mode=mode)
+        mode_cutoff_V0 = self.fiber.get_mode_cutoff_v0(mode=mode)
 
         if mode_cutoff_V0 > self.fiber.V_number:
-            logging.warning(f"Mode: {mode} cutoff V number: {mode_cutoff_V0} is below the fiber V number: {self.fiber.V_number}")
+            logging.info(f"Mode: {mode} cutoff V number: {mode_cutoff_V0} is below the fiber V number: {self.fiber.V_number}")
             return numpy.nan
 
         n_clad_equivalent = self.get_clad_index_from_V0(V0=mode_cutoff_V0)  # High neff boundary

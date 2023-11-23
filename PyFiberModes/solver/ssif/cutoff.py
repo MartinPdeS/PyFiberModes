@@ -44,10 +44,10 @@ class CutoffSolver(BaseSolver):
 
         return jn_zeros(nu, m)[m - 1]
 
-    def _get_cutoff_HE(self, V0: float, nu: int, mode: Mode) -> float:
+    def _get_mode_cutoff_HE(self, V0: float, nu: int, mode: Mode) -> float:
         core, clad = self.fiber.layers
 
-        cutoff_wavelength = self.fiber.get_cutoff_wavelength(mode=mode)
+        cutoff_wavelength = self.fiber.get_mode_cutoff_wavelength(mode=mode)
 
         normal_wavelength = core.wavelength
 
@@ -63,7 +63,7 @@ class CutoffSolver(BaseSolver):
 
         return (1 + ratio) * jn(nu - 2, V0) - (1 - ratio) * jn(nu, V0)
 
-    def get_cutoff_HE(self, V0, nu):
+    def get_mode_cutoff_HE(self, V0, nu):
         core, clad = self.fiber.layers
 
         n_ratio = core.refractive_index**2 / clad.refractive_index**2
@@ -78,7 +78,7 @@ class CutoffSolver(BaseSolver):
                 m=mode.m - 1
             )
 
-            lower_neff_boundary = self.fiber.get_cutoff_v0(mode=lower_neff_mode)
+            lower_neff_boundary = self.fiber.get_mode_cutoff_v0(mode=lower_neff_mode)
 
             if numpy.isnan(lower_neff_boundary) or numpy.isinf(lower_neff_boundary):
                 raise AssertionError(f"find_HE_mode_cutoff: no previous cutoff for {mode} mode")
@@ -97,7 +97,7 @@ class CutoffSolver(BaseSolver):
         ipoints = list(ipoints[ipoints > lower_neff_boundary])
 
         cutoff = self.find_function_first_root(
-            function=self.get_cutoff_HE,
+            function=self.get_mode_cutoff_HE,
             function_args=(mode.nu,),
             lowbound=lower_neff_boundary,
             ipoints=ipoints,

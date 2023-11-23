@@ -18,9 +18,7 @@ class NameSpace():
 
 
 class NeffSolver(BaseSolver):
-    def get_neff_lower_boundary(self,
-            mode: Mode,
-            delta_neff: float) -> float:
+    def get_neff_lower_boundary(self, mode: Mode, delta_neff: float = 1e-6) -> float:
         """
         Gets the lower boundary for neff value.
 
@@ -49,10 +47,7 @@ class NeffSolver(BaseSolver):
             lower_neff_boundary = self.fiber.maximum_index
 
         else:
-            lower_neff_boundary = self.fiber.get_effective_index(
-                mode=lower_order_mode,
-                delta_neff=delta_neff
-            )
+            lower_neff_boundary = self.fiber.get_effective_index(mode=lower_order_mode)
 
             if numpy.isnan(lower_neff_boundary):
                 return lower_neff_boundary
@@ -60,10 +55,7 @@ class NeffSolver(BaseSolver):
         if mode.family == 'LP' and mode.nu > 0:
             pm = Mode(mode.family, mode.nu - 1, mode.m)
 
-            lb = self.fiber.get_effective_index(
-                mode=pm,
-                delta_neff=delta_neff
-            )
+            lb = self.fiber.get_effective_index(mode=pm)
 
             if numpy.isnan(lb):
                 return lb
@@ -73,10 +65,7 @@ class NeffSolver(BaseSolver):
         return lower_neff_boundary
 
     def solve(self, mode: Mode, delta_neff: float) -> float:
-        lower_neff_boundary = self.get_neff_lower_boundary(
-            mode=mode,
-            delta_neff=delta_neff
-        )
+        lower_neff_boundary = self.get_neff_lower_boundary(mode=mode)
 
         last_layer = self.fiber.layers[-1]
         higher_neff_boundary = last_layer.refractive_index

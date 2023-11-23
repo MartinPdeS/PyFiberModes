@@ -14,7 +14,7 @@ from PyFiberModes.field import Field
 
 from PyFiberModes.fundamentals import (
     get_effective_index,
-    get_cutoff_v0,
+    get_mode_cutoff_v0,
     get_radial_field,
     get_propagation_constant_from_omega
 )
@@ -318,7 +318,7 @@ class Fiber(object):
 
         return V0
 
-    def get_cutoff_v0(self, mode: Mode) -> float:
+    def get_mode_cutoff_v0(self, mode: Mode) -> float:
         """
         Gets the cutoff wavelength of the fiber.
 
@@ -328,7 +328,7 @@ class Fiber(object):
         :returns:   The cutoff wavelength.
         :rtype:     float
         """
-        cutoff_V0 = get_cutoff_v0(
+        cutoff_V0 = get_mode_cutoff_v0(
             mode=mode,
             fiber=self,
             wavelength=self.wavelength
@@ -336,7 +336,7 @@ class Fiber(object):
 
         return cutoff_V0
 
-    def get_cutoff_wavelength(self, mode: Mode) -> float:
+    def get_mode_cutoff_wavelength(self, mode: Mode) -> float:
         """
         Gets the cutoff wavelength.
 
@@ -346,7 +346,7 @@ class Fiber(object):
         :returns:   The cutoff wavelength.
         :rtype:     float
         """
-        cutoff_V0 = self.get_cutoff_v0(mode=mode)
+        cutoff_V0 = self.get_mode_cutoff_v0(mode=mode)
 
         if cutoff_V0 == 0:
             return numpy.inf

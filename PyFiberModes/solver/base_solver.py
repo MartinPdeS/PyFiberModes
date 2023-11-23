@@ -4,7 +4,7 @@
 import logging
 import numpy
 
-from scipy.optimize import brentq, bisect, root_scalar
+from scipy.optimize import brentq, root_scalar
 
 
 class BaseSolver(object):
@@ -77,7 +77,7 @@ class BaseSolver(object):
             function_args,
             x_low: float,
             x_high: float,
-            n_slice: int = 100):
+            n_slice: int = 100) -> tuple:
         """
         Gets the new x boundaries.
         Returns numpy.nan if no sign inversion found.
@@ -158,6 +158,7 @@ class BaseSolver(object):
             x_high=x_high,
             n_slice=100,
         )
+
         if numpy.isscalar(boundaries) and numpy.isnan(boundaries):
             logging.warning(f"Couldn't find neff root in range:[{x_low}, {x_high}]  for mode")
             return numpy.nan
