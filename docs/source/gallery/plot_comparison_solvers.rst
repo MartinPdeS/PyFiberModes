@@ -101,7 +101,7 @@ Imports
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 7.349 seconds)
+   **Total running time of the script:** (0 minutes 7.684 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_comparison_solvers.py:

@@ -113,7 +113,7 @@ Preparing the figure
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.615 seconds)
+   **Total running time of the script:** (0 minutes 1.726 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_dispersion.py:

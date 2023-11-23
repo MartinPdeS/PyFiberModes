@@ -91,7 +91,7 @@ class Fiber(object):
         return self.layers[-2]
 
     @property
-    def first_layer(self):
+    def first_layer(self) -> StepIndex:
         """
         Returns the first layer
 
@@ -103,15 +103,24 @@ class Fiber(object):
     def __hash__(self):
         return hash(tuple(self.layers))
 
-    def __getitem__(self, index: int) -> object:
+    def __getitem__(self, index: int) -> StepIndex:
+        """
+        Returns the nth layer.
+
+        :param      index:  The index
+        :type       index:  int
+
+        :returns:   The step index.
+        :rtype:     StepIndex
+        """
         return self.layers[index]
 
-    def iterate_interfaces(self) -> tuple[object, object]:
+    def iterate_interfaces(self) -> tuple[StepIndex, StepIndex]:
         """
         Iterates through pair of layers that forms interfaces
 
         :returns:   The two layers that form the interfaces.
-        :rtype:     tuple[object, object]
+        :rtype:     tuple[StepIndex, StepIndex]
         """
         for layer_idx in range(1, self.n_layer):
             layer_in = self.layers[layer_idx - 1]
@@ -219,7 +228,7 @@ class Fiber(object):
         """
         layer = self.get_layer_at_radius(radius)
 
-        return layer.index(radius)
+        return layer.refractive_index
 
     @property
     def maximum_index(self) -> float:
@@ -273,7 +282,8 @@ class Fiber(object):
 
         return numpy.sqrt(n_max**2 - n_min**2)
 
-    def get_M_number(self) -> float:
+    @property
+    def M_number(self) -> float:
         r"""
         Gets the m number representing an approximation of the number of existing mode
         in the fiber. It's valide only for highly multimode fibers
@@ -285,9 +295,10 @@ class Fiber(object):
         :returns:   The M number.
         :rtype:     float
         """
-        pass
+        return self.V_number**2 / 2
 
-    def get_V0(self) -> float:
+    @property
+    def V_number(self) -> float:
         r"""
         Gets the V number parameter defined as:
 
@@ -351,9 +362,7 @@ class Fiber(object):
 
         return Wavelength(cutoff_wavelength)
 
-    def get_effective_index(self,
-            mode: Mode,
-            delta_neff: float = 1e-6) -> float:
+    def get_effective_index(self, mode: Mode) -> float:
         """
         Gets the effective index.
 

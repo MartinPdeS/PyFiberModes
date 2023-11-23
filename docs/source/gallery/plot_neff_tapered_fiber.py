@@ -9,7 +9,7 @@ Effective index for tapered multi-mode fiber
 import numpy
 from MPSPlots.render2D import SceneList
 from PyFiberModes.fiber import Fiber
-from PyFiberModes import LP01, LP11, LP21
+from PyFiberModes import LP01, LP11, LP21, LP02
 
 
 # %%
@@ -39,7 +39,7 @@ itr_list = numpy.linspace(1, 0.1, 50)
 
 data_dict = get_mode_beta(
     fiber=fiber,
-    mode_list=[LP01, LP11, LP21],
+    mode_list=[LP01, LP11, LP21, LP02],
     itr_list=itr_list
 )
 

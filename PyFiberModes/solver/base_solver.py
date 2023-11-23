@@ -4,7 +4,7 @@
 import logging
 import numpy
 
-from scipy.optimize import root, brentq, bisect, brenth
+from scipy.optimize import brentq, bisect, root_scalar
 
 
 class BaseSolver(object):
@@ -29,7 +29,7 @@ class BaseSolver(object):
             highbound: float = None,
             ipoints: list = [],
             delta: float = 0.25,
-            maxiter: int = numpy.inf):
+            maxiter: int = numpy.inf) -> float:
 
         while True:
             if ipoints:
@@ -72,60 +72,33 @@ class BaseSolver(object):
         self.logger.info(f"maxiter reached ({maxiter}, {lowbound}, {highbound})")
         return numpy.nan
 
-    def _find_root_within_range(self,
-            function,
-            x_low: float,
-            x_high: float,
-            function_args: tuple = (),
-            max_iteration: int = 20) -> float:
-        """
-        Finds a root within range.
-
-        :param      function:       The function
-        :type       function:       object
-        :param      x_low:          The x low
-        :type       x_low:          float
-        :param      x_high:         The x high
-        :type       x_high:         float
-        :param      function_args:  The function arguments
-        :type       function_args:  tuple
-        :param      max_iteration:  The maximum iteration
-        :type       max_iteration:  int
-
-        :returns:   The root value: x such as f(x) = 0
-        :rtype:     float
-        """
-        return brenth(f=function, a=x_low, b=x_high, args=function_args)
-        try:
-            return brenth(f=function, a=x_low, b=x_high, args=function_args)
-        except ValueError:
-
-            delta_x = abs(x_high - x_low) / 2
-            print('DSADS')
-            return self.find_root_within_range(
-                function=function,
-                x_low=x_low + delta_x,
-                x_high=x_high,
-                function_args=function_args
-            )
-
-        opt = root(fun=function, x0=x_low, args=function_args)
-
-        if not (x_low < opt.x[0] < x_high):
-            self.logger.warning(f"Root found : {opt.x[0]} but outside of range: [{x_low:.16f}, {x_high:.16f}]")
-
-        return opt.x[0]
-
     def get_new_x_low_x_high(self,
             function,
             function_args,
             x_low: float,
             x_high: float,
-            n_iteration: int = 10):
+            n_slice: int = 100):
+        """
+        Gets the new x boundaries.
+        Returns numpy.nan if no sign inversion found.
 
+        :param      function:       The function
+        :type       function:       { type_description }
+        :param      function_args:  The function arguments
+        :type       function_args:  { type_description }
+        :param      x_low:          The x low
+        :type       x_low:          float
+        :param      x_high:         The x high
+        :type       x_high:         float
+        :param      n_slice:        The n iteration
+        :type       n_slice:        int
+
+        :returns:   The new x low x high.
+        :rtype:     tuple
+        """
         x_list = [x_low, x_high]
         x_list.sort()
-        x_list = numpy.linspace(*x_list, n_iteration)
+        x_list = numpy.linspace(*x_list, n_slice)
         y_list = [function(x, *function_args) for x in x_list]
         y_list = numpy.asarray(y_list)
 
@@ -135,12 +108,12 @@ class BaseSolver(object):
         y_list = y_list[non_nan_idx]
 
         if len(y_list) < 2:
-            return self.get_new_x_low_x_high(function, function_args, x_low, x_high, n_iteration=2 * n_iteration)
+            return numpy.nan
 
         sign_change = (numpy.diff(numpy.sign(y_list)) != 0) * 1
 
         if (sign_change == 0).all():
-            return self.get_new_x_low_x_high(function, function_args, x_low, x_high, n_iteration=2 * n_iteration)
+            return numpy.nan
 
         sign_change_idx = numpy.where(sign_change == 1)[0]
 
@@ -157,56 +130,51 @@ class BaseSolver(object):
             x_low: float,
             x_high: float,
             function_args: tuple = (),
-            max_iteration: int = 20):
-
-        y_low, y_high = function(x_low, *function_args), function(x_high, *function_args)
-
-        x_low, x_high, y_low, y_high = self.get_new_x_low_x_high(function, function_args, x_low, x_high, 100)
-
-        try:
-            x_root = brentq(f=function, a=x_low, b=x_high, args=function_args, maxiter=max_iteration, disp=True)  # Get x such as f(x) = 0
-        except RuntimeError:
-            self.logger.warning("Couldn't converge to value as max iteration is reached")
-            return numpy.nan
-
-        y_root = function(x_root, *function_args)  # f(x)
-
-        if abs(y_low) > abs(y_root) < abs(y_high):  # Skip discontinuities
-            return x_root
-
-    def update_root_range(self, function, function_args: tuple, x_low: float, x_high: float, y_low: float, y_high: float) -> tuple:
+            max_iteration: int = 100,
+            tolerance: float = 1e-8) -> float:
         """
-        Calculate the new x-range such that it updates the new x-y minimum or new x-y maximum.
-        The new evalution is midway between x_low and x_high.
+        Finds and return the root of a given function within range.
 
-        :param      function:       The function
+        :param      function:       The function to evaluate
         :type       function:       object
+        :param      x_low:          The lower boundary
+        :type       x_low:          float
+        :param      x_high:         The higher boundary
+        :type       x_high:         float
         :param      function_args:  The function arguments
         :type       function_args:  tuple
-        :param      x_low:          The x lower boundary
-        :type       x_low:          float
-        :param      x_high:         The x upper boundary
-        :type       x_high:         float
-        :param      y_low:          The y lower boundary
-        :type       y_low:          float
-        :param      y_high:         The y upper boundary
-        :type       y_high:         float
+        :param      max_iteration:  The maximum iteration
+        :type       max_iteration:  int
 
-        :returns:   The new x_low, x_high, y_low, y_high
-        :rtype:     tuple
+        :returns:   The root of the function
+        :rtype:     float
         """
-        x_mid = (x_low + x_high) / 2
-        y_mid = function(x_mid, *function_args)
+        y_low, y_high = function(x_low, *function_args), function(x_high, *function_args)
 
-        if y_mid > 0:
-            y_high = y_mid
-            x_high = x_mid
+        boundaries = self.get_new_x_low_x_high(
+            function=function,
+            function_args=function_args,
+            x_low=x_low,
+            x_high=x_high,
+            n_slice=100,
+        )
+        if numpy.isscalar(boundaries) and numpy.isnan(boundaries):
+            logging.warning(f"Couldn't find neff root in range:[{x_low}, {x_high}]  for mode")
+            return numpy.nan
 
-        else:
-            y_low = y_mid
-            x_low = x_mid
+        x_low, x_high, y_low, y_high = boundaries
 
-        return x_low, x_high, y_low, y_high
+        x_root = root_scalar(
+            method='brentq',
+            x0=(x_low + x_high) / 2,
+            f=function,
+            bracket=[x_low, x_high],
+            args=function_args,
+            maxiter=max_iteration,
+            xtol=tolerance,
+            options=dict(disp=True)
+        )
 
+        return x_root.root
 
 # -

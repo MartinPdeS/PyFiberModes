@@ -6,34 +6,34 @@
 
 Computation times
 =================
-**00:08.213** total execution time for **gallery** files:
+**01:28.442** total execution time for **gallery** files:
 
 +---------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_gallery_plot_comparison_solvers.py` (``plot_comparison_solvers.py``)                           | 00:07.349 | 0.0 MB |
+| :ref:`sphx_glr_gallery_plot_DCF_fields.py` (``plot_DCF_fields.py``)                                           | 00:58.710 | 0.0 MB |
 +---------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_gallery_plot_smf28_dispersion_vs_wavelength.py` (``plot_smf28_dispersion_vs_wavelength.py``)   | 00:00.234 | 0.0 MB |
+| :ref:`sphx_glr_gallery_plot_mode_field_1.py` (``plot_mode_field_1.py``)                                       | 00:09.463 | 0.0 MB |
 +---------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_gallery_plot_smf28.py` (``plot_smf28.py``)                                                     | 00:00.222 | 0.0 MB |
+| :ref:`sphx_glr_gallery_plot_comparison_solvers.py` (``plot_comparison_solvers.py``)                           | 00:07.684 | 0.0 MB |
 +---------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_gallery_plot_smf28_group_index_vs_wavelength.py` (``plot_smf28_group_index_vs_wavelength.py``) | 00:00.211 | 0.0 MB |
+| :ref:`sphx_glr_gallery_plot_mode_field.py` (``plot_mode_field.py``)                                           | 00:04.896 | 0.0 MB |
 +---------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_gallery_plot_neff_tapered_fiber.py` (``plot_neff_tapered_fiber.py``)                           | 00:00.197 | 0.0 MB |
+| :ref:`sphx_glr_gallery_plot_U_vs_V.py` (``plot_U_vs_V.py``)                                                   | 00:02.243 | 0.0 MB |
 +---------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_gallery_plot_DCF_fields.py` (``plot_DCF_fields.py``)                                           | 00:00.000 | 0.0 MB |
+| :ref:`sphx_glr_gallery_plot_dispersion.py` (``plot_dispersion.py``)                                           | 00:01.726 | 0.0 MB |
 +---------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_gallery_plot_U_vs_V.py` (``plot_U_vs_V.py``)                                                   | 00:00.000 | 0.0 MB |
+| :ref:`sphx_glr_gallery_plot_group_index.py` (``plot_group_index.py``)                                         | 00:01.418 | 0.0 MB |
 +---------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_gallery_plot_dispersion.py` (``plot_dispersion.py``)                                           | 00:00.000 | 0.0 MB |
+| :ref:`sphx_glr_gallery_plot_fiber_LP_modes.py` (``plot_fiber_LP_modes.py``)                                   | 00:00.596 | 0.0 MB |
 +---------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_gallery_plot_effective_index.py` (``plot_effective_index.py``)                                 | 00:00.000 | 0.0 MB |
+| :ref:`sphx_glr_gallery_plot_mode_field_2.py` (``plot_mode_field_2.py``)                                       | 00:00.502 | 0.0 MB |
 +---------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_gallery_plot_fiber_LP_modes.py` (``plot_fiber_LP_modes.py``)                                   | 00:00.000 | 0.0 MB |
+| :ref:`sphx_glr_gallery_plot_effective_index.py` (``plot_effective_index.py``)                                 | 00:00.436 | 0.0 MB |
 +---------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_gallery_plot_group_index.py` (``plot_group_index.py``)                                         | 00:00.000 | 0.0 MB |
+| :ref:`sphx_glr_gallery_plot_smf28_dispersion_vs_wavelength.py` (``plot_smf28_dispersion_vs_wavelength.py``)   | 00:00.244 | 0.0 MB |
 +---------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_gallery_plot_mode_field.py` (``plot_mode_field.py``)                                           | 00:00.000 | 0.0 MB |
+| :ref:`sphx_glr_gallery_plot_neff_tapered_fiber.py` (``plot_neff_tapered_fiber.py``)                           | 00:00.228 | 0.0 MB |
 +---------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_gallery_plot_mode_field_1.py` (``plot_mode_field_1.py``)                                       | 00:00.000 | 0.0 MB |
+| :ref:`sphx_glr_gallery_plot_smf28_group_index_vs_wavelength.py` (``plot_smf28_group_index_vs_wavelength.py``) | 00:00.216 | 0.0 MB |
 +---------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_gallery_plot_mode_field_2.py` (``plot_mode_field_2.py``)                                       | 00:00.000 | 0.0 MB |
+| :ref:`sphx_glr_gallery_plot_smf28.py` (``plot_smf28.py``)                                                     | 00:00.080 | 0.0 MB |
 +---------------------------------------------------------------------------------------------------------------+-----------+--------+

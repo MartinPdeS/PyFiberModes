@@ -60,21 +60,30 @@ Here we create the different fiber design that we want to explore
     # -
 
 
-
-
 .. rst-class:: sphx-glr-script-out
 
- .. code-block:: none
+.. code-block:: pytb
 
-    cutoff_wavelength @ wavelength: 1310.00 nm:
-     --------------------------------------------
-    mode = LP01      cutoff_wavelength: inf
-    mode = HE11      cutoff_wavelength: inf
-    mode = HE22      cutoff_wavelength: 4783.07 nm
-    mode = TE01      cutoff_wavelength: 4788.04 nm
-
-
-
+    Traceback (most recent call last):
+      File "/Users/martinpdes/Desktop/GitProject/PyFiberModes/docs/examples/plot_smf28.py", line 19, in <module>
+        a = smf28.does_mode_exist(LP01, LP11, )
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/Users/martinpdes/Desktop/GitProject/PyFiberModes/PyFiberModes/fiber.py", line 622, in does_mode_exist
+        neff = self.get_effective_index(mode=mode)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/Users/martinpdes/Desktop/GitProject/PyFiberModes/PyFiberModes/fiber.py", line 375, in get_effective_index
+        neff = get_effective_index(
+               ^^^^^^^^^^^^^^^^^^^^
+      File "/Users/martinpdes/Desktop/GitProject/PyFiberModes/PyFiberModes/fundamentals.py", line 148, in get_effective_index
+        neff = neff_solver.solve(
+               ^^^^^^^^^^^^^^^^^^
+      File "/Users/martinpdes/Desktop/GitProject/PyFiberModes/PyFiberModes/solver/mlsif/neff.py", line 76, in solve
+        lower_neff_boundary = self.get_neff_lower_boundary(
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/Users/martinpdes/Desktop/GitProject/PyFiberModes/PyFiberModes/solver/mlsif/neff.py", line 63, in get_neff_lower_boundary
+        lb = self.fiber.get_effective_index(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    TypeError: Fiber.get_effective_index() got an unexpected keyword argument 'delta_neff'
 
 
 
@@ -82,7 +91,7 @@ Here we create the different fiber design that we want to explore
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.222 seconds)
+   **Total running time of the script:** (0 minutes 0.080 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_smf28.py:

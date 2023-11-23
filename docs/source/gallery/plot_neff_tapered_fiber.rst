@@ -33,7 +33,7 @@ Imports
     import numpy
     from MPSPlots.render2D import SceneList
     from PyFiberModes.fiber import Fiber
-    from PyFiberModes import LP01, LP11, LP21
+    from PyFiberModes import LP01, LP11, LP21, LP02
 
 
 
@@ -89,42 +89,13 @@ Constructing fiber
 
     data_dict = get_mode_beta(
         fiber=fiber,
-        mode_list=[LP01, LP11, LP21],
+        mode_list=[LP01, LP11, LP21, LP02],
         itr_list=itr_list
     )
 
 
 
 
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    WARNING:root:Mode: LP11 cutoff wavelenght: 1436.70 nm is below actual wavelength: 1550.00 nm
-    WARNING:root:Mode: LP11 cutoff wavelenght: 1321.26 nm is below actual wavelength: 1550.00 nm
-    WARNING:root:Mode: LP11 cutoff wavelenght: 1205.81 nm is below actual wavelength: 1550.00 nm
-    WARNING:root:Mode: LP11 cutoff wavelenght: 1090.36 nm is below actual wavelength: 1550.00 nm
-    WARNING:root:Mode: LP11 cutoff wavelenght: 974.91 nm is below actual wavelength: 1550.00 nm
-    WARNING:root:Mode: LP11 cutoff wavelenght: 859.46 nm is below actual wavelength: 1550.00 nm
-    WARNING:root:Mode: LP11 cutoff wavelenght: 744.01 nm is below actual wavelength: 1550.00 nm
-    WARNING:root:Mode: LP11 cutoff wavelenght: 628.56 nm is below actual wavelength: 1550.00 nm
-    WARNING:root:Mode: LP21 cutoff wavelenght: 1481.35 nm is below actual wavelength: 1550.00 nm
-    WARNING:root:Mode: LP21 cutoff wavelenght: 1408.90 nm is below actual wavelength: 1550.00 nm
-    WARNING:root:Mode: LP21 cutoff wavelenght: 1336.44 nm is below actual wavelength: 1550.00 nm
-    WARNING:root:Mode: LP21 cutoff wavelenght: 1263.98 nm is below actual wavelength: 1550.00 nm
-    WARNING:root:Mode: LP21 cutoff wavelenght: 1191.52 nm is below actual wavelength: 1550.00 nm
-    WARNING:root:Mode: LP21 cutoff wavelenght: 1119.07 nm is below actual wavelength: 1550.00 nm
-    WARNING:root:Mode: LP21 cutoff wavelenght: 1046.61 nm is below actual wavelength: 1550.00 nm
-    WARNING:root:Mode: LP21 cutoff wavelenght: 974.15 nm is below actual wavelength: 1550.00 nm
-    WARNING:root:Mode: LP21 cutoff wavelenght: 901.69 nm is below actual wavelength: 1550.00 nm
-    WARNING:root:Mode: LP21 cutoff wavelenght: 829.24 nm is below actual wavelength: 1550.00 nm
-    WARNING:root:Mode: LP21 cutoff wavelenght: 756.78 nm is below actual wavelength: 1550.00 nm
-    WARNING:root:Mode: LP21 cutoff wavelenght: 684.32 nm is below actual wavelength: 1550.00 nm
-    WARNING:root:Mode: LP21 cutoff wavelenght: 611.86 nm is below actual wavelength: 1550.00 nm
-    WARNING:root:Mode: LP21 cutoff wavelenght: 539.41 nm is below actual wavelength: 1550.00 nm
-    WARNING:root:Mode: LP21 cutoff wavelenght: 466.95 nm is below actual wavelength: 1550.00 nm
-    WARNING:root:Mode: LP21 cutoff wavelenght: 394.49 nm is below actual wavelength: 1550.00 nm
 
 
 
@@ -178,7 +149,7 @@ Preparing the figure
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.197 seconds)
+   **Total running time of the script:** (0 minutes 0.228 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_neff_tapered_fiber.py:
