@@ -30,13 +30,18 @@ figure = SceneList()
 ax = figure.append_ax(show_legend=True, line_width=2)
 
 for mode in [LP01, LP02, LP03]:
-    data = []
+    amplitudes = []
     for radius in radius_list:
-        e_abs = fiber.get_radial_field_norm(mode=mode, radius=radius)
+        e_field, _ = fiber.get_radial_field(mode=mode, radius=radius)
+        amplitudes.append(e_field.rho)
 
-        data.append(e_abs)
+    amplitudes = numpy.asarray(amplitudes)
+    amplitudes /= numpy.sign(amplitudes[0])
+    ax.add_line(x=radius_list, y=amplitudes, label=mode)
 
-    ax.add_line(x=radius_list, y=data, label=mode)
+    norm = fiber.get_mode_norm(mode=mode)
+
+    amplitudes /= numpy.sqrt(norm)
 
 
 figure.show()

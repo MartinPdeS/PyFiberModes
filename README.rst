@@ -58,7 +58,7 @@ Testing
 
 To test localy (with cloning the GitHub repository) you'll need to install the dependencies and run the coverage command as
 
-.. code:: console
+.. code:: python
 
    >>> git clone https://github.com/MartinPdeS/PyFiberModes.git
    >>> cd PyFiberModes

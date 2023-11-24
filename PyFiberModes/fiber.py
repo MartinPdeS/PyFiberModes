@@ -6,6 +6,7 @@ from functools import cache
 from dataclasses import dataclass, field
 from scipy import constants
 from copy import deepcopy
+from itertools import pairwise
 
 from PyFiberModes.stepindex import StepIndex
 from PyFiberModes import Wavelength, Mode
@@ -122,9 +123,7 @@ class Fiber(object):
         :returns:   The two layers that form the interfaces.
         :rtype:     tuple[StepIndex, StepIndex]
         """
-        for layer_idx in range(1, self.n_layer):
-            layer_in = self.layers[layer_idx - 1]
-            layer_out = self.layers[layer_idx]
+        for layer_in, layer_out in pairwise(self.layers):
             yield layer_in, layer_out
 
     def update_wavelength(self, wavelength: Wavelength) -> None:
@@ -405,6 +404,26 @@ class Fiber(object):
         denominator = n_max**2 - n_last_layer**2
 
         return numerator / denominator
+
+    def get_propagation_constant(self, mode: Mode) -> float:
+        r"""
+        Gets the propagation constant [:math:`beta`].
+
+        :param      mode:    The mode to consider
+        :type       mode:    Mode
+
+        :returns:   The propagation constant [:math:`beta`].
+        :rtype:     float
+        """
+        neff = get_effective_index(
+            fiber=self,
+            wavelength=self.wavelength,
+            mode=mode,
+        )
+
+        beta = neff * self.wavelength.k0
+
+        return beta
 
     def get_phase_velocity(self, mode: Mode) -> float:
         """
