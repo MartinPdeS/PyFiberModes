@@ -10,7 +10,7 @@ from itertools import pairwise
 
 from PyFiberModes.stepindex import StepIndex
 from PyFiberModes import Wavelength, Mode
-from PyFinitDiff.tools.derivatives import get_derivative_1d
+from PyFinitDiff.finite_difference_1D import get_function_derivative
 from PyFiberModes.field import Field
 
 from PyFiberModes.fundamentals import (
@@ -453,10 +453,10 @@ class Fiber(object):
         :returns:   The group index.
         :rtype:     float
         """
-        derivative = get_derivative_1d(
+        derivative = get_function_derivative(
             function=get_propagation_constant_from_omega,
             x_eval=self.wavelength.omega,
-            order=1,
+            derivative=1,
             accuracy=4,
             delta=1e12,  # This value is critical for accurate computation
             function_kwargs=dict(fiber=self, mode=mode)
@@ -477,10 +477,10 @@ class Fiber(object):
         :returns:   The groupe velocity.
         :rtype:     float
         """
-        derivative = get_derivative_1d(
+        derivative = get_function_derivative(
             function=get_propagation_constant_from_omega,
             x_eval=self.wavelength.omega,
-            order=1,
+            derivative=1,
             accuracy=4,
             delta=1e12,  # This value is critical for accurate computation
             function_kwargs=dict(fiber=self, mode=mode)
@@ -501,10 +501,10 @@ class Fiber(object):
         :returns:   The group_velocity dispersion
         :rtype:     float
         """
-        derivative = get_derivative_1d(
+        derivative = get_function_derivative(
             function=get_propagation_constant_from_omega,
             x_eval=self.wavelength.omega,
-            order=2,
+            derivative=2,
             accuracy=4,
             delta=1e12,  # This value is critical for accurate computation
             function_kwargs=dict(fiber=self, mode=mode)
@@ -544,10 +544,10 @@ class Fiber(object):
         :returns:   The s parameter.
         :rtype:     float
         """
-        derivative = get_derivative_1d(
+        derivative = get_function_derivative(
             function=get_propagation_constant_from_omega,
             x_eval=self.wavelength.omega,
-            order=3,
+            derivative=3,
             accuracy=4,
             delta=1e12,  # This value is critical for accurate computation
             function_kwargs=dict(fiber=self, mode=mode)
@@ -557,7 +557,8 @@ class Fiber(object):
 
         return 1e-3 * derivative * factor**2
 
-    def get_mode_field(self,
+    def get_mode_field(
+            self,
             mode: Mode,
             limit: float = None,
             n_point: int = 101) -> Field:

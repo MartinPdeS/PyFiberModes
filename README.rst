@@ -102,7 +102,8 @@ Email:`martin.poinsinet-de-sivry@polymtl.ca <mailto:martin.poinsinet-de-sivry@po
    :target: https://pypi.org/project/PyFiberModes/
 
 .. |PyPi_download| image:: https://img.shields.io/pypi/dm/PyFiberModes.svg
-   :target: https://pypi.org/project/PyFiberModes/
+   :target: https://pypistats.org/packages/pyfibermodes
+
 
 
 

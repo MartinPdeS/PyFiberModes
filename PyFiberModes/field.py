@@ -25,7 +25,7 @@ class Field(object):
         """
         Generate the mesh coordinates that are used for field computation.
         """
-        self.cartesian_coordinates = CartesianCoordinates.generate_from_square(size=2 * self.limit, n_points=self.n_point)
+        self.cartesian_coordinates = CartesianCoordinates.generate_from_square(length=2 * self.limit, n_points=self.n_point)
 
         self.cylindrical_coordinates = self.cartesian_coordinates.to_cylindrical()
 

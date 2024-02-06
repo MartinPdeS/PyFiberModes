@@ -22,7 +22,8 @@ class BaseSolver(object):
     def solver(self, *args, **kwargs):
         raise NotImplementedError()
 
-    def find_function_first_root(self,
+    def find_function_first_root(
+            self,
             function,
             function_args: tuple = (),
             lowbound: float = 0,
@@ -72,7 +73,8 @@ class BaseSolver(object):
         self.logger.info(f"maxiter reached ({maxiter}, {lowbound}, {highbound})")
         return numpy.nan
 
-    def get_new_x_low_x_high(self,
+    def get_new_x_low_x_high(
+            self,
             function,
             function_args,
             x_low: float,
@@ -125,7 +127,8 @@ class BaseSolver(object):
 
         return x_low, x_high, y_low, y_high
 
-    def find_root_within_range(self,
+    def find_root_within_range(
+            self,
             function,
             x_low: float,
             x_high: float,
@@ -160,7 +163,7 @@ class BaseSolver(object):
         )
 
         if numpy.isscalar(boundaries) and numpy.isnan(boundaries):
-            logging.warning(f"Couldn't find neff root in range:[{x_low}, {x_high}]  for mode")
+            logging.warning(f"Couldn't find neff root in range:[{x_low}, {x_high}] for mode")
             return numpy.nan
 
         x_low, x_high, y_low, y_high = boundaries

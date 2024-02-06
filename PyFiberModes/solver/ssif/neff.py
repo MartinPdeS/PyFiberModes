@@ -106,11 +106,12 @@ class NeffSolver(BaseSolver):
             case 'HE':
                 return self.get_HE_equation
 
-    def solve(self,
+    def solve(
+            self,
             mode: Mode,
             delta_neff: float,
             max_iteration: int = 100,
-            epsilon: float = 1e-12) -> float:
+            epsilon: float = 1e-14) -> float:
         """
         Solve and return the effective index (neff) for a given mode.
 

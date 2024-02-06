@@ -65,10 +65,9 @@ class NeffSolver(BaseSolver):
         return lower_neff_boundary
 
     def solve(self, mode: Mode, delta_neff: float) -> float:
-        lower_neff_boundary = self.get_neff_lower_boundary(mode=mode)
+        higher_neff_boundary = self.get_neff_lower_boundary(mode=mode)
 
-        last_layer = self.fiber.layers[-1]
-        higher_neff_boundary = last_layer.refractive_index
+        lower_neff_boundary = self.fiber.last_layer.refractive_index
 
         match mode.family:
             case 'LP':
@@ -82,12 +81,12 @@ class NeffSolver(BaseSolver):
             case 'EH':
                 function = self.get_HE_equation
 
-        if lower_neff_boundary <= higher_neff_boundary:
+        if higher_neff_boundary <= lower_neff_boundary:
             print("Impossible bound")
             return numpy.nan
 
-        delta_boundary = lower_neff_boundary - higher_neff_boundary
-        delta_neff = min(delta_neff, delta_boundary / 20)
+        delta_boundary = (higher_neff_boundary - lower_neff_boundary) / 100
+        delta_neff = - min(delta_neff, delta_boundary)
 
         extra = 1e-13
 
@@ -95,9 +94,9 @@ class NeffSolver(BaseSolver):
             value = self.find_function_first_root(
                 function=function,
                 function_args=(mode.nu,),
-                lowbound=lower_neff_boundary - extra,
-                highbound=higher_neff_boundary + extra,
-                delta=-delta_neff
+                lowbound=higher_neff_boundary - extra,
+                highbound=lower_neff_boundary + extra,
+                delta=delta_neff
             )
 
         except ValueError:
@@ -235,7 +234,8 @@ class NeffSolver(BaseSolver):
             C=C
         )
 
-    def get_LP_field_from_parameters(self,
+    def get_LP_field_from_parameters(
+            self,
             eval_layer: object,
             radius: float,
             neff: float,
@@ -350,8 +350,7 @@ class NeffSolver(BaseSolver):
 
             radius_in = radius_out
         else:
-            last_layer = self.fiber.layers[-1]
-            u = last_layer.get_U_W_parameter(radius=radius_out, neff=neff)
+            u = self.fiber.last_layer.get_U_W_parameter(radius=radius_out, neff=neff)
 
         return numpy.array((0, ephi, 0)), numpy.array((hr, 0, hz))
 
