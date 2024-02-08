@@ -47,7 +47,8 @@ class FiberFactory(object):
         self.cutoff_solver = None
         self.wavelength = wavelength
 
-    def add_layer(self,
+    def add_layer(
+            self,
             index: float,
             name: str = "",
             radius: float = 0) -> None:

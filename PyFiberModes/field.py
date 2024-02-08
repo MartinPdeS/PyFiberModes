@@ -613,7 +613,7 @@ class Field(object):
         figure = SceneList(unit_size=(4, 4), ax_orientation='horizontal', tight_layout=True)
 
         for field_string in plot_type:
-            ax = figure.append_ax(title=field_string, equal=True)
+            ax = figure.append_ax(title=field_string, aspect_ratio='equal')
 
             self.add_to_ax(field_string=field_string, ax=ax)
 
