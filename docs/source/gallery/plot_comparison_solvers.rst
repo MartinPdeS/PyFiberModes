@@ -94,14 +94,50 @@ Imports
  .. code-block:: none
 
 
-    SceneList(unit_size=(10, 3), tight_layout=True, transparent_background=False, title='', padding=1.0, ax_orientation='vertical')
+    SceneList(unit_size=(10, 3), tight_layout=True, transparent_background=False, title='', padding=1.0, axis_list=[Axis(row=0, col=0, x_label='Inverse taper ration [ITR]', y_label='LP01 effective index', title='', show_grid=True, show_legend=True, legend_position='best', x_scale='linear', y_scale='linear', x_limits=None, y_limits=None, equal_limits=False, projection=None, font_size=16, tick_size=14, y_tick_position='left', x_tick_position='bottom', show_ticks=True, show_colorbar=None, legend_font_size=14, line_width=None, line_style=None, x_scale_factor=None, y_scale_factor=None, aspect_ratio='auto', _artist_list=[Line(y=array([1.4474905 , 1.44743126, 1.44737064, 1.4473086 , 1.44724513,
+           1.4471802 , 1.44711379, 1.44704587, 1.44697642, 1.44690543,
+           1.44683287, 1.44675875, 1.44668306, 1.44660579, 1.44652695,
+           1.44644655, 1.4463646 , 1.44628115, 1.44619623, 1.44610989,
+           1.44602219, 1.44593322, 1.44584307, 1.44575186, 1.44565972,
+           1.44556683, 1.44547338, 1.44537958, 1.44528569, 1.44519199,
+           1.44509882, 1.44500655, 1.44491559, 1.44482638, 1.44473942,
+           1.44465526, 1.44457444, 1.44449757, 1.44442524, 1.44435806,
+           1.44429657, 1.44424127, 1.44419256, 1.4441507 , 1.44411576,
+           1.44408759, 1.44406582, 1.4440498 , 1.44403872, 1.4440316 ]), x=array([1.        , 0.98571429, 0.97142857, 0.95714286, 0.94285714,
+           0.92857143, 0.91428571, 0.9       , 0.88571429, 0.87142857,
+           0.85714286, 0.84285714, 0.82857143, 0.81428571, 0.8       ,
+           0.78571429, 0.77142857, 0.75714286, 0.74285714, 0.72857143,
+           0.71428571, 0.7       , 0.68571429, 0.67142857, 0.65714286,
+           0.64285714, 0.62857143, 0.61428571, 0.6       , 0.58571429,
+           0.57142857, 0.55714286, 0.54285714, 0.52857143, 0.51428571,
+           0.5       , 0.48571429, 0.47142857, 0.45714286, 0.44285714,
+           0.42857143, 0.41428571, 0.4       , 0.38571429, 0.37142857,
+           0.35714286, 0.34285714, 0.32857143, 0.31428571, 0.3       ]), label='2 layer', color=None, line_style='-', line_width=3.0, x_scale_factor=1, y_scale_factor=1, layer_position=1, mappable=[<matplotlib.lines.Line2D object at 0x17e7fc190>]), Scatter(y=array([1.4474905 , 1.44743126, 1.44737064, 1.4473086 , 1.44724513,
+           1.4471802 , 1.44711379, 1.44704587, 1.44697642, 1.44690543,
+           1.44683287, 1.44675875, 1.44668306, 1.44660579, 1.44652695,
+           1.44644654, 1.4463646 , 1.44628115, 1.44619623, 1.44610989,
+           1.44602219, 1.44593322, 1.44584307, 1.44575185, 1.44565972,
+           1.44556683, 1.44547338, 1.44537958, 1.44528568, 1.44519199,
+           1.44509882, 1.44500655, 1.44491558, 1.44482637, 1.44473939,
+           1.44465517, 1.44457425, 1.44449714, 1.44442432, 1.44435615,
+           1.44429284, 1.44423438, 1.44418051, 1.44413074, 1.44408446,
+           1.44404156, 1.4440234 , 1.44402359, 1.44402364, 1.44402363]), x=array([1.        , 0.98571429, 0.97142857, 0.95714286, 0.94285714,
+           0.92857143, 0.91428571, 0.9       , 0.88571429, 0.87142857,
+           0.85714286, 0.84285714, 0.82857143, 0.81428571, 0.8       ,
+           0.78571429, 0.77142857, 0.75714286, 0.74285714, 0.72857143,
+           0.71428571, 0.7       , 0.68571429, 0.67142857, 0.65714286,
+           0.64285714, 0.62857143, 0.61428571, 0.6       , 0.58571429,
+           0.57142857, 0.55714286, 0.54285714, 0.52857143, 0.51428571,
+           0.5       , 0.48571429, 0.47142857, 0.45714286, 0.44285714,
+           0.42857143, 0.41428571, 0.4       , 0.38571429, 0.37142857,
+           0.35714286, 0.34285714, 0.32857143, 0.31428571, 0.3       ]), label='3 layer', color='black', marker='o', marker_size=20.0, line_style='None', line_width=1, alpha=0.7, edge_color='black', x_scale_factor=1, y_scale_factor=1, layer_position=1, mappable=<matplotlib.collections.PathCollection object at 0x17ef78cd0>)], mpl_ax=<Axes: xlabel='Inverse taper ration [ITR]', ylabel='LP01 effective index'>, colorbar=Colorbar(artist=None, discreet=False, position='right', colormap=<matplotlib.colors.LinearSegmentedColormap object at 0x115c76bd0>, orientation='vertical', symmetric=False, log_norm=False, numeric_format=None, n_ticks=None, label_size=None, width='10%', padding=0.1, norm=None, label='', mappable=None))], _mpl_figure=<Figure size 1000x300 with 1 Axes>, mpl_axis_generated=False, axis_generated=True, ax_orientation='vertical')
 
 
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 7.684 seconds)
+   **Total running time of the script:** (0 minutes 8.069 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_comparison_solvers.py:

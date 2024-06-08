@@ -42,7 +42,7 @@ for mode in [HE11, TE01, TM01, HE21, EH11, HE31, HE12, HE22, HE32]:
 
         data_list.append(data)
 
-    _ = ax.add_line(x=V0_list, y=data_list, label=mode, line_width=1.5)
+    _ = ax.add_line(x=V0_list, y=data_list, label=str(mode), line_width=1.5)
 
 _ = ax.add_line(x=V0_list, y=V0_list, line_width=2, label='U = V')
 

@@ -34,5 +34,5 @@ ax = figure.append_ax(
 
 ax.add_line(x=wavelength_list, y=data)
 
-figure.show()
+_ = figure.show()
 # -

@@ -70,7 +70,7 @@ Here we create the different fiber design that we want to explore
 
     ax.add_line(x=wavelength_list, y=data)
 
-    figure.show()
+    _ = figure.show()
     # -
 
 
@@ -81,19 +81,13 @@ Here we create the different fiber design that we want to explore
    :class: sphx-glr-single-img
 
 
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-
-    SceneList(unit_size=(10, 3), tight_layout=True, transparent_background=False, title='', padding=1.0, ax_orientation='vertical')
 
 
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.216 seconds)
+   **Total running time of the script:** (0 minutes 0.211 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_smf28_group_index_vs_wavelength.py:

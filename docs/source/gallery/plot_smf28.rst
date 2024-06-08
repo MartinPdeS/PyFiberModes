@@ -46,44 +46,76 @@ Generating the fiber structures
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Here we create the different fiber design that we want to explore
 
-.. GENERATED FROM PYTHON SOURCE LINES 17-25
+.. GENERATED FROM PYTHON SOURCE LINES 17-27
 
 .. code-block:: python3
 
-    smf28 = load_fiber(fiber_name='DCF1300S_20', wavelength=1310e-9)
+    smf28 = load_fiber(fiber_name='SMF28', wavelength=1310e-9)
 
-    a = smf28.does_mode_exist(LP01, LP11, )
-    # print(a)
-    smf28.print_data(data_type_list=['cutoff_wavelength'], mode_list=[LP01, HE11, HE22, TE01])
+
+    smf28.print_data(
+        data_type_list=['mode_cutoff_wavelength', 'effective_index', 'dispersion'], 
+        mode_list=[HE11, LP01, TE01, LP11, LP02, LP21, LP12, HE22, LP31, LP22, LP41]
+    )
 
 
     # -
 
 
+
+
 .. rst-class:: sphx-glr-script-out
 
-.. code-block:: pytb
+ .. code-block:: none
 
-    Traceback (most recent call last):
-      File "/Users/martinpdes/Desktop/GitProject/PyFiberModes/docs/examples/plot_smf28.py", line 19, in <module>
-        a = smf28.does_mode_exist(LP01, LP11, )
-            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-      File "/Users/martinpdes/Desktop/GitProject/PyFiberModes/PyFiberModes/fiber.py", line 622, in does_mode_exist
-        neff = self.get_effective_index(mode=mode)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-      File "/Users/martinpdes/Desktop/GitProject/PyFiberModes/PyFiberModes/fiber.py", line 375, in get_effective_index
-        neff = get_effective_index(
-               ^^^^^^^^^^^^^^^^^^^^
-      File "/Users/martinpdes/Desktop/GitProject/PyFiberModes/PyFiberModes/fundamentals.py", line 148, in get_effective_index
-        neff = neff_solver.solve(
-               ^^^^^^^^^^^^^^^^^^
-      File "/Users/martinpdes/Desktop/GitProject/PyFiberModes/PyFiberModes/solver/mlsif/neff.py", line 76, in solve
-        lower_neff_boundary = self.get_neff_lower_boundary(
-                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-      File "/Users/martinpdes/Desktop/GitProject/PyFiberModes/PyFiberModes/solver/mlsif/neff.py", line 63, in get_neff_lower_boundary
-        lb = self.fiber.get_effective_index(
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    TypeError: Fiber.get_effective_index() got an unexpected keyword argument 'delta_neff'
+    mode_cutoff_wavelength @ wavelength: 1310.00 nm:
+     -------------------------------------------------
+    mode = HE11      mode_cutoff_wavelength: inf
+    mode = LP01      mode_cutoff_wavelength: inf
+    mode = TE01      mode_cutoff_wavelength: 1499.71 nm
+    mode = LP11      mode_cutoff_wavelength: 1499.71 nm
+    mode = LP02      mode_cutoff_wavelength: 941.24 nm
+    mode = LP21      mode_cutoff_wavelength: 941.24 nm
+    mode = LP12      mode_cutoff_wavelength: 653.35 nm
+    mode = HE22      mode_cutoff_wavelength: 653.15 nm
+    mode = LP31      mode_cutoff_wavelength: 702.26 nm
+    mode = LP22      mode_cutoff_wavelength: 514.08 nm
+    mode = LP41      mode_cutoff_wavelength: 565.28 nm
+
+
+
+    effective_index @ wavelength: 1310.00 nm:
+     ------------------------------------------
+    mode = HE11      effective_index: 1.4509073523458274
+    mode = LP01      effective_index: 1.4509131222977205
+    mode = TE01      effective_index: 1.447470263696458
+    mode = LP11      effective_index: 1.447470263696458
+    mode = LP02      effective_index: nan
+    mode = LP21      effective_index: nan
+    mode = LP12      effective_index: nan
+    mode = HE22      effective_index: nan
+    mode = LP31      effective_index: nan
+    mode = LP22      effective_index: nan
+    mode = LP41      effective_index: nan
+
+
+
+    dispersion @ wavelength: 1310.00 nm:
+     -------------------------------------
+    mode = HE11      dispersion: 1.1399738885603026
+    mode = LP01      dispersion: -1.0354515265649626
+    mode = TE01      dispersion: -33.95106566984884
+    mode = LP11      dispersion: -33.95106566984884
+    mode = LP02      dispersion: nan
+    mode = LP21      dispersion: nan
+    mode = LP12      dispersion: nan
+    mode = HE22      dispersion: nan
+    mode = LP31      dispersion: nan
+    mode = LP22      dispersion: nan
+    mode = LP41      dispersion: nan
+
+
+
 
 
 
@@ -91,7 +123,7 @@ Here we create the different fiber design that we want to explore
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.080 seconds)
+   **Total running time of the script:** (0 minutes 0.023 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_smf28.py:

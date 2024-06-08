@@ -85,7 +85,7 @@ Preparing the figure
         ax.add_line(
             x=core_indexes,
             y=neff,
-            label=mode,
+            label=str(mode),
             line_width=2
         )
 
@@ -106,14 +106,44 @@ Preparing the figure
  .. code-block:: none
 
 
-    SceneList(unit_size=(10, 3), tight_layout=True, transparent_background=False, title='Effective index vs core index', padding=1.0, ax_orientation='vertical')
+    SceneList(unit_size=(10, 3), tight_layout=True, transparent_background=False, title='Effective index vs core index', padding=1.0, axis_list=[Axis(row=0, col=0, x_label=None, y_label=None, title='', show_grid=True, show_legend=True, legend_position='best', x_scale='linear', y_scale='linear', x_limits=None, y_limits=None, equal_limits=False, projection=None, font_size=16, tick_size=14, y_tick_position='left', x_tick_position='bottom', show_ticks=True, show_colorbar=None, legend_font_size=14, line_width=None, line_style=None, x_scale_factor=None, y_scale_factor=None, aspect_ratio='auto', _artist_list=[Line(y=array([1.45504122, 1.45648663, 1.45792288, 1.45935074, 1.46077371,
+           1.46219158, 1.46360487, 1.46501676, 1.46642383, 1.46782915,
+           1.46923235, 1.47063371, 1.47203484, 1.47343173, 1.47482873,
+           1.47622458, 1.47761938, 1.4790158 , 1.48040623, 1.48179845,
+           1.48319252, 1.48458079, 1.48597102, 1.48736062, 1.48874984,
+           1.49013851, 1.49152674, 1.49291454, 1.49430195, 1.49568899]), x=array([1.454     , 1.45537931, 1.45675862, 1.45813793, 1.45951724,
+           1.46089655, 1.46227586, 1.46365517, 1.46503448, 1.46641379,
+           1.4677931 , 1.46917241, 1.47055172, 1.47193103, 1.47331034,
+           1.47468966, 1.47606897, 1.47744828, 1.47882759, 1.4802069 ,
+           1.48158621, 1.48296552, 1.48434483, 1.48572414, 1.48710345,
+           1.48848276, 1.48986207, 1.49124138, 1.49262069, 1.494     ]), label='HE11', color=None, line_style='-', line_width=2.0, x_scale_factor=1, y_scale_factor=1, layer_position=1, mappable=[<matplotlib.lines.Line2D object at 0x17e7920d0>]), Line(y=array([1.45638841, 1.45887258, 1.46102037, 1.46298046, 1.46482349,
+           1.4665849 , 1.46828801, 1.46994605, 1.47156918, 1.47316452,
+           1.47473744, 1.47628961, 1.47782657, 1.4793497 , 1.48086073,
+           1.48236155, 1.48385314, 1.48533669, 1.48681351, 1.48828309,
+           1.48974724, 1.49120613, 1.49266042, 1.49411027, 1.49555623,
+           1.49699851, 1.49843749, 1.49987335, 1.5013064 , 1.50273676]), x=array([1.454     , 1.45537931, 1.45675862, 1.45813793, 1.45951724,
+           1.46089655, 1.46227586, 1.46365517, 1.46503448, 1.46641379,
+           1.4677931 , 1.46917241, 1.47055172, 1.47193103, 1.47331034,
+           1.47468966, 1.47606897, 1.47744828, 1.47882759, 1.4802069 ,
+           1.48158621, 1.48296552, 1.48434483, 1.48572414, 1.48710345,
+           1.48848276, 1.48986207, 1.49124138, 1.49262069, 1.494     ]), label='HE12', color=None, line_style='-', line_width=2.0, x_scale_factor=1, y_scale_factor=1, layer_position=1, mappable=[<matplotlib.lines.Line2D object at 0x17d7cd5d0>]), Line(y=array([       nan,        nan,        nan, 1.45751482, 1.46313105,
+           1.46656857, 1.4692845 , 1.4716421 , 1.47378267, 1.4757861 ,
+           1.47768757, 1.47951423, 1.48128309, 1.48300621, 1.48469543,
+           1.48634724, 1.48797624, 1.48958333, 1.49117163, 1.49274438,
+           1.49430069, 1.4958451 , 1.4973781 , 1.49890094, 1.50041469,
+           1.50192032, 1.50341831, 1.5049094 , 1.5063942 , 1.50787356]), x=array([1.454     , 1.45537931, 1.45675862, 1.45813793, 1.45951724,
+           1.46089655, 1.46227586, 1.46365517, 1.46503448, 1.46641379,
+           1.4677931 , 1.46917241, 1.47055172, 1.47193103, 1.47331034,
+           1.47468966, 1.47606897, 1.47744828, 1.47882759, 1.4802069 ,
+           1.48158621, 1.48296552, 1.48434483, 1.48572414, 1.48710345,
+           1.48848276, 1.48986207, 1.49124138, 1.49262069, 1.494     ]), label='HE22', color=None, line_style='-', line_width=2.0, x_scale_factor=1, y_scale_factor=1, layer_position=1, mappable=[<matplotlib.lines.Line2D object at 0x17e7a6f10>])], mpl_ax=<Axes: >, colorbar=Colorbar(artist=None, discreet=False, position='right', colormap=<matplotlib.colors.LinearSegmentedColormap object at 0x123c9c590>, orientation='vertical', symmetric=False, log_norm=False, numeric_format=None, n_ticks=None, label_size=None, width='10%', padding=0.1, norm=None, label='', mappable=None))], _mpl_figure=<Figure size 1000x300 with 1 Axes>, mpl_axis_generated=False, axis_generated=True, ax_orientation='vertical')
 
 
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.596 seconds)
+   **Total running time of the script:** (0 minutes 0.611 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_fiber_LP_modes.py:

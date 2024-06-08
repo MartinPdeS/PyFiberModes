@@ -19,7 +19,7 @@
 
 
 Effective index for tapered multi-mode fiber
-===========================================
+============================================
 
 .. GENERATED FROM PYTHON SOURCE LINES 7-9
 
@@ -97,6 +97,12 @@ Constructing fiber
 
 
 
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    WARNING:root:Couldn't find neff root in range:[1.44440000000001, 1.444424538538227] for mode
+
 
 
 
@@ -149,7 +155,7 @@ Preparing the figure
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.228 seconds)
+   **Total running time of the script:** (0 minutes 0.255 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_neff_tapered_fiber.py:

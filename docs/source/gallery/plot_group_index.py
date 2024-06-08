@@ -36,7 +36,7 @@ for mode in [HE11, HE12, HE22]:
     ax.add_line(
         x=core_indexes,
         y=data,
-        label=mode,
+        label=str(mode),
         line_width=2
     )
 

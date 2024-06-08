@@ -37,7 +37,7 @@ for mode in [LP01, LP02, LP03]:
 
     amplitudes = numpy.asarray(amplitudes)
     amplitudes /= numpy.sign(amplitudes[0])
-    ax.add_line(x=radius_list, y=amplitudes, label=mode)
+    ax.add_line(x=radius_list, y=amplitudes, label=str(mode))
 
 
 figure.show()
