@@ -1,11 +1,11 @@
 from PyFiberModes.wavelength import Wavelength
-from PyFiberModes.mode import Mode, Family
-from PyFiberModes.mode_instances import *
+from PyFiberModes.mode import Mode, Family  # noqa: F401
+from PyFiberModes.mode_instances import *  # noqa: F403
 from PyFiberModes.factory import FiberFactory
 from PyFiberModes.field import Field
 
 
-__all__ = [
+__all__ = [  # noqa: F405
     'Wavelength',
     'Mode',
     'ModeFamily',
