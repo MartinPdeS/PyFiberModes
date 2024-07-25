@@ -5,6 +5,15 @@ from PyFiberModes.factory import FiberFactory
 from PyFiberModes.field import Field
 
 
+try:
+    from ._version import version as __version__  # noqa: F401
+
+except ImportError:
+    __version__ = "0.0.0"
+
+# -
+
+
 __all__ = [  # noqa: F405
     'Wavelength',
     'Mode',
