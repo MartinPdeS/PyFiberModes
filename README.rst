@@ -3,7 +3,7 @@ PyFiberModes
 
 |python|
 |docs|
-|Unittest|
+|coverage|
 |PyPi|
 |PyPi_download|
 
@@ -96,7 +96,9 @@ Email:`martin.poinsinet-de-sivry@polymtl.ca <mailto:martin.poinsinet-de-sivry@po
    :target: https://pyfibermodes.readthedocs.io/en/latest/
    :alt: Documentation Status
 
-.. |Unittest| image:: https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/MartinPdeS/f0955be398d59efac69042c1b0fbece2/raw/4c502d1ed25ca76bf1a73e2374d40960dae7e2dc/PyFiberModescoverage_badge.json
+.. |coverage| image:: https://raw.githubusercontent.com/MartinPdeS/PyFiberModes/python-coverage-comment-action-data/badge.svg
+   :alt: Unittest coverage
+   :target: https://htmlpreview.github.io/?https://github.com/MartinPdeS/PyFiberModes/blob/python-coverage-comment-action-data/htmlcov/index.html
 
 .. |PyPi| image:: https://badge.fury.io/py/PyFiberModes.svg
    :target: https://pypi.org/project/PyFiberModes/
