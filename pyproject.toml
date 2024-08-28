@@ -61,5 +61,24 @@ documentation = [
 minversion = "6.0"
 xfail_strict = true
 log_cli_level = "INFO"
-testpaths = "tests"
-addopts = ['-v', '-rA', '-rw']
+testpaths = [
+    "tests/*",
+]
+addopts = [
+    '-v',
+    '-rA',
+    '-rw',
+    '--cov=PyFiberModes',
+    '--cov-report=html'
+]
+
+
+[tool.coverage.run]
+source = ['PyFiberModes']
+omit = [
+    '*\__init__.py',
+    '*\_version.py',
+    '*\directories.py',
+]
+branch = true
+relative_files = true

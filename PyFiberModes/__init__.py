@@ -11,8 +11,6 @@ try:
 except ImportError:
     __version__ = "0.0.0"
 
-# -
-
 
 __all__ = [  # noqa: F405
     'Wavelength',
