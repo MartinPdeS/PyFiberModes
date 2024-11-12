@@ -7,7 +7,26 @@ from PyFiberModes.mode_instances import HE11
 from PyFiberModes.mode import Mode
 from dataclasses import dataclass
 from MPSPlots.render2D import SceneList, Axis
-from MPSTools.tools.coordinates import CartesianCoordinates
+from PyFiberModes.coordinates import CartesianCoordinates
+
+
+@dataclass
+class CylindricalCoordinates:
+    rho: numpy.ndarray
+    phi: numpy.ndarray
+    z: numpy.ndarray
+
+    def to_cartesian(self) -> object:
+        x = self.rho * numpy.cos(self.phi)
+        y = self.rho * numpy.sin(self.phi)
+        z = self.z
+
+        cartesian_coordinate = CartesianCoordinates(x=x, y=y, z=z)
+
+        return cartesian_coordinate
+
+    def to_cylindrical(self):
+        return self
 
 
 @dataclass

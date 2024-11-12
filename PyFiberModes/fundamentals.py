@@ -7,7 +7,7 @@ from PyFiberModes.mode import Mode
 from PyFiberModes import Wavelength
 from PyFiberModes.mode_instances import HE11, LP01
 
-from MPSTools.tools.coordinates import CylindricalCoordinates
+from PyFiberModes.coordinates import CylindricalCoordinates
 
 
 def get_delta_from_fiber(fiber) -> float:

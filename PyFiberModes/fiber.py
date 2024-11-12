@@ -21,7 +21,7 @@ from PyFiberModes.fundamentals import (
 )
 
 from MPSTools.fiber_catalogue import loader
-from MPSTools.tools.coordinates import CylindricalCoordinates
+from PyFiberModes.coordinates import CylindricalCoordinates
 
 
 @dataclass
