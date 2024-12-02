@@ -27,6 +27,7 @@ jobs:
         with:
           channels: conda-forge, martinpdes
           activate-environment: anaconda-client-env
+          environment-file: etc/example-environment.yml
           python-version: ${{ matrix.python-version }}
 
       - name: Install Conda tools
