@@ -25,9 +25,10 @@ jobs:
       - name: Set up Conda environment
         uses: conda-incubator/setup-miniconda@v3
         with:
-          channels: conda-forge, martinpdes
-          activate-environment: anaconda-client-env
+          auto-activate-base: true
           python-version: ${{ matrix.python-version }}
+          channels: conda-forge, martinpdes
+          activate-environment: base
 
       - name: Install Conda tools
         run: |
