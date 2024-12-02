@@ -7,19 +7,16 @@ Mode fields
 # %%
 # Imports
 # ~~~~~~~
-from PyFiberModes import FiberFactory, HE11
+from PyFiberModes import HE11
+from PyFiberModes.fiber import load_fiber
 from PyFiberModes.field import Field
 from MPSPlots.render2D import SceneList
 
 # %%
-# Generating the fiber structures
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Here we create the different fiber design that we want to explore
-core_indexes = 1.54
-factory = FiberFactory(wavelength=1550e-9)
-factory.add_layer(name="core", radius=4e-6, index=core_indexes)
-factory.add_layer(name="cladding", index=1.4444)
-
+# Loading the double clad fiber [DCF]
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Here we load a fiber from MPSTools library and define the wavelength
+fiber = load_fiber(fiber_name='DCF1300S_20', wavelength=1310e-9)
 
 # %%
 # Preparing the figure
@@ -29,15 +26,11 @@ figure = SceneList(
     ax_orientation='horizontal'
 )
 
-mode = HE11
-
-fiber = factory[0]
-
 field = Field(
     fiber=fiber,
-    mode=mode,
+    mode=HE11,
     limit=10e-6,
-    n_point=201
+    n_point=30
 )
 
 
