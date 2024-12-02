@@ -24,6 +24,7 @@ requirements:
     - pip
   run:
     - martinpdes::mpsplots
+    - martinpdes::pyfinitdiff
     - pyyaml ~=6.0
     - matplotlib ~=3.8
     - numpy ~=1.26
