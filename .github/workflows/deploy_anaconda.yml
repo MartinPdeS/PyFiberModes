@@ -32,6 +32,9 @@ jobs:
         run: |
           conda install anaconda-client conda-build
 
+      - name: Verify Anaconda CLI
+        run: which anaconda
+
       - name: Build Conda package
         run: |
           conda build . --python ${{ matrix.python-version }}

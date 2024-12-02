@@ -1,12 +1,23 @@
 PyFiberModes
 ============
 
-|python|
-|docs|
-|coverage|
-|PyPi|
-|PyPi_download|
 
+.. list-table::
+   :widths: 10 25 25
+   :header-rows: 0
+
+   * - Meta
+     - |python|
+     - |docs|
+   * - Testing
+     - |ci/cd|
+     - |coverage|
+   * - PyPi
+     - |PyPi|
+     - |PyPi_download|
+   * - Anaconda
+     - |anaconda|
+     - |anaconda_download|
 
 
 
@@ -88,6 +99,7 @@ PyMieSim was written by `Martin Poinsinet de Sivry-Houle <https://github.com/Mar
 
 Email:`martin.poinsinet-de-sivry@polymtl.ca <mailto:martin.poinsinet-de-sivry@polymtl.ca?subject=PyFiberModes>`_ .
 
+.. |package| replace:: PyFiberModes
 
 .. |python| image:: https://img.shields.io/pypi/pyversions/pyfibermodes.svg
    :target: https://www.python.org/
@@ -106,6 +118,14 @@ Email:`martin.poinsinet-de-sivry@polymtl.ca <mailto:martin.poinsinet-de-sivry@po
 .. |PyPi_download| image:: https://img.shields.io/pypi/dm/PyFiberModes.svg
    :target: https://pypistats.org/packages/pyfibermodes
 
+.. |ci/cd| image:: https://github.com/martinpdes/pyfibermodes/actions/workflows/deploy_coverage.yml/badge.svg
+   :target: https://martinpdes.github.io/PyFiberModes/actions
+   :alt: Unittest Status
 
+.. |anaconda_download| image:: https://anaconda.org/martinpdes/pyfibermodes/badges/downloads.svg
+   :alt: Anaconda downloads
+   :target: https://anaconda.org/martinpdes/pyfibermodes
 
-
+.. |anaconda| image:: https://anaconda.org/martinpdes/pyfibermodes/badges/version.svg
+   :alt: Anaconda version
+   :target: https://anaconda.org/martinpdes/pyfibermodes
