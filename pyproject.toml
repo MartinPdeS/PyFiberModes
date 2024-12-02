@@ -25,36 +25,41 @@ classifiers = [
 keywords = ["finit-difference", "matrix"]
 
 dependencies = [
-    "numpy==1.*",
-    "MPSPlots",
+    "numpy ==1.*",
+    "MPSPlots ~=1.5.1",
     "PyFinitDiff",
-    "MPSTools",
-    "scipy==1.*",
+    "scipy ==1.*",
 ]
+
+[tool.setuptools]
+packages = {find = {where = ["."], include = ["PyFiberModes*"]}}
+include-package-data = true
 
 
 [tool.setuptools_scm]
 write_to = "PyFiberModes/_version.py"
-version_scheme = "post-release"
+version_scheme = "only-version"
 local_scheme = "no-local-version"
 
 [project.optional-dependencies]
 testing = [
-    "pytest>=0.6",
-    "pytest-cov>=2.0",
-    "pytest-json-report==1.5.0",
-    "mypy>=0.910",
-    "flake8>=3.9",
-    "tox>=3.24",
-    "coverage==6.5.0"
+    "pytest >=7.4,<9.0",
+    "pytest-cov >=2,<6",
+    "pytest-json-report ~=1.5",
+    "coverage ~=7.6"
 ]
 
+
 documentation = [
-    "numpydoc==1.6.0",
-    "sphinx>=5.1.1",
-    "sphinx-gallery==0.15.0",
-    "sphinx-rtd-theme==2.0.0",
-    "pydata-sphinx-theme==0.14.1",
+    "numpydoc ==1.6.0",
+    "sphinx >=5.1.1",
+    "sphinx-gallery ==0.15.0",
+    "sphinx-rtd-theme ==2.0.0",
+    "pydata-sphinx-theme ==0.14.1",
+]
+
+dev = [
+    "flake8 ==7.1.1",
 ]
 
 [tool.pytest.ini_options]
