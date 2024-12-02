@@ -25,6 +25,7 @@ classifiers = [
 keywords = ["finit-difference", "matrix"]
 
 dependencies = [
+    "PyOptik",
     "pyyaml ==6.0.1",
     "numpy ==1.*",
     "MPSPlots ~=1.5.1",
