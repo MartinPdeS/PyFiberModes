@@ -46,6 +46,13 @@
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'code';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.14.1';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/MartinPdeS/PyFiberModes/documentation_page/version_switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'v0.4.0';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner = true;
+        </script>
+    <link rel="icon" href="_static/thumbnail.png"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Examples" href="gallery/index.html" />
@@ -113,12 +120,20 @@
   <div class=" navbar-header-items__start">
     
       <div class="navbar-item">
-   
+  
 
-<a class="navbar-brand logo" href="https://github.com/MartinPdeS/PyFiberModes">
+<a class="navbar-brand logo" href="index.html">
   
   
   
+  
+    
+    
+      
+    
+    
+    <img src="_static/thumbnail.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="_static/thumbnail.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
   
   
     <p class="title logo__title">PyFiberModes</p>
@@ -213,8 +228,20 @@ document.write(`
           
           
           
-          <a href="https://pypi.org/project/pyfibermodes/" title="PyPI" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-solid fa-box fa-lg" aria-hidden="true"></i></span>
+          <a href="https://pypi.org/project/PyFiberModes/" title="PyPI" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-solid fa-box fa-lg" aria-hidden="true"></i></span>
             <span class="sr-only">PyPI</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://anaconda.org/MartinPdeS/PyFiberModes" title="Anaconda" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-python fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Anaconda</span></a>
         </li>
 </ul></div>
       
@@ -326,8 +353,20 @@ document.write(`
           
           
           
-          <a href="https://pypi.org/project/pyfibermodes/" title="PyPI" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-solid fa-box fa-lg" aria-hidden="true"></i></span>
+          <a href="https://pypi.org/project/PyFiberModes/" title="PyPI" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-solid fa-box fa-lg" aria-hidden="true"></i></span>
             <span class="sr-only">PyPI</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://anaconda.org/MartinPdeS/PyFiberModes" title="Anaconda" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-python fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Anaconda</span></a>
         </li>
 </ul></div>
         
@@ -389,9 +428,9 @@ document.write(`
 <section id="fiber">
 <h2>Fiber<a class="headerlink" href="#fiber" title="Link to this heading">#</a></h2>
 <blockquote>
-<div><span class="target" id="module-PyFiberModes.fiber"></span><dl class="py class">
+<div><dl class="py class" id="module-PyFiberModes.fiber">
 <dt class="sig sig-object py" id="PyFiberModes.fiber.Fiber">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">PyFiberModes.fiber.</span></span><span class="sig-name descname"><span class="pre">Fiber</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wavelength:</span> <span class="pre">PyFiberModes.wavelength.Wavelength</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_names:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_radius:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_types:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_list:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyFiberModes.fiber.Fiber" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Fiber</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wavelength:</span> <span class="pre">PyFiberModes.wavelength.Wavelength</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_names:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_radius:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_types:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_list:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyFiberModes/fiber.html#Fiber"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.fiber.Fiber" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="PyFiberModes.fiber.Fiber.wavelength">
@@ -425,7 +464,7 @@ document.write(`
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.fiber.Fiber.scale">
-<span class="sig-name descname"><span class="pre">scale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#PyFiberModes.fiber.Fiber.scale" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">scale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/PyFiberModes/fiber.html#Fiber.scale"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.fiber.Fiber.scale" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py property">
@@ -500,7 +539,7 @@ document.write(`
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.fiber.Fiber.iterate_interfaces">
-<span class="sig-name descname"><span class="pre">iterate_interfaces</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#PyFiberModes.stepindex.StepIndex" title="PyFiberModes.stepindex.StepIndex"><span class="pre">StepIndex</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#PyFiberModes.stepindex.StepIndex" title="PyFiberModes.stepindex.StepIndex"><span class="pre">StepIndex</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#PyFiberModes.fiber.Fiber.iterate_interfaces" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">iterate_interfaces</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#PyFiberModes.stepindex.StepIndex" title="PyFiberModes.stepindex.StepIndex"><span class="pre">StepIndex</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#PyFiberModes.stepindex.StepIndex" title="PyFiberModes.stepindex.StepIndex"><span class="pre">StepIndex</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/PyFiberModes/fiber.html#Fiber.iterate_interfaces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.fiber.Fiber.iterate_interfaces" title="Link to this definition">#</a></dt>
 <dd><p>Iterates through pair of layers that forms interfaces</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -514,7 +553,7 @@ document.write(`
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.fiber.Fiber.update_wavelength">
-<span class="sig-name descname"><span class="pre">update_wavelength</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wavelength</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Wavelength</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#PyFiberModes.fiber.Fiber.update_wavelength" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">update_wavelength</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wavelength</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Wavelength</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/PyFiberModes/fiber.html#Fiber.update_wavelength"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.fiber.Fiber.update_wavelength" title="Link to this definition">#</a></dt>
 <dd><p>Update the wavelength of the fiber and all its layers</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -531,7 +570,7 @@ document.write(`
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.fiber.Fiber.add_layer">
-<span class="sig-name descname"><span class="pre">add_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#PyFiberModes.fiber.Fiber.add_layer" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">add_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/PyFiberModes/fiber.html#Fiber.add_layer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.fiber.Fiber.add_layer" title="Link to this definition">#</a></dt>
 <dd><p>Adds a layer to the fiber the center-most layer have to be settled first.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -552,7 +591,7 @@ document.write(`
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.fiber.Fiber.initialize_layers">
-<span class="sig-name descname"><span class="pre">initialize_layers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#PyFiberModes.fiber.Fiber.initialize_layers" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">initialize_layers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/PyFiberModes/fiber.html#Fiber.initialize_layers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.fiber.Fiber.initialize_layers" title="Link to this definition">#</a></dt>
 <dd><p>Initializes the layers.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -566,7 +605,7 @@ document.write(`
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.fiber.Fiber.get_layer_at_radius">
-<span class="sig-name descname"><span class="pre">get_layer_at_radius</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFiberModes.stepindex.StepIndex" title="PyFiberModes.stepindex.StepIndex"><span class="pre">StepIndex</span></a></span></span><a class="headerlink" href="#PyFiberModes.fiber.Fiber.get_layer_at_radius" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_layer_at_radius</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFiberModes.stepindex.StepIndex" title="PyFiberModes.stepindex.StepIndex"><span class="pre">StepIndex</span></a></span></span><a class="reference internal" href="_modules/PyFiberModes/fiber.html#Fiber.get_layer_at_radius"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.fiber.Fiber.get_layer_at_radius" title="Link to this definition">#</a></dt>
 <dd><p>Gets the layer that is associated to a given radius.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -591,7 +630,7 @@ document.write(`
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.fiber.Fiber.get_index_at_radius">
-<span class="sig-name descname"><span class="pre">get_index_at_radius</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#PyFiberModes.fiber.Fiber.get_index_at_radius" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_index_at_radius</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/PyFiberModes/fiber.html#Fiber.get_index_at_radius"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.fiber.Fiber.get_index_at_radius" title="Link to this definition">#</a></dt>
 <dd><p>Gets the refractive index at a given radius.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -642,7 +681,7 @@ document.write(`
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.fiber.Fiber.get_NA">
-<span class="sig-name descname"><span class="pre">get_NA</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#PyFiberModes.fiber.Fiber.get_NA" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_NA</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/PyFiberModes/fiber.html#Fiber.get_NA"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.fiber.Fiber.get_NA" title="Link to this definition">#</a></dt>
 <dd><p>Gets the numerical aperture NA defined as:</p>
 <div class="math notranslate nohighlight">
 \[NA = \sqrt{n_{max}^2-n_{min}^2}\]</div>
@@ -693,7 +732,7 @@ M number is defined as:</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.fiber.Fiber.get_mode_cutoff_v0">
-<span class="sig-name descname"><span class="pre">get_mode_cutoff_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mode</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#PyFiberModes.fiber.Fiber.get_mode_cutoff_v0" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_mode_cutoff_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mode</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/PyFiberModes/fiber.html#Fiber.get_mode_cutoff_v0"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.fiber.Fiber.get_mode_cutoff_v0" title="Link to this definition">#</a></dt>
 <dd><p>Gets the cutoff wavelength of the fiber.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -710,7 +749,7 @@ M number is defined as:</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.fiber.Fiber.get_mode_cutoff_wavelength">
-<span class="sig-name descname"><span class="pre">get_mode_cutoff_wavelength</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mode</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#PyFiberModes.fiber.Fiber.get_mode_cutoff_wavelength" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_mode_cutoff_wavelength</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mode</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/PyFiberModes/fiber.html#Fiber.get_mode_cutoff_wavelength"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.fiber.Fiber.get_mode_cutoff_wavelength" title="Link to this definition">#</a></dt>
 <dd><p>Gets the cutoff wavelength.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -727,7 +766,7 @@ M number is defined as:</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.fiber.Fiber.get_effective_index">
-<span class="sig-name descname"><span class="pre">get_effective_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mode</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#PyFiberModes.fiber.Fiber.get_effective_index" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_effective_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mode</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/PyFiberModes/fiber.html#Fiber.get_effective_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.fiber.Fiber.get_effective_index" title="Link to this definition">#</a></dt>
 <dd><p>Gets the effective index.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -744,7 +783,7 @@ M number is defined as:</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.fiber.Fiber.get_normalized_beta">
-<span class="sig-name descname"><span class="pre">get_normalized_beta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mode</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#PyFiberModes.fiber.Fiber.get_normalized_beta" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_normalized_beta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mode</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/PyFiberModes/fiber.html#Fiber.get_normalized_beta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.fiber.Fiber.get_normalized_beta" title="Link to this definition">#</a></dt>
 <dd><p>Gets the normalized propagation constant [beta].</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -761,7 +800,7 @@ M number is defined as:</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.fiber.Fiber.get_propagation_constant">
-<span class="sig-name descname"><span class="pre">get_propagation_constant</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mode</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#PyFiberModes.fiber.Fiber.get_propagation_constant" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_propagation_constant</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mode</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/PyFiberModes/fiber.html#Fiber.get_propagation_constant"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.fiber.Fiber.get_propagation_constant" title="Link to this definition">#</a></dt>
 <dd><p>Gets the propagation constant [<span class="math notranslate nohighlight">\(beta\)</span>].</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -778,7 +817,7 @@ M number is defined as:</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.fiber.Fiber.get_phase_velocity">
-<span class="sig-name descname"><span class="pre">get_phase_velocity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mode</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#PyFiberModes.fiber.Fiber.get_phase_velocity" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_phase_velocity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mode</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/PyFiberModes/fiber.html#Fiber.get_phase_velocity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.fiber.Fiber.get_phase_velocity" title="Link to this definition">#</a></dt>
 <dd><p>Gets the phase velocity.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -795,7 +834,7 @@ M number is defined as:</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.fiber.Fiber.get_group_index">
-<span class="sig-name descname"><span class="pre">get_group_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mode</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#PyFiberModes.fiber.Fiber.get_group_index" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_group_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mode</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/PyFiberModes/fiber.html#Fiber.get_group_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.fiber.Fiber.get_group_index" title="Link to this definition">#</a></dt>
 <dd><p>Gets the group index.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -812,7 +851,7 @@ M number is defined as:</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.fiber.Fiber.get_groupe_velocity">
-<span class="sig-name descname"><span class="pre">get_groupe_velocity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mode</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#PyFiberModes.fiber.Fiber.get_groupe_velocity" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_groupe_velocity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mode</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/PyFiberModes/fiber.html#Fiber.get_groupe_velocity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.fiber.Fiber.get_groupe_velocity" title="Link to this definition">#</a></dt>
 <dd><p>Gets the groupe velocity defined as:</p>
 <div class="math notranslate nohighlight">
 \[\left( \frac{\partial \beta}{\partial \omega} \right)^{-1}\]</div>
@@ -831,7 +870,7 @@ M number is defined as:</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.fiber.Fiber.get_group_velocity_dispersion">
-<span class="sig-name descname"><span class="pre">get_group_velocity_dispersion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mode</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#PyFiberModes.fiber.Fiber.get_group_velocity_dispersion" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_group_velocity_dispersion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mode</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/PyFiberModes/fiber.html#Fiber.get_group_velocity_dispersion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.fiber.Fiber.get_group_velocity_dispersion" title="Link to this definition">#</a></dt>
 <dd><p>Gets the fiber group velocity dispersion defined as:</p>
 <div class="math notranslate nohighlight">
 \[\frac{\partial^2 \beta}{\partial \omega^2}\]</div>
@@ -850,7 +889,7 @@ M number is defined as:</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.fiber.Fiber.get_dispersion">
-<span class="sig-name descname"><span class="pre">get_dispersion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mode</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#PyFiberModes.fiber.Fiber.get_dispersion" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_dispersion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mode</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/PyFiberModes/fiber.html#Fiber.get_dispersion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.fiber.Fiber.get_dispersion" title="Link to this definition">#</a></dt>
 <dd><p>Gets the fiber dispersion defined as:</p>
 <div class="math notranslate nohighlight">
 \[10^6 * \frac{2 \pi c}{\lambda^2} * \frac{\partial^2 \beta}{\partial \omega}\]</div>
@@ -869,7 +908,7 @@ M number is defined as:</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.fiber.Fiber.get_S_parameter">
-<span class="sig-name descname"><span class="pre">get_S_parameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mode</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#PyFiberModes.fiber.Fiber.get_S_parameter" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_S_parameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mode</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/PyFiberModes/fiber.html#Fiber.get_S_parameter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.fiber.Fiber.get_S_parameter" title="Link to this definition">#</a></dt>
 <dd><p>Gets the s parameter defined as:</p>
 <div class="math notranslate nohighlight">
 \[10^{-3} * \left( \frac{2 \pi c}{\lambda^2} \right)^2 * \frac{\partial^3 \beta}{\partial \omega}\]</div>
@@ -888,7 +927,7 @@ M number is defined as:</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.fiber.Fiber.get_mode_field">
-<span class="sig-name descname"><span class="pre">get_mode_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_point</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">101</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFiberModes.field.Field" title="PyFiberModes.field.Field"><span class="pre">Field</span></a></span></span><a class="headerlink" href="#PyFiberModes.fiber.Fiber.get_mode_field" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_mode_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_point</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">101</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFiberModes.field.Field" title="PyFiberModes.field.Field"><span class="pre">Field</span></a></span></span><a class="reference internal" href="_modules/PyFiberModes/fiber.html#Fiber.get_mode_field"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.fiber.Fiber.get_mode_field" title="Link to this definition">#</a></dt>
 <dd><p>Get field class</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -910,7 +949,7 @@ M number is defined as:</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.fiber.Fiber.get_radial_field">
-<span class="sig-name descname"><span class="pre">get_radial_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">CylindricalCoordinates</span></span></span><a class="headerlink" href="#PyFiberModes.fiber.Fiber.get_radial_field" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_radial_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">CylindricalCoordinates</span></span></span><a class="reference internal" href="_modules/PyFiberModes/fiber.html#Fiber.get_radial_field"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.fiber.Fiber.get_radial_field" title="Link to this definition">#</a></dt>
 <dd><p>Gets the mode field without the azimuthal component.
 Tuple structure is [<span class="math notranslate nohighlight">\(E_{r}\)</span>, <span class="math notranslate nohighlight">\(E_{\phi}\)</span>, <span class="math notranslate nohighlight">\(E_{z}\)</span>], [<span class="math notranslate nohighlight">\(H_{r}\)</span>, <span class="math notranslate nohighlight">\(H_{\phi}\)</span>, <span class="math notranslate nohighlight">\(H_{z}\)</span>]</p>
 <dl class="field-list simple">
@@ -931,7 +970,7 @@ Tuple structure is [<span class="math notranslate nohighlight">\(E_{r}\)</span>,
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.fiber.Fiber.get_radial_field_norm">
-<span class="sig-name descname"><span class="pre">get_radial_field_norm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#PyFiberModes.fiber.Fiber.get_radial_field_norm" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_radial_field_norm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/PyFiberModes/fiber.html#Fiber.get_radial_field_norm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.fiber.Fiber.get_radial_field_norm" title="Link to this definition">#</a></dt>
 <dd><p>Gets the norm of the mode field without the azimuthal component.
 Tuple structure is [<span class="math notranslate nohighlight">\(E_{r}\)</span>, <span class="math notranslate nohighlight">\(E_{\phi}\)</span>, <span class="math notranslate nohighlight">\(E_{z}\)</span>], [<span class="math notranslate nohighlight">\(H_{r}\)</span>, <span class="math notranslate nohighlight">\(H_{\phi}\)</span>, <span class="math notranslate nohighlight">\(H_{z}\)</span>]</p>
 <dl class="field-list simple">
@@ -952,12 +991,12 @@ Tuple structure is [<span class="math notranslate nohighlight">\(E_{r}\)</span>,
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.fiber.Fiber.does_mode_exist">
-<span class="sig-name descname"><span class="pre">does_mode_exist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">mode_list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="headerlink" href="#PyFiberModes.fiber.Fiber.does_mode_exist" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">does_mode_exist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">mode_list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/PyFiberModes/fiber.html#Fiber.does_mode_exist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.fiber.Fiber.does_mode_exist" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.fiber.Fiber.print_data">
-<span class="sig-name descname"><span class="pre">print_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_type_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Mode</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#PyFiberModes.fiber.Fiber.print_data" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">print_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_type_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Mode</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/PyFiberModes/fiber.html#Fiber.print_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.fiber.Fiber.print_data" title="Link to this definition">#</a></dt>
 <dd><p>Prints the given data for the given modes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -979,12 +1018,12 @@ Tuple structure is [<span class="math notranslate nohighlight">\(E_{r}\)</span>,
 
 <dl class="py function">
 <dt class="sig sig-object py" id="PyFiberModes.fiber.get_fiber_from_delta_and_V0">
-<span class="sig-prename descclassname"><span class="pre">PyFiberModes.fiber.</span></span><span class="sig-name descname"><span class="pre">get_fiber_from_delta_and_V0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">delta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">V0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wavelength</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFiberModes.fiber.Fiber" title="PyFiberModes.fiber.Fiber"><span class="pre">Fiber</span></a></span></span><a class="headerlink" href="#PyFiberModes.fiber.get_fiber_from_delta_and_V0" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_fiber_from_delta_and_V0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">delta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">V0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wavelength</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFiberModes.fiber.Fiber" title="PyFiberModes.fiber.Fiber"><span class="pre">Fiber</span></a></span></span><a class="reference internal" href="_modules/PyFiberModes/fiber.html#get_fiber_from_delta_and_V0"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.fiber.get_fiber_from_delta_and_V0" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="PyFiberModes.fiber.load_fiber">
-<span class="sig-prename descclassname"><span class="pre">PyFiberModes.fiber.</span></span><span class="sig-name descname"><span class="pre">load_fiber</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fiber_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wavelength</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_air_layer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFiberModes.fiber.Fiber" title="PyFiberModes.fiber.Fiber"><span class="pre">Fiber</span></a></span></span><a class="headerlink" href="#PyFiberModes.fiber.load_fiber" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">load_fiber</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fiber_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wavelength</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_air_layer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFiberModes.fiber.Fiber" title="PyFiberModes.fiber.Fiber"><span class="pre">Fiber</span></a></span></span><a class="reference internal" href="_modules/PyFiberModes/fiber.html#load_fiber"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.fiber.load_fiber" title="Link to this definition">#</a></dt>
 <dd><p>Loads a fiber as type that suit PyFiberModes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1007,9 +1046,9 @@ Tuple structure is [<span class="math notranslate nohighlight">\(E_{r}\)</span>,
 <section id="field">
 <h2>Field<a class="headerlink" href="#field" title="Link to this heading">#</a></h2>
 <blockquote>
-<div><span class="target" id="module-PyFiberModes.field"></span><dl class="py class">
+<div><dl class="py class" id="module-PyFiberModes.field">
 <dt class="sig sig-object py" id="PyFiberModes.field.CylindricalCoordinates">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">PyFiberModes.field.</span></span><span class="sig-name descname"><span class="pre">CylindricalCoordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rho</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyFiberModes.field.CylindricalCoordinates" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CylindricalCoordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rho</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyFiberModes/field.html#CylindricalCoordinates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.CylindricalCoordinates" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="PyFiberModes.field.CylindricalCoordinates.rho">
@@ -1028,19 +1067,19 @@ Tuple structure is [<span class="math notranslate nohighlight">\(E_{r}\)</span>,
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.CylindricalCoordinates.to_cartesian">
-<span class="sig-name descname"><span class="pre">to_cartesian</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">object</span></span></span><a class="headerlink" href="#PyFiberModes.field.CylindricalCoordinates.to_cartesian" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">to_cartesian</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">object</span></span></span><a class="reference internal" href="_modules/PyFiberModes/field.html#CylindricalCoordinates.to_cartesian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.CylindricalCoordinates.to_cartesian" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.CylindricalCoordinates.to_cylindrical">
-<span class="sig-name descname"><span class="pre">to_cylindrical</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PyFiberModes.field.CylindricalCoordinates.to_cylindrical" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">to_cylindrical</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyFiberModes/field.html#CylindricalCoordinates.to_cylindrical"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.CylindricalCoordinates.to_cylindrical" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">PyFiberModes.field.</span></span><span class="sig-name descname"><span class="pre">Field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fiber</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'Fiber'</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PyFiberModes.mode.Mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_point</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">101</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyFiberModes.field.Field" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fiber</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'Fiber'</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PyFiberModes.mode.Mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_point</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">101</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyFiberModes/field.html#Field"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.fiber">
@@ -1068,7 +1107,7 @@ Tuple structure is [<span class="math notranslate nohighlight">\(E_{r}\)</span>,
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.get_azimuthal_dependency_f">
-<span class="sig-name descname"><span class="pre">get_azimuthal_dependency_f</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#PyFiberModes.field.Field.get_azimuthal_dependency_f" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_azimuthal_dependency_f</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/PyFiberModes/field.html#Field.get_azimuthal_dependency_f"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_azimuthal_dependency_f" title="Link to this definition">#</a></dt>
 <dd><p>Gets the azimuthal dependency <span class="math notranslate nohighlight">\(f_\nu\)</span>.
 Reference: Eq. 3.71 of Jaques Bures.</p>
 <dl class="field-list simple">
@@ -1086,7 +1125,7 @@ Reference: Eq. 3.71 of Jaques Bures.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.get_azimuthal_dependency_g">
-<span class="sig-name descname"><span class="pre">get_azimuthal_dependency_g</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#PyFiberModes.field.Field.get_azimuthal_dependency_g" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_azimuthal_dependency_g</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/PyFiberModes/field.html#Field.get_azimuthal_dependency_g"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_azimuthal_dependency_g" title="Link to this definition">#</a></dt>
 <dd><p>Gets the azimuthal dependency <span class="math notranslate nohighlight">\(g_\nu\)</span>.
 Reference: Eq. 3.71 of Jaques Bures.</p>
 <dl class="field-list simple">
@@ -1104,17 +1143,17 @@ Reference: Eq. 3.71 of Jaques Bures.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.get_index_iterator">
-<span class="sig-name descname"><span class="pre">get_index_iterator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="headerlink" href="#PyFiberModes.field.Field.get_index_iterator" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_index_iterator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/PyFiberModes/field.html#Field.get_index_iterator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_index_iterator" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.wrapper_get_field">
-<span class="sig-name descname"><span class="pre">wrapper_get_field</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PyFiberModes.field.Field.wrapper_get_field" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">wrapper_get_field</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyFiberModes/field.html#Field.wrapper_get_field"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.wrapper_get_field" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.Ex">
-<span class="sig-name descname"><span class="pre">Ex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#PyFiberModes.field.Field.Ex" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">Ex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/PyFiberModes/field.html#Field.Ex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Ex" title="Link to this definition">#</a></dt>
 <dd><p>X component of the electric field <span class="math notranslate nohighlight">\(E_{x}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1134,7 +1173,7 @@ Reference: Eq. 3.71 of Jaques Bures.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.Ey">
-<span class="sig-name descname"><span class="pre">Ey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#PyFiberModes.field.Field.Ey" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">Ey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/PyFiberModes/field.html#Field.Ey"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Ey" title="Link to this definition">#</a></dt>
 <dd><p>Y component of the electric field <span class="math notranslate nohighlight">\(E_{y}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1154,7 +1193,7 @@ Reference: Eq. 3.71 of Jaques Bures.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.Ez">
-<span class="sig-name descname"><span class="pre">Ez</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#PyFiberModes.field.Field.Ez" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">Ez</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/PyFiberModes/field.html#Field.Ez"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Ez" title="Link to this definition">#</a></dt>
 <dd><p>Z component of the electric field <span class="math notranslate nohighlight">\(E_{z}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1174,7 +1213,7 @@ Reference: Eq. 3.71 of Jaques Bures.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.Er">
-<span class="sig-name descname"><span class="pre">Er</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#PyFiberModes.field.Field.Er" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">Er</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/PyFiberModes/field.html#Field.Er"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Er" title="Link to this definition">#</a></dt>
 <dd><p>Radial component of the electric field <span class="math notranslate nohighlight">\(E_{r}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1194,7 +1233,7 @@ Reference: Eq. 3.71 of Jaques Bures.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.Ephi">
-<span class="sig-name descname"><span class="pre">Ephi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#PyFiberModes.field.Field.Ephi" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">Ephi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/PyFiberModes/field.html#Field.Ephi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Ephi" title="Link to this definition">#</a></dt>
 <dd><p>Phi component of the electric field <span class="math notranslate nohighlight">\(E_{\phi}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1214,7 +1253,7 @@ Reference: Eq. 3.71 of Jaques Bures.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.Et">
-<span class="sig-name descname"><span class="pre">Et</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#PyFiberModes.field.Field.Et" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">Et</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/PyFiberModes/field.html#Field.Et"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Et" title="Link to this definition">#</a></dt>
 <dd><p>Transverse component of the electric field <span class="math notranslate nohighlight">\(E_{T}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1234,7 +1273,7 @@ Reference: Eq. 3.71 of Jaques Bures.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.Epol">
-<span class="sig-name descname"><span class="pre">Epol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#PyFiberModes.field.Field.Epol" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">Epol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/PyFiberModes/field.html#Field.Epol"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Epol" title="Link to this definition">#</a></dt>
 <dd><p>Polarization of the transverse electric field (in radians).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1254,7 +1293,7 @@ Reference: Eq. 3.71 of Jaques Bures.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.Emod">
-<span class="sig-name descname"><span class="pre">Emod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#PyFiberModes.field.Field.Emod" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">Emod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/PyFiberModes/field.html#Field.Emod"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Emod" title="Link to this definition">#</a></dt>
 <dd><p>Norm of the E vector. <span class="math notranslate nohighlight">\(\vec{E}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1274,7 +1313,7 @@ Reference: Eq. 3.71 of Jaques Bures.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.Hx">
-<span class="sig-name descname"><span class="pre">Hx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#PyFiberModes.field.Field.Hx" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">Hx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/PyFiberModes/field.html#Field.Hx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Hx" title="Link to this definition">#</a></dt>
 <dd><p>X component of the magnetic field <span class="math notranslate nohighlight">\(H_{x}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1294,7 +1333,7 @@ Reference: Eq. 3.71 of Jaques Bures.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.Hy">
-<span class="sig-name descname"><span class="pre">Hy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#PyFiberModes.field.Field.Hy" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">Hy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/PyFiberModes/field.html#Field.Hy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Hy" title="Link to this definition">#</a></dt>
 <dd><p>Y component of the magnetic field <span class="math notranslate nohighlight">\(H_{y}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1314,7 +1353,7 @@ Reference: Eq. 3.71 of Jaques Bures.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.Hz">
-<span class="sig-name descname"><span class="pre">Hz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#PyFiberModes.field.Field.Hz" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">Hz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/PyFiberModes/field.html#Field.Hz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Hz" title="Link to this definition">#</a></dt>
 <dd><p>Z component of the magnetic field <span class="math notranslate nohighlight">\(H_{z}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1334,7 +1373,7 @@ Reference: Eq. 3.71 of Jaques Bures.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.Hr">
-<span class="sig-name descname"><span class="pre">Hr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#PyFiberModes.field.Field.Hr" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">Hr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/PyFiberModes/field.html#Field.Hr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Hr" title="Link to this definition">#</a></dt>
 <dd><p>Radial component of the magnetic field <span class="math notranslate nohighlight">\(H_{r}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1354,7 +1393,7 @@ Reference: Eq. 3.71 of Jaques Bures.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.Hphi">
-<span class="sig-name descname"><span class="pre">Hphi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#PyFiberModes.field.Field.Hphi" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">Hphi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/PyFiberModes/field.html#Field.Hphi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Hphi" title="Link to this definition">#</a></dt>
 <dd><p>Azimuthal component of the magnetic field <span class="math notranslate nohighlight">\(H_{\phi}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1374,7 +1413,7 @@ Reference: Eq. 3.71 of Jaques Bures.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.Ht">
-<span class="sig-name descname"><span class="pre">Ht</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#PyFiberModes.field.Field.Ht" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">Ht</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/PyFiberModes/field.html#Field.Ht"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Ht" title="Link to this definition">#</a></dt>
 <dd><p>Transverse component of the magnetic field <span class="math notranslate nohighlight">\(H_{T}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1394,7 +1433,7 @@ Reference: Eq. 3.71 of Jaques Bures.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.Hpol">
-<span class="sig-name descname"><span class="pre">Hpol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#PyFiberModes.field.Field.Hpol" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">Hpol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/PyFiberModes/field.html#Field.Hpol"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Hpol" title="Link to this definition">#</a></dt>
 <dd><p>Polarization of the transverse magnetic field (in radians).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1414,7 +1453,7 @@ Reference: Eq. 3.71 of Jaques Bures.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.Hmod">
-<span class="sig-name descname"><span class="pre">Hmod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#PyFiberModes.field.Field.Hmod" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">Hmod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/PyFiberModes/field.html#Field.Hmod"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Hmod" title="Link to this definition">#</a></dt>
 <dd><p>Norm of the H vector <span class="math notranslate nohighlight">\(\vec{H}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1434,7 +1473,7 @@ Reference: Eq. 3.71 of Jaques Bures.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.get_effective_area">
-<span class="sig-name descname"><span class="pre">get_effective_area</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#PyFiberModes.field.Field.get_effective_area" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_effective_area</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/PyFiberModes/field.html#Field.get_effective_area"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_effective_area" title="Link to this definition">#</a></dt>
 <dd><p>Gets of mode effective area. Suppose than r is large enough, such as F(r, r) = 0.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -1448,7 +1487,7 @@ Reference: Eq. 3.71 of Jaques Bures.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.get_integrale_square">
-<span class="sig-name descname"><span class="pre">get_integrale_square</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#PyFiberModes.field.Field.get_integrale_square" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_integrale_square</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/PyFiberModes/field.html#Field.get_integrale_square"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_integrale_square" title="Link to this definition">#</a></dt>
 <dd><p>Gets the integrale of the array squared.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1465,7 +1504,7 @@ Reference: Eq. 3.71 of Jaques Bures.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.get_intensity">
-<span class="sig-name descname"><span class="pre">get_intensity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#PyFiberModes.field.Field.get_intensity" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_intensity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/PyFiberModes/field.html#Field.get_intensity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_intensity" title="Link to this definition">#</a></dt>
 <dd><p>Gets the intensity value of the mode.</p>
 <div class="math notranslate nohighlight">
 \[I = \frac{n_{eff}}{n_{eff}^{HE11}} * \int E_T^2 * dx * dy\]</div>
@@ -1481,7 +1520,7 @@ Reference: Eq. 3.71 of Jaques Bures.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.get_normalization_constant">
-<span class="sig-name descname"><span class="pre">get_normalization_constant</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#PyFiberModes.field.Field.get_normalization_constant" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_normalization_constant</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/PyFiberModes/field.html#Field.get_normalization_constant"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_normalization_constant" title="Link to this definition">#</a></dt>
 <dd><p>Gets the normalization constant <span class="math notranslate nohighlight">\(N\)</span>.</p>
 <div class="math notranslate nohighlight">
 \[N = \frac{I}{2} * \epsilon_0 * n_{eff}^{HE11} * c\]</div>
@@ -1497,7 +1536,7 @@ Reference: Eq. 3.71 of Jaques Bures.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.get_poynting_vector">
-<span class="sig-name descname"><span class="pre">get_poynting_vector</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PyFiberModes.field.Field.get_poynting_vector" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_poynting_vector</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyFiberModes/field.html#Field.get_poynting_vector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_poynting_vector" title="Link to this definition">#</a></dt>
 <dd><p>Gets the Poynting vector but is not implemented yet.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -1511,12 +1550,12 @@ Reference: Eq. 3.71 of Jaques Bures.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.add_to_ax">
-<span class="sig-name descname"><span class="pre">add_to_ax</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field_string</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Axis</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyFiberModes.field.Field.add_to_ax" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">add_to_ax</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field_string</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Axis</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyFiberModes/field.html#Field.add_to_ax"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.add_to_ax" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.plot">
-<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plot_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">SceneList</span></span></span><a class="headerlink" href="#PyFiberModes.field.Field.plot" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plot_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">SceneList</span></span></span><a class="reference internal" href="_modules/PyFiberModes/field.html#Field.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.plot" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1526,68 +1565,89 @@ Reference: Eq. 3.71 of Jaques Bures.</p>
 <section id="step-index">
 <h2>Step-index<a class="headerlink" href="#step-index" title="Link to this heading">#</a></h2>
 <blockquote>
-<div><span class="target" id="module-PyFiberModes.stepindex"></span><dl class="py class">
+<div><dl class="py class" id="module-PyFiberModes.stepindex">
 <dt class="sig sig-object py" id="PyFiberModes.stepindex.Geometry">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">PyFiberModes.stepindex.</span></span><span class="sig-name descname"><span class="pre">Geometry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius_in</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius_out</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyFiberModes.stepindex.Geometry" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Geometry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius_in</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius_out</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyFiberModes/stepindex.html#Geometry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.stepindex.Geometry" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Represents a geometric structure with refractive indices and radii.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Attributes<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>radius_in</strong><span class="classifier">float</span></dt><dd><p>Minimum radius of the structure.</p>
-</dd>
-<dt><strong>radius_out</strong><span class="classifier">float</span></dt><dd><p>Maximum radius of the structure.</p>
-</dd>
-<dt><strong>index_list</strong><span class="classifier">list</span></dt><dd><p>List of refractive indices for the structure.</p>
-</dd>
-</dl>
-</dd>
-</dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="PyFiberModes.stepindex.Geometry.radius_in">
-<span class="sig-name descname"><span class="pre">radius_in</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#PyFiberModes.stepindex.Geometry.radius_in" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">radius_in</span></span><a class="headerlink" href="#PyFiberModes.stepindex.Geometry.radius_in" title="Link to this definition">#</a></dt>
+<dd><p>Minimum radius of the structure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="PyFiberModes.stepindex.Geometry.radius_out">
-<span class="sig-name descname"><span class="pre">radius_out</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#PyFiberModes.stepindex.Geometry.radius_out" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">radius_out</span></span><a class="headerlink" href="#PyFiberModes.stepindex.Geometry.radius_out" title="Link to this definition">#</a></dt>
+<dd><p>Maximum radius of the structure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="PyFiberModes.stepindex.Geometry.index_list">
-<span class="sig-name descname"><span class="pre">index_list</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></em><a class="headerlink" href="#PyFiberModes.stepindex.Geometry.index_list" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">index_list</span></span><a class="headerlink" href="#PyFiberModes.stepindex.Geometry.index_list" title="Link to this definition">#</a></dt>
+<dd><p>List of refractive indices for the structure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">radius_in</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id0" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">radius_out</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id1" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">index_list</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></em><a class="headerlink" href="#id2" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="PyFiberModes.stepindex.StepIndex">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">PyFiberModes.stepindex.</span></span><span class="sig-name descname"><span class="pre">StepIndex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius_in</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius_out</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyFiberModes.stepindex.StepIndex" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">StepIndex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius_in</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius_out</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyFiberModes/stepindex.html#StepIndex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.stepindex.StepIndex" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#PyFiberModes.stepindex.Geometry" title="PyFiberModes.stepindex.Geometry"><code class="xref py py-class docutils literal notranslate"><span class="pre">Geometry</span></code></a></p>
 <p>Step-index structure for optical fibers and waveguides.</p>
+<section id="inherits">
+<h3>Inherits<a class="headerlink" href="#inherits" title="Link to this heading">#</a></h3>
+<p>Geometry</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.stepindex.StepIndex.get_index_at_radius">
-<span class="sig-name descname"><span class="pre">get_index_at_radius</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#PyFiberModes.stepindex.StepIndex.get_index_at_radius" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_index_at_radius</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/PyFiberModes/stepindex.html#StepIndex.get_index_at_radius"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.stepindex.StepIndex.get_index_at_radius" title="Link to this definition">#</a></dt>
 <dd><p>Get the refractive index at a specific radius.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>radius</strong><span class="classifier">float</span></dt><dd><p>Radius for evaluation.</p>
-</dd>
-</dl>
+<dd class="field-odd"><p><strong>radius</strong> (<em>float</em>) – Radius for evaluation.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>float or None</dt><dd><p>Refractive index at the given radius if within bounds, else None.</p>
+<dd class="field-even"><p>Refractive index at the given radius if within bounds, else None.</p>
 </dd>
-</dl>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float or None</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.stepindex.StepIndex.get_U_W_parameter">
-<span class="sig-name descname"><span class="pre">get_U_W_parameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#PyFiberModes.stepindex.StepIndex.get_U_W_parameter" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_U_W_parameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/PyFiberModes/stepindex.html#StepIndex.get_U_W_parameter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.stepindex.StepIndex.get_U_W_parameter" title="Link to this definition">#</a></dt>
 <dd><p>Calculate the U or W parameter for waveguides.</p>
 <p>The U and W parameters are defined as:</p>
 <div class="math notranslate nohighlight">
@@ -1598,25 +1658,23 @@ Reference: Eq. 3.71 of Jaques Bures.</p>
 - (n_{text{eff}}) is the effective refractive index.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>radius</strong><span class="classifier">float</span></dt><dd><p>Radius for evaluation.</p>
-</dd>
-<dt><strong>neff</strong><span class="classifier">float</span></dt><dd><p>Effective refractive index.</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>radius</strong> (<em>float</em>) – Radius for evaluation.</p></li>
+<li><p><strong>neff</strong> (<em>float</em>) – Effective refractive index.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>float</dt><dd><p>U or W parameter value.</p>
+<dd class="field-even"><p>U or W parameter value.</p>
 </dd>
-</dl>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.stepindex.StepIndex.get_psi">
-<span class="sig-name descname"><span class="pre">get_psi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="headerlink" href="#PyFiberModes.stepindex.StepIndex.get_psi" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_psi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/PyFiberModes/stepindex.html#StepIndex.get_psi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.stepindex.StepIndex.get_psi" title="Link to this definition">#</a></dt>
 <dd><p>Compute the <span class="math notranslate nohighlight">\(\psi\)</span> function and its derivative.</p>
 <p>The function <span class="math notranslate nohighlight">\(\psi\)</span> is computed using Bessel functions for core layers
 and modified Bessel functions for cladding layers. The equations used are:</p>
@@ -1635,153 +1693,128 @@ and modified Bessel functions for cladding layers. The equations used are:</p>
 </pre></div>
 </div>
 <p>where:
-- (<a href="#id1"><span class="problematic" id="id2">J_</span></a>nu), (<a href="#id3"><span class="problematic" id="id4">Y_</span></a>nu): Bessel functions of the first and second kind.
-- (<a href="#id5"><span class="problematic" id="id6">I_</span></a>nu), (<a href="#id7"><span class="problematic" id="id8">K_</span></a>nu): Modified Bessel functions of the first and second kind.
+- (<a href="#id3"><span class="problematic" id="id4">J_</span></a>nu), (<a href="#id5"><span class="problematic" id="id6">Y_</span></a>nu): Bessel functions of the first and second kind.
+- (<a href="#id7"><span class="problematic" id="id8">I_</span></a>nu), (<a href="#id9"><span class="problematic" id="id10">K_</span></a>nu): Modified Bessel functions of the first and second kind.
 - (C_0), (C_1): Coefficients.
 - (U): Parameter related to radius and refractive indices.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>radius</strong><span class="classifier">float</span></dt><dd><p>The radius at which the field is evaluated.</p>
-</dd>
-<dt><strong>neff</strong><span class="classifier">float</span></dt><dd><p>The effective refractive index.</p>
-</dd>
-<dt><strong>nu</strong><span class="classifier">int</span></dt><dd><p>The order of the Bessel function (mode number).</p>
-</dd>
-<dt><strong>C</strong><span class="classifier">list</span></dt><dd><p>Coefficients for the Bessel functions. Must have at least one value,
-with the second value optional (defaults to 0).</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>radius</strong> (<em>float</em>) – The radius at which the field is evaluated.</p></li>
+<li><p><strong>neff</strong> (<em>float</em>) – The effective refractive index.</p></li>
+<li><p><strong>nu</strong> (<em>int</em>) – The order of the Bessel function (mode number).</p></li>
+<li><p><strong>C</strong> (<em>list</em>) – Coefficients for the Bessel functions. Must have at least one value,
+with the second value optional (defaults to 0).</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>tuple</dt><dd><p>A tuple containing:
+<dd class="field-even"><p>A tuple containing:
 - <span class="math notranslate nohighlight">\(\psi\)</span>: The field value.
 - <span class="math notranslate nohighlight">\(\dot{\psi}\)</span>: The derivative of the field value.</p>
 </dd>
-</dl>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.stepindex.StepIndex.get_LP_constants">
-<span class="sig-name descname"><span class="pre">get_LP_constants</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="headerlink" href="#PyFiberModes.stepindex.StepIndex.get_LP_constants" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_LP_constants</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/PyFiberModes/stepindex.html#StepIndex.get_LP_constants"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.stepindex.StepIndex.get_LP_constants" title="Link to this definition">#</a></dt>
 <dd><p>Calculate the LP mode constants.</p>
 <p>The constants are derived from Bessel or modified Bessel functions
 for specific mode conditions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>radius</strong><span class="classifier">float</span></dt><dd><p>Radius for evaluation.</p>
-</dd>
-<dt><strong>neff</strong><span class="classifier">float</span></dt><dd><p>Effective refractive index.</p>
-</dd>
-<dt><strong>nu</strong><span class="classifier">int</span></dt><dd><p>Mode number.</p>
-</dd>
-<dt><strong>A</strong><span class="classifier">list</span></dt><dd><p>Coefficients for Bessel functions.</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>radius</strong> (<em>float</em>) – Radius for evaluation.</p></li>
+<li><p><strong>neff</strong> (<em>float</em>) – Effective refractive index.</p></li>
+<li><p><strong>nu</strong> (<em>int</em>) – Mode number.</p></li>
+<li><p><strong>A</strong> (<em>list</em>) – Coefficients for Bessel functions.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>tuple</dt><dd><p>LP mode constants.</p>
+<dd class="field-even"><p>LP mode constants.</p>
 </dd>
-</dl>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.stepindex.StepIndex.EH_fields">
-<span class="sig-name descname"><span class="pre">EH_fields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius_in</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius_out</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">EH</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TM</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="headerlink" href="#PyFiberModes.stepindex.StepIndex.EH_fields" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">EH_fields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius_in</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius_out</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">EH</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TM</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/PyFiberModes/stepindex.html#StepIndex.EH_fields"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.stepindex.StepIndex.EH_fields" title="Link to this definition">#</a></dt>
 <dd><p>Compute the EH field components.</p>
 <p>The EH field components are derived based on the mode parameters and
 the coefficients (C_i).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>radius_in</strong><span class="classifier">float</span></dt><dd><p>Inner radius of the structure.</p>
-</dd>
-<dt><strong>radius_out</strong><span class="classifier">float</span></dt><dd><p>Outer radius of the structure.</p>
-</dd>
-<dt><strong>nu</strong><span class="classifier">int</span></dt><dd><p>Mode number.</p>
-</dd>
-<dt><strong>neff</strong><span class="classifier">float</span></dt><dd><p>Effective refractive index.</p>
-</dd>
-<dt><strong>EH</strong><span class="classifier">list</span></dt><dd><p>List of field components.</p>
-</dd>
-<dt><strong>TM</strong><span class="classifier">bool, optional</span></dt><dd><p>Indicates if TM mode (default is True).</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>radius_in</strong> (<em>float</em>) – Inner radius of the structure.</p></li>
+<li><p><strong>radius_out</strong> (<em>float</em>) – Outer radius of the structure.</p></li>
+<li><p><strong>nu</strong> (<em>int</em>) – Mode number.</p></li>
+<li><p><strong>neff</strong> (<em>float</em>) – Effective refractive index.</p></li>
+<li><p><strong>EH</strong> (<em>list</em>) – List of field components.</p></li>
+<li><p><strong>TM</strong> (<em>bool</em><em>, </em><em>optional</em>) – Indicates if TM mode (default is True).</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>list</dt><dd><p>Updated EH field components.</p>
+<dd class="field-even"><p>Updated EH field components.</p>
 </dd>
-</dl>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.stepindex.StepIndex.get_V_constant">
-<span class="sig-name descname"><span class="pre">get_V_constant</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius_in</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius_out</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">EH</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#PyFiberModes.stepindex.StepIndex.get_V_constant" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_V_constant</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius_in</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius_out</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">EH</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/PyFiberModes/stepindex.html#StepIndex.get_V_constant"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.stepindex.StepIndex.get_V_constant" title="Link to this definition">#</a></dt>
 <dd><p>Compute the V constants for the mode.</p>
 <p>This method calculates the constants using Bessel or modified Bessel
 functions based on the refractive index regime.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>radius_in</strong><span class="classifier">float</span></dt><dd><p>Inner radius of the structure.</p>
-</dd>
-<dt><strong>radius_out</strong><span class="classifier">float</span></dt><dd><p>Outer radius of the structure.</p>
-</dd>
-<dt><strong>neff</strong><span class="classifier">float</span></dt><dd><p>Effective refractive index.</p>
-</dd>
-<dt><strong>nu</strong><span class="classifier">int</span></dt><dd><p>Mode number.</p>
-</dd>
-<dt><strong>EH</strong><span class="classifier">np.ndarray</span></dt><dd><p>Electric and magnetic field components.</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>radius_in</strong> (<em>float</em>) – Inner radius of the structure.</p></li>
+<li><p><strong>radius_out</strong> (<em>float</em>) – Outer radius of the structure.</p></li>
+<li><p><strong>neff</strong> (<em>float</em>) – Effective refractive index.</p></li>
+<li><p><strong>nu</strong> (<em>int</em>) – Mode number.</p></li>
+<li><p><strong>EH</strong> (<em>np.ndarray</em>) – Electric and magnetic field components.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>np.ndarray</dt><dd><p>Solution to the linear system representing the V constants.</p>
+<dd class="field-even"><p>Solution to the linear system representing the V constants.</p>
 </dd>
-</dl>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.stepindex.StepIndex.get_TE_TM_constants">
-<span class="sig-name descname"><span class="pre">get_TE_TM_constants</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius_in</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius_out</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">EH</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#PyFiberModes.stepindex.StepIndex.get_TE_TM_constants" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_TE_TM_constants</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius_in</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius_out</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">EH</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/PyFiberModes/stepindex.html#StepIndex.get_TE_TM_constants"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.stepindex.StepIndex.get_TE_TM_constants" title="Link to this definition">#</a></dt>
 <dd><p>Compute the TE/TM constants for the waveguide.</p>
 <p>This method calculates the constants using standard or modified Bessel
 functions depending on the refractive index regime.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>radius_in</strong><span class="classifier">float</span></dt><dd><p>Inner radius of the structure.</p>
-</dd>
-<dt><strong>radius_out</strong><span class="classifier">float</span></dt><dd><p>Outer radius of the structure.</p>
-</dd>
-<dt><strong>neff</strong><span class="classifier">float</span></dt><dd><p>Effective refractive index.</p>
-</dd>
-<dt><strong>EH</strong><span class="classifier">np.ndarray</span></dt><dd><p>Electric and magnetic field components.</p>
-</dd>
-<dt><strong>c</strong><span class="classifier">float</span></dt><dd><p>Scaling constant for the calculation.</p>
-</dd>
-<dt><strong>idx</strong><span class="classifier">tuple</span></dt><dd><p>Indices for selecting specific components of the EH array.</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>radius_in</strong> (<em>float</em>) – Inner radius of the structure.</p></li>
+<li><p><strong>radius_out</strong> (<em>float</em>) – Outer radius of the structure.</p></li>
+<li><p><strong>neff</strong> (<em>float</em>) – Effective refractive index.</p></li>
+<li><p><strong>EH</strong> (<em>np.ndarray</em>) – Electric and magnetic field components.</p></li>
+<li><p><strong>c</strong> (<em>float</em>) – Scaling constant for the calculation.</p></li>
+<li><p><strong>idx</strong> (<em>tuple</em>) – Indices for selecting specific components of the EH array.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>np.ndarray</dt><dd><p>Solution to the linear system representing the TE/TM constants.</p>
+<dd class="field-even"><p>Solution to the linear system representing the TE/TM constants.</p>
 </dd>
-</dl>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1801,6 +1834,7 @@ functions depending on the refractive index regime.</p>
 <span class="sig-name descname"><span class="pre">index_list</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></em><a class="headerlink" href="#PyFiberModes.stepindex.StepIndex.index_list" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
+</section>
 </dd></dl>
 
 </div></blockquote>
@@ -1808,9 +1842,9 @@ functions depending on the refractive index regime.</p>
 <section id="fiber-factory">
 <h2>Fiber factory<a class="headerlink" href="#fiber-factory" title="Link to this heading">#</a></h2>
 <blockquote>
-<div><span class="target" id="module-PyFiberModes.factory"></span><dl class="py class">
+<div><dl class="py class" id="module-PyFiberModes.factory">
 <dt class="sig sig-object py" id="PyFiberModes.factory.ProxyLayer">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">PyFiberModes.factory.</span></span><span class="sig-name descname"><span class="pre">ProxyLayer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyFiberModes.factory.ProxyLayer" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ProxyLayer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyFiberModes/factory.html#ProxyLayer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.factory.ProxyLayer" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="PyFiberModes.factory.ProxyLayer.name">
@@ -1829,14 +1863,14 @@ functions depending on the refractive index regime.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.factory.ProxyLayer.get_generator">
-<span class="sig-name descname"><span class="pre">get_generator</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PyFiberModes.factory.ProxyLayer.get_generator" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_generator</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyFiberModes/factory.html#ProxyLayer.get_generator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.factory.ProxyLayer.get_generator" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="PyFiberModes.factory.FiberFactory">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">PyFiberModes.factory.</span></span><span class="sig-name descname"><span class="pre">FiberFactory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wavelength</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyFiberModes.factory.FiberFactory" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">FiberFactory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wavelength</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyFiberModes/factory.html#FiberFactory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.factory.FiberFactory" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>FiberFactory is used to instantiate a
 <code class="xref py py-class docutils literal notranslate"><span class="pre">Fiber</span></code> or a series of
@@ -1856,7 +1890,7 @@ materials. However, parameters can vary.</p>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.factory.FiberFactory.add_layer">
-<span class="sig-name descname"><span class="pre">add_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#PyFiberModes.factory.FiberFactory.add_layer" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">add_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/PyFiberModes/factory.html#FiberFactory.add_layer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.factory.FiberFactory.add_layer" title="Link to this definition">#</a></dt>
 <dd><p>Insert a new layer in the factory.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1871,7 +1905,7 @@ materials. However, parameters can vary.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.factory.FiberFactory.get_overall_generator">
-<span class="sig-name descname"><span class="pre">get_overall_generator</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PyFiberModes.factory.FiberFactory.get_overall_generator" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_overall_generator</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyFiberModes/factory.html#FiberFactory.get_overall_generator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.factory.FiberFactory.get_overall_generator" title="Link to this definition">#</a></dt>
 <dd><p>Return a generator of all combination of fibers.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -2010,6 +2044,9 @@ materials. However, parameters can vary.</p>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.stepindex.Geometry.radius_in"><code class="docutils literal notranslate"><span class="pre">Geometry.radius_in</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.stepindex.Geometry.radius_out"><code class="docutils literal notranslate"><span class="pre">Geometry.radius_out</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.stepindex.Geometry.index_list"><code class="docutils literal notranslate"><span class="pre">Geometry.index_list</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id0"><code class="docutils literal notranslate"><span class="pre">Geometry.radius_in</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><code class="docutils literal notranslate"><span class="pre">Geometry.radius_out</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id2"><code class="docutils literal notranslate"><span class="pre">Geometry.index_list</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.stepindex.StepIndex"><code class="docutils literal notranslate"><span class="pre">StepIndex</span></code></a><ul class="nav section-nav flex-column">
@@ -2078,7 +2115,7 @@ materials. However, parameters can vary.</p>
         <div class="footer-item">
   <p class="copyright">
     
-      © Copyright 2021, Martin Poinsinet de Sivry-Houle.
+      © Copyright 2024, Martin Poinsinet de Sivry-Houle.
       <br/>
     
   </p>
