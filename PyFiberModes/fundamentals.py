@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import numpy
-
+import numpy as np
 from PyFiberModes.mode import Mode
 from PyFiberModes import Wavelength
 from PyFiberModes.mode_instances import HE11, LP01
@@ -11,37 +10,53 @@ from PyFiberModes.coordinates import CylindricalCoordinates
 
 
 def get_delta_from_fiber(fiber) -> float:
-    """
-    Gets the delta from fiber as defined in reference Eq. 3.82 of Jacques Bures.
+    r"""
+    Calculate the relative index difference, \(\Delta\), of the fiber.
 
-    :param      fiber:  The fiber
-    :type       fiber:  Fiber
+    .. math::
+        \Delta = \frac{1}{2} \left( 1 - \frac{n_{\text{clad}}^2}{n_{\text{core}}^2} \right)
 
-    :returns:   The delta from fiber.
-    :rtype:     float
+    Parameters
+    ----------
+    fiber : Fiber
+        The fiber object containing core and cladding properties.
+
+    Returns
+    -------
+    float
+        The relative index difference, \(\Delta\).
     """
     core, clad = fiber.layers
     n_ratio = clad.refractive_index**2 / core.refractive_index**2
     return 0.5 * (1 - n_ratio)
 
 
-def get_wavelength_from_V0(fiber: object, V0: float) -> float:
-    """
-    Gets the wavelength associated to the V number V0.
+def get_wavelength_from_V0(fiber: object, V0: float) -> Wavelength:
+    r"""
+    Compute the wavelength corresponding to a given V-number, \(V_0\).
 
-    :param      fiber:  The fiber
-    :type       fiber:  object
-    :param      V0:     The V number
-    :type       V0:     float
+    .. math::
+        \lambda = \frac{2 \pi a \cdot \text{NA}}{V_0}
 
-    :returns:   The wavelength from V number.
-    :rtype:     float
+    where:
+    - \(a\) is the core radius.
+    - \(\text{NA}\) is the numerical aperture.
+
+    Parameters
+    ----------
+    fiber : Fiber
+        The fiber object.
+    V0 : float
+        The V-number.
+
+    Returns
+    -------
+    Wavelength
+        The wavelength corresponding to \(V_0\).
     """
     NA = fiber.get_NA()
     last_layer = fiber.last_layer
-
-    wavelength = 2 * numpy.pi / V0 * last_layer.radius_in * NA
-
+    wavelength = 2 * np.pi / V0 * last_layer.radius_in * NA
     return Wavelength(wavelength)
 
 
@@ -50,36 +65,39 @@ def get_propagation_constant_from_omega(
         fiber: object,
         mode: Mode,
         delta_neff: float = 1e-6) -> float:
-    """
-    Gets the effective index of a given fiber and mode.
+    r"""
+    Calculate the propagation constant, \(\beta\), for a given angular frequency, fiber, and mode.
 
-    :param      fiber:                The fiber to evaluate
-    :type       fiber:                Fiber
-    :param      wavelength:           The wavelength
-    :type       wavelength:           Wavelength
-    :param      mode:                 The mode
-    :type       mode:                 Mode
-    :param      delta_neff:           The delta neff
-    :type       delta_neff:           float
+    .. math::
+        \beta = k_0 n_{\text{eff}}
 
-    :returns:   The effective index.
-    :rtype:     float
+    where:
+    - \(k_0 = \frac{2 \pi}{\lambda}\) is the free-space wave number.
+    - \(n_{\text{eff}}\) is the effective refractive index.
+
+    Parameters
+    ----------
+    omega : float
+        The angular frequency.
+    fiber : Fiber
+        The fiber object.
+    mode : Mode
+        The mode of interest.
+    delta_neff : float, optional
+        Convergence threshold for \(n_{\text{eff}}\) calculation, by default \(1 \times 10^{-6}\).
+
+    Returns
+    -------
+    float
+        The propagation constant, \(\beta\).
     """
     wavelength = Wavelength(omega=omega)
-
     from PyFiberModes import solver
 
-    if fiber.n_layer == 2:  # Standard Step-Index Fiber [SSIF]
-        neff_solver = solver.ssif.NeffSolver(fiber=fiber, wavelength=wavelength)
+    neff_solver = solver.ssif.NeffSolver(fiber=fiber, wavelength=wavelength) if fiber.n_layer == 2 \
+        else solver.mlsif.NeffSolver(fiber=fiber, wavelength=wavelength)
 
-    else:  # Multi-Layer Step-Index Fiber [MLSIF]
-        neff_solver = solver.mlsif.NeffSolver(fiber=fiber, wavelength=wavelength)
-
-    neff = neff_solver.solve(
-        mode=mode,
-        delta_neff=delta_neff
-    )
-
+    neff = neff_solver.solve(mode=mode, delta_neff=delta_neff)
     return neff * wavelength.k0
 
 
@@ -88,33 +106,34 @@ def get_U_parameter(
         wavelength: Wavelength,
         mode: Mode,
         delta_neff: float = 1e-6) -> float:
-    """
-    Gets the U parameter for a given fiber and mode.
+    r"""
+    Calculate the \(U\) parameter for a given fiber and mode.
 
-    :param      fiber:                The fiber to evaluate
-    :type       fiber:                Fiber
-    :param      wavelength:           The wavelength to consider
-    :type       wavelength:           Wavelength
-    :param      mode:                 The mode
-    :type       mode:                 Mode
-    :param      delta_neff:           The delta neff
-    :type       delta_neff:           float
+    .. math::
+        U = k_0 a \sqrt{n_{\text{core}}^2 - n_{\text{eff}}^2}
 
-    :returns:   The U parameter.
-    :rtype:     float
+    Parameters
+    ----------
+    fiber : Fiber
+        The fiber object.
+    wavelength : Wavelength
+        The wavelength of interest.
+    mode : Mode
+        The mode of interest.
+    delta_neff : float, optional
+        Convergence threshold for \(n_{\text{eff}}\), by default \(1 \times 10^{-6}\).
+
+    Returns
+    -------
+    float
+        The \(U\) parameter.
     """
     from PyFiberModes import solver
-    assert fiber.n_layer == 2, "Cannot compute U number for more than two layers"
+    assert fiber.n_layer == 2, "U-parameter can only be calculated for two-layer fibers."
 
     neff_solver = solver.ssif.NeffSolver(fiber=fiber, wavelength=wavelength)
-
-    neff = neff_solver.solve(
-        mode=mode,
-        delta_neff=delta_neff,
-    )
-
+    neff = neff_solver.solve(mode=mode, delta_neff=delta_neff)
     U, _, _ = neff_solver.get_U_W_V_parameter(neff=neff)
-
     return U
 
 
@@ -123,52 +142,55 @@ def get_effective_index(
         wavelength: Wavelength,
         mode: Mode,
         delta_neff: float = 1e-6) -> float:
-    """
-    Gets the effective index of a given fiber and mode.
+    r"""
+    Compute the effective refractive index, \(n_{\text{eff}}\), for a given mode.
 
-    :param      fiber:                The fiber to evaluate
-    :type       fiber:                Fiber
-    :param      wavelength:           The wavelength
-    :type       wavelength:           Wavelength
-    :param      mode:                 The mode
-    :type       mode:                 Mode
-    :param      delta_neff:           The delta neff
-    :type       delta_neff:           float
+    Parameters
+    ----------
+    fiber : Fiber
+        The fiber object.
+    wavelength : Wavelength
+        The wavelength of interest.
+    mode : Mode
+        The mode of interest.
+    delta_neff : float, optional
+        Convergence threshold for \(n_{\text{eff}}\), by default \(1 \times 10^{-6}\).
 
-    :returns:   The effective index.
-    :rtype:     float
+    Returns
+    -------
+    float
+        The effective refractive index, \(n_{\text{eff}}\).
     """
     from PyFiberModes import solver
 
-    if fiber.n_layer == 2:  # Standard Step-Index Fiber [SSIF]
+    if fiber.n_layer == 2:
         neff_solver = solver.ssif.NeffSolver(fiber=fiber, wavelength=wavelength)
-    else:  # Multi-Layer Step-Index Fiber [MLSIF]
+    else:
         neff_solver = solver.mlsif.NeffSolver(fiber=fiber, wavelength=wavelength)
 
-    neff = neff_solver.solve(
-        mode=mode,
-        delta_neff=delta_neff,
-    )
-
-    return neff
+    return neff_solver.solve(mode=mode, delta_neff=delta_neff)
 
 
 def get_mode_cutoff_v0(
         fiber,
         wavelength: Wavelength,
         mode: Mode) -> float:
-    """
-    Gets the effective index of a given fiber and mode.
+    r"""
+    Compute the cutoff V-number, \(V_0\), for a mode.
 
-    :param      fiber:                The fiber to evaluate
-    :type       fiber:                Fiber
-    :param      wavelength:           The wavelength
-    :type       wavelength:           Wavelength
-    :param      mode:                 The mode
-    :type       mode:                 Mode
+    Parameters
+    ----------
+    fiber : Fiber
+        The fiber object.
+    wavelength : Wavelength
+        The wavelength of interest.
+    mode : Mode
+        The mode of interest.
 
-    :returns:   The V0 value associated to cutoff.
-    :rtype:     float
+    Returns
+    -------
+    float
+        The cutoff V-number, \(V_0\).
     """
     from PyFiberModes import solver
 
@@ -194,20 +216,27 @@ def get_radial_field(
         wavelength: float,
         radius: float) -> tuple:
     r"""
-    Gets the mode field without the azimuthal component.
-    Tuple structure is [:math:`E_{r}`, :math:`E_{\phi}`, :math:`E_{z}`], [:math:`H_{r}`, :math:`H_{\phi}`, :math:`H_{z}`]
+    Compute the radial field components of a mode in cylindrical coordinates.
 
-    :param      fiber:       The fiber to evaluate
-    :type       fiber:       Fiber
-    :param      mode:        The mode to consider
-    :type       mode:        Mode
-    :param      wavelength:  The wavelength to consider
-    :type       wavelength:  float
-    :param      radius:      The radius
-    :type       radius:      float
+    The tuple structure contains:
+    - \((E_r, E_\phi, E_z)\): Electric field components.
+    - \((H_r, H_\phi, H_z)\): Magnetic field components.
 
-    :returns:   The radial field in a tupler of CylindricalCoordinates.
-    :rtype:     tuple
+    Parameters
+    ----------
+    fiber : Fiber
+        The fiber object.
+    mode : Mode
+        The mode of interest.
+    wavelength : float
+        The wavelength of interest.
+    radius : float
+        The radial position.
+
+    Returns
+    -------
+    tuple
+        Radial field components as CylindricalCoordinates.
     """
     from PyFiberModes import solver
 
@@ -244,5 +273,3 @@ def get_radial_field(
     h_field = CylindricalCoordinates(rho=hr, phi=hphi, z=hz)
 
     return e_field, h_field
-
-# -

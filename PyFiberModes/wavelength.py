@@ -1,77 +1,100 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import numpy
-import scipy
+from scipy.constants import c, pi
 
 
 class Wavelength(float):
-    """Easy wavelength units conversion class.
+    """
+    Class for wavelength unit conversions.
 
-    This class is inherited from :py:class:`float`. Therefore, it can be
-    used wherever you can use floats. Wavelength always is expressed in
-    meters.
+    Inherits from :py:class:`float` to allow seamless use wherever floats are used.
+    The wavelength is always stored in meters.
 
-    Properties can be used to convert wavelength to frequency or wavenumber.
-
+    Attributes can be accessed to convert wavelength into wave number, frequency, or angular frequency.
     """
 
     def __new__(cls, *args, **kwargs):
         """
-        Construct a Wavelength object, using given value.
+        Create a new Wavelength object.
 
-        You can pass to the constructor any keyword defined in properties
-        (k0, omega, w, wl, wavelength, frequency, v, or f).
-        If no keyword is given, value is considered to be wavelength.
+        Parameters
+        ----------
+        args : tuple
+            Positional arguments to specify the wavelength (default in meters).
+        kwargs : dict
+            Keyword arguments for alternative unit-based construction:
+                - 'k0': Wave number (2π/λ).
+                - 'omega', 'w': Angular frequency (rad/s).
+                - 'wl', 'wavelength': Wavelength (in meters).
+                - 'frequency', 'v', 'f': Frequency (in Hertz).
 
+        Returns
+        -------
+        Wavelength
+            A new Wavelength instance in meters.
+
+        Raises
+        ------
+        TypeError
+            If multiple arguments are provided or if arguments are invalid.
         """
-        nargs = len(args) + len(kwargs)
-        if nargs > 1:
-            raise TypeError("Wavelength constructor need exactly one parameter")
-        if nargs == 0:
-            wl = 0
-        elif len(args) == 1:
+        if len(args) + len(kwargs) > 1:
+            raise TypeError("Wavelength constructor requires exactly one parameter.")
+
+        if args:
             wl = args[0]
         elif 'k0' in kwargs:
-            wl = 2 * numpy.pi / kwargs['k0']
-        elif 'omega' in kwargs:
-            wl = scipy.constants.c * 2 * numpy.pi / kwargs['omega']
-        elif 'w' in kwargs:
-            wl = scipy.constants.c * 2 * numpy.pi / kwargs['w']
-        elif 'wl' in kwargs:
-            wl = kwargs['wl']
-        elif 'wavelength' in kwargs:
-            wl = kwargs['wavelength']
-        elif 'frequency' in kwargs:
-            wl = scipy.constants.c / kwargs['frequency']
-        elif 'v' in kwargs:
-            wl = scipy.constants.c / kwargs['v']
-        elif 'f' in kwargs:
-            wl = scipy.constants.c / kwargs['f']
+            wl = 2 * pi / kwargs['k0']
+        elif 'omega' in kwargs or 'w' in kwargs:
+            omega = kwargs.get('omega') or kwargs['w']
+            wl = c * 2 * pi / omega
+        elif 'wl' in kwargs or 'wavelength' in kwargs:
+            wl = kwargs.get('wl') or kwargs['wavelength']
+        elif 'frequency' in kwargs or 'v' in kwargs or 'f' in kwargs:
+            frequency = kwargs.get('frequency') or kwargs.get('v') or kwargs['f']
+            wl = c / frequency
         else:
-            raise TypeError("Invalid argument")
+            raise TypeError("Invalid argument for Wavelength constructor.")
 
-        return float.__new__(cls, wl)
+        return super().__new__(cls, wl)
 
     @property
-    def k0(self):
-        r"""
-        Wave number (:math:`2 \pi / \lambda`).
+    def k0(self) -> float:
         """
-        return 2 * numpy.pi / self if self != 0 else float("inf")
+        Wave number (2π/λ).
+
+        Returns
+        -------
+        float
+            Wave number in radians per meter.
+        """
+        return 2 * pi / self if self != 0 else float('inf')
 
     @property
     def omega(self) -> float:
         """
         Angular frequency (in rad/s).
+
+        Returns
+        -------
+        float
+            Angular frequency.
         """
-        return scipy.constants.c * 2 * numpy.pi / self if self != 0 else numpy.inf
+        return c * 2 * pi / self if self != 0 else float('inf')
 
     w = omega
 
     @property
     def wavelength(self) -> float:
-        """Wavelength (in meters)."""
+        """
+        Wavelength (in meters).
+
+        Returns
+        -------
+        float
+            Wavelength in meters.
+        """
         return self
 
     wl = wavelength
@@ -80,17 +103,35 @@ class Wavelength(float):
     def frequency(self) -> float:
         """
         Frequency (in Hertz).
+
+        Returns
+        -------
+        float
+            Frequency in Hz.
         """
-        return scipy.constants.c / self if self != 0 else numpy.inf
+        return c / self if self != 0 else float('inf')
 
     v = frequency
     f = frequency
 
-    def __str__(self):
+    def __str__(self) -> str:
         """
-        Format wavelength as string (nanometers, 2 digits)
+        String representation of the wavelength in nanometers.
+
+        Returns
+        -------
+        str
+            Wavelength formatted as a string in nanometers with 2 decimal places.
         """
         return f"{1e9 * self.wavelength:.2f} nm"
 
-    def __repr__(self):
-        return f"wavelength({self.wavelength})"
+    def __repr__(self) -> str:
+        """
+        Debug representation of the Wavelength object.
+
+        Returns
+        -------
+        str
+            Debug string representation.
+        """
+        return f"Wavelength({self.wavelength:.6e} meters)"
