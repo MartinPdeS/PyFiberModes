@@ -26,14 +26,12 @@ jobs:
         uses: conda-incubator/setup-miniconda@v3
         with:
           channels: conda-forge, martinpdes
+          activate-environment: anaconda-client-env
           python-version: ${{ matrix.python-version }}
 
       - name: Install Conda tools
         run: |
           conda install anaconda-client conda-build
-
-      - name: Verify Anaconda CLI
-        run: which anaconda
 
       - name: Build Conda package
         run: |
