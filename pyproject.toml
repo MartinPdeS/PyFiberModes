@@ -25,6 +25,7 @@ classifiers = [
 keywords = ["finit-difference", "matrix"]
 
 dependencies = [
+    "pyyaml ==6.0.1",
     "numpy ==1.*",
     "MPSPlots ~=1.5.1",
     "PyFinitDiff",
@@ -63,6 +64,7 @@ dev = [
 ]
 
 [tool.pytest.ini_options]
+python_functions = "test*"
 minversion = "6.0"
 xfail_strict = true
 log_cli_level = "INFO"
@@ -73,8 +75,10 @@ addopts = [
     '-v',
     '-rA',
     '-rw',
+    '-Werror',
     '--cov=PyFiberModes',
-    '--cov-report=html'
+    '--cov-report=html',
+    "--cov-report=term"
 ]
 
 
