@@ -220,14 +220,14 @@ Preparing the figure
            1.48824242, 1.48854545, 1.48884848, 1.48915152, 1.48945455,
            1.48975758, 1.49006061, 1.49036364, 1.49066667, 1.4909697 ,
            1.49127273, 1.49157576, 1.49187879, 1.49218182, 1.49248485,
-           1.49278788, 1.49309091, 1.49339394, 1.49369697, 1.494     ]), label='HE22', color=None, line_style='-', line_width=2.0, x_scale_factor=1, y_scale_factor=1, layer_position=1)], mpl_ax=<Axes: >, colorbar=Colorbar(artist=None, discreet=False, position='right', colormap=<matplotlib.colors.LinearSegmentedColormap object at 0x7f2c09d97050>, orientation='vertical', symmetric=False, log_norm=False, numeric_format=None, n_ticks=None, label_size=None, width='10%', padding=0.1, norm=None, label=''))], _mpl_figure=<Figure size 1000x300 with 1 Axes>, mpl_axis_generated=False, axis_generated=True, ax_orientation='vertical')
+           1.49278788, 1.49309091, 1.49339394, 1.49369697, 1.494     ]), label='HE22', color=None, line_style='-', line_width=2.0, x_scale_factor=1, y_scale_factor=1, layer_position=1)], mpl_ax=<Axes: >, colorbar=Colorbar(artist=None, discreet=False, position='right', colormap=<matplotlib.colors.LinearSegmentedColormap object at 0x7fd12f212010>, orientation='vertical', symmetric=False, log_norm=False, numeric_format=None, n_ticks=None, label_size=None, width='10%', padding=0.1, norm=None, label=''))], _mpl_figure=<Figure size 1000x300 with 1 Axes>, mpl_axis_generated=False, axis_generated=True, ax_orientation='vertical')
 
 
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 2.718 seconds)
+   **Total running time of the script:** (0 minutes 2.732 seconds)
 
 
 .. _sphx_glr_download_gallery_basic_plot_group_index.py:
