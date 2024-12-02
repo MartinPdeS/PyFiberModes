@@ -20,7 +20,7 @@ from PyFiberModes.fundamentals import (
     get_propagation_constant_from_omega
 )
 
-from MPSTools.fiber_catalogue import loader
+from PyFiberModes import loader
 from PyFiberModes.coordinates import CylindricalCoordinates
 
 

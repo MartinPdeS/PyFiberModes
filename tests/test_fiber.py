@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-
+import pytest
 import numpy
 
 
@@ -27,5 +27,9 @@ def test_fiber_loader():
     smf28 = load_fiber(fiber_name='SMF28', wavelength=1310e-9)
 
     print(smf28)
+
+
+if __name__ == "__main__":
+    pytest.main(["-W error", __file__])
 
 # -
