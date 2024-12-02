@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**02:07.351** total execution time for 14 files **from gallery/basic**:
+**02:08.128** total execution time for 14 files **from gallery/basic**:
 
 .. container::
 
@@ -33,44 +33,44 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_gallery_basic_plot_DCF_fields.py` (``plot_DCF_fields.py``)
-     - 01:05.634
+     - 01:05.940
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_mode_field_1.py` (``plot_mode_field_1.py``)
-     - 00:18.318
+     - 00:18.567
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_comparison_solvers.py` (``plot_comparison_solvers.py``)
-     - 00:16.999
+     - 00:17.199
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_mode_field.py` (``plot_mode_field.py``)
-     - 00:09.676
+     - 00:09.688
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_U_vs_V.py` (``plot_U_vs_V.py``)
-     - 00:06.020
+     - 00:05.978
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_dispersion.py` (``plot_dispersion.py``)
-     - 00:03.387
+     - 00:03.432
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_group_index.py` (``plot_group_index.py``)
-     - 00:02.732
+     - 00:02.738
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_fiber_LP_modes.py` (``plot_fiber_LP_modes.py``)
-     - 00:01.172
+     - 00:01.191
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_mode_field_2.py` (``plot_mode_field_2.py``)
-     - 00:00.999
+     - 00:00.978
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_effective_index.py` (``plot_effective_index.py``)
-     - 00:00.877
+     - 00:00.878
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_smf28_dispersion_vs_wavelength.py` (``plot_smf28_dispersion_vs_wavelength.py``)
-     - 00:00.555
+     - 00:00.574
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_smf28_group_index_vs_wavelength.py` (``plot_smf28_group_index_vs_wavelength.py``)
-     - 00:00.506
+     - 00:00.516
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_neff_tapered_fiber.py` (``plot_neff_tapered_fiber.py``)
-     - 00:00.432
+     - 00:00.403
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_smf28.py` (``plot_smf28.py``)
-     - 00:00.045
+     - 00:00.046
      - 0.0
