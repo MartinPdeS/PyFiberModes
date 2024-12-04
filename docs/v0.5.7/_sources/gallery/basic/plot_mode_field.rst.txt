@@ -157,7 +157,7 @@ Preparing the figure
             52,  53,  54,  55,  56,  57,  58,  59,  60,  61,  62,  63,  64,
             65,  66,  67,  68,  69,  70,  71,  72,  73,  74,  75,  76,  77,
             78,  79,  80,  81,  82,  83,  84,  85,  86,  87,  88,  89,  90,
-            91,  92,  93,  94,  95,  96,  97,  98,  99, 100]), x_scale_factor=1, y_scale_factor=1, layer_position=1), discreet=False, position='right', colormap=<matplotlib.colors.LinearSegmentedColormap object at 0x7fa1bc011f90>, orientation='vertical', symmetric=True, log_norm=False, numeric_format=None, n_ticks=None, label_size=None, width='10%', padding=0.1, norm=<matplotlib.colors.CenteredNorm object at 0x7fa1ae1ffd10>, label='')), Axis(row=0, col=1, x_label=None, y_label=None, title=LP01, show_grid=True, show_legend=False, legend_position='best', x_scale='linear', y_scale='linear', x_limits=None, y_limits=None, equal_limits=False, projection=None, font_size=16, tick_size=14, y_tick_position='left', x_tick_position='bottom', show_ticks=True, show_colorbar=True, legend_font_size=14, line_width=None, line_style=None, x_scale_factor=None, y_scale_factor=None, aspect_ratio='auto', _artist_list=[Mesh(scalar=array([[0.00290347, 0.00314054, 0.00339436, ..., 0.00339436, 0.00314054,
+            91,  92,  93,  94,  95,  96,  97,  98,  99, 100]), x_scale_factor=1, y_scale_factor=1, layer_position=1), discreet=False, position='right', colormap=<matplotlib.colors.LinearSegmentedColormap object at 0x7fc9631eefd0>, orientation='vertical', symmetric=True, log_norm=False, numeric_format=None, n_ticks=None, label_size=None, width='10%', padding=0.1, norm=<matplotlib.colors.CenteredNorm object at 0x7fc95528bd50>, label='')), Axis(row=0, col=1, x_label=None, y_label=None, title=LP01, show_grid=True, show_legend=False, legend_position='best', x_scale='linear', y_scale='linear', x_limits=None, y_limits=None, equal_limits=False, projection=None, font_size=16, tick_size=14, y_tick_position='left', x_tick_position='bottom', show_ticks=True, show_colorbar=True, legend_font_size=14, line_width=None, line_style=None, x_scale_factor=None, y_scale_factor=None, aspect_ratio='auto', _artist_list=[Mesh(scalar=array([[0.00290347, 0.00314054, 0.00339436, ..., 0.00339436, 0.00314054,
             0.00290347],
            [0.00314054, 0.00339984, 0.00367776, ..., 0.00367776, 0.00339984,
             0.00314054],
@@ -209,7 +209,7 @@ Preparing the figure
             52,  53,  54,  55,  56,  57,  58,  59,  60,  61,  62,  63,  64,
             65,  66,  67,  68,  69,  70,  71,  72,  73,  74,  75,  76,  77,
             78,  79,  80,  81,  82,  83,  84,  85,  86,  87,  88,  89,  90,
-            91,  92,  93,  94,  95,  96,  97,  98,  99, 100]), x_scale_factor=1, y_scale_factor=1, layer_position=1), discreet=False, position='right', colormap=<matplotlib.colors.LinearSegmentedColormap object at 0x7fa1bc011f90>, orientation='vertical', symmetric=True, log_norm=False, numeric_format=None, n_ticks=None, label_size=None, width='10%', padding=0.1, norm=<matplotlib.colors.CenteredNorm object at 0x7fa1ae0efd10>, label='')), Axis(row=0, col=2, x_label=None, y_label=None, title=LP11, show_grid=True, show_legend=False, legend_position='best', x_scale='linear', y_scale='linear', x_limits=None, y_limits=None, equal_limits=False, projection=None, font_size=16, tick_size=14, y_tick_position='left', x_tick_position='bottom', show_ticks=True, show_colorbar=True, legend_font_size=14, line_width=None, line_style=None, x_scale_factor=None, y_scale_factor=None, aspect_ratio='auto', _artist_list=[Mesh(scalar=array([[-0.04903786, -0.05125921, -0.05356427, ..., -0.05356427,
+            91,  92,  93,  94,  95,  96,  97,  98,  99, 100]), x_scale_factor=1, y_scale_factor=1, layer_position=1), discreet=False, position='right', colormap=<matplotlib.colors.LinearSegmentedColormap object at 0x7fc9631eefd0>, orientation='vertical', symmetric=True, log_norm=False, numeric_format=None, n_ticks=None, label_size=None, width='10%', padding=0.1, norm=<matplotlib.colors.CenteredNorm object at 0x7fc955950a90>, label='')), Axis(row=0, col=2, x_label=None, y_label=None, title=LP11, show_grid=True, show_legend=False, legend_position='best', x_scale='linear', y_scale='linear', x_limits=None, y_limits=None, equal_limits=False, projection=None, font_size=16, tick_size=14, y_tick_position='left', x_tick_position='bottom', show_ticks=True, show_colorbar=True, legend_font_size=14, line_width=None, line_style=None, x_scale_factor=None, y_scale_factor=None, aspect_ratio='auto', _artist_list=[Mesh(scalar=array([[-0.04903786, -0.05125921, -0.05356427, ..., -0.05356427,
             -0.05125921, -0.04903786],
            [-0.05023402, -0.05254094, -0.05493695, ..., -0.05493695,
             -0.05254094, -0.05023402],
@@ -261,14 +261,14 @@ Preparing the figure
             52,  53,  54,  55,  56,  57,  58,  59,  60,  61,  62,  63,  64,
             65,  66,  67,  68,  69,  70,  71,  72,  73,  74,  75,  76,  77,
             78,  79,  80,  81,  82,  83,  84,  85,  86,  87,  88,  89,  90,
-            91,  92,  93,  94,  95,  96,  97,  98,  99, 100]), x_scale_factor=1, y_scale_factor=1, layer_position=1), discreet=False, position='right', colormap=<matplotlib.colors.LinearSegmentedColormap object at 0x7fa1bc011f90>, orientation='vertical', symmetric=True, log_norm=False, numeric_format=None, n_ticks=None, label_size=None, width='10%', padding=0.1, norm=<matplotlib.colors.CenteredNorm object at 0x7fa1ae0e7d10>, label=''))], _mpl_figure=<Figure size 1200x400 with 6 Axes>, mpl_axis_generated=False, axis_generated=True, ax_orientation='horizontal')
+            91,  92,  93,  94,  95,  96,  97,  98,  99, 100]), x_scale_factor=1, y_scale_factor=1, layer_position=1), discreet=False, position='right', colormap=<matplotlib.colors.LinearSegmentedColormap object at 0x7fc9631eefd0>, orientation='vertical', symmetric=True, log_norm=False, numeric_format=None, n_ticks=None, label_size=None, width='10%', padding=0.1, norm=<matplotlib.colors.CenteredNorm object at 0x7fc9551b3d50>, label=''))], _mpl_figure=<Figure size 1200x400 with 6 Axes>, mpl_axis_generated=False, axis_generated=True, ax_orientation='horizontal')
 
 
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 9.504 seconds)
+   **Total running time of the script:** (0 minutes 9.652 seconds)
 
 
 .. _sphx_glr_download_gallery_basic_plot_mode_field.py:
