@@ -1,0 +1,620 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Comparing two and three layers &#8212; PyFiberModes  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="/opt/hostedtoolcache/Python/3.11.10/x64/lib/python3.11/site-packages/docs/source/_static/default.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/default.css?v=265c6c44" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
+
+    <script src="../../_static/documentation_options.js?v=8a448e45"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'gallery/basic/plot_comparison_solvers';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.14.1';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/MartinPdeS/PyFiberModes/documentation_page/version_switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'v0.5.9.0';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner = true;
+        </script>
+    <link rel="icon" href="../../_static/thumbnail.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/thumbnail.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../../_static/thumbnail.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+    <p class="title logo__title">PyFiberModes</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../code.html">
+                        Source code structures
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        Examples
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="versionswitcherbutton" type="button" role="button" class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="listbox" aria-controls="versionswitcherlist" aria-label="Version switcher list">
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="versionswitcherlist" class="version-switcher__menu dropdown-menu list-group-flush py-0" role="listbox" aria-labelledby="versionswitcherbutton">
+    <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/MartinPdeS/PyFiberModes" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/PyFiberModes/" title="PyPI" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-solid fa-box fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">PyPI</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://anaconda.org/MartinPdeS/PyFiberModes" title="Anaconda" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-python fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Anaconda</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../code.html">
+                        Source code structures
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        Examples
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="versionswitcherbutton" type="button" role="button" class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="listbox" aria-controls="versionswitcherlist" aria-label="Version switcher list">
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="versionswitcherlist" class="version-switcher__menu dropdown-menu list-group-flush py-0" role="listbox" aria-labelledby="versionswitcherbutton">
+    <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/MartinPdeS/PyFiberModes" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/PyFiberModes/" title="PyPI" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-solid fa-box fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">PyPI</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://anaconda.org/MartinPdeS/PyFiberModes" title="Anaconda" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-python fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Anaconda</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">Comparing...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-gallery-basic-plot-comparison-solvers-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code</p>
+</div>
+<section class="sphx-glr-example-title" id="comparing-two-and-three-layers">
+<span id="sphx-glr-gallery-basic-plot-comparison-solvers-py"></span><h1>Comparing two and three layers<a class="headerlink" href="#comparing-two-and-three-layers" title="Link to this heading">#</a></h1>
+<section id="imports">
+<h2>Imports<a class="headerlink" href="#imports" title="Link to this heading">#</a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span>
+
+<span class="kn">from</span> <span class="nn">PyFiberModes.fiber</span> <span class="kn">import</span> <span class="n">load_fiber</span>
+<span class="kn">from</span> <span class="nn">PyFiberModes</span> <span class="kn">import</span> <span class="n">LP01</span>
+<span class="kn">from</span> <span class="nn">MPSPlots.render2D</span> <span class="kn">import</span> <span class="n">SceneList</span>
+
+<span class="n">fiber_2L</span> <span class="o">=</span> <span class="n">load_fiber</span><span class="p">(</span>
+    <span class="n">fiber_name</span><span class="o">=</span><span class="s1">&#39;SMF28&#39;</span><span class="p">,</span>
+    <span class="n">wavelength</span><span class="o">=</span><span class="mf">1550e-9</span><span class="p">,</span>
+    <span class="n">add_air_layer</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+
+<span class="n">fiber_3L</span> <span class="o">=</span> <span class="n">load_fiber</span><span class="p">(</span>
+    <span class="n">fiber_name</span><span class="o">=</span><span class="s1">&#39;SMF28&#39;</span><span class="p">,</span>
+    <span class="n">wavelength</span><span class="o">=</span><span class="mf">1550e-9</span><span class="p">,</span>
+    <span class="n">add_air_layer</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+
+
+<span class="n">data_2L</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">data_3L</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="n">itr_list</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">itr</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">itr_list</span><span class="p">):</span>
+    <span class="n">_fiber_2L</span> <span class="o">=</span> <span class="n">fiber_2L</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">factor</span><span class="o">=</span><span class="n">itr</span><span class="p">)</span>
+    <span class="n">_fiber_3L</span> <span class="o">=</span> <span class="n">fiber_3L</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">factor</span><span class="o">=</span><span class="n">itr</span><span class="p">)</span>
+
+    <span class="n">neff_2L</span> <span class="o">=</span> <span class="n">_fiber_2L</span><span class="o">.</span><span class="n">get_effective_index</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">LP01</span><span class="p">)</span>
+    <span class="n">neff_3L</span> <span class="o">=</span> <span class="n">_fiber_3L</span><span class="o">.</span><span class="n">get_effective_index</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">LP01</span><span class="p">)</span>
+
+    <span class="n">data_2L</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">neff_2L</span><span class="p">)</span>
+    <span class="n">data_3L</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">neff_3L</span><span class="p">)</span>
+
+
+<span class="n">figure</span> <span class="o">=</span> <span class="n">SceneList</span><span class="p">()</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">figure</span><span class="o">.</span><span class="n">append_ax</span><span class="p">(</span>
+    <span class="n">show_legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">x_label</span><span class="o">=</span><span class="s1">&#39;Inverse taper ration [ITR]&#39;</span><span class="p">,</span>
+    <span class="n">y_label</span><span class="o">=</span><span class="s1">&#39;LP01 effective index&#39;</span>
+<span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">add_line</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">itr_list</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">data_2L</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;2 layer&#39;</span><span class="p">,</span> <span class="n">line_width</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">add_scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">itr_list</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">data_3L</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;3 layer&#39;</span><span class="p">,</span> <span class="n">marker_size</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+
+<span class="n">figure</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># -</span>
+</pre></div>
+</div>
+<img src="../../_images/sphx_glr_plot_comparison_solvers_001.png" srcset="../../_images/sphx_glr_plot_comparison_solvers_001.png" alt="plot comparison solvers" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>SceneList(unit_size=(10, 3), tight_layout=True, transparent_background=False, title=&#39;&#39;, padding=1.0, axis_list=[Axis(row=0, col=0, x_label=&#39;Inverse taper ration [ITR]&#39;, y_label=&#39;LP01 effective index&#39;, title=&#39;&#39;, show_grid=True, show_legend=True, legend_position=&#39;best&#39;, x_scale=&#39;linear&#39;, y_scale=&#39;linear&#39;, x_limits=None, y_limits=None, equal_limits=False, projection=None, font_size=16, tick_size=14, y_tick_position=&#39;left&#39;, x_tick_position=&#39;bottom&#39;, show_ticks=True, show_colorbar=None, legend_font_size=14, line_width=None, line_style=None, x_scale_factor=None, y_scale_factor=None, aspect_ratio=&#39;auto&#39;, _artist_list=[Line(y=array([1.4474905 , 1.44743126, 1.44737064, 1.4473086 , 1.44724513,
+       1.4471802 , 1.44711379, 1.44704587, 1.44697642, 1.44690543,
+       1.44683287, 1.44675875, 1.44668306, 1.44660579, 1.44652695,
+       1.44644655, 1.4463646 , 1.44628115, 1.44619623, 1.44610989,
+       1.44602219, 1.44593322, 1.44584307, 1.44575186, 1.44565972,
+       1.44556683, 1.44547338, 1.44537958, 1.44528569, 1.44519199,
+       1.44509882, 1.44500655, 1.44491559, 1.44482638, 1.44473942,
+       1.44465526, 1.44457444, 1.44449757, 1.44442524, 1.44435806,
+       1.44429657, 1.44424127, 1.44419256, 1.4441507 , 1.44411576,
+       1.44408759, 1.44406582, 1.4440498 , 1.44403872, 1.4440316 ]), x=array([1.        , 0.98571429, 0.97142857, 0.95714286, 0.94285714,
+       0.92857143, 0.91428571, 0.9       , 0.88571429, 0.87142857,
+       0.85714286, 0.84285714, 0.82857143, 0.81428571, 0.8       ,
+       0.78571429, 0.77142857, 0.75714286, 0.74285714, 0.72857143,
+       0.71428571, 0.7       , 0.68571429, 0.67142857, 0.65714286,
+       0.64285714, 0.62857143, 0.61428571, 0.6       , 0.58571429,
+       0.57142857, 0.55714286, 0.54285714, 0.52857143, 0.51428571,
+       0.5       , 0.48571429, 0.47142857, 0.45714286, 0.44285714,
+       0.42857143, 0.41428571, 0.4       , 0.38571429, 0.37142857,
+       0.35714286, 0.34285714, 0.32857143, 0.31428571, 0.3       ]), label=&#39;2 layer&#39;, color=None, line_style=&#39;-&#39;, line_width=3.0, x_scale_factor=1, y_scale_factor=1, layer_position=1), Scatter(y=array([1.4474905 , 1.44743126, 1.44737064, 1.4473086 , 1.44724513,
+       1.4471802 , 1.44711379, 1.44704587, 1.44697642, 1.44690543,
+       1.44683287, 1.44675875, 1.44668306, 1.44660579, 1.44652695,
+       1.44644654, 1.4463646 , 1.44628115, 1.44619623, 1.44610989,
+       1.44602219, 1.44593322, 1.44584307, 1.44575185, 1.44565972,
+       1.44556683, 1.44547338, 1.44537958, 1.44528568, 1.44519199,
+       1.44509882, 1.44500655, 1.44491558, 1.44482637, 1.44473939,
+       1.44465517, 1.44457425, 1.44449714, 1.44442432, 1.44435615,
+       1.44429284, 1.44423438, 1.44418051, 1.44413074, 1.44408446,
+       1.44404156, 1.4440234 , 1.44402359, 1.44402364, 1.44402363]), x=array([1.        , 0.98571429, 0.97142857, 0.95714286, 0.94285714,
+       0.92857143, 0.91428571, 0.9       , 0.88571429, 0.87142857,
+       0.85714286, 0.84285714, 0.82857143, 0.81428571, 0.8       ,
+       0.78571429, 0.77142857, 0.75714286, 0.74285714, 0.72857143,
+       0.71428571, 0.7       , 0.68571429, 0.67142857, 0.65714286,
+       0.64285714, 0.62857143, 0.61428571, 0.6       , 0.58571429,
+       0.57142857, 0.55714286, 0.54285714, 0.52857143, 0.51428571,
+       0.5       , 0.48571429, 0.47142857, 0.45714286, 0.44285714,
+       0.42857143, 0.41428571, 0.4       , 0.38571429, 0.37142857,
+       0.35714286, 0.34285714, 0.32857143, 0.31428571, 0.3       ]), label=&#39;3 layer&#39;, color=&#39;black&#39;, marker=&#39;o&#39;, marker_size=20.0, line_style=&#39;None&#39;, line_width=1, alpha=0.7, edge_color=&#39;black&#39;, x_scale_factor=1, y_scale_factor=1, layer_position=1)], mpl_ax=&lt;Axes: xlabel=&#39;Inverse taper ration [ITR]&#39;, ylabel=&#39;LP01 effective index&#39;&gt;, colorbar=Colorbar(artist=None, discreet=False, position=&#39;right&#39;, colormap=&lt;matplotlib.colors.LinearSegmentedColormap object at 0x7f0ce6026810&gt;, orientation=&#39;vertical&#39;, symmetric=False, log_norm=False, numeric_format=None, n_ticks=None, label_size=None, width=&#39;10%&#39;, padding=0.1, norm=None, label=&#39;&#39;))], _mpl_figure=&lt;Figure size 1000x300 with 1 Axes&gt;, mpl_axis_generated=False, axis_generated=True, ax_orientation=&#39;vertical&#39;)
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 16.765 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-gallery-basic-plot-comparison-solvers-py">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/5203e3981c8eae2c843c41c7380f32fd/plot_comparison_solvers.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_comparison_solvers.ipynb</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/01d7e59a77a8fffab0632a7eefde91d0/plot_comparison_solvers.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_comparison_solvers.py</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#imports">Imports</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div class="tocsection sourcelink">
+    <a href="../../_sources/gallery/basic/plot_comparison_solvers.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright 2024, Martin Poinsinet de Sivry-Houle.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    <br/>
+  </p>
+</div>
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

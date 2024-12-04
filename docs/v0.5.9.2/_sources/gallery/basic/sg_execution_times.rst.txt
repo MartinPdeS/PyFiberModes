@@ -1,0 +1,76 @@
+
+:orphan:
+
+.. _sphx_glr_gallery_basic_sg_execution_times:
+
+
+Computation times
+=================
+**02:05.836** total execution time for 14 files **from gallery/basic**:
+
+.. container::
+
+  .. raw:: html
+
+    <style scoped>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+    </style>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script type="text/javascript" class="init">
+    $(document).ready( function () {
+        $('table.sg-datatable').DataTable({order: [[1, 'desc']]});
+    } );
+    </script>
+
+  .. list-table::
+   :header-rows: 1
+   :class: table table-striped sg-datatable
+
+   * - Example
+     - Time
+     - Mem (MB)
+   * - :ref:`sphx_glr_gallery_basic_plot_DCF_fields.py` (``plot_DCF_fields.py``)
+     - 01:05.205
+     - 0.0
+   * - :ref:`sphx_glr_gallery_basic_plot_mode_field_1.py` (``plot_mode_field_1.py``)
+     - 00:18.231
+     - 0.0
+   * - :ref:`sphx_glr_gallery_basic_plot_comparison_solvers.py` (``plot_comparison_solvers.py``)
+     - 00:16.765
+     - 0.0
+   * - :ref:`sphx_glr_gallery_basic_plot_mode_field.py` (``plot_mode_field.py``)
+     - 00:09.517
+     - 0.0
+   * - :ref:`sphx_glr_gallery_basic_plot_U_vs_V.py` (``plot_U_vs_V.py``)
+     - 00:05.626
+     - 0.0
+   * - :ref:`sphx_glr_gallery_basic_plot_dispersion.py` (``plot_dispersion.py``)
+     - 00:03.302
+     - 0.0
+   * - :ref:`sphx_glr_gallery_basic_plot_group_index.py` (``plot_group_index.py``)
+     - 00:02.663
+     - 0.0
+   * - :ref:`sphx_glr_gallery_basic_plot_fiber_LP_modes.py` (``plot_fiber_LP_modes.py``)
+     - 00:01.108
+     - 0.0
+   * - :ref:`sphx_glr_gallery_basic_plot_mode_field_2.py` (``plot_mode_field_2.py``)
+     - 00:01.009
+     - 0.0
+   * - :ref:`sphx_glr_gallery_basic_plot_effective_index.py` (``plot_effective_index.py``)
+     - 00:00.804
+     - 0.0
+   * - :ref:`sphx_glr_gallery_basic_plot_smf28_dispersion_vs_wavelength.py` (``plot_smf28_dispersion_vs_wavelength.py``)
+     - 00:00.582
+     - 0.0
+   * - :ref:`sphx_glr_gallery_basic_plot_smf28_group_index_vs_wavelength.py` (``plot_smf28_group_index_vs_wavelength.py``)
+     - 00:00.526
+     - 0.0
+   * - :ref:`sphx_glr_gallery_basic_plot_neff_tapered_fiber.py` (``plot_neff_tapered_fiber.py``)
+     - 00:00.450
+     - 0.0
+   * - :ref:`sphx_glr_gallery_basic_plot_smf28.py` (``plot_smf28.py``)
+     - 00:00.045
+     - 0.0
