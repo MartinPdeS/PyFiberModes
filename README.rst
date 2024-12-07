@@ -54,32 +54,7 @@ Install the PyFiberModes package directly from PyPi. Ensure you have Python 3.10
 Manual Installation
 ===================
 
-To manually install the package:
 
-.. code-block:: bash
-
-   git clone https://github.com/MartinPdeS/PyFiberModes.git
-   cd PyFiberModes
-   pip install .
-
-
-----
-
-Testing
-*******
-
-PyFiberModes includes comprehensive tests. To run the tests locally:
-
-.. code-block:: bash
-
-   git clone https://github.com/MartinPdeS/PyFiberModes.git
-   cd PyFiberModes
-   pip install .
-   coverage run --source=PyFiberModes --module pytest --verbose tests
-   coverage report --show-missing
-
-
-This will generate a coverage report detailing untested portions of the code.
 
 ----
 
