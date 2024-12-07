@@ -41,14 +41,6 @@ The latest documentation is always available `here <https://martinpdes.github.io
 Installation
 ************
 
-Using Pip
-=========
-Install the PyFiberModes package directly from PyPi. Ensure you have Python 3.10 or later:
-
-.. code-block:: bash
-
-   pip install PyFiberModes
-
 
 
 
