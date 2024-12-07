@@ -14,37 +14,42 @@ Below, you will find detailed, automatically generated documentation for signifi
 
 Fiber
 -----
- .. automodule:: PyFiberModes.fiber
-    :members:
-    :inherited-members:
-    :member-order: bysource
+.. automodule:: PyFiberModes.fiber
+   :members:
+   :inherited-members:
+   :member-order: bysource
 
 
 Field
 -----
- .. automodule:: PyFiberModes.field
-    :members:
-    :member-order: bysource
-    :show-inheritance:
+ .. autoclass:: PyFiberModes.field.Field
+   :members:
+   :member-order: bysource
+   :show-inheritance:
+   :undoc-members:
+
+
 
 Step-index
 ----------
- .. automodule:: PyFiberModes.stepindex
-    :members:
-    :member-order: bysource
-    :show-inheritance:
+ .. autoclass:: PyFiberModes.stepindex.StepIndex
+   :members:
+   :member-order: bysource
+   :show-inheritance:
+   :undoc-members:
 
 
 Fiber factory
 -------------
- .. automodule:: PyFiberModes.factory
-    :members:
-    :member-order: bysource
-    :show-inheritance:
+ .. autoclass:: PyFiberModes.factory.FiberFactory
+   :members:
+   :member-order: bysource
+   :show-inheritance:
 
-Solver single clad fiber
-------------------------
- .. automodule:: PyFiberModes.solver.ssif
-    :members:
-    :member-order: bysource
-    :show-inheritance:
+
+.. Solver single clad fiber
+.. ------------------------
+..  .. automodule:: PyFiberModes.solver.ssif
+..     :members:
+..     :member-order: bysource
+..     :show-inheritance:
