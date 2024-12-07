@@ -51,9 +51,6 @@ Install the PyFiberModes package directly from PyPi. Ensure you have Python 3.10
    pip install PyFiberModes
 
 
-Manual Installation
-===================
-
 
 
 ----
