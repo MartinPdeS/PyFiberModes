@@ -52,32 +52,33 @@ Manual Installation
 ===================
 To manually install the package:
 
-.. code-block:: bash
 
-   git clone https://github.com/MartinPdeS/PyFiberModes.git
-   cd PyFiberModes
-   pip install -r requirements/requirements.txt
-   pip install .
+
+Examples and Usage
+******************
+Learn how to use PyFiberModes with detailed examples in the `Examples Section <https://martinpdes.github.io/PyFiberModes>`_ of the documentation. Examples include:
+- Calculating the effective index for a given mode.
+- Visualizing mode profiles in optical fibers.
+- Evaluating fiber parameters like V-number and dispersion.
 
 ----
 
-Testing
+Get Involved
+************
+PyFiberModes is an actively maintained project, and contributions are highly encouraged! Whether it's a bug fix, feature request, or enhancement, your input is valuable.
+
+- Report issues or request features on the `GitHub Issue Tracker <https://github.com/MartinPdeS/PyFiberModes/issues>`_.
+- Open pull requests to improve the codebase.
+
+Contact
 *******
-PyFiberModes includes comprehensive tests. To run the tests locally:
+If you would like to collaborate, please reach out:
 
-.. code-block:: bash
+Author: `Martin Poinsinet de Sivry-Houle <https://github.com/MartinPdS>`_
 
-   git clone https://github.com/MartinPdeS/PyFiberModes.git
-   cd PyFiberModes
-   pip install .
-   coverage run --source=PyFiberModes --module pytest --verbose tests
-   coverage report --show-missing
-
-This will generate a coverage report detailing untested portions of the code.
+Email: `martin.poinsinet-de-sivry@polymtl.ca <mailto:martin.poinsinet-de-sivry@polymtl.ca?subject=PyFiberModes>`_
 
 ----
-
-
 
 .. |python| image:: https://img.shields.io/pypi/pyversions/pyfibermodes.svg
    :target: https://www.python.org/
