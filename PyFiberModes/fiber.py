@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import numpy
+from typing import Generator
 from functools import cache
 from dataclasses import dataclass, field
 from scipy import constants
@@ -26,16 +27,31 @@ from PyFiberModes.coordinates import CylindricalCoordinates
 
 @dataclass
 class Fiber(object):
+    """
+    A class to represent an optical fiber with multiple layers.
+
+    This class provides functionality to define and manipulate
+    the properties of optical fibers, including their layers,
+    refractive indices, and propagation characteristics.
+
+    Attributes
+    ----------
+    wavelength : Wavelength
+        The wavelength of light used for fiber simulations.
+    layer_names : list of str
+        Names of the fiber layers.
+    layer_radius : list of float
+        Radii of the fiber layers in meters.
+    layer_types : list of str
+        Types of layers (e.g., core, cladding).
+    index_list : list of float
+        Refractive indices for each layer.
+    """
     wavelength: Wavelength
-    """ Wavelength to consider """
     layer_names: list = field(default_factory=list)
-    """ Name of each layers """
     layer_radius: list = field(default_factory=list)
-    """ Radius of each layers """
     layer_types: list = field(default_factory=list)
-    """ Type of each layers """
     index_list: list = field(default_factory=list)
-    """ Refractive index of each layers """
 
     def __post_init__(self):
         self.wavelength = Wavelength(self.wavelength)
@@ -44,6 +60,25 @@ class Fiber(object):
         self.layers = []
 
     def scale(self, factor: float) -> None:
+        """
+        Scale the fiber's geometry by a given factor.
+
+        This method scales all radii in the fiber by the specified factor.
+
+        Parameters
+        ----------
+        factor : float
+            Scaling factor to apply to the radii.
+
+        Returns
+        -------
+        Fiber
+            A scaled copy of the fiber.
+
+        Notes
+        -----
+        This operation does not modify the original fiber.
+        """
         scaled_fiber = deepcopy(self)
         for layer in scaled_fiber.layers:
             layer.radius_in *= factor
@@ -54,20 +89,24 @@ class Fiber(object):
     @property
     def n_layer(self) -> int:
         """
-        Returns the number of layers in the fiber.
+        Number of layers in the fiber.
 
-        :returns:   The number of layers
-        :rtype:     int
+        Returns
+        -------
+        int
+            The total number of layers.
         """
         return len(self.layers)
 
     @property
     def n_interface(self) -> int:
         """
-        Returns the number of layer interfaces in the fiber.
+        Number of interfaces in the fiber.
 
-        :returns:   The number of interface
-        :rtype:     int
+        Returns
+        -------
+        int
+            The number of interfaces, calculated as `n_layer - 1`.
         """
         return len(self.layers) - 1
 
@@ -116,7 +155,7 @@ class Fiber(object):
         """
         return self.layers[index]
 
-    def iterate_interfaces(self) -> tuple[StepIndex, StepIndex]:
+    def iterate_interfaces(self) -> Generator:
         """
         Iterates through pair of layers that forms interfaces
 
@@ -142,17 +181,20 @@ class Fiber(object):
 
     def add_layer(self, name: str, radius: float, index: float) -> None:
         """
-        Adds a layer to the fiber the center-most layer have to be settled first.
+        Add a layer to the fiber.
 
-        :param      name:    The name
-        :type       name:    str
-        :param      radius:  The radius
-        :type       radius:  float
-        :param      index:   The index
-        :type       index:   float
+        Parameters
+        ----------
+        name : str
+            Name of the layer (e.g., "core", "cladding").
+        radius : float
+            Outer radius of the layer in meters.
+        index : float
+            Refractive index of the layer.
 
-        :returns:   No return
-        :rtype:     None
+        Notes
+        -----
+        Layers should be added in order, starting with the innermost layer (core).
         """
         self.layer_names.append(name)
         self.index_list.append(index)
@@ -265,13 +307,21 @@ class Fiber(object):
 
     def get_NA(self) -> float:
         r"""
-        Gets the numerical aperture NA defined as:
+        Compute the numerical aperture (NA) of the fiber.
+
+        The numerical aperture is defined as:
 
         .. math::
-            NA = \sqrt{n_{max}^2-n_{min}^2}
+            NA = \sqrt{n_{max}^2 - n_{min}^2}
 
-        :returns:   The numerical aperture.
-        :rtype:     float
+        where:
+            - :math:`n_{max}` is the maximum refractive index in the fiber.
+            - :math:`n_{min}` is the refractive index of the outermost layer.
+
+        Returns
+        -------
+        float
+            The numerical aperture of the fiber.
         """
         n_max = self.maximum_index
 
@@ -285,8 +335,7 @@ class Fiber(object):
     def M_number(self) -> float:
         r"""
         Gets the m number representing an approximation of the number of existing mode
-        in the fiber. It's valide only for highly multimode fibers
-        M number is defined as:
+        in the fiber. It's valide only for highly multimode fibers M number is defined as:
 
         .. math::
             M = \frac{V^2}{2}
@@ -299,15 +348,27 @@ class Fiber(object):
     @property
     def V_number(self) -> float:
         r"""
-        Gets the V number parameter defined as:
+        Compute the V-number (normalized frequency) of the fiber.
+
+        The V-number is given by:
 
         .. math::
-            V = \frac{2 * pi * a}{\lambda} * NA
+            V = \frac{2 \pi a}{\lambda} \cdot NA
 
-        reference: https://www.thorlabs.com/newgrouppage9.cfm?objectgroup_id=10417#:~:text=Single%20mode%20fibers%20are%20defined,fiber%20at%20the%20same%20wavelength.
+        where:
+            - :math:`a` is the core radius.
+            - :math:`\lambda` is the wavelength.
+            - :math:`NA` is the numerical aperture.
 
-        :returns:   The parameter V0.
-        :rtype:     float
+        Returns
+        -------
+        float
+            The V-number of the fiber.
+
+        Notes
+        -----
+        The V-number determines whether the fiber supports single-mode
+        or multimode operation.
         """
         NA = self.get_NA()
 
@@ -337,13 +398,21 @@ class Fiber(object):
 
     def get_mode_cutoff_wavelength(self, mode: Mode) -> float:
         """
-        Gets the cutoff wavelength.
+        Compute the cutoff wavelength for a given mode.
 
-        :param      mode:  The mode to consider
-        :type       mode:  Mode
+        Parameters
+        ----------
+        mode : Mode
+            The optical mode for which to calculate the cutoff wavelength.
 
-        :returns:   The cutoff wavelength.
-        :rtype:     float
+        Returns
+        -------
+        Wavelength
+            The cutoff wavelength of the specified mode.
+
+        Notes
+        -----
+        A mode is no longer guided when the wavelength exceeds the cutoff.
         """
         cutoff_V0 = self.get_mode_cutoff_v0(mode=mode)
 
@@ -427,13 +496,26 @@ class Fiber(object):
 
     def get_phase_velocity(self, mode: Mode) -> float:
         """
-        Gets the phase velocity.
+        Compute the phase velocity of a mode in the fiber.
 
-        :param      mode:    The mode to consider
-        :type       mode:    Mode
+        Parameters
+        ----------
+        mode : Mode
+            The optical mode for which to compute the phase velocity.
 
-        :returns:   The phase velocity.
-        :rtype:     float
+        Returns
+        -------
+        float
+            The phase velocity of the mode, in meters per second.
+
+        Notes
+        -----
+        Phase velocity is given by:
+
+        .. math::
+            v_p = \frac{c}{n_{eff}}
+
+        where :math:`n_{eff}` is the effective refractive index.
         """
         n_eff = get_effective_index(
             fiber=self,
@@ -514,16 +596,31 @@ class Fiber(object):
 
     def get_dispersion(self, mode: Mode) -> float:
         r"""
-        Gets the fiber dispersion defined as:
+        Compute the modal dispersion in the fiber.
+
+        Dispersion is defined as:
 
         .. math::
-            10^6 * \frac{2 \pi c}{\lambda^2} * \frac{\partial^2 \beta}{\partial \omega}
+            D = - \frac{2 \pi c}{\lambda^2} \cdot \frac{\partial^2 \beta}{\partial \omega^2}
 
-        :param      mode:   The mode to consider
-        :type       mode:   Mode
+        where:
+            - :math:`c` is the speed of light.
+            - :math:`\lambda` is the wavelength.
+            - :math:`\beta` is the propagation constant.
 
-        :returns:   The modal dispersion in units of ps/nm/km.
-        :rtype:     float
+        Parameters
+        ----------
+        mode : Mode
+            The optical mode to consider.
+
+        Returns
+        -------
+        float
+            The dispersion in units of ps/nm/km.
+
+        Notes
+        -----
+        Dispersion affects pulse broadening in fiber optics, particularly for long-haul transmission.
         """
         gvd = self.get_group_velocity_dispersion(mode=mode)
 
@@ -533,16 +630,22 @@ class Fiber(object):
 
     def get_S_parameter(self, mode: Mode) -> float:
         r"""
-        Gets the s parameter defined as:
+        Compute the S-parameter (third-order dispersion).
+
+        The S-parameter is defined as:
 
         .. math::
-            10^{-3} * \left( \frac{2 \pi c}{\lambda^2} \right)^2 * \frac{\partial^3 \beta}{\partial \omega}
+            S = 10^{-3} \cdot \left( \frac{2 \pi c}{\lambda^2} \right)^2 \cdot \frac{\partial^3 \beta}{\partial \omega^3}
 
-        :param      mode:    The mode to consider
-        :type       mode:    Mode
+        Parameters
+        ----------
+        mode : Mode
+            The optical mode to consider.
 
-        :returns:   The s parameter.
-        :rtype:     float
+        Returns
+        -------
+        float
+            The S-parameter in appropriate units.
         """
         derivative = get_function_derivative(
             function=get_propagation_constant_from_omega,

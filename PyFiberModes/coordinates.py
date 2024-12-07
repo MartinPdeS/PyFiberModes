@@ -116,10 +116,28 @@ class CartesianCoordinates:
         """
         if self.is_structured:
             x_min, x_max = self.x_boundaries
-            return (x_max - x_min) / self.n_x
+            return (x_max - x_min) / len(self.x)
         raise ValueError("dx value cannot be inferred from an unstructured mesh.")
 
-    # Similar implementations for dy and dz...
+    @property
+    def dy(self) -> float:
+        """
+        Calculates the grid spacing in the x-direction.
+
+        Returns
+        -------
+        float
+            Grid spacing in the x-direction.
+
+        Raises
+        ------
+        ValueError
+            If the mesh is unstructured.
+        """
+        if self.is_structured:
+            y_min, y_max = self.y_boundaries
+            return (y_max - y_min) / len(self.y)
+        raise ValueError("dx value cannot be inferred from an unstructured mesh.")
 
     @classmethod
     def generate_from_boundaries(cls, x_limits, y_limits, z_limits, x_points, y_points, z_points) -> 'CartesianCoordinates':
@@ -166,25 +184,15 @@ class CartesianCoordinates:
         length : float
             The length of the square's side.
         center : Tuple[float, float], optional
-            The coordinates of the square's center (x0, y0).
-            Default is (0.0, 0.0).
+            The coordinates of the square's center (x0, y0). Default is (0.0, 0.0).
         n_points : int, optional
-            The number of points along each dimension (x, y).
-            Default is 100.
+            The number of points along each dimension (x, y). Default is 100.
 
         Returns
         -------
         CartesianCoordinates
             Cartesian coordinate system with x, y mesh grids and z set to 0.
 
-        Examples
-        --------
-        >>> coords = CartesianCoordinates.generate_from_square(
-        ...     length=2.0, center=(1.0, 1.0), n_points=10)
-        >>> coords.x.shape
-        (10, 10)
-        >>> coords.y.shape
-        (10, 10)
         """
         x0, y0 = center
 

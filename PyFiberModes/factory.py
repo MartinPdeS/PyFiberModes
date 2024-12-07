@@ -1,137 +1,148 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import numpy
 from itertools import product
+from dataclasses import dataclass, field
+import numpy as np
 from PyFiberModes.fiber import Fiber
-from dataclasses import dataclass
 
 
 @dataclass
-class ProxyLayer():
+class ProxyLayer:
+    """
+    Represents a layer configuration in a fiber, with name, radius, and refractive index.
+
+    Attributes
+    ----------
+    name : str
+        Name of the layer.
+    radius : list[float]
+        Radius values for the layer (in meters).
+    index : list[float]
+        Refractive index values for the layer.
+    """
     name: str
-    radius: list
-    index: list
+    radius: list = field(default_factory=list)
+    index: list = field(default_factory=list)
 
     def __post_init__(self):
         self.name = [self.name]
-        self.radius = numpy.atleast_1d(self.radius)
-        self.index = numpy.atleast_1d(self.index)
+        self.radius = np.atleast_1d(self.radius)
+        self.index = np.atleast_1d(self.index)
 
     def get_generator(self):
+        """
+        Create a generator for all combinations of name, radius, and index.
+
+        Returns
+        -------
+        generator : itertools.product
+            Generator yielding tuples of (name, radius, index).
+        """
         return product(self.name, self.radius, self.index)
 
 
-class FiberFactory(object):
+class FiberFactory:
     """
-    FiberFactory is used to instantiate a
-    :py:class:`~PyFiberModes.fiber.fiber.Fiber` or a series of
-    Fiber objects.
-
-    It can read fiber definition from json file, and write it back.
-    Convenient functions are available to set fiber parameters, and to
-    iterate through fiber objects.
-
-    All fibers build from a given factory share the same number
-    of layers, the same kind of geometries, and the same
-    materials. However, parameters can vary.
+    Factory to create and manage multiple Fiber instances with various configurations.
 
     Parameters
     ----------
-    filename : str
-        Name of fiber file to load, or None to construct empty Fiberfactory object.
+    wavelength : float
+        Wavelength (in meters) used for fiber simulations.
 
+    Attributes
+    ----------
+    layers_list : list[ProxyLayer]
+        List of ProxyLayer objects representing the layers of the fiber.
+    neff_solver : None
+        Placeholder for a solver object (if required).
+    cutoff_solver : None
+        Placeholder for a cutoff solver object (if required).
+    wavelength : float
+        Wavelength used in simulations.
     """
+
     def __init__(self, wavelength: float):
         self.layers_list = []
         self.neff_solver = None
         self.cutoff_solver = None
         self.wavelength = wavelength
 
-    def add_layer(
-            self,
-            index: float,
-            name: str = "",
-            radius: float = 0) -> None:
+    def add_layer(self, index: float, name: str = "", radius: float = 0.0):
         """
-        Insert a new layer in the factory.
+        Add a new layer to the fiber factory.
 
-        :param      name:      Layer name.
-        :type       name:      str
-        :param      radius:    Radius of the layer (in meters).
-        :type       radius:    float
-        :param      kwargs:    The keywords arguments
-        :type       kwargs:    dictionary
+        Parameters
+        ----------
+        index : float
+            Refractive index of the layer.
+        name : str, optional
+            Name of the layer (default is an empty string).
+        radius : float, optional
+            Radius of the layer (default is 0.0 meters).
         """
-        layer = ProxyLayer(
-            name=name,
-            radius=radius,
-            index=index,
-        )
-
+        layer = ProxyLayer(name=name, radius=radius, index=index)
         self.layers_list.append(layer)
 
     def get_overall_generator(self):
         """
-        Return a generator of all combination of fibers.
+        Generate all possible combinations of layer configurations.
 
-        :returns:   Generator
-        :rtype:     object
+        Returns
+        -------
+        overall_generator : itertools.product
+            Generator yielding all possible layer configurations.
         """
-        list_of_generator = []
-
-        for layer in self.layers_list:
-            generator = layer.get_generator()
-
-            list_of_generator.append(generator)
-
-        overall_generator = product(*list_of_generator)
-
-        return overall_generator
+        generators = [layer.get_generator() for layer in self.layers_list]
+        return product(*generators)
 
     def __getitem__(self, index: int) -> Fiber:
         """
-        Of all the fiber combination, returns the one associated to the given index.
+        Retrieve a specific fiber configuration by index.
 
-        :returns:   Return the associated fiber
-        :rtype:     Fiber
+        Parameters
+        ----------
+        index : int
+            Index of the desired fiber configuration.
+
+        Returns
+        -------
+        fiber : Fiber
+            A Fiber object with the selected configuration.
         """
-        generator = self.get_overall_generator()
-
-        structure = list(generator)[index]
-
-        fiber = Fiber(wavelength=self.wavelength)
-
-        for name, radius, index in structure:
-            fiber.add_layer(
-                name=name,
-                radius=radius,
-                index=index,
-            )
-
-        fiber.initialize_layers()
-
+        structure = list(self.get_overall_generator())[index]
+        fiber = self._create_fiber_from_structure(structure)
         return fiber
 
-    def __iter__(self) -> Fiber:
+    def __iter__(self):
         """
-        Iterate through all combination of fibers.
+        Iterate through all possible fiber configurations.
 
-        :returns:   Yield the next fiber
-        :rtype:     Fiber
+        Yields
+        ------
+        fiber : Fiber
+            A Fiber object with the next configuration in the sequence.
         """
-        generator = self.get_overall_generator()
-        for structure in generator:
-            fiber = Fiber(wavelength=self.wavelength)
+        for structure in self.get_overall_generator():
+            yield self._create_fiber_from_structure(structure)
 
-            for name, radius, index in structure:
-                fiber.add_layer(
-                    name=name,
-                    radius=radius,
-                    index=index,
-                )
+    def _create_fiber_from_structure(self, structure) -> Fiber:
+        """
+        Create a Fiber object from a given structure.
 
-            fiber.initialize_layers()
+        Parameters
+        ----------
+        structure : iterable
+            An iterable containing tuples of (name, radius, index) for each layer.
 
-            yield fiber
-# -
+        Returns
+        -------
+        fiber : Fiber
+            A Fiber object initialized with the given structure.
+        """
+        fiber = Fiber(wavelength=self.wavelength)
+        for name, radius, index in structure:
+            fiber.add_layer(name=name, radius=radius, index=index)
+        fiber.initialize_layers()
+        return fiber

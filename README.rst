@@ -1,4 +1,3 @@
-
 .. list-table::
    :widths: 10 25 25
    :header-rows: 0
@@ -20,27 +19,30 @@
 PyFiberModes
 ============
 
-A numerical tool for simulating propagating modes in fiber optics, supporting all kinds of circular-symmetric geometries.
+PyFiberModes is a Python package designed to simulate the propagation of modes in optical fibers. It supports all circularly symmetric geometries and provides tools for in-depth analysis of optical fiber properties and modal characteristics.
 
+Key Features
+------------
+- **Comprehensive Simulations**: Supports step-index fibers, multilayer fibers, and custom refractive index profiles.
+- **Extensive Mode Analysis**: Calculate mode profiles, propagation constants, effective indices, and more.
+- **Open Source**: Designed for customization and extensibility.
 
 ----
 
 Documentation
 **************
-The latest documentation is available `here <https://martinpdes.github.io/PyFiberModes/>`_ or by clicking the badge below:
+The latest documentation is always available `here <https://martinpdes.github.io/PyFiberModes/>`_ or via the badge below:
 
 |docs|
 
-
 ----
-
 
 Installation
 ************
 
-Pip Installation
-================
-PyFiberModes is available as a Python wheel for Linux and macOS. It requires Python 3.10. To install, simply run:
+Using Pip
+=========
+Install the PyFiberModes package directly from PyPi. Ensure you have Python 3.10 or later:
 
 .. code-block:: bash
 
@@ -48,7 +50,7 @@ PyFiberModes is available as a Python wheel for Linux and macOS. It requires Pyt
 
 Manual Installation
 ===================
-For manual installation, clone the repository and install dependencies:
+To manually install the package:
 
 .. code-block:: bash
 
@@ -61,8 +63,7 @@ For manual installation, clone the repository and install dependencies:
 
 Testing
 *******
-
-To run tests locally after cloning the repository, follow these steps:
+PyFiberModes includes comprehensive tests. To run the tests locally:
 
 .. code-block:: bash
 
@@ -72,20 +73,29 @@ To run tests locally after cloning the repository, follow these steps:
    coverage run --source=PyFiberModes --module pytest --verbose tests
    coverage report --show-missing
 
-This ensures the package is thoroughly tested and provides a coverage report.
+This will generate a coverage report detailing untested portions of the code.
 
 ----
 
-Coding Examples
-***************
-Explore plenty of examples in the `examples section <https://martinpdes.github.io/PyFiberModes/docs/v0.5.9.3/gallery/index.html>`_ of the documentation.
+Examples and Usage
+******************
+Learn how to use PyFiberModes with detailed examples in the `Examples Section <https://martinpdes.github.io/PyFiberModes>`_ of the documentation. Examples include:
+- Calculating the effective index for a given mode.
+- Visualizing mode profiles in optical fibers.
+- Evaluating fiber parameters like V-number and dispersion.
 
 ----
+
+Get Involved
+************
+PyFiberModes is an actively maintained project, and contributions are highly encouraged! Whether it's a bug fix, feature request, or enhancement, your input is valuable.
+
+- Report issues or request features on the `GitHub Issue Tracker <https://github.com/MartinPdeS/PyFiberModes/issues>`_.
+- Open pull requests to improve the codebase.
 
 Contact
 *******
-
-PyFiberModes is actively developed, and contributions are welcome! If you'd like to collaborate or provide feedback, please reach out.
+If you would like to collaborate, please reach out:
 
 Author: `Martin Poinsinet de Sivry-Houle <https://github.com/MartinPdS>`_
 

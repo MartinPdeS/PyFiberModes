@@ -526,14 +526,14 @@ class NeffSolver(BaseSolver):
         # At last layer the equation are differents.
         Ez, _, _, Hp = EH
 
-        u = self.fiber.last_layers.get_U_W_parameter(
-            radius=self.fiber.last_layers.radius_in,
+        u = self.fiber.last_layer.get_U_W_parameter(
+            radius=self.fiber.last_layer.radius_in,
             neff=neff,
         )
 
         F4 = k1(u) / k0(u)
 
-        return Hp - self.wavelength.k0 * self.fiber.last_layers.radius_in / u * numpy.sqrt(epsilon_0 / mu_0) * self.fiber.last_layers.refractive_index**2 * Ez * F4
+        return Hp - self.wavelength.k0 * self.fiber.last_layer.radius_in / u * numpy.sqrt(epsilon_0 / mu_0) * self.fiber.last_layer.refractive_index**2 * Ez * F4
 
     def get_HE_equation(self, neff: float, nu: int) -> float:
         EH = numpy.empty((4, 2))

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import numpy
-
+import pytest
 from PyFiberModes.fiber import get_fiber_from_delta_and_V0
 from PyFiberModes.fiber import load_fiber
 from PyFiberModes.tools.utils import get_mode_beta
@@ -41,5 +41,8 @@ def test_2_3_layer_solver():
 
     assert discrepencies.all()
 
+
+if __name__ == "__main__":
+    pytest.main(["-W error", __file__])
 
 # -
