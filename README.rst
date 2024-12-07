@@ -45,27 +45,8 @@ Using Pip
 =========
 Install the PyFiberModes package directly from PyPi. Ensure you have Python 3.10 or later:
 
-.. code-block:: bash
-
-   pip install PyFiberModes
 
 
-Manual Installation
-===================
-To manually install the package:
-
-.. code-block:: bash
-
-   git clone https://github.com/MartinPdeS/PyFiberModes.git
-   cd PyFiberModes
-   pip install -r requirements/requirements.txt
-   pip install .
-
-
-----
-
-Testing
-*******
 PyFiberModes includes comprehensive tests. To run the tests locally:
 
 .. code-block:: bash
