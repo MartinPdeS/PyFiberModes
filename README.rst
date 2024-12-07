@@ -60,7 +60,6 @@ To manually install the package:
 
    git clone https://github.com/MartinPdeS/PyFiberModes.git
    cd PyFiberModes
-   pip install -r requirements/requirements.txt
    pip install .
 
 
@@ -78,6 +77,7 @@ PyFiberModes includes comprehensive tests. To run the tests locally:
    pip install .
    coverage run --source=PyFiberModes --module pytest --verbose tests
    coverage report --show-missing
+
 
 This will generate a coverage report detailing untested portions of the code.
 
