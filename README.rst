@@ -29,6 +29,25 @@ Key Features
 
 ----
 
+Documentation
+**************
+The latest documentation is always available `here <https://martinpdes.github.io/PyFiberModes/>`_ or via the badge below:
+
+|docs|
+
+----
+
+Installation
+************
+
+Using Pip
+=========
+Install the PyFiberModes package directly from PyPi. Ensure you have Python 3.10 or later:
+
+.. code-block:: bash
+
+   pip install PyFiberModes
+
 
 .. |python| image:: https://img.shields.io/pypi/pyversions/pyfibermodes.svg
    :target: https://www.python.org/
