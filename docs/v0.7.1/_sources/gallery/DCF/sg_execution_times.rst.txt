@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:01.335** total execution time for 1 file **from gallery/DCF**:
+**00:01.334** total execution time for 1 file **from gallery/DCF**:
 
 .. container::
 
@@ -33,5 +33,5 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_gallery_DCF_plot_DCF_fields.py` (``plot_DCF_fields.py``)
-     - 00:01.335
+     - 00:01.334
      - 0.0
