@@ -427,28 +427,36 @@ document.write(`
 </section>
 <section id="pyfibermodes">
 <h1>PyFiberModes<a class="headerlink" href="#pyfibermodes" title="Link to this heading">#</a></h1>
-<p>A numerical tool for simulating propagating modes in fiber optics, supporting all kinds of circular-symmetric geometries.</p>
+<p>PyFiberModes is a Python package designed to simulate the propagation of modes in optical fibers. It supports all circularly symmetric geometries and provides tools for in-depth analysis of optical fiber properties and modal characteristics.</p>
+<section id="key-features">
+<h2>Key Features<a class="headerlink" href="#key-features" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>Comprehensive Simulations</strong>: Supports step-index fibers, multilayer fibers, and custom refractive index profiles.</p></li>
+<li><p><strong>Extensive Mode Analysis</strong>: Calculate mode profiles, propagation constants, effective indices, and more.</p></li>
+<li><p><strong>Open Source</strong>: Designed for customization and extensibility.</p></li>
+</ul>
 <hr class="docutils" />
 <section id="documentation">
-<h2>Documentation<a class="headerlink" href="#documentation" title="Link to this heading">#</a></h2>
-<p>The latest documentation is available <a class="reference external" href="https://martinpdes.github.io/PyFiberModes/">here</a> or by clicking the badge below:</p>
+<h3>Documentation<a class="headerlink" href="#documentation" title="Link to this heading">#</a></h3>
+<p>The latest documentation is always available <a class="reference external" href="https://martinpdes.github.io/PyFiberModes/">here</a> or via the badge below:</p>
 <p><a class="reference external" href="https://martinpdes.github.io/PyFiberModes/"><img alt="Documentation Status" src="https://github.com/martinpdes/pyfibermodes/actions/workflows/deploy_documentation.yml/badge.svg" /></a></p>
 </section>
 <hr class="docutils" />
 <section id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h2>
+<h3>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h3>
 </section>
 </section>
-<section id="pip-installation">
-<h1>Pip Installation<a class="headerlink" href="#pip-installation" title="Link to this heading">#</a></h1>
-<p>PyFiberModes is available as a Python wheel for Linux and macOS. It requires Python 3.10. To install, simply run:</p>
+</section>
+<section id="using-pip">
+<h1>Using Pip<a class="headerlink" href="#using-pip" title="Link to this heading">#</a></h1>
+<p>Install the PyFiberModes package directly from PyPi. Ensure you have Python 3.10 or later:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>PyFiberModes
 </pre></div>
 </div>
 </section>
 <section id="manual-installation">
 <h1>Manual Installation<a class="headerlink" href="#manual-installation" title="Link to this heading">#</a></h1>
-<p>For manual installation, clone the repository and install dependencies:</p>
+<p>To manually install the package:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/MartinPdeS/PyFiberModes.git
 <span class="nb">cd</span><span class="w"> </span>PyFiberModes
 pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements/requirements.txt
@@ -456,9 +464,7 @@ pip<span class="w"> </span>install<span class="w"> </span>.
 </pre></div>
 </div>
 <hr class="docutils" />
-<section id="testing">
-<h2>Testing<a class="headerlink" href="#testing" title="Link to this heading">#</a></h2>
-<p>To run tests locally after cloning the repository, follow these steps:</p>
+<p>PyFiberModes includes comprehensive tests. To run the tests locally:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/MartinPdeS/PyFiberModes.git
 <span class="nb">cd</span><span class="w"> </span>PyFiberModes
 pip<span class="w"> </span>install<span class="w"> </span>.
@@ -466,23 +472,24 @@ coverage<span class="w"> </span>run<span class="w"> </span>--source<span class="
 coverage<span class="w"> </span>report<span class="w"> </span>--show-missing
 </pre></div>
 </div>
-<p>This ensures the package is thoroughly tested and provides a coverage report.</p>
-</section>
+<p>This will generate a coverage report detailing untested portions of the code.</p>
 <hr class="docutils" />
-<section id="coding-examples">
-<h2>Coding Examples<a class="headerlink" href="#coding-examples" title="Link to this heading">#</a></h2>
-<p>Explore plenty of examples in the <a class="reference external" href="https://martinpdes.github.io/PyFiberModes/docs/v0.5.9.3/gallery/index.html">examples section</a> of the documentation.</p>
-</section>
+<p>Learn how to use PyFiberModes with detailed examples in the <a class="reference external" href="https://martinpdes.github.io/PyFiberModes">Examples Section</a> of the documentation. Examples include:
+- Calculating the effective index for a given mode.
+- Visualizing mode profiles in optical fibers.
+- Evaluating fiber parameters like V-number and dispersion.</p>
 <hr class="docutils" />
-<section id="contact">
-<h2>Contact<a class="headerlink" href="#contact" title="Link to this heading">#</a></h2>
-<p>PyFiberModes is actively developed, and contributions are welcome! If you’d like to collaborate or provide feedback, please reach out.</p>
+<p>PyFiberModes is an actively maintained project, and contributions are highly encouraged! Whether it’s a bug fix, feature request, or enhancement, your input is valuable.</p>
+<ul class="simple">
+<li><p>Report issues or request features on the <a class="reference external" href="https://github.com/MartinPdeS/PyFiberModes/issues">GitHub Issue Tracker</a>.</p></li>
+<li><p>Open pull requests to improve the codebase.</p></li>
+</ul>
+<p>If you would like to collaborate, please reach out:</p>
 <p>Author: <a class="reference external" href="https://github.com/MartinPdS">Martin Poinsinet de Sivry-Houle</a></p>
 <p>Email: <a class="reference external" href="mailto:martin&#46;poinsinet-de-sivry&#37;&#52;&#48;polymtl&#46;ca?subject=PyFiberModes">martin<span>&#46;</span>poinsinet-de-sivry<span>&#64;</span>polymtl<span>&#46;</span>ca</a></p>
 <hr class="docutils" />
 <div class="toctree-wrapper compound">
 </div>
-</section>
 </section>
 
 
@@ -506,17 +513,15 @@ coverage<span class="w"> </span>report<span class="w"> </span>--show-missing
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">PyFiberModes’ documentation</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#pyfibermodes">PyFiberModes</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation">Documentation</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">Installation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-features">Key Features</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation">Documentation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">Installation</a></li>
 </ul>
 </li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#pip-installation">Pip Installation</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#manual-installation">Manual Installation</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#testing">Testing</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#coding-examples">Coding Examples</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contact">Contact</a></li>
 </ul>
 </li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#using-pip">Using Pip</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#manual-installation">Manual Installation</a></li>
 </ul>
 
   </nav></div>

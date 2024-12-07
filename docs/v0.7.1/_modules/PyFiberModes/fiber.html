@@ -423,6 +423,7 @@ document.write(`
 <span class="c1"># -*- coding: utf-8 -*-</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Generator</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">cache</span>
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
 <span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">constants</span>
@@ -449,16 +450,31 @@ document.write(`
 <a class="viewcode-back" href="../../code.html#PyFiberModes.fiber.Fiber">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">Fiber</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A class to represent an optical fiber with multiple layers.</span>
+
+<span class="sd">    This class provides functionality to define and manipulate</span>
+<span class="sd">    the properties of optical fibers, including their layers,</span>
+<span class="sd">    refractive indices, and propagation characteristics.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    wavelength : Wavelength</span>
+<span class="sd">        The wavelength of light used for fiber simulations.</span>
+<span class="sd">    layer_names : list of str</span>
+<span class="sd">        Names of the fiber layers.</span>
+<span class="sd">    layer_radius : list of float</span>
+<span class="sd">        Radii of the fiber layers in meters.</span>
+<span class="sd">    layer_types : list of str</span>
+<span class="sd">        Types of layers (e.g., core, cladding).</span>
+<span class="sd">    index_list : list of float</span>
+<span class="sd">        Refractive indices for each layer.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">wavelength</span><span class="p">:</span> <span class="n">Wavelength</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Wavelength to consider &quot;&quot;&quot;</span>
     <span class="n">layer_names</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Name of each layers &quot;&quot;&quot;</span>
     <span class="n">layer_radius</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Radius of each layers &quot;&quot;&quot;</span>
     <span class="n">layer_types</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Type of each layers &quot;&quot;&quot;</span>
     <span class="n">index_list</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Refractive index of each layers &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span> <span class="o">=</span> <span class="n">Wavelength</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span><span class="p">)</span>
@@ -469,6 +485,25 @@ document.write(`
 <div class="viewcode-block" id="Fiber.scale">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.fiber.Fiber.scale">[docs]</a>
     <span class="k">def</span> <span class="nf">scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factor</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Scale the fiber&#39;s geometry by a given factor.</span>
+
+<span class="sd">        This method scales all radii in the fiber by the specified factor.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        factor : float</span>
+<span class="sd">            Scaling factor to apply to the radii.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Fiber</span>
+<span class="sd">            A scaled copy of the fiber.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        This operation does not modify the original fiber.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">scaled_fiber</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">scaled_fiber</span><span class="o">.</span><span class="n">layers</span><span class="p">:</span>
             <span class="n">layer</span><span class="o">.</span><span class="n">radius_in</span> <span class="o">*=</span> <span class="n">factor</span>
@@ -480,20 +515,24 @@ document.write(`
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">n_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns the number of layers in the fiber.</span>
+<span class="sd">        Number of layers in the fiber.</span>
 
-<span class="sd">        :returns:   The number of layers</span>
-<span class="sd">        :rtype:     int</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            The total number of layers.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">n_interface</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns the number of layer interfaces in the fiber.</span>
+<span class="sd">        Number of interfaces in the fiber.</span>
 
-<span class="sd">        :returns:   The number of interface</span>
-<span class="sd">        :rtype:     int</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            The number of interfaces, calculated as `n_layer - 1`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
 
@@ -544,7 +583,7 @@ document.write(`
 
 <div class="viewcode-block" id="Fiber.iterate_interfaces">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.fiber.Fiber.iterate_interfaces">[docs]</a>
-    <span class="k">def</span> <span class="nf">iterate_interfaces</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">StepIndex</span><span class="p">,</span> <span class="n">StepIndex</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">iterate_interfaces</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Iterates through pair of layers that forms interfaces</span>
 
@@ -576,17 +615,20 @@ document.write(`
 <a class="viewcode-back" href="../../code.html#PyFiberModes.fiber.Fiber.add_layer">[docs]</a>
     <span class="k">def</span> <span class="nf">add_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Adds a layer to the fiber the center-most layer have to be settled first.</span>
+<span class="sd">        Add a layer to the fiber.</span>
 
-<span class="sd">        :param      name:    The name</span>
-<span class="sd">        :type       name:    str</span>
-<span class="sd">        :param      radius:  The radius</span>
-<span class="sd">        :type       radius:  float</span>
-<span class="sd">        :param      index:   The index</span>
-<span class="sd">        :type       index:   float</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            Name of the layer (e.g., &quot;core&quot;, &quot;cladding&quot;).</span>
+<span class="sd">        radius : float</span>
+<span class="sd">            Outer radius of the layer in meters.</span>
+<span class="sd">        index : float</span>
+<span class="sd">            Refractive index of the layer.</span>
 
-<span class="sd">        :returns:   No return</span>
-<span class="sd">        :rtype:     None</span>
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Layers should be added in order, starting with the innermost layer (core).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">layer_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">index_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
@@ -711,13 +753,21 @@ document.write(`
 <a class="viewcode-back" href="../../code.html#PyFiberModes.fiber.Fiber.get_NA">[docs]</a>
     <span class="k">def</span> <span class="nf">get_NA</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Gets the numerical aperture NA defined as:</span>
+<span class="sd">        Compute the numerical aperture (NA) of the fiber.</span>
+
+<span class="sd">        The numerical aperture is defined as:</span>
 
 <span class="sd">        .. math::</span>
-<span class="sd">            NA = \sqrt{n_{max}^2-n_{min}^2}</span>
+<span class="sd">            NA = \sqrt{n_{max}^2 - n_{min}^2}</span>
 
-<span class="sd">        :returns:   The numerical aperture.</span>
-<span class="sd">        :rtype:     float</span>
+<span class="sd">        where:</span>
+<span class="sd">            - :math:`n_{max}` is the maximum refractive index in the fiber.</span>
+<span class="sd">            - :math:`n_{min}` is the refractive index of the outermost layer.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            The numerical aperture of the fiber.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">n_max</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maximum_index</span>
 
@@ -732,8 +782,7 @@ document.write(`
     <span class="k">def</span> <span class="nf">M_number</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the m number representing an approximation of the number of existing mode</span>
-<span class="sd">        in the fiber. It&#39;s valide only for highly multimode fibers</span>
-<span class="sd">        M number is defined as:</span>
+<span class="sd">        in the fiber. It&#39;s valide only for highly multimode fibers M number is defined as:</span>
 
 <span class="sd">        .. math::</span>
 <span class="sd">            M = \frac{V^2}{2}</span>
@@ -746,15 +795,27 @@ document.write(`
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">V_number</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Gets the V number parameter defined as:</span>
+<span class="sd">        Compute the V-number (normalized frequency) of the fiber.</span>
+
+<span class="sd">        The V-number is given by:</span>
 
 <span class="sd">        .. math::</span>
-<span class="sd">            V = \frac{2 * pi * a}{\lambda} * NA</span>
+<span class="sd">            V = \frac{2 \pi a}{\lambda} \cdot NA</span>
 
-<span class="sd">        reference: https://www.thorlabs.com/newgrouppage9.cfm?objectgroup_id=10417#:~:text=Single%20mode%20fibers%20are%20defined,fiber%20at%20the%20same%20wavelength.</span>
+<span class="sd">        where:</span>
+<span class="sd">            - :math:`a` is the core radius.</span>
+<span class="sd">            - :math:`\lambda` is the wavelength.</span>
+<span class="sd">            - :math:`NA` is the numerical aperture.</span>
 
-<span class="sd">        :returns:   The parameter V0.</span>
-<span class="sd">        :rtype:     float</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            The V-number of the fiber.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The V-number determines whether the fiber supports single-mode</span>
+<span class="sd">        or multimode operation.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">NA</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_NA</span><span class="p">()</span>
 
@@ -789,13 +850,21 @@ document.write(`
 <a class="viewcode-back" href="../../code.html#PyFiberModes.fiber.Fiber.get_mode_cutoff_wavelength">[docs]</a>
     <span class="k">def</span> <span class="nf">get_mode_cutoff_wavelength</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Gets the cutoff wavelength.</span>
+<span class="sd">        Compute the cutoff wavelength for a given mode.</span>
 
-<span class="sd">        :param      mode:  The mode to consider</span>
-<span class="sd">        :type       mode:  Mode</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mode : Mode</span>
+<span class="sd">            The optical mode for which to calculate the cutoff wavelength.</span>
 
-<span class="sd">        :returns:   The cutoff wavelength.</span>
-<span class="sd">        :rtype:     float</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Wavelength</span>
+<span class="sd">            The cutoff wavelength of the specified mode.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        A mode is no longer guided when the wavelength exceeds the cutoff.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">cutoff_V0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_mode_cutoff_v0</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span>
 
@@ -891,13 +960,26 @@ document.write(`
 <a class="viewcode-back" href="../../code.html#PyFiberModes.fiber.Fiber.get_phase_velocity">[docs]</a>
     <span class="k">def</span> <span class="nf">get_phase_velocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Gets the phase velocity.</span>
+<span class="sd">        Compute the phase velocity of a mode in the fiber.</span>
 
-<span class="sd">        :param      mode:    The mode to consider</span>
-<span class="sd">        :type       mode:    Mode</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mode : Mode</span>
+<span class="sd">            The optical mode for which to compute the phase velocity.</span>
 
-<span class="sd">        :returns:   The phase velocity.</span>
-<span class="sd">        :rtype:     float</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            The phase velocity of the mode, in meters per second.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Phase velocity is given by:</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            v_p = \frac{c}{n_{eff}}</span>
+
+<span class="sd">        where :math:`n_{eff}` is the effective refractive index.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">n_eff</span> <span class="o">=</span> <span class="n">get_effective_index</span><span class="p">(</span>
             <span class="n">fiber</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
@@ -990,16 +1072,31 @@ document.write(`
 <a class="viewcode-back" href="../../code.html#PyFiberModes.fiber.Fiber.get_dispersion">[docs]</a>
     <span class="k">def</span> <span class="nf">get_dispersion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Gets the fiber dispersion defined as:</span>
+<span class="sd">        Compute the modal dispersion in the fiber.</span>
+
+<span class="sd">        Dispersion is defined as:</span>
 
 <span class="sd">        .. math::</span>
-<span class="sd">            10^6 * \frac{2 \pi c}{\lambda^2} * \frac{\partial^2 \beta}{\partial \omega}</span>
+<span class="sd">            D = - \frac{2 \pi c}{\lambda^2} \cdot \frac{\partial^2 \beta}{\partial \omega^2}</span>
 
-<span class="sd">        :param      mode:   The mode to consider</span>
-<span class="sd">        :type       mode:   Mode</span>
+<span class="sd">        where:</span>
+<span class="sd">            - :math:`c` is the speed of light.</span>
+<span class="sd">            - :math:`\lambda` is the wavelength.</span>
+<span class="sd">            - :math:`\beta` is the propagation constant.</span>
 
-<span class="sd">        :returns:   The modal dispersion in units of ps/nm/km.</span>
-<span class="sd">        :rtype:     float</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mode : Mode</span>
+<span class="sd">            The optical mode to consider.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            The dispersion in units of ps/nm/km.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Dispersion affects pulse broadening in fiber optics, particularly for long-haul transmission.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">gvd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_group_velocity_dispersion</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span>
 
@@ -1012,16 +1109,22 @@ document.write(`
 <a class="viewcode-back" href="../../code.html#PyFiberModes.fiber.Fiber.get_S_parameter">[docs]</a>
     <span class="k">def</span> <span class="nf">get_S_parameter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Gets the s parameter defined as:</span>
+<span class="sd">        Compute the S-parameter (third-order dispersion).</span>
+
+<span class="sd">        The S-parameter is defined as:</span>
 
 <span class="sd">        .. math::</span>
-<span class="sd">            10^{-3} * \left( \frac{2 \pi c}{\lambda^2} \right)^2 * \frac{\partial^3 \beta}{\partial \omega}</span>
+<span class="sd">            S = 10^{-3} \cdot \left( \frac{2 \pi c}{\lambda^2} \right)^2 \cdot \frac{\partial^3 \beta}{\partial \omega^3}</span>
 
-<span class="sd">        :param      mode:    The mode to consider</span>
-<span class="sd">        :type       mode:    Mode</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mode : Mode</span>
+<span class="sd">            The optical mode to consider.</span>
 
-<span class="sd">        :returns:   The s parameter.</span>
-<span class="sd">        :rtype:     float</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            The S-parameter in appropriate units.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">derivative</span> <span class="o">=</span> <span class="n">get_function_derivative</span><span class="p">(</span>
             <span class="n">function</span><span class="o">=</span><span class="n">get_propagation_constant_from_omega</span><span class="p">,</span>

@@ -422,49 +422,70 @@ document.write(`
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span>
 <span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">PyFiberModes.fiber</span> <span class="kn">import</span> <span class="n">Fiber</span>
-<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
 
 
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">ProxyLayer</span><span class="p">():</span>
+<span class="k">class</span> <span class="nc">ProxyLayer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represents a layer configuration in a fiber, with name, radius, and refractive index.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name : str</span>
+<span class="sd">        Name of the layer.</span>
+<span class="sd">    radius : list[float]</span>
+<span class="sd">        Radius values for the layer (in meters).</span>
+<span class="sd">    index : list[float]</span>
+<span class="sd">        Refractive index values for the layer.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">radius</span><span class="p">:</span> <span class="nb">list</span>
-    <span class="n">index</span><span class="p">:</span> <span class="nb">list</span>
+    <span class="n">radius</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">index</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">get_generator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a generator for all combinations of name, radius, and index.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        generator : itertools.product</span>
+<span class="sd">            Generator yielding tuples of (name, radius, index).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">product</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="FiberFactory">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.factory.FiberFactory">[docs]</a>
-<span class="k">class</span> <span class="nc">FiberFactory</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">FiberFactory</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    FiberFactory is used to instantiate a</span>
-<span class="sd">    :py:class:`~PyFiberModes.fiber.fiber.Fiber` or a series of</span>
-<span class="sd">    Fiber objects.</span>
-
-<span class="sd">    It can read fiber definition from json file, and write it back.</span>
-<span class="sd">    Convenient functions are available to set fiber parameters, and to</span>
-<span class="sd">    iterate through fiber objects.</span>
-
-<span class="sd">    All fibers build from a given factory share the same number</span>
-<span class="sd">    of layers, the same kind of geometries, and the same</span>
-<span class="sd">    materials. However, parameters can vary.</span>
+<span class="sd">    Factory to create and manage multiple Fiber instances with various configurations.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    filename : str</span>
-<span class="sd">        Name of fiber file to load, or None to construct empty Fiberfactory object.</span>
+<span class="sd">    wavelength : float</span>
+<span class="sd">        Wavelength (in meters) used for fiber simulations.</span>
 
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    layers_list : list[ProxyLayer]</span>
+<span class="sd">        List of ProxyLayer objects representing the layers of the fiber.</span>
+<span class="sd">    neff_solver : None</span>
+<span class="sd">        Placeholder for a solver object (if required).</span>
+<span class="sd">    cutoff_solver : None</span>
+<span class="sd">        Placeholder for a cutoff solver object (if required).</span>
+<span class="sd">    wavelength : float</span>
+<span class="sd">        Wavelength used in simulations.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">layers_list</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">neff_solver</span> <span class="o">=</span> <span class="kc">None</span>
@@ -473,27 +494,20 @@ document.write(`
 
 <div class="viewcode-block" id="FiberFactory.add_layer">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.factory.FiberFactory.add_layer">[docs]</a>
-    <span class="k">def</span> <span class="nf">add_layer</span><span class="p">(</span>
-            <span class="bp">self</span><span class="p">,</span>
-            <span class="n">index</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-            <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-            <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">add_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Insert a new layer in the factory.</span>
+<span class="sd">        Add a new layer to the fiber factory.</span>
 
-<span class="sd">        :param      name:      Layer name.</span>
-<span class="sd">        :type       name:      str</span>
-<span class="sd">        :param      radius:    Radius of the layer (in meters).</span>
-<span class="sd">        :type       radius:    float</span>
-<span class="sd">        :param      kwargs:    The keywords arguments</span>
-<span class="sd">        :type       kwargs:    dictionary</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        index : float</span>
+<span class="sd">            Refractive index of the layer.</span>
+<span class="sd">        name : str, optional</span>
+<span class="sd">            Name of the layer (default is an empty string).</span>
+<span class="sd">        radius : float, optional</span>
+<span class="sd">            Radius of the layer (default is 0.0 meters).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">layer</span> <span class="o">=</span> <span class="n">ProxyLayer</span><span class="p">(</span>
-            <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
-            <span class="n">radius</span><span class="o">=</span><span class="n">radius</span><span class="p">,</span>
-            <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span>
-        <span class="p">)</span>
-
+        <span class="n">layer</span> <span class="o">=</span> <span class="n">ProxyLayer</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">radius</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">layers_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">layer</span><span class="p">)</span></div>
 
 
@@ -501,70 +515,67 @@ document.write(`
 <a class="viewcode-back" href="../../code.html#PyFiberModes.factory.FiberFactory.get_overall_generator">[docs]</a>
     <span class="k">def</span> <span class="nf">get_overall_generator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Return a generator of all combination of fibers.</span>
+<span class="sd">        Generate all possible combinations of layer configurations.</span>
 
-<span class="sd">        :returns:   Generator</span>
-<span class="sd">        :rtype:     object</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        overall_generator : itertools.product</span>
+<span class="sd">            Generator yielding all possible layer configurations.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">list_of_generator</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers_list</span><span class="p">:</span>
-            <span class="n">generator</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">get_generator</span><span class="p">()</span>
-
-            <span class="n">list_of_generator</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">generator</span><span class="p">)</span>
-
-        <span class="n">overall_generator</span> <span class="o">=</span> <span class="n">product</span><span class="p">(</span><span class="o">*</span><span class="n">list_of_generator</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">overall_generator</span></div>
+        <span class="n">generators</span> <span class="o">=</span> <span class="p">[</span><span class="n">layer</span><span class="o">.</span><span class="n">get_generator</span><span class="p">()</span> <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers_list</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">product</span><span class="p">(</span><span class="o">*</span><span class="n">generators</span><span class="p">)</span></div>
 
 
     <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Fiber</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Of all the fiber combination, returns the one associated to the given index.</span>
+<span class="sd">        Retrieve a specific fiber configuration by index.</span>
 
-<span class="sd">        :returns:   Return the associated fiber</span>
-<span class="sd">        :rtype:     Fiber</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        index : int</span>
+<span class="sd">            Index of the desired fiber configuration.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        fiber : Fiber</span>
+<span class="sd">            A Fiber object with the selected configuration.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">generator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_overall_generator</span><span class="p">()</span>
-
-        <span class="n">structure</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">generator</span><span class="p">)[</span><span class="n">index</span><span class="p">]</span>
-
-        <span class="n">fiber</span> <span class="o">=</span> <span class="n">Fiber</span><span class="p">(</span><span class="n">wavelength</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span><span class="p">)</span>
-
-        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">structure</span><span class="p">:</span>
-            <span class="n">fiber</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span>
-                <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
-                <span class="n">radius</span><span class="o">=</span><span class="n">radius</span><span class="p">,</span>
-                <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span>
-            <span class="p">)</span>
-
-        <span class="n">fiber</span><span class="o">.</span><span class="n">initialize_layers</span><span class="p">()</span>
-
+        <span class="n">structure</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_overall_generator</span><span class="p">())[</span><span class="n">index</span><span class="p">]</span>
+        <span class="n">fiber</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_fiber_from_structure</span><span class="p">(</span><span class="n">structure</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">fiber</span>
 
-    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Fiber</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Iterate through all combination of fibers.</span>
+<span class="sd">        Iterate through all possible fiber configurations.</span>
 
-<span class="sd">        :returns:   Yield the next fiber</span>
-<span class="sd">        :rtype:     Fiber</span>
+<span class="sd">        Yields</span>
+<span class="sd">        ------</span>
+<span class="sd">        fiber : Fiber</span>
+<span class="sd">            A Fiber object with the next configuration in the sequence.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">generator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_overall_generator</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">structure</span> <span class="ow">in</span> <span class="n">generator</span><span class="p">:</span>
-            <span class="n">fiber</span> <span class="o">=</span> <span class="n">Fiber</span><span class="p">(</span><span class="n">wavelength</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">structure</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_overall_generator</span><span class="p">():</span>
+            <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_fiber_from_structure</span><span class="p">(</span><span class="n">structure</span><span class="p">)</span>
 
-            <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">structure</span><span class="p">:</span>
-                <span class="n">fiber</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span>
-                    <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
-                    <span class="n">radius</span><span class="o">=</span><span class="n">radius</span><span class="p">,</span>
-                    <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span>
-                <span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_create_fiber_from_structure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">structure</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Fiber</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a Fiber object from a given structure.</span>
 
-            <span class="n">fiber</span><span class="o">.</span><span class="n">initialize_layers</span><span class="p">()</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        structure : iterable</span>
+<span class="sd">            An iterable containing tuples of (name, radius, index) for each layer.</span>
 
-            <span class="k">yield</span> <span class="n">fiber</span></div>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        fiber : Fiber</span>
+<span class="sd">            A Fiber object initialized with the given structure.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fiber</span> <span class="o">=</span> <span class="n">Fiber</span><span class="p">(</span><span class="n">wavelength</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">structure</span><span class="p">:</span>
+            <span class="n">fiber</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">radius</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">)</span>
+        <span class="n">fiber</span><span class="o">.</span><span class="n">initialize_layers</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">fiber</span></div>
 
-<span class="c1"># -</span>
 </pre></div>
 
                 </article>
