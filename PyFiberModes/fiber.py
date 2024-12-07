@@ -34,7 +34,7 @@ class Fiber(object):
     the properties of optical fibers, including their layers,
     refractive indices, and propagation characteristics.
 
-    Attributes
+    Parameters
     ----------
     wavelength : Wavelength
         The wavelength of light used for fiber simulations.
@@ -495,7 +495,7 @@ class Fiber(object):
         return beta
 
     def get_phase_velocity(self, mode: Mode) -> float:
-        """
+        r"""
         Compute the phase velocity of a mode in the fiber.
 
         Parameters
