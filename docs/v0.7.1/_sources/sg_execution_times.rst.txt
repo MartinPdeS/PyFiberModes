@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:59.603** total execution time for 14 files **from all galleries**:
+**00:59.753** total execution time for 14 files **from all galleries**:
 
 .. container::
 
@@ -33,43 +33,43 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_gallery_basic_plot_comparison_solvers.py` (``../examples/basic/plot_comparison_solvers.py``)
-     - 00:16.960
+     - 00:16.720
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_mode_field_1.py` (``../examples/basic/plot_mode_field_1.py``)
-     - 00:16.420
+     - 00:16.369
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_mode_field.py` (``../examples/basic/plot_mode_field.py``)
-     - 00:08.694
+     - 00:08.730
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_U_vs_V.py` (``../examples/basic/plot_U_vs_V.py``)
-     - 00:05.565
+     - 00:05.659
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_dispersion.py` (``../examples/basic/plot_dispersion.py``)
-     - 00:03.348
+     - 00:03.334
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_group_index.py` (``../examples/basic/plot_group_index.py``)
-     - 00:02.721
+     - 00:02.778
      - 0.0
    * - :ref:`sphx_glr_gallery_DCF_plot_DCF_fields.py` (``../examples/DCF/plot_DCF_fields.py``)
-     - 00:01.289
+     - 00:01.323
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_fiber_LP_modes.py` (``../examples/basic/plot_fiber_LP_modes.py``)
-     - 00:01.175
+     - 00:01.227
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_mode_field_2.py` (``../examples/basic/plot_mode_field_2.py``)
-     - 00:00.955
+     - 00:01.014
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_effective_index.py` (``../examples/basic/plot_effective_index.py``)
-     - 00:00.904
+     - 00:00.840
      - 0.0
    * - :ref:`sphx_glr_gallery_SMF28_plot_smf28_dispersion_vs_wavelength.py` (``../examples/SMF28/plot_smf28_dispersion_vs_wavelength.py``)
-     - 00:00.585
+     - 00:00.648
      - 0.0
    * - :ref:`sphx_glr_gallery_SMF28_plot_smf28_group_index_vs_wavelength.py` (``../examples/SMF28/plot_smf28_group_index_vs_wavelength.py``)
-     - 00:00.550
+     - 00:00.615
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_neff_tapered_fiber.py` (``../examples/basic/plot_neff_tapered_fiber.py``)
-     - 00:00.393
+     - 00:00.452
      - 0.0
    * - :ref:`sphx_glr_gallery_SMF28_plot_smf28.py` (``../examples/SMF28/plot_smf28.py``)
      - 00:00.044
