@@ -36,9 +36,10 @@ class FiberFactory(object):
     of layers, the same kind of geometries, and the same
     materials. However, parameters can vary.
 
-    Args:
-        filename: Name of fiber file to load, or None to construct
-                  empty Fiberfactory object.
+    Parameters
+    ----------
+    filename : str
+        Name of fiber file to load, or None to construct empty Fiberfactory object.
 
     """
     def __init__(self, wavelength: float):
