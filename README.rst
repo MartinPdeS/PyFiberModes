@@ -52,11 +52,6 @@ Install the PyFiberModes package directly from PyPi. Ensure you have Python 3.10
 
 
 
-This will generate a coverage report detailing untested portions of the code.
-
-----
-
-
 Examples and Usage
 ******************
 Learn how to use PyFiberModes with detailed examples in the `Examples Section <https://martinpdes.github.io/PyFiberModes>`_ of the documentation. Examples include:
