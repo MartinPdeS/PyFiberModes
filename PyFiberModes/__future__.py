@@ -47,7 +47,7 @@ def get_normalized_LP_coupling(fiber, mode_0: Mode, mode_1: Mode) -> float:
 
     term_0 = abs(beta_0 - beta_1)
     term_1 = numpy.sqrt(beta_0 * beta_1)
-    term_2 = 0.5 * fiber.wavelength.k0**2
+    term_2 = 0.5 * (2 * numpy.pi / fiber.wavelength)**2
     term_3 = term_2 / (term_0 * term_1)
 
     coupling = integral * term_3

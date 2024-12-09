@@ -490,7 +490,7 @@ class Fiber(object):
             mode=mode,
         )
 
-        beta = neff * self.wavelength.k0
+        beta = neff * (2 * numpy.pi / self.wavelength)
 
         return beta
 
