@@ -111,7 +111,7 @@ class StepIndex(Geometry):
         if index is None:
             return 0
 
-        return self.wavelength.k0 * radius * np.sqrt(abs(index**2 - neff**2))
+        return (2 * numpy.pi / self.wavelength) * radius * np.sqrt(abs(index**2 - neff**2))
 
     def get_psi(self, radius: float, neff: float, nu: int, C: list) -> tuple:
         r"""
@@ -286,11 +286,11 @@ class StepIndex(Geometry):
 
         # Compute EH fields
         if neff < self.refractive_index:
-            c1 = self.wavelength.k0 * radius_out / u
+            c1 = (2 * numpy.pi / self.wavelength) * radius_out / u
             F3 = jvp(nu, u) / jn(nu, u)
             F4 = yvp(nu, u) / yn(nu, u)
         else:
-            c1 = -self.wavelength.k0 * radius_out / u
+            c1 = -(2 * numpy.pi / self.wavelength) * radius_out / u
             F3 = ivp(nu, u) / iv(nu, u)
             F4 = kvp(nu, u) / kn(nu, u)
 
@@ -355,7 +355,7 @@ class StepIndex(Geometry):
         F4 = bessel_func[3](nu, u_in) / B2 if B2 != 0 else 1
 
         # Compute scaling coefficients
-        c1 = sign * self.wavelength.k0 * radius_out / u_out if u_out != 0 else 1
+        c1 = sign * (2 * numpy.pi / self.wavelength) * radius_out / u_out if u_out != 0 else 1
         c2 = neff * nu / u_in * c1 if u_in != 0 else 1
         c3 = ETA_0 * c1
         c4 = np.sqrt(epsilon_0 / mu_0) * self.refractive_index**2 * c1
@@ -433,7 +433,7 @@ class StepIndex(Geometry):
         F4 = bessel_func[3](u_in) / B2 if B2 != 0 else 1
 
         # Compute scaling coefficient
-        c1 = sign * self.wavelength.k0 * radius_out / u_out if u_out != 0 else 1
+        c1 = sign * (2 * numpy.pi / self.wavelength) * radius_out / u_out if u_out != 0 else 1
         c3 = c * c1
 
         # Fill the coefficient matrix

@@ -50,7 +50,7 @@ class NeffSolver(BaseSolver):
 
         n_core = core.refractive_index
 
-        NA = V0 / (self.wavelength.k0 * core.radius_out)
+        NA = V0 / ((2 * numpy.pi / self.wavelength) * core.radius_out)
 
         n_clad_2 = n_core**2 - NA**2
 
@@ -233,7 +233,7 @@ class NeffSolver(BaseSolver):
 
         u, w, _ = self.get_U_W_V_parameter(neff=neff)
 
-        term_0 = self.wavelength.k0 * core.radius_out
+        term_0 = (2 * numpy.pi / self.wavelength) * core.radius_out
         ratio = radius / core.radius_out
 
         if radius < core.radius_out:
@@ -287,7 +287,7 @@ class NeffSolver(BaseSolver):
 
         rho = core.radius_out
 
-        k = self.wavelength.k0
+        k = (2 * numpy.pi / self.wavelength)
 
         n_core = core.refractive_index
 
@@ -331,7 +331,7 @@ class NeffSolver(BaseSolver):
 
         rho = core.radius_out
 
-        k = self.wavelength.k0
+        k = (2 * numpy.pi / self.wavelength)
 
         n_core_square = core.refractive_index**2
 
@@ -425,8 +425,8 @@ class NeffSolver(BaseSolver):
 
         n_clad = clad.refractive_index
 
-        U = core.radius_out * self.wavelength.k0 * numpy.sqrt(n_core**2 - neff**2)
-        W = core.radius_out * self.wavelength.k0 * numpy.sqrt(neff**2 - n_clad**2)
+        U = core.radius_out * (2 * numpy.pi / self.wavelength) * numpy.sqrt(n_core**2 - neff**2)
+        W = core.radius_out * (2 * numpy.pi / self.wavelength) * numpy.sqrt(neff**2 - n_clad**2)
         V = numpy.sqrt(U**2 + W**2)
 
         return U, W, V

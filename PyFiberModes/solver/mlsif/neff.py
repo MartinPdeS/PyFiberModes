@@ -335,11 +335,11 @@ class NeffSolver(BaseSolver):
                 break
 
             if neff < n:
-                c1 = wavelength.k0 * radius_out / u
+                c1 = (2 * numpy.pi / self.wavelength) * radius_out / u
                 F3 = jvp(nu, u) / jn(nu, u)
                 F4 = yvp(nu, u) / yn(nu, u)
             else:
-                c1 = -wavelength.k0 * radius_out / u
+                c1 = -(2 * numpy.pi / self.wavelength) * radius_out / u
                 F3 = ivp(nu, u) / iv(nu, u)
                 F4 = kvp(nu, u) / kn(nu, u)
 
@@ -403,7 +403,7 @@ class NeffSolver(BaseSolver):
         urp = u * radius / rho
 
         c1 = rho / u
-        c2 = self.wavelength.k0 * c1
+        c2 = (2 * numpy.pi / self.wavelength) * c1
         c3 = nu * c1 / radius if radius else 0  # To avoid div by 0
         c6 = numpy.sqrt(epsilon_0 / mu_0) * layer.refractive_index**2
 
@@ -508,7 +508,7 @@ class NeffSolver(BaseSolver):
         )
 
         F4 = k1(u) / k0(u)
-        return Ep + self.wavelength.k0 * self.fiber.last_layer.radius_in / u * eta0 * Hz * F4
+        return Ep + (2 * numpy.pi / self.wavelength) * self.fiber.last_layer.radius_in / u * eta0 * Hz * F4
 
     def get_TM_equation(self, neff: float, nu: int) -> tuple[float, float]:
         EH = numpy.empty(4)
@@ -533,7 +533,7 @@ class NeffSolver(BaseSolver):
 
         F4 = k1(u) / k0(u)
 
-        return Hp - self.wavelength.k0 * self.fiber.last_layer.radius_in / u * numpy.sqrt(epsilon_0 / mu_0) * self.fiber.last_layer.refractive_index**2 * Ez * F4
+        return Hp - (2 * numpy.pi / self.wavelength) * self.fiber.last_layer.radius_in / u * numpy.sqrt(epsilon_0 / mu_0) * self.fiber.last_layer.refractive_index**2 * Ez * F4
 
     def get_HE_equation(self, neff: float, nu: int) -> float:
         EH = numpy.empty((4, 2))
@@ -562,7 +562,7 @@ class NeffSolver(BaseSolver):
         )
 
         F4 = kvp(nu, u) / kn(nu, u)
-        c1 = -self.wavelength.k0 * last_layer.radius_in / u
+        c1 = -(2 * numpy.pi / self.wavelength) * last_layer.radius_in / u
         c2 = neff * nu / u * c1
         c3 = eta0 * c1
         c4 = numpy.sqrt(epsilon_0 / mu_0) * last_layer.refractive_index**2 * c1

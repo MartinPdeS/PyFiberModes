@@ -8,9 +8,10 @@ from dataclasses import dataclass, field
 from scipy import constants
 from copy import deepcopy
 from itertools import pairwise
+from scipy.constants import c
 
 from PyFiberModes.stepindex import StepIndex
-from PyFiberModes import Wavelength, Mode
+from PyFiberModes import Mode
 from PyFinitDiff.finite_difference_1D import get_function_derivative
 from PyFiberModes.field import Field
 
@@ -36,7 +37,7 @@ class Fiber(object):
 
     Parameters
     ----------
-    wavelength : Wavelength
+    wavelength : float
         The wavelength of light used for fiber simulations.
     layer_names : list of str
         Names of the fiber layers.
@@ -47,14 +48,13 @@ class Fiber(object):
     index_list : list of float
         Refractive indices for each layer.
     """
-    wavelength: Wavelength
+    wavelength: float
     layer_names: list = field(default_factory=list)
     layer_radius: list = field(default_factory=list)
     layer_types: list = field(default_factory=list)
     index_list: list = field(default_factory=list)
 
     def __post_init__(self):
-        self.wavelength = Wavelength(self.wavelength)
         self.layers_parameters = []
         self.radius_in = 0
         self.layers = []
@@ -165,12 +165,12 @@ class Fiber(object):
         for layer_in, layer_out in pairwise(self.layers):
             yield layer_in, layer_out
 
-    def update_wavelength(self, wavelength: Wavelength) -> None:
+    def update_wavelength(self, wavelength: float) -> None:
         """
         Update the wavelength of the fiber and all its layers
 
         :param      wavelength:  The wavelength
-        :type       wavelength:  Wavelength
+        :type       wavelength:  float
 
         :returns:   No return
         :rtype:     None
@@ -374,7 +374,7 @@ class Fiber(object):
 
         inner_radius = self.last_layer.radius_in
 
-        V0 = self.wavelength.k0 * inner_radius * NA
+        V0 = (2 * numpy.pi / self.wavelength) * inner_radius * NA
 
         return V0
 
@@ -407,7 +407,7 @@ class Fiber(object):
 
         Returns
         -------
-        Wavelength
+        float
             The cutoff wavelength of the specified mode.
 
         Notes
@@ -428,7 +428,7 @@ class Fiber(object):
 
         cutoff_wavelength = 2 * numpy.pi / cutoff_V0 * inner_radius * NA
 
-        return Wavelength(cutoff_wavelength)
+        return cutoff_wavelength
 
     def get_effective_index(self, mode: Mode) -> float:
         """
@@ -535,9 +535,11 @@ class Fiber(object):
         :returns:   The group index.
         :rtype:     float
         """
+        omega = c * 2 * numpy.pi / self.wavelength
+
         derivative = get_function_derivative(
             function=get_propagation_constant_from_omega,
-            x_eval=self.wavelength.omega,
+            x_eval=omega,
             derivative=1,
             accuracy=4,
             delta=1e12,  # This value is critical for accurate computation
@@ -559,9 +561,11 @@ class Fiber(object):
         :returns:   The groupe velocity.
         :rtype:     float
         """
+        omega = c * 2 * numpy.pi / self.wavelength
+
         derivative = get_function_derivative(
             function=get_propagation_constant_from_omega,
-            x_eval=self.wavelength.omega,
+            x_eval=omega,
             derivative=1,
             accuracy=4,
             delta=1e12,  # This value is critical for accurate computation
@@ -583,9 +587,11 @@ class Fiber(object):
         :returns:   The group_velocity dispersion
         :rtype:     float
         """
+        omega = c * 2 * numpy.pi / self.wavelength
+
         derivative = get_function_derivative(
             function=get_propagation_constant_from_omega,
-            x_eval=self.wavelength.omega,
+            x_eval=omega,
             derivative=2,
             accuracy=4,
             delta=1e12,  # This value is critical for accurate computation
@@ -647,9 +653,11 @@ class Fiber(object):
         float
             The S-parameter in appropriate units.
         """
+        omega = c * 2 * numpy.pi / self.wavelength
+
         derivative = get_function_derivative(
             function=get_propagation_constant_from_omega,
-            x_eval=self.wavelength.omega,
+            x_eval=omega,
             derivative=3,
             accuracy=4,
             delta=1e12,  # This value is critical for accurate computation

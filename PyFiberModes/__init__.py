@@ -1,4 +1,3 @@
-from PyFiberModes.wavelength import Wavelength
 from PyFiberModes.mode import Mode, Family  # noqa: F401
 from PyFiberModes.mode_instances import *  # noqa: F403
 from PyFiberModes.factory import FiberFactory

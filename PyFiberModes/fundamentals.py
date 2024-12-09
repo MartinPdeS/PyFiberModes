@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import numpy
 import numpy as np
 from PyFiberModes.mode import Mode
-from PyFiberModes import Wavelength
 from PyFiberModes.mode_instances import HE11, LP01
+from scipy.constants import c
 
 from PyFiberModes.coordinates import CylindricalCoordinates
 
@@ -31,7 +32,7 @@ def get_delta_from_fiber(fiber) -> float:
     return 0.5 * (1 - n_ratio)
 
 
-def get_wavelength_from_V0(fiber: object, V0: float) -> Wavelength:
+def get_wavelength_from_V0(fiber: object, V0: float) -> float:
     r"""
     Compute the wavelength corresponding to a given V-number, \(V_0\).
 
@@ -51,13 +52,13 @@ def get_wavelength_from_V0(fiber: object, V0: float) -> Wavelength:
 
     Returns
     -------
-    Wavelength
-        The wavelength corresponding to \(V_0\).
+    float
+        The wavelength corresponding to V$_0$.
     """
     NA = fiber.get_NA()
     last_layer = fiber.last_layer
     wavelength = 2 * np.pi / V0 * last_layer.radius_in * NA
-    return Wavelength(wavelength)
+    return wavelength
 
 
 def get_propagation_constant_from_omega(
@@ -91,19 +92,20 @@ def get_propagation_constant_from_omega(
     float
         The propagation constant, \(\beta\).
     """
-    wavelength = Wavelength(omega=omega)
+    wavelength = c * 2 * np.pi / omega
+
     from PyFiberModes import solver
 
     neff_solver = solver.ssif.NeffSolver(fiber=fiber, wavelength=wavelength) if fiber.n_layer == 2 \
         else solver.mlsif.NeffSolver(fiber=fiber, wavelength=wavelength)
 
     neff = neff_solver.solve(mode=mode, delta_neff=delta_neff)
-    return neff * wavelength.k0
+    return neff * (2 * numpy.pi / wavelength)
 
 
 def get_U_parameter(
         fiber,
-        wavelength: Wavelength,
+        wavelength: float,
         mode: Mode,
         delta_neff: float = 1e-6) -> float:
     r"""
@@ -116,7 +118,7 @@ def get_U_parameter(
     ----------
     fiber : Fiber
         The fiber object.
-    wavelength : Wavelength
+    wavelength : float
         The wavelength of interest.
     mode : Mode
         The mode of interest.
@@ -139,7 +141,7 @@ def get_U_parameter(
 
 def get_effective_index(
         fiber,
-        wavelength: Wavelength,
+        wavelength: float,
         mode: Mode,
         delta_neff: float = 1e-6) -> float:
     r"""
@@ -149,7 +151,7 @@ def get_effective_index(
     ----------
     fiber : Fiber
         The fiber object.
-    wavelength : Wavelength
+    wavelength : float
         The wavelength of interest.
     mode : Mode
         The mode of interest.
@@ -173,7 +175,7 @@ def get_effective_index(
 
 def get_mode_cutoff_v0(
         fiber,
-        wavelength: Wavelength,
+        wavelength: float,
         mode: Mode) -> float:
     r"""
     Compute the cutoff V-number, \(V_0\), for a mode.
@@ -182,7 +184,7 @@ def get_mode_cutoff_v0(
     ----------
     fiber : Fiber
         The fiber object.
-    wavelength : Wavelength
+    wavelength : float
         The wavelength of interest.
     mode : Mode
         The mode of interest.

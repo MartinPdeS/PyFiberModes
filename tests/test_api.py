@@ -7,6 +7,7 @@ import numpy
 from PyFiberModes import HE11, LP01, LP11, LP21, LP12
 from PyFiberModes.fiber import load_fiber
 from PyFiberModes import FiberFactory
+from PyFiberModes.source import Source
 
 
 function_list = [
@@ -50,8 +51,12 @@ def test_get_attribute(function_string):
 
 
 def test_print_data():
-    smf28 = load_fiber(fiber_name='SMF28', wavelength=1310e-9)
+    source = Source(1310e-9)
+
+    smf28 = load_fiber(fiber_name='SMF28', wavelength=source.wavelength)
 
     smf28.print_data(data_type_list=attribute_list, mode_list=[LP01, LP11, LP21, LP12])
 
-# -
+
+if __name__ == "__main__":
+    pytest.main(["-W error", __file__])

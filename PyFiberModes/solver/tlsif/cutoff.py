@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 from PyFiberModes.mode import Mode
-from PyFiberModes.wavelength import Wavelength
 from PyFiberModes.mode_instances import HE11, LP01, LP11, TE01
 from PyFiberModes.fundamentals import get_wavelength_from_V0
 from PyFiberModes.solver.base_solver import BaseSolver
@@ -101,7 +100,8 @@ class CutoffSolver(BaseSolver):
         wavelength = get_wavelength_from_V0(fiber=self.fiber, V0=V0)
 
         if numpy.isinf(wavelength):
-            wavelength = Wavelength(k0=1)  # because it causes troubles if 0
+            k0 = 1  # because it causes troubles if 0
+            wavelength = 2 * numpy.pi / k0
 
         layers_minimum_index_squared = [
             layer.refractive_index**2 for layer in self.fiber.layers
