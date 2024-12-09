@@ -1,6 +1,6 @@
 import numpy as np
 from dataclasses import dataclass
-from typing import Tuple, Self
+from typing import Tuple
 
 
 @dataclass
@@ -34,7 +34,7 @@ class CylindricalCoordinates:
         y = self.rho * np.sin(self.phi)
         return CartesianCoordinates(x=x, y=y, z=self.z)
 
-    def to_cylindrical(self) -> Self:
+    def to_cylindrical(self):
         """
         Returns self in cylindrical format (no conversion needed).
 
@@ -240,7 +240,7 @@ class CartesianCoordinates:
         phi = np.arctan2(self.y, self.x)
         return CylindricalCoordinates(rho=rho, phi=phi, z=self.z)
 
-    def shift_coordinates(self, shift: Tuple[float, float, float]) -> Self:
+    def shift_coordinates(self, shift: Tuple[float, float, float]):
         """
         Shifts the coordinates by specified amounts.
 
