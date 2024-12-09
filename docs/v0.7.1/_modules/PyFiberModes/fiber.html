@@ -429,9 +429,10 @@ document.write(`
 <span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">constants</span>
 <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
 <span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">pairwise</span>
+<span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="kn">import</span> <span class="n">c</span>
 
 <span class="kn">from</span> <span class="nn">PyFiberModes.stepindex</span> <span class="kn">import</span> <span class="n">StepIndex</span>
-<span class="kn">from</span> <span class="nn">PyFiberModes</span> <span class="kn">import</span> <span class="n">Wavelength</span><span class="p">,</span> <span class="n">Mode</span>
+<span class="kn">from</span> <span class="nn">PyFiberModes</span> <span class="kn">import</span> <span class="n">Mode</span>
 <span class="kn">from</span> <span class="nn">PyFinitDiff.finite_difference_1D</span> <span class="kn">import</span> <span class="n">get_function_derivative</span>
 <span class="kn">from</span> <span class="nn">PyFiberModes.field</span> <span class="kn">import</span> <span class="n">Field</span>
 
@@ -459,7 +460,7 @@ document.write(`
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    wavelength : Wavelength</span>
+<span class="sd">    wavelength : float</span>
 <span class="sd">        The wavelength of light used for fiber simulations.</span>
 <span class="sd">    layer_names : list of str</span>
 <span class="sd">        Names of the fiber layers.</span>
@@ -470,14 +471,13 @@ document.write(`
 <span class="sd">    index_list : list of float</span>
 <span class="sd">        Refractive indices for each layer.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">wavelength</span><span class="p">:</span> <span class="n">Wavelength</span>
+    <span class="n">wavelength</span><span class="p">:</span> <span class="nb">float</span>
     <span class="n">layer_names</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
     <span class="n">layer_radius</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
     <span class="n">layer_types</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
     <span class="n">index_list</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span> <span class="o">=</span> <span class="n">Wavelength</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">layers_parameters</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">radius_in</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">layers</span> <span class="o">=</span> <span class="p">[]</span>
@@ -596,12 +596,12 @@ document.write(`
 
 <div class="viewcode-block" id="Fiber.update_wavelength">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.fiber.Fiber.update_wavelength">[docs]</a>
-    <span class="k">def</span> <span class="nf">update_wavelength</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">:</span> <span class="n">Wavelength</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">update_wavelength</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Update the wavelength of the fiber and all its layers</span>
 
 <span class="sd">        :param      wavelength:  The wavelength</span>
-<span class="sd">        :type       wavelength:  Wavelength</span>
+<span class="sd">        :type       wavelength:  float</span>
 
 <span class="sd">        :returns:   No return</span>
 <span class="sd">        :rtype:     None</span>
@@ -821,7 +821,7 @@ document.write(`
 
         <span class="n">inner_radius</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_layer</span><span class="o">.</span><span class="n">radius_in</span>
 
-        <span class="n">V0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span><span class="o">.</span><span class="n">k0</span> <span class="o">*</span> <span class="n">inner_radius</span> <span class="o">*</span> <span class="n">NA</span>
+        <span class="n">V0</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span><span class="p">)</span> <span class="o">*</span> <span class="n">inner_radius</span> <span class="o">*</span> <span class="n">NA</span>
 
         <span class="k">return</span> <span class="n">V0</span>
 
@@ -859,7 +859,7 @@ document.write(`
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        Wavelength</span>
+<span class="sd">        float</span>
 <span class="sd">            The cutoff wavelength of the specified mode.</span>
 
 <span class="sd">        Notes</span>
@@ -880,7 +880,7 @@ document.write(`
 
         <span class="n">cutoff_wavelength</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">cutoff_V0</span> <span class="o">*</span> <span class="n">inner_radius</span> <span class="o">*</span> <span class="n">NA</span>
 
-        <span class="k">return</span> <span class="n">Wavelength</span><span class="p">(</span><span class="n">cutoff_wavelength</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">cutoff_wavelength</span></div>
 
 
 <div class="viewcode-block" id="Fiber.get_effective_index">
@@ -1002,9 +1002,11 @@ document.write(`
 <span class="sd">        :returns:   The group index.</span>
 <span class="sd">        :rtype:     float</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">omega</span> <span class="o">=</span> <span class="n">c</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span>
+
         <span class="n">derivative</span> <span class="o">=</span> <span class="n">get_function_derivative</span><span class="p">(</span>
             <span class="n">function</span><span class="o">=</span><span class="n">get_propagation_constant_from_omega</span><span class="p">,</span>
-            <span class="n">x_eval</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span><span class="o">.</span><span class="n">omega</span><span class="p">,</span>
+            <span class="n">x_eval</span><span class="o">=</span><span class="n">omega</span><span class="p">,</span>
             <span class="n">derivative</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
             <span class="n">accuracy</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
             <span class="n">delta</span><span class="o">=</span><span class="mf">1e12</span><span class="p">,</span>  <span class="c1"># This value is critical for accurate computation</span>
@@ -1029,9 +1031,11 @@ document.write(`
 <span class="sd">        :returns:   The groupe velocity.</span>
 <span class="sd">        :rtype:     float</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">omega</span> <span class="o">=</span> <span class="n">c</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span>
+
         <span class="n">derivative</span> <span class="o">=</span> <span class="n">get_function_derivative</span><span class="p">(</span>
             <span class="n">function</span><span class="o">=</span><span class="n">get_propagation_constant_from_omega</span><span class="p">,</span>
-            <span class="n">x_eval</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span><span class="o">.</span><span class="n">omega</span><span class="p">,</span>
+            <span class="n">x_eval</span><span class="o">=</span><span class="n">omega</span><span class="p">,</span>
             <span class="n">derivative</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
             <span class="n">accuracy</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
             <span class="n">delta</span><span class="o">=</span><span class="mf">1e12</span><span class="p">,</span>  <span class="c1"># This value is critical for accurate computation</span>
@@ -1056,9 +1060,11 @@ document.write(`
 <span class="sd">        :returns:   The group_velocity dispersion</span>
 <span class="sd">        :rtype:     float</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">omega</span> <span class="o">=</span> <span class="n">c</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span>
+
         <span class="n">derivative</span> <span class="o">=</span> <span class="n">get_function_derivative</span><span class="p">(</span>
             <span class="n">function</span><span class="o">=</span><span class="n">get_propagation_constant_from_omega</span><span class="p">,</span>
-            <span class="n">x_eval</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span><span class="o">.</span><span class="n">omega</span><span class="p">,</span>
+            <span class="n">x_eval</span><span class="o">=</span><span class="n">omega</span><span class="p">,</span>
             <span class="n">derivative</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
             <span class="n">accuracy</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
             <span class="n">delta</span><span class="o">=</span><span class="mf">1e12</span><span class="p">,</span>  <span class="c1"># This value is critical for accurate computation</span>
@@ -1126,9 +1132,11 @@ document.write(`
 <span class="sd">        float</span>
 <span class="sd">            The S-parameter in appropriate units.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">omega</span> <span class="o">=</span> <span class="n">c</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span>
+
         <span class="n">derivative</span> <span class="o">=</span> <span class="n">get_function_derivative</span><span class="p">(</span>
             <span class="n">function</span><span class="o">=</span><span class="n">get_propagation_constant_from_omega</span><span class="p">,</span>
-            <span class="n">x_eval</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span><span class="o">.</span><span class="n">omega</span><span class="p">,</span>
+            <span class="n">x_eval</span><span class="o">=</span><span class="n">omega</span><span class="p">,</span>
             <span class="n">derivative</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
             <span class="n">accuracy</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
             <span class="n">delta</span><span class="o">=</span><span class="mf">1e12</span><span class="p">,</span>  <span class="c1"># This value is critical for accurate computation</span>

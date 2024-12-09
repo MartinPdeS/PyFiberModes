@@ -434,7 +434,7 @@ document.write(`
 <span id="fiber"></span><h2>Fiber<a class="headerlink" href="#module-PyFiberModes.fiber" title="Link to this heading">#</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="PyFiberModes.fiber.Fiber">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Fiber</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wavelength:</span> <span class="pre">~PyFiberModes.wavelength.Wavelength</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_names:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_radius:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_types:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_list:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyFiberModes/fiber.html#Fiber"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.fiber.Fiber" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Fiber</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wavelength:</span> <span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_names:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_radius:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_types:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_list:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyFiberModes/fiber.html#Fiber"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.fiber.Fiber" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A class to represent an optical fiber with multiple layers.</p>
 <p>This class provides functionality to define and manipulate
@@ -443,7 +443,7 @@ refractive indices, and propagation characteristics.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>wavelength</strong> (<em>Wavelength</em>) – The wavelength of light used for fiber simulations.</p></li>
+<li><p><strong>wavelength</strong> (<em>float</em>) – The wavelength of light used for fiber simulations.</p></li>
 <li><p><strong>layer_names</strong> (<em>list</em><em> of </em><em>str</em>) – Names of the fiber layers.</p></li>
 <li><p><strong>layer_radius</strong> (<em>list</em><em> of </em><em>float</em>) – Radii of the fiber layers in meters.</p></li>
 <li><p><strong>layer_types</strong> (<em>list</em><em> of </em><em>str</em>) – Types of layers (e.g., core, cladding).</p></li>
@@ -453,7 +453,7 @@ refractive indices, and propagation characteristics.</p>
 </dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="PyFiberModes.fiber.Fiber.wavelength">
-<span class="sig-name descname"><span class="pre">wavelength</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Wavelength</span></em><a class="headerlink" href="#PyFiberModes.fiber.Fiber.wavelength" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">wavelength</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#PyFiberModes.fiber.Fiber.wavelength" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -582,11 +582,11 @@ refractive indices, and propagation characteristics.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.fiber.Fiber.update_wavelength">
-<span class="sig-name descname"><span class="pre">update_wavelength</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wavelength</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Wavelength</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/PyFiberModes/fiber.html#Fiber.update_wavelength"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.fiber.Fiber.update_wavelength" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">update_wavelength</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wavelength</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/PyFiberModes/fiber.html#Fiber.update_wavelength"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.fiber.Fiber.update_wavelength" title="Link to this definition">#</a></dt>
 <dd><p>Update the wavelength of the fiber and all its layers</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>wavelength</strong> (<em>Wavelength</em>) – The wavelength</p>
+<dd class="field-odd"><p><strong>wavelength</strong> (<em>float</em>) – The wavelength</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>No return</p>
@@ -802,7 +802,7 @@ or multimode operation.</p>
 <dd class="field-even"><p>The cutoff wavelength of the specified mode.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Wavelength</p>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
