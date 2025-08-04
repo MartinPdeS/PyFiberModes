@@ -26,10 +26,10 @@ requirements:
     - martinpdes::mpsplots
     - martinpdes::pyfinitdiff
     - martinpdes::pyoptik
-    - pyyaml ~=6.0
-    - matplotlib ~=3.8
-    - numpy ~=1.26
-    - scipy ~=1.0
+    - pyyaml
+    - matplotlib
+    - numpy
+    - scipy
 
 about:
   home: https://github.com/MartinPdeS/PyFiberModes
