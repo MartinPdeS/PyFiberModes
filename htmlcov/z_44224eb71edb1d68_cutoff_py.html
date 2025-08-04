@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Coverage for PyFiberModes/solver/ssif/cutoff.py: 65%</title>
     <link rel="icon" sizes="32x32" href="favicon_32_cb_58284776.png">
-    <link rel="stylesheet" href="style_cb_8e611ae1.css" type="text/css">
+    <link rel="stylesheet" href="style_cb_6b508a39.css" type="text/css">
     <script src="coverage_html_cb_6fb7b396.js" defer></script>
 </head>
 <body class="pyfile">
@@ -66,8 +66,8 @@
             <a id="indexLink" class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a id="nextFileLink" class="nav" href="z_44224eb71edb1d68_neff_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.6.4">coverage.py v7.6.4</a>,
-            created at 2024-12-10 18:08 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.10.0">coverage.py v7.10.0</a>,
+            created at 2025-08-04 03:17 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -98,8 +98,8 @@
     <p class="run"><span class="n"><a id="t14" href="#t14">14</a></span><span class="t"><span class="nam">Y0</span> <span class="op">=</span> <span class="nam">numpy</span><span class="op">.</span><span class="nam">sqrt</span><span class="op">(</span><span class="nam">epsilon_0</span> <span class="op">/</span> <span class="nam">mu_0</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t15" href="#t15">15</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t16" href="#t16">16</a></span><span class="t"><span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t17" href="#t17">17</a></span><span class="t"><span class="str">Solver for standard layer step-index solver: SSIF</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t18" href="#t18">18</a></span><span class="t"><span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t17" href="#t17">17</a></span><span class="t"><span class="str">Solver for standard layer step-index solver: SSIF</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t18" href="#t18">18</a></span><span class="t"><span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t19" href="#t19">19</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t20" href="#t20">20</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t21" href="#t21">21</a></span><span class="t"><span class="key">class</span> <span class="nam">CutoffSolver</span><span class="op">(</span><span class="nam">BaseSolver</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -157,10 +157,10 @@
     <p class="run"><span class="n"><a id="t73" href="#t73">73</a></span><span class="t">    <span class="key">def</span> <span class="nam">find_HE_mode_cutoff</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">mode</span><span class="op">:</span> <span class="nam">Mode</span><span class="op">)</span> <span class="op">-></span> <span class="nam">float</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="par run show_par"><span class="n"><a id="t74" href="#t74">74</a></span><span class="t">        <span class="key">if</span> <span class="nam">mode</span><span class="op">.</span><span class="nam">m</span> <span class="op">></span> <span class="num">1</span><span class="op">:</span>&nbsp;</span><span class="r"><span class="annotate short">74&#x202F;&#x219B;&#x202F;75</span><span class="annotate long">line 74 didn't jump to line 75 because the condition on line 74 was never true</span></span></p>
     <p class="mis show_mis"><span class="n"><a id="t75" href="#t75">75</a></span><span class="t">            <span class="nam">lower_neff_mode</span> <span class="op">=</span> <span class="nam">Mode</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t76" href="#t76">76</a></span><span class="t">                <span class="nam">family</span><span class="op">=</span><span class="nam">mode</span><span class="op">.</span><span class="nam">family</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t77" href="#t77">77</a></span><span class="t">                <span class="nam">nu</span><span class="op">=</span><span class="nam">mode</span><span class="op">.</span><span class="nam">nu</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t78" href="#t78">78</a></span><span class="t">                <span class="nam">m</span><span class="op">=</span><span class="nam">mode</span><span class="op">.</span><span class="nam">m</span> <span class="op">-</span> <span class="num">1</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t79" href="#t79">79</a></span><span class="t">            <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis mis2 show_mis"><span class="n"><a id="t76" href="#t76">76</a></span><span class="t">                <span class="nam">family</span><span class="op">=</span><span class="nam">mode</span><span class="op">.</span><span class="nam">family</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis mis2 show_mis"><span class="n"><a id="t77" href="#t77">77</a></span><span class="t">                <span class="nam">nu</span><span class="op">=</span><span class="nam">mode</span><span class="op">.</span><span class="nam">nu</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis mis2 show_mis"><span class="n"><a id="t78" href="#t78">78</a></span><span class="t">                <span class="nam">m</span><span class="op">=</span><span class="nam">mode</span><span class="op">.</span><span class="nam">m</span> <span class="op">-</span> <span class="num">1</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis mis2 show_mis"><span class="n"><a id="t79" href="#t79">79</a></span><span class="t">            <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t80" href="#t80">80</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t81" href="#t81">81</a></span><span class="t">            <span class="nam">lower_neff_boundary</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">fiber</span><span class="op">.</span><span class="nam">get_mode_cutoff_v0</span><span class="op">(</span><span class="nam">mode</span><span class="op">=</span><span class="nam">lower_neff_mode</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t82" href="#t82">82</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -174,19 +174,19 @@
     <p class="run"><span class="n"><a id="t90" href="#t90">90</a></span><span class="t">            <span class="nam">lower_neff_boundary</span> <span class="op">=</span> <span class="nam">delta</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">_MCD</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t91" href="#t91">91</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t92" href="#t92">92</a></span><span class="t">        <span class="nam">ipoints</span> <span class="op">=</span> <span class="nam">numpy</span><span class="op">.</span><span class="nam">concatenate</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t93" href="#t93">93</a></span><span class="t">            <span class="op">[</span><span class="nam">jn_zeros</span><span class="op">(</span><span class="nam">mode</span><span class="op">.</span><span class="nam">nu</span><span class="op">,</span> <span class="nam">mode</span><span class="op">.</span><span class="nam">m</span><span class="op">)</span><span class="op">,</span> <span class="nam">jn_zeros</span><span class="op">(</span><span class="nam">mode</span><span class="op">.</span><span class="nam">nu</span> <span class="op">-</span> <span class="num">2</span><span class="op">,</span> <span class="nam">mode</span><span class="op">.</span><span class="nam">m</span><span class="op">)</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t94" href="#t94">94</a></span><span class="t">        <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t93" href="#t93">93</a></span><span class="t">            <span class="op">[</span><span class="nam">jn_zeros</span><span class="op">(</span><span class="nam">mode</span><span class="op">.</span><span class="nam">nu</span><span class="op">,</span> <span class="nam">mode</span><span class="op">.</span><span class="nam">m</span><span class="op">)</span><span class="op">,</span> <span class="nam">jn_zeros</span><span class="op">(</span><span class="nam">mode</span><span class="op">.</span><span class="nam">nu</span> <span class="op">-</span> <span class="num">2</span><span class="op">,</span> <span class="nam">mode</span><span class="op">.</span><span class="nam">m</span><span class="op">)</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t94" href="#t94">94</a></span><span class="t">        <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t95" href="#t95">95</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t96" href="#t96">96</a></span><span class="t">        <span class="nam">ipoints</span><span class="op">.</span><span class="nam">sort</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t97" href="#t97">97</a></span><span class="t">        <span class="nam">ipoints</span> <span class="op">=</span> <span class="nam">list</span><span class="op">(</span><span class="nam">ipoints</span><span class="op">[</span><span class="nam">ipoints</span> <span class="op">></span> <span class="nam">lower_neff_boundary</span><span class="op">]</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t98" href="#t98">98</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t99" href="#t99">99</a></span><span class="t">        <span class="nam">cutoff</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">find_function_first_root</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t100" href="#t100">100</a></span><span class="t">            <span class="nam">function</span><span class="op">=</span><span class="nam">self</span><span class="op">.</span><span class="nam">get_mode_cutoff_HE</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t101" href="#t101">101</a></span><span class="t">            <span class="nam">function_args</span><span class="op">=</span><span class="op">(</span><span class="nam">mode</span><span class="op">.</span><span class="nam">nu</span><span class="op">,</span><span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t102" href="#t102">102</a></span><span class="t">            <span class="nam">lowbound</span><span class="op">=</span><span class="nam">lower_neff_boundary</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t103" href="#t103">103</a></span><span class="t">            <span class="nam">ipoints</span><span class="op">=</span><span class="nam">ipoints</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t104" href="#t104">104</a></span><span class="t">            <span class="nam">delta</span><span class="op">=</span><span class="nam">delta</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t105" href="#t105">105</a></span><span class="t">        <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t100" href="#t100">100</a></span><span class="t">            <span class="nam">function</span><span class="op">=</span><span class="nam">self</span><span class="op">.</span><span class="nam">get_mode_cutoff_HE</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t101" href="#t101">101</a></span><span class="t">            <span class="nam">function_args</span><span class="op">=</span><span class="op">(</span><span class="nam">mode</span><span class="op">.</span><span class="nam">nu</span><span class="op">,</span><span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t102" href="#t102">102</a></span><span class="t">            <span class="nam">lowbound</span><span class="op">=</span><span class="nam">lower_neff_boundary</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t103" href="#t103">103</a></span><span class="t">            <span class="nam">ipoints</span><span class="op">=</span><span class="nam">ipoints</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t104" href="#t104">104</a></span><span class="t">            <span class="nam">delta</span><span class="op">=</span><span class="nam">delta</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t105" href="#t105">105</a></span><span class="t">        <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t106" href="#t106">106</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="par run show_par"><span class="n"><a id="t107" href="#t107">107</a></span><span class="t">        <span class="key">if</span> <span class="nam">numpy</span><span class="op">.</span><span class="nam">isnan</span><span class="op">(</span><span class="nam">cutoff</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"><span class="annotate short">107&#x202F;&#x219B;&#x202F;108</span><span class="annotate long">line 107 didn't jump to line 108 because the condition on line 107 was never true</span></span></p>
     <p class="mis show_mis"><span class="n"><a id="t108" href="#t108">108</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">logger</span><span class="op">.</span><span class="nam">error</span><span class="op">(</span><span class="fst">f"</span><span class="fst">find_HE_mode_cutoff: no cutoff found for </span><span class="op">{</span><span class="nam">mode</span><span class="op">}</span><span class="fst"> mode</span><span class="fst">"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -203,8 +203,8 @@
             <a class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a class="nav" href="z_44224eb71edb1d68_neff_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.6.4">coverage.py v7.6.4</a>,
-            created at 2024-12-10 18:08 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.10.0">coverage.py v7.10.0</a>,
+            created at 2025-08-04 03:17 +0000
         </p>
     </div>
 </footer>
