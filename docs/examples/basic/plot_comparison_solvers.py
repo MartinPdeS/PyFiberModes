@@ -11,7 +11,7 @@ import numpy
 
 from PyFiberModes.fiber import load_fiber
 from PyFiberModes import LP01
-from MPSPlots.render2D import SceneList
+import matplotlib.pyplot as plt
 
 fiber_2L = load_fiber(
     fiber_name='SMF28',
@@ -42,18 +42,13 @@ for j, itr in enumerate(itr_list):
     data_3L.append(neff_3L)
 
 
-figure = SceneList()
+figure, ax = plt.subplots(1, 1, figsize=(10, 6))
 
-ax = figure.append_ax(
-    show_legend=True,
-    x_label='Inverse taper ration [ITR]',
-    y_label='LP01 effective index'
-)
+ax.set_xlabel('Inverse taper ratio [ITR]')
+ax.set_ylabel('LP01 effective index')
+ax.plot(itr_list, data_2L, label='2 layer', linewidth=3)
+ax.plot(itr_list, data_3L, label='3 layer', marker='o', markersize=5)
 
-ax.add_line(x=itr_list, y=data_2L, label='2 layer', line_width=3)
-ax.add_scatter(x=itr_list, y=data_3L, label='3 layer', marker_size=20)
-
-
-figure.show()
+plt.show()
 
 # -
