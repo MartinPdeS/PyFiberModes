@@ -7,7 +7,7 @@ Mode fields
 # %%
 # Imports
 # ~~~~~~~
-from PyFiberModes import FiberFactory, HE11
+from PyFiberModes import FiberFactory, HE11, LP02
 from PyFiberModes.field import Field
 
 # %%
@@ -19,7 +19,7 @@ factory = FiberFactory(wavelength=1550e-9)
 factory.add_layer(name="core", radius=4e-6, index=core_indexes)
 factory.add_layer(name="cladding", index=1.4444)
 
-mode = HE11
+mode = LP02
 
 fiber = factory[0]
 
@@ -30,8 +30,8 @@ field = Field(
     n_point=201
 )
 
-
-figure = field.plot(plot_type=['Ex', 'Ey', 'Ez', 'Er', 'Ephi'])
+figure = field.plot(plot_type=['Ex', 'Ey'])
+# figure = field.plot(plot_type=['Ex', 'Ey', 'Ez', 'Er', 'Ephi'])
 
 
 # -

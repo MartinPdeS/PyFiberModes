@@ -26,11 +26,11 @@ keywords = ["finit-difference", "matrix"]
 
 dependencies = [
     "PyOptik",
-    "MPSPlots ~=1.5.1",
+    "MPSPlots",
     "PyFinitDiff",
-    "pyyaml ==6.0.1",
-    "numpy ==1.*",
-    "scipy ==1.*",
+    "pyyaml",
+    "numpy",
+    "scipy",
 ]
 
 [tool.setuptools]
