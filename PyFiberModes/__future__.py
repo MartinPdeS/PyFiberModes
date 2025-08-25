@@ -99,7 +99,7 @@ def get_scalar_field_norm(rho_list: numpy.ndarray, field: numpy.ndarray) -> floa
     field = numpy.asarray(field)
     dr = rho_list[1] - rho_list[0]
 
-    integral = numpy.trapz(field**2 * rho_list, dx=dr)
+    integral = numpy.trapezoid(field**2 * rho_list, dx=dr)
 
     norm = 2 * numpy.pi * integral
 
