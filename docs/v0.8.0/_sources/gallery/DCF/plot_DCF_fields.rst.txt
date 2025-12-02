@@ -97,7 +97,7 @@ Preparing the figure
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 1.228 seconds)
+   **Total running time of the script:** (0 minutes 1.331 seconds)
 
 
 .. _sphx_glr_download_gallery_DCF_plot_DCF_fields.py:
