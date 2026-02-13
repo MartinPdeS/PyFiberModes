@@ -11,7 +11,7 @@
         :class: sphx-glr-download-link-note
 
         :ref:`Go to the end <sphx_glr_download_gallery_basic_plot_mode_field_1.py>`
-        to download the full example code
+        to download the full example code.
 
 .. rst-class:: sphx-glr-example-title
 
@@ -86,7 +86,7 @@ Here we create the different fiber design that we want to explore
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 7.352 seconds)
+   **Total running time of the script:** (0 minutes 7.362 seconds)
 
 
 .. _sphx_glr_download_gallery_basic_plot_mode_field_1.py:
@@ -102,6 +102,10 @@ Here we create the different fiber design that we want to explore
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: plot_mode_field_1.py <plot_mode_field_1.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: plot_mode_field_1.zip <plot_mode_field_1.zip>`
 
 
 .. only:: html

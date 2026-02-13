@@ -12,6 +12,7 @@ A gallery of examples and that showcase how PyFiberModes can be used. Some examp
 
     <div class="sphx-glr-thumbnails">
 
+.. thumbnail-parent-div-open
 
 .. raw:: html
 
@@ -29,6 +30,8 @@ A gallery of examples and that showcase how PyFiberModes can be used. Some examp
       <div class="sphx-glr-thumbnail-title">Mode fields</div>
     </div>
 
+
+.. thumbnail-parent-div-close
 
 .. raw:: html
 

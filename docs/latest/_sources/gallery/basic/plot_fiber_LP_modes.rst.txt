@@ -11,7 +11,7 @@
         :class: sphx-glr-download-link-note
 
         :ref:`Go to the end <sphx_glr_download_gallery_basic_plot_fiber_LP_modes.py>`
-        to download the full example code
+        to download the full example code.
 
 .. rst-class:: sphx-glr-example-title
 
@@ -108,7 +108,7 @@ Preparing the figure
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 1.136 seconds)
+   **Total running time of the script:** (0 minutes 1.111 seconds)
 
 
 .. _sphx_glr_download_gallery_basic_plot_fiber_LP_modes.py:
@@ -124,6 +124,10 @@ Preparing the figure
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: plot_fiber_LP_modes.py <plot_fiber_LP_modes.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: plot_fiber_LP_modes.zip <plot_fiber_LP_modes.zip>`
 
 
 .. only:: html
