@@ -19,7 +19,7 @@
 | PyFiberModes/source.py              |       17 |        5 |        0 |        0 |     70.59% |21, 33, 45, 56, 67 |
 | PyFiberModes/stepindex.py           |      124 |        2 |       22 |        1 |     97.95% |   54, 112 |
 | PyFiberModes/tools/directories.py   |       16 |       16 |        4 |        0 |      0.00% |      4-39 |
-|                           **TOTAL** | **1682** |  **733** |  **384** |   **40** | **53.29%** |           |
+| **TOTAL**                           | **1682** |  **733** |  **384** |   **40** | **53.29%** |           |
 
 3 files skipped due to complete coverage.
 
