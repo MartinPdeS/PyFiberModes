@@ -86,7 +86,7 @@ Here we create the different fiber design that we want to explore
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 7.362 seconds)
+   **Total running time of the script:** (0 minutes 7.480 seconds)
 
 
 .. _sphx_glr_download_gallery_basic_plot_mode_field_1.py:
