@@ -1,24 +1,19 @@
-# Simple workflow for deploying static content to GitHub Pages
-name: Documentation
+name: Publish documentation
 
 on:
   push:
-    branches: [ "master" ]
-    tags: '*'
-  pull_request:
-    branches: [ "master" ]
+    branches: [master]
+    tags: ["v*"]
 
-
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: write
   pages: write
   id-token: write
 
 jobs:
-  ManyLinux_x86_64:
-    uses: MartinPdeS/MPSActions/.github/workflows/publish_documentation.yml@master
+  documentation:
+    uses: MartinPdeS/MPSActions/.github/workflows/publish_documentation.yml@v5
     with:
       python-version: "3.11"
-      package-name: "PyFiberModes"
+      package-name: PyFiberModes
       apt-package: xvfb jq

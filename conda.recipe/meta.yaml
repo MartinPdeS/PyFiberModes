@@ -4,7 +4,6 @@ package:
 
 source:
   path: ../
-  git_url: https://github.com/MartinPdeS/PyFiberModes.git
 
 build:
   noarch: python
