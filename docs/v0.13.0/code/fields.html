@@ -1,0 +1,1994 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Fields and coordinates &#8212; PyFiberModes  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/docs/source/_static/default.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/default.css?v=94474078" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/sg-tags.js?v=d80f6fa4"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'code/fields';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.17.1';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/MartinPdeS/PyFiberModes/documentation_page/version_switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'v0.13.0';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="icon" href="../_static/favicon.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Analysis, design, and propagation" href="analysis.html" />
+    <link rel="prev" title="Fibers and layers" href="fibers.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.13.0" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/thumbnail.png" class="logo__image only-light" alt=""/>
+    <img src="../_static/thumbnail.png" class="logo__image only-dark pst-js-only" alt=""/>
+  
+  
+    <p class="title logo__title">PyFiberModes</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../theory.html">
+    Theory and conventions
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../workflows.html">
+    Workflows
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../performance.html">
+    Performance
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../troubleshooting.html">
+    Troubleshooting
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../examples.html">
+    Example galleries
+  </a>
+</li>
+
+
+<li class=" current active">
+  <a class="nav-link dropdown-item nav-internal" href="../code.html">
+    API reference
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../references.html">
+    References
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/MartinPdeS/PyFiberModes" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/PyFiberModes/" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-solid fa-box fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">PyPI</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://anaconda.org/MartinPdeS/PyFiberModes" title="Anaconda" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-python fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Anaconda</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../theory.html">
+    Theory and conventions
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../workflows.html">
+    Workflows
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../performance.html">
+    Performance
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../troubleshooting.html">
+    Troubleshooting
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Example galleries
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../code.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../references.html">
+    References
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/MartinPdeS/PyFiberModes" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/PyFiberModes/" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-solid fa-box fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">PyPI</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://anaconda.org/MartinPdeS/PyFiberModes" title="Anaconda" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-python fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Anaconda</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar"><svg class="pst-icon svg-inline--fa" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="fibers.html">Fibers and layers</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Fields and coordinates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis, design, and propagation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fundamentals.html">Modes and fundamentals</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../code.html" class="nav-link">API reference</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Fields and coordinates</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-PyFiberModes.field">
+<span id="fields-and-coordinates"></span><h1>Fields and coordinates<a class="headerlink" href="#module-PyFiberModes.field" title="Link to this heading">#</a></h1>
+<p>Vectorized electric and magnetic field evaluation on Cartesian grids.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="PyFiberModes.field.CylindricalCoordinates">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">CylindricalCoordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rho</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#CylindricalCoordinates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.CylindricalCoordinates" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Store cylindrical coordinate arrays used by a field grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rho</strong> (<em>numpy.ndarray</em>) – Radial distances.</p></li>
+<li><p><strong>phi</strong> (<em>numpy.ndarray</em>) – Azimuthal angles in radians.</p></li>
+<li><p><strong>z</strong> (<em>numpy.ndarray</em>) – Longitudinal positions.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFiberModes.field.CylindricalCoordinates.rho">
+<span class="sig-name descname"><span class="pre">rho</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></span><a class="headerlink" href="#PyFiberModes.field.CylindricalCoordinates.rho" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFiberModes.field.CylindricalCoordinates.phi">
+<span class="sig-name descname"><span class="pre">phi</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></span><a class="headerlink" href="#PyFiberModes.field.CylindricalCoordinates.phi" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFiberModes.field.CylindricalCoordinates.z">
+<span class="sig-name descname"><span class="pre">z</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></span><a class="headerlink" href="#PyFiberModes.field.CylindricalCoordinates.z" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.CylindricalCoordinates.to_cartesian">
+<span class="sig-name descname"><span class="pre">to_cartesian</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">object</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#CylindricalCoordinates.to_cartesian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.CylindricalCoordinates.to_cartesian" title="Link to this definition">#</a></dt>
+<dd><p>Convert the coordinate arrays to Cartesian form.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Equivalent Cartesian coordinate arrays.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#PyFiberModes.coordinates.CartesianCoordinates" title="PyFiberModes.coordinates.CartesianCoordinates">CartesianCoordinates</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.CylindricalCoordinates.to_cylindrical">
+<span class="sig-name descname"><span class="pre">to_cylindrical</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#CylindricalCoordinates.to_cylindrical"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.CylindricalCoordinates.to_cylindrical" title="Link to this definition">#</a></dt>
+<dd><p>Return this already-cylindrical coordinate object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The current object.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#PyFiberModes.field.CylindricalCoordinates" title="PyFiberModes.field.CylindricalCoordinates">CylindricalCoordinates</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fiber</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.mode.Mode"><span class="pre">Mode</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_point</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">101</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class representing the electric and magnetic field components in a fiber.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fiber</strong> (<a class="reference internal" href="fibers.html#PyFiberModes.fiber.Fiber" title="PyFiberModes.fiber.Fiber"><em>Fiber</em></a>) – The fiber associated with the mode.</p></li>
+<li><p><strong>mode</strong> (<a class="reference internal" href="fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.mode.Mode"><em>Mode</em></a>) – The mode to evaluate.</p></li>
+<li><p><strong>limit</strong> (<em>float</em>) – The radius of the field to compute.</p></li>
+<li><p><strong>n_point</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of points for the computation grid (default is 101).</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.cartesian_coordinates">
+<span class="sig-name descname"><span class="pre">cartesian_coordinates</span></span><a class="headerlink" href="#PyFiberModes.field.Field.cartesian_coordinates" title="Link to this definition">#</a></dt>
+<dd><p>Cartesian coordinates generated for the field computation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#PyFiberModes.coordinates.CartesianCoordinates" title="PyFiberModes.coordinates.CartesianCoordinates">CartesianCoordinates</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.cylindrical_coordinates">
+<span class="sig-name descname"><span class="pre">cylindrical_coordinates</span></span><a class="headerlink" href="#PyFiberModes.field.Field.cylindrical_coordinates" title="Link to this definition">#</a></dt>
+<dd><p>Cylindrical coordinates corresponding to the cartesian grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#PyFiberModes.field.CylindricalCoordinates" title="PyFiberModes.field.CylindricalCoordinates">CylindricalCoordinates</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.fiber">
+<span class="sig-name descname"><span class="pre">fiber</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">object</span></span><a class="headerlink" href="#PyFiberModes.field.Field.fiber" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.mode">
+<span class="sig-name descname"><span class="pre">mode</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.mode.Mode"><span class="pre">Mode</span></a></span><a class="headerlink" href="#PyFiberModes.field.Field.mode" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.limit">
+<span class="sig-name descname"><span class="pre">limit</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><a class="headerlink" href="#PyFiberModes.field.Field.limit" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.n_point">
+<span class="sig-name descname"><span class="pre">n_point</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">101</span></span><a class="headerlink" href="#PyFiberModes.field.Field.n_point" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.initialize_array">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">initialize_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.initialize_array"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.initialize_array" title="Link to this definition">#</a></dt>
+<dd><p>Initialize a floating-point array of zeros.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>shape</strong> (<em>tuple</em><em> of </em><em>int</em>) – Dimensions of the requested array.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Zero-filled array with the requested shape.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.get_azimuthal_dependency">
+<span class="sig-name descname"><span class="pre">get_azimuthal_dependency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dependency_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.get_azimuthal_dependency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_azimuthal_dependency" title="Link to this definition">#</a></dt>
+<dd><p>Compute the azimuthal dependency for the field based on the given type.</p>
+<p>The azimuthal dependencies are defined as:</p>
+<div class="math notranslate nohighlight">
+\[f_\nu(\phi) = \cos(\nu \phi + \phi_0)\]</div>
+<div class="math notranslate nohighlight">
+\[g_\nu(\phi) = -\sin(\nu \phi + \phi_0)\]</div>
+<p>where <span class="math notranslate nohighlight">\(\nu\)</span> is the azimuthal mode number and <span class="math notranslate nohighlight">\(\phi_0\)</span> is the
+phase shift.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phi</strong> (<em>float</em>) – Phase shift of the field in radians.</p></li>
+<li><p><strong>dependency_type</strong> (<em>{'f'</em><em>, </em><em>'g'}</em>) – The type of azimuthal dependency to compute:
+- ‘f’ for cosine dependency.
+- ‘g’ for sine dependency.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The azimuthal dependency values, computed over the cylindrical coordinates.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If <cite>dependency_type</cite> is not ‘f’ or ‘g’.</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This method is referenced in Eq. 3.71 of Jaques Bures for the calculation
+of field azimuthal behavior in optical fibers.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.get_components">
+<span class="sig-name descname"><span class="pre">get_components</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">components</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('Ex',</span> <span class="pre">'Ey',</span> <span class="pre">'Ez',</span> <span class="pre">'Hx',</span> <span class="pre">'Hy',</span> <span class="pre">'Hz')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.get_components"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_components" title="Link to this definition">#</a></dt>
+<dd><p>Evaluate and cache several field components together.</p>
+<p>All requested components share the same radial solve, interpolated maps,
+and azimuthal factors. This is the preferred entry point when more than
+one component is needed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>components</strong> (<em>iterable</em><em> of </em><em>str</em><em>, </em><em>optional</em>) – Cartesian or cylindrical component names to evaluate.</p></li>
+<li><p><strong>phi</strong> (<em>float</em><em>, </em><em>optional</em>) – Azimuthal phase offset in radians.</p></li>
+<li><p><strong>theta</strong> (<em>float</em><em>, </em><em>optional</em>) – Polarization rotation in radians.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Component arrays keyed by their requested names.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict of str to numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.get_index_iterator">
+<span class="sig-name descname"><span class="pre">get_index_iterator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.get_index_iterator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_index_iterator" title="Link to this definition">#</a></dt>
+<dd><p>Generate an iterator for multi-dimensional array indices.</p>
+<p>This method provides a way to iterate through all indices of a
+multi-dimensional NumPy array in a memory-efficient manner.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>array</strong> (<em>numpy.ndarray</em>) – The array for which to generate the index iterator.</p>
+</dd>
+<dt class="field-even">Yields<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>tuple</em> – Multi-dimensional index corresponding to the current element.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.wrapper_get_field">
+<span class="sig-name descname"><span class="pre">wrapper_get_field</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.wrapper_get_field"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.wrapper_get_field" title="Link to this definition">#</a></dt>
+<dd><p>Decorator for wrapping field computation methods.</p>
+<p>This decorator can be used to add pre- or post-processing steps
+to field computation methods in the <cite>Field</cite> class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>function</strong> (<em>Callable</em>) – The function to be wrapped.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The wrapped function.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>callable</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.Ex">
+<span class="sig-name descname"><span class="pre">Ex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Ex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Ex" title="Link to this definition">#</a></dt>
+<dd><p>Compute the x-component of the electric field, <span class="math notranslate nohighlight">\(E_x\)</span>.</p>
+<p>The x-component of the electric field is calculated based on the field’s mode family.
+For LP (linearly polarized) modes, it uses the radial electric field and the azimuthal
+dependency <span class="math notranslate nohighlight">\(f_\nu(\phi)\)</span>. For other modes, the x-component is derived using the
+transverse electric field and its polarization angle.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}E_x =
+\begin{cases}
+E_\rho \cdot f_\nu(\phi) &amp; \text{if mode is LP} \\
+E_T \cdot \cos(\theta_{\text{pol}}) &amp; \text{otherwise}
+\end{cases}\end{split}\]</div>
+<dl class="simple">
+<dt>where:</dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(E_\rho\)</span> is the radial electric field.</p></li>
+<li><p><span class="math notranslate nohighlight">\(f_\nu(\phi) = \cos(\nu \phi + \phi_0)\)</span> is the azimuthal dependency.</p></li>
+<li><p><span class="math notranslate nohighlight">\(E_T\)</span> is the transverse electric field.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\theta_{\text{pol}}\)</span> is the polarization angle.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phi</strong> (<em>float</em><em>, </em><em>optional</em>) – The phase of the field in radians (default is 0).</p></li>
+<li><p><strong>theta</strong> (<em>float</em><em>, </em><em>optional</em>) – The orientation of the field in radians (default is 0).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The x-component of the electric field, <span class="math notranslate nohighlight">\(E_x\)</span>, computed over the Cartesian grid.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>AttributeError</strong> – If <cite>self.fiber</cite> does not implement <cite>get_radial_field</cite>.</p>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p>Jaques Bures, Optical Fiber Theory, Eq. 3.71.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.Ey">
+<span class="sig-name descname"><span class="pre">Ey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Ey"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Ey" title="Link to this definition">#</a></dt>
+<dd><p>Compute the y-component of the electric field, <span class="math notranslate nohighlight">\(E_y\)</span>.</p>
+<p>The y-component of the electric field is calculated based on the field’s mode family.
+For LP (linearly polarized) modes, it uses the azimuthal dependency <span class="math notranslate nohighlight">\(f_\nu(\phi)\)</span>
+and the azimuthal electric field. For other modes, it is derived using the transverse
+electric field and its polarization angle.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}E_y =
+\begin{cases}
+E_\phi \cdot f_\nu(\phi) &amp; \text{if mode is LP} \\
+E_T \cdot \sin(\theta_{\text{pol}}) &amp; \text{otherwise}
+\end{cases}\end{split}\]</div>
+<dl class="simple">
+<dt>where:</dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(E_\phi\)</span> is the azimuthal electric field.</p></li>
+<li><p><span class="math notranslate nohighlight">\(f_\nu(\phi) = \cos(\nu \phi + \phi_0)\)</span> is the azimuthal dependency.</p></li>
+<li><p><span class="math notranslate nohighlight">\(E_T\)</span> is the transverse electric field.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\theta_{\text{pol}}\)</span> is the polarization angle.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phi</strong> (<em>float</em><em>, </em><em>optional</em>) – The phase of the field in radians (default is 0).</p></li>
+<li><p><strong>theta</strong> (<em>float</em><em>, </em><em>optional</em>) – The orientation of the field in radians (default is 0).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The y-component of the electric field, <span class="math notranslate nohighlight">\(E_y\)</span>, computed over the Cartesian grid.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>AttributeError</strong> – If <cite>self.fiber</cite> does not implement <cite>get_radial_field</cite>.</p>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p>Jaques Bures, Optical Fiber Theory, Eq. 3.71.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.Ez">
+<span class="sig-name descname"><span class="pre">Ez</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Ez"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Ez" title="Link to this definition">#</a></dt>
+<dd><p>Compute the z-component of the electric field, <span class="math notranslate nohighlight">\(E_z\)</span>.</p>
+<p>The z-component of the electric field is calculated using the azimuthal dependency
+<span class="math notranslate nohighlight">\(f_\nu(\phi)\)</span> and the longitudinal electric field component <span class="math notranslate nohighlight">\(E_z\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[E_z = E_z \cdot f_\nu(\phi)\]</div>
+<dl class="simple">
+<dt>where:</dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(E_z\)</span> is the longitudinal electric field.</p></li>
+<li><p><span class="math notranslate nohighlight">\(f_\nu(\phi) = \cos(\nu \phi + \phi_0)\)</span> is the azimuthal dependency.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phi</strong> (<em>float</em><em>, </em><em>optional</em>) – The phase of the field in radians (default is 0).</p></li>
+<li><p><strong>theta</strong> (<em>float</em><em>, </em><em>optional</em>) – Orientation of the field in radians (not used in this calculation, default is 0).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The z-component of the electric field, <span class="math notranslate nohighlight">\(E_z\)</span>, computed over the Cartesian grid.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>AttributeError</strong> – If <cite>self.fiber</cite> does not implement <cite>get_radial_field</cite>.</p>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p>Jaques Bures, Optical Fiber Theory, Eq. 3.71.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.Er">
+<span class="sig-name descname"><span class="pre">Er</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Er"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Er" title="Link to this definition">#</a></dt>
+<dd><p>Compute the radial component of the electric field, <span class="math notranslate nohighlight">\(E_r\)</span>.</p>
+<p>The radial component of the electric field is calculated differently based on the field’s
+mode family. For LP (linearly polarized) modes, it uses the transverse electric field and
+its polarization. For other modes, it incorporates the azimuthal dependency
+<span class="math notranslate nohighlight">\(f_\nu(\phi)\)</span> and the radial electric field component <span class="math notranslate nohighlight">\(E_\rho\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}E_r =
+\begin{cases}
+E_T \cdot \cos(\theta_{\text{pol}} - \phi) &amp; \text{if mode is LP} \\
+E_\rho \cdot f_\nu(\phi) &amp; \text{otherwise}
+\end{cases}\end{split}\]</div>
+<dl class="simple">
+<dt>where:</dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(E_T\)</span> is the transverse electric field.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\theta_{\text{pol}}\)</span> is the polarization angle.</p></li>
+<li><p><span class="math notranslate nohighlight">\(E_\rho\)</span> is the radial electric field.</p></li>
+<li><p><span class="math notranslate nohighlight">\(f_\nu(\phi) = \cos(\nu \phi + \phi_0)\)</span> is the azimuthal dependency.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phi</strong> (<em>float</em><em>, </em><em>optional</em>) – The phase of the field in radians (default is 0).</p></li>
+<li><p><strong>theta</strong> (<em>float</em><em>, </em><em>optional</em>) – The orientation of the field in radians (default is 0).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The radial component of the electric field, <span class="math notranslate nohighlight">\(E_r\)</span>, computed over the Cartesian grid.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>AttributeError</strong> – If <cite>self.fiber</cite> does not implement <cite>get_radial_field</cite>.</p>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p>Jaques Bures, Optical Fiber Theory, Eq. 3.71.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.Ephi">
+<span class="sig-name descname"><span class="pre">Ephi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Ephi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Ephi" title="Link to this definition">#</a></dt>
+<dd><p>Compute the azimuthal component of the electric field, <span class="math notranslate nohighlight">\(E_\phi\)</span>.</p>
+<p>The azimuthal component of the electric field is calculated based on the field’s mode family.
+For LP (linearly polarized) modes, it uses the transverse electric field and its polarization.
+For other modes, it incorporates the azimuthal dependency <span class="math notranslate nohighlight">\(g_\nu(\phi)\)</span> and the azimuthal
+electric field component <span class="math notranslate nohighlight">\(E_\phi\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}E_\phi =
+\begin{cases}
+E_T \cdot \sin(\theta_{\text{pol}} - \phi) &amp; \text{if mode is LP} \\
+E_\phi \cdot g_\nu(\phi) &amp; \text{otherwise}
+\end{cases}\end{split}\]</div>
+<dl class="simple">
+<dt>where:</dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(E_T\)</span> is the transverse electric field.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\theta_{\text{pol}}\)</span> is the polarization angle.</p></li>
+<li><p><span class="math notranslate nohighlight">\(E_\phi\)</span> is the azimuthal electric field.</p></li>
+<li><p><span class="math notranslate nohighlight">\(g_\nu(\phi) = -\sin(\nu \phi + \phi_0)\)</span> is the azimuthal dependency.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phi</strong> (<em>float</em><em>, </em><em>optional</em>) – The phase of the field in radians (default is 0).</p></li>
+<li><p><strong>theta</strong> (<em>float</em><em>, </em><em>optional</em>) – The orientation of the field in radians (default is 0).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The azimuthal component of the electric field, <span class="math notranslate nohighlight">\(E_\phi\)</span>, computed over the Cartesian grid.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>AttributeError</strong> – If <cite>self.fiber</cite> does not implement <cite>get_radial_field</cite>.</p>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p>Jaques Bures, Optical Fiber Theory, Eq. 3.71.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.Et">
+<span class="sig-name descname"><span class="pre">Et</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Et"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Et" title="Link to this definition">#</a></dt>
+<dd><p>Compute the transverse component of the electric field, <span class="math notranslate nohighlight">\(E_T\)</span>.</p>
+<p>The transverse electric field is computed as the magnitude of the
+components perpendicular to the z-axis. For LP (linearly polarized)
+modes, it is derived from the x and y components. For other modes, it
+is computed using the radial and azimuthal components.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}E_T =
+\begin{cases}
+\sqrt{E_x^2 + E_y^2} &amp; \text{if mode is LP} \\
+\sqrt{E_r^2 + E_\phi^2} &amp; \text{otherwise}
+\end{cases}\end{split}\]</div>
+<dl class="simple">
+<dt>where:</dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(E_x, E_y\)</span> are the Cartesian components of the electric field.</p></li>
+<li><p><span class="math notranslate nohighlight">\(E_r, E_\phi\)</span> are the cylindrical components of the electric field.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phi</strong> (<em>float</em><em>, </em><em>optional</em>) – The phase of the field in radians (default is 0).</p></li>
+<li><p><strong>theta</strong> (<em>float</em><em>, </em><em>optional</em>) – The orientation of the field in radians (default is 0).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The transverse electric field, <span class="math notranslate nohighlight">\(E_T\)</span>, computed over the Cartesian grid.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.Epol">
+<span class="sig-name descname"><span class="pre">Epol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Epol"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Epol" title="Link to this definition">#</a></dt>
+<dd><p>Compute the polarization angle of the transverse electric field, <span class="math notranslate nohighlight">\(\theta_{\text{pol}}\)</span>.</p>
+<p>The polarization angle is the direction of the transverse electric field vector
+in the plane perpendicular to the z-axis. For LP (linearly polarized) modes, it is
+calculated using the x and y components. For other modes, it is calculated using
+the radial and azimuthal components.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\theta_{\text{pol}} =
+\begin{cases}
+\arctan2(E_y, E_x) &amp; \text{if mode is LP} \\
+\arctan2(E_\phi, E_r) + \phi &amp; \text{otherwise}
+\end{cases}\end{split}\]</div>
+<dl class="simple">
+<dt>where:</dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(E_x, E_y\)</span> are the Cartesian components of the electric field.</p></li>
+<li><p><span class="math notranslate nohighlight">\(E_r, E_\phi\)</span> are the cylindrical components of the electric field.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phi</strong> (<em>float</em><em>, </em><em>optional</em>) – The phase of the field in radians (default is 0).</p></li>
+<li><p><strong>theta</strong> (<em>float</em><em>, </em><em>optional</em>) – The orientation of the field in radians (default is 0).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The polarization angle of the transverse electric field in radians.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.Emod">
+<span class="sig-name descname"><span class="pre">Emod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Emod"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Emod" title="Link to this definition">#</a></dt>
+<dd><p>Compute the modulus (magnitude) of the electric field vector, <span class="math notranslate nohighlight">\(|\vec{E}|\)</span>.</p>
+<p>The electric field modulus is the magnitude of the field vector, which
+includes all components (transverse and longitudinal). For LP (linearly
+polarized) modes, it uses the Cartesian components. For other modes, it
+uses the cylindrical components.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}|\vec{E}| =
+\begin{cases}
+\sqrt{E_x^2 + E_y^2 + E_z^2} &amp; \text{if mode is LP} \\
+\sqrt{E_r^2 + E_\phi^2 + E_z^2} &amp; \text{otherwise}
+\end{cases}\end{split}\]</div>
+<dl class="simple">
+<dt>where:</dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(E_x, E_y, E_z\)</span> are the Cartesian components of the electric field.</p></li>
+<li><p><span class="math notranslate nohighlight">\(E_r, E_\phi, E_z\)</span> are the cylindrical components of the electric field.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phi</strong> (<em>float</em><em>, </em><em>optional</em>) – The phase of the field in radians (default is 0).</p></li>
+<li><p><strong>theta</strong> (<em>float</em><em>, </em><em>optional</em>) – The orientation of the field in radians (default is 0).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The modulus of the electric field, <span class="math notranslate nohighlight">\(|\vec{E}|\)</span>, computed over the Cartesian grid.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.Hx">
+<span class="sig-name descname"><span class="pre">Hx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Hx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Hx" title="Link to this definition">#</a></dt>
+<dd><p>Compute the x-component of the magnetic field <span class="math notranslate nohighlight">\(H_x\)</span>.</p>
+<p>For LP (linearly polarized) modes, this is computed using the radial
+component <span class="math notranslate nohighlight">\(H_r\)</span> and the azimuthal dependency <span class="math notranslate nohighlight">\(f_\nu(\phi)\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[H_x = H_r \cdot f_\nu(\phi)\]</div>
+<p>For other modes, the transverse magnetic field and polarization are used:</p>
+<div class="math notranslate nohighlight">
+\[H_x = H_T \cdot \cos(\theta_{\text{pol}})\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phi</strong> (<em>float</em><em>, </em><em>optional</em>) – Phase of the field in radians (default is 0).</p></li>
+<li><p><strong>theta</strong> (<em>float</em><em>, </em><em>optional</em>) – Orientation of the field in radians (default is 0).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The magnetic field in the x-direction over the Cartesian grid.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>AttributeError</strong> – If the fiber object does not implement <cite>get_radial_field</cite>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.Hy">
+<span class="sig-name descname"><span class="pre">Hy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Hy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Hy" title="Link to this definition">#</a></dt>
+<dd><p>Compute the y-component of the magnetic field <span class="math notranslate nohighlight">\(H_y\)</span>.</p>
+<p>For LP modes, this is computed using the azimuthal component <span class="math notranslate nohighlight">\(H_\phi\)</span>
+and the azimuthal dependency <span class="math notranslate nohighlight">\(f_\nu(\phi)\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[H_y = H_\phi \cdot f_\nu(\phi)\]</div>
+<p>For other modes, the transverse magnetic field and polarization are used:</p>
+<div class="math notranslate nohighlight">
+\[H_y = H_T \cdot \sin(\theta_{\text{pol}})\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phi</strong> (<em>float</em><em>, </em><em>optional</em>) – Phase of the field in radians (default is 0).</p></li>
+<li><p><strong>theta</strong> (<em>float</em><em>, </em><em>optional</em>) – Orientation of the field in radians (default is 0).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The magnetic field in the y-direction over the Cartesian grid.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>AttributeError</strong> – If the fiber object does not implement <cite>get_radial_field</cite>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.Hz">
+<span class="sig-name descname"><span class="pre">Hz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Hz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Hz" title="Link to this definition">#</a></dt>
+<dd><p>Compute the z-component of the magnetic field <span class="math notranslate nohighlight">\(H_z\)</span>.</p>
+<p>The z-component is calculated for all modes using the longitudinal field
+<span class="math notranslate nohighlight">\(H_z\)</span> and the azimuthal dependency <span class="math notranslate nohighlight">\(f_\nu(\phi)\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[H_z = H_z \cdot f_\nu(\phi)\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phi</strong> (<em>float</em><em>, </em><em>optional</em>) – Phase of the field in radians (default is 0).</p></li>
+<li><p><strong>theta</strong> (<em>float</em><em>, </em><em>optional</em>) – Orientation of the field in radians (default is 0).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The magnetic field in the z-direction over the Cartesian grid.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>AttributeError</strong> – If the fiber object does not implement <cite>get_radial_field</cite>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.Hr">
+<span class="sig-name descname"><span class="pre">Hr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Hr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Hr" title="Link to this definition">#</a></dt>
+<dd><p>Compute the radial component of the magnetic field <span class="math notranslate nohighlight">\(H_r\)</span>.</p>
+<p>For LP modes, this is computed using the transverse field <span class="math notranslate nohighlight">\(H_T\)</span> and
+the polarization angle <span class="math notranslate nohighlight">\(\theta_{\text{pol}}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[H_r = H_T \cdot \cos(\theta_{\text{pol}} - \phi)\]</div>
+<p>For other modes, the radial field and azimuthal dependency <span class="math notranslate nohighlight">\(f_\nu(\phi)\)</span> are used:</p>
+<div class="math notranslate nohighlight">
+\[H_r = H_r \cdot f_\nu(\phi)\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phi</strong> (<em>float</em><em>, </em><em>optional</em>) – Phase of the field in radians (default is 0).</p></li>
+<li><p><strong>theta</strong> (<em>float</em><em>, </em><em>optional</em>) – Orientation of the field in radians (default is 0).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The magnetic field in the radial direction over the Cartesian grid.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.Hphi">
+<span class="sig-name descname"><span class="pre">Hphi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Hphi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Hphi" title="Link to this definition">#</a></dt>
+<dd><p>Compute the azimuthal component of the magnetic field <span class="math notranslate nohighlight">\(H_\phi\)</span>.</p>
+<p>For LP modes, this is computed using the transverse field <span class="math notranslate nohighlight">\(H_T\)</span> and
+the polarization angle <span class="math notranslate nohighlight">\(\theta_{\text{pol}}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[H_\phi = H_T \cdot \sin(\theta_{\text{pol}} - \phi)\]</div>
+<p>For other modes, the azimuthal field and azimuthal dependency <span class="math notranslate nohighlight">\(g_\nu(\phi)\)</span> are used:</p>
+<div class="math notranslate nohighlight">
+\[H_\phi = H_\phi \cdot g_\nu(\phi)\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phi</strong> (<em>float</em><em>, </em><em>optional</em>) – Phase of the field in radians (default is 0).</p></li>
+<li><p><strong>theta</strong> (<em>float</em><em>, </em><em>optional</em>) – Orientation of the field in radians (default is 0).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The magnetic field in the azimuthal direction over the Cartesian grid.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.Ht">
+<span class="sig-name descname"><span class="pre">Ht</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Ht"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Ht" title="Link to this definition">#</a></dt>
+<dd><p>Compute the transverse component of the magnetic field, <span class="math notranslate nohighlight">\(H_T\)</span>.</p>
+<p>The transverse magnetic field is calculated as the magnitude of the
+components perpendicular to the z-axis. For LP (linearly polarized) modes,
+it is derived from the x and y components. For other modes, it is computed
+using the radial and azimuthal components.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}H_T =
+\begin{cases}
+\sqrt{H_x^2 + H_y^2} &amp; \text{if mode is LP} \\
+\sqrt{H_r^2 + H_\phi^2} &amp; \text{otherwise}
+\end{cases}\end{split}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phi</strong> (<em>float</em><em>, </em><em>optional</em>) – Phase of the field in radians (default is 0).</p></li>
+<li><p><strong>theta</strong> (<em>float</em><em>, </em><em>optional</em>) – Orientation of the field in radians (default is 0).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The transverse magnetic field, <span class="math notranslate nohighlight">\(H_T\)</span>, computed over the Cartesian grid.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.Hpol">
+<span class="sig-name descname"><span class="pre">Hpol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Hpol"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Hpol" title="Link to this definition">#</a></dt>
+<dd><p>Compute the polarization angle of the transverse magnetic field, <span class="math notranslate nohighlight">\(\theta_{\text{pol}}\)</span>.</p>
+<p>The polarization angle represents the direction of the transverse magnetic
+field vector in the plane perpendicular to the z-axis. For LP modes, it is
+calculated using the x and y components. For other modes, it is calculated
+using the radial and azimuthal components.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\theta_{\text{pol}} =
+\begin{cases}
+\arctan2(H_y, H_x) &amp; \text{if mode is LP} \\
+\arctan2(H_\phi, H_r) + \phi &amp; \text{otherwise}
+\end{cases}\end{split}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phi</strong> (<em>float</em><em>, </em><em>optional</em>) – Phase of the field in radians (default is 0).</p></li>
+<li><p><strong>theta</strong> (<em>float</em><em>, </em><em>optional</em>) – Orientation of the field in radians (default is 0).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The polarization angle of the transverse magnetic field in radians.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.Hmod">
+<span class="sig-name descname"><span class="pre">Hmod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Hmod"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Hmod" title="Link to this definition">#</a></dt>
+<dd><p>Compute the modulus (magnitude) of the magnetic field vector, <span class="math notranslate nohighlight">\(|\vec{H}|\)</span>.</p>
+<p>The magnetic field modulus is the magnitude of the field vector, which
+includes all components (transverse and longitudinal). For LP (linearly
+polarized) modes, it uses the Cartesian components. For other modes, it
+uses the cylindrical components.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}|\vec{H}| =
+\begin{cases}
+\sqrt{H_x^2 + H_y^2 + H_z^2} &amp; \text{if mode is LP} \\
+\sqrt{H_r^2 + H_\phi^2 + H_z^2} &amp; \text{otherwise}
+\end{cases}\end{split}\]</div>
+<dl class="simple">
+<dt>where:</dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(H_x, H_y, H_z\)</span> are the Cartesian components of the magnetic field.</p></li>
+<li><p><span class="math notranslate nohighlight">\(H_r, H_\phi, H_z\)</span> are the cylindrical components of the magnetic field.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phi</strong> (<em>float</em><em>, </em><em>optional</em>) – Phase of the field in radians (default is 0).</p></li>
+<li><p><strong>theta</strong> (<em>float</em><em>, </em><em>optional</em>) – Orientation of the field in radians (default is 0).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The modulus of the magnetic field, <span class="math notranslate nohighlight">\(|\vec{H}|\)</span>, computed over the Cartesian grid.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.get_effective_area">
+<span class="sig-name descname"><span class="pre">get_effective_area</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.get_effective_area"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_effective_area" title="Link to this definition">#</a></dt>
+<dd><p>Compute the effective area of the mode, <span class="math notranslate nohighlight">\(A_{\text{eff}}\)</span>.</p>
+<p>The effective area is defined as:</p>
+<div class="math notranslate nohighlight">
+\[A_{\text{eff}} = \frac{\left( \int |E|^2 \, dx \, dy \right)^2}{\int |E|^4 \, dx \, dy}\]</div>
+<dl class="simple">
+<dt>where:</dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(|E|\)</span> is the modulus of the electric field.</p></li>
+<li><p>The integrals are evaluated over the cross-sectional area.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The effective area, <span class="math notranslate nohighlight">\(A_{\text{eff}}\)</span>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.get_integrale_square">
+<span class="sig-name descname"><span class="pre">get_integrale_square</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.get_integrale_square"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_integrale_square" title="Link to this definition">#</a></dt>
+<dd><p>Compute the square of the integral of the given array.</p>
+<div class="math notranslate nohighlight">
+\[\left( \int |F(x, y)|^2 \, dx \, dy \right)\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>array</strong> (<em>numpy.ndarray</em>) – Array representing the field values over the grid.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The squared integral of the array.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.get_intensity">
+<span class="sig-name descname"><span class="pre">get_intensity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.get_intensity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_intensity" title="Link to this definition">#</a></dt>
+<dd><p>Compute the intensity of the mode, <span class="math notranslate nohighlight">\(I\)</span>.</p>
+<p>The intensity is defined as:</p>
+<div class="math notranslate nohighlight">
+\[I = \frac{n_{\text{eff}}}{n_{\text{eff}}^{\text{HE11}}} \cdot \int |E_T|^2 \, dx \, dy\]</div>
+<dl class="simple">
+<dt>where:</dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(n_{\text{eff}}\)</span> is the effective index of the mode.</p></li>
+<li><p><span class="math notranslate nohighlight">\(n_{\text{eff}}^{\text{HE11}}\)</span> is the effective index of the fundamental HE11 mode.</p></li>
+<li><p><span class="math notranslate nohighlight">\(|E_T|^2\)</span> is the squared transverse electric field.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The intensity of the mode.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.get_normalization_constant">
+<span class="sig-name descname"><span class="pre">get_normalization_constant</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.get_normalization_constant"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_normalization_constant" title="Link to this definition">#</a></dt>
+<dd><p>Compute the normalization constant, <span class="math notranslate nohighlight">\(N\)</span>.</p>
+<p>The normalization constant is defined as:</p>
+<div class="math notranslate nohighlight">
+\[N = \frac{I}{2} \cdot \epsilon_0 \cdot n_{\text{eff}}^{\text{HE11}} \cdot c\]</div>
+<dl class="simple">
+<dt>where:</dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(I\)</span> is the intensity of the mode.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\epsilon_0\)</span> is the permittivity of free space.</p></li>
+<li><p><span class="math notranslate nohighlight">\(n_{\text{eff}}^{\text{HE11}}\)</span> is the effective index of the fundamental HE11 mode.</p></li>
+<li><p><span class="math notranslate nohighlight">\(c\)</span> is the speed of light in vacuum.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The normalization constant, <span class="math notranslate nohighlight">\(N\)</span>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.get_poynting_vector">
+<span class="sig-name descname"><span class="pre">get_poynting_vector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.get_poynting_vector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_poynting_vector" title="Link to this definition">#</a></dt>
+<dd><p>Return the time-averaged Cartesian Poynting-vector components.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phi</strong> (<em>float</em><em>, </em><em>optional</em>) – Azimuthal phase offset in radians.</p></li>
+<li><p><strong>theta</strong> (<em>float</em><em>, </em><em>optional</em>) – Polarization rotation in radians.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The x, y, and z Poynting-vector components.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple of numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.get_power">
+<span class="sig-name descname"><span class="pre">get_power</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.get_power"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_power" title="Link to this definition">#</a></dt>
+<dd><p>Integrate the longitudinal time-averaged power over the grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phi</strong> (<em>float</em><em>, </em><em>optional</em>) – Azimuthal phase offset in radians.</p></li>
+<li><p><strong>theta</strong> (<em>float</em><em>, </em><em>optional</em>) – Polarization rotation in radians.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Integrated longitudinal power in watts.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.get_confinement_factor">
+<span class="sig-name descname"><span class="pre">get_confinement_factor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.get_confinement_factor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_confinement_factor" title="Link to this definition">#</a></dt>
+<dd><p>Return the fraction of electric energy inside a radius.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>radius</strong> (<em>float</em>) – Integration radius in meters.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Fraction of sampled electric-field energy inside the radius.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.overlap">
+<span class="sig-name descname"><span class="pre">overlap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">complex</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.overlap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.overlap" title="Link to this definition">#</a></dt>
+<dd><p>Return the normalized vector-field overlap with another field.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#PyFiberModes.field.Field" title="PyFiberModes.field.Field"><em>Field</em></a>) – Field to compare with this field.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Normalized complex overlap amplitude.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>complex</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plot_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Figure</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.plot" title="Link to this definition">#</a></dt>
+<dd><p>Plotting function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>plot_type</strong> (<em>list</em><em> of </em><em>str</em><em>, </em><em>optional</em>) – Field-component names to plot.</p></li>
+<li><p><strong>show</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to display the plot. If False, the plot will not be shown but can still be saved
+or returned. Default is True.</p></li>
+<li><p><strong>save_filename</strong> (<em>str</em><em>, </em><em>optional</em>) – A file path to save the figure. If None, the figure will not be saved. Default is None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The matplotlib Figure object created or used for the plot.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>plt.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<p id="module-PyFiberModes.coordinates">Cartesian and cylindrical sampling-grid definitions.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CylindricalCoordinates">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">CylindricalCoordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rho</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/coordinates.html#CylindricalCoordinates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.coordinates.CylindricalCoordinates" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a set of points in cylindrical coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rho</strong> (<em>np.ndarray</em>) – Radial distance from the z-axis.</p></li>
+<li><p><strong>phi</strong> (<em>np.ndarray</em>) – Azimuthal angle in radians.</p></li>
+<li><p><strong>z</strong> (<em>np.ndarray</em>) – Height along the z-axis.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CylindricalCoordinates.rho">
+<span class="sig-name descname"><span class="pre">rho</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></span><a class="headerlink" href="#PyFiberModes.coordinates.CylindricalCoordinates.rho" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CylindricalCoordinates.phi">
+<span class="sig-name descname"><span class="pre">phi</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></span><a class="headerlink" href="#PyFiberModes.coordinates.CylindricalCoordinates.phi" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CylindricalCoordinates.z">
+<span class="sig-name descname"><span class="pre">z</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></span><a class="headerlink" href="#PyFiberModes.coordinates.CylindricalCoordinates.z" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CylindricalCoordinates.to_cartesian">
+<span class="sig-name descname"><span class="pre">to_cartesian</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFiberModes.coordinates.CartesianCoordinates" title="PyFiberModes.coordinates.CartesianCoordinates"><span class="pre">CartesianCoordinates</span></a></span></span><a class="reference internal" href="../_modules/PyFiberModes/coordinates.html#CylindricalCoordinates.to_cartesian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.coordinates.CylindricalCoordinates.to_cartesian" title="Link to this definition">#</a></dt>
+<dd><p>Converts cylindrical coordinates to cartesian coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Corresponding cartesian coordinates.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#PyFiberModes.coordinates.CartesianCoordinates" title="PyFiberModes.coordinates.CartesianCoordinates">CartesianCoordinates</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CylindricalCoordinates.to_cylindrical">
+<span class="sig-name descname"><span class="pre">to_cylindrical</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/coordinates.html#CylindricalCoordinates.to_cylindrical"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.coordinates.CylindricalCoordinates.to_cylindrical" title="Link to this definition">#</a></dt>
+<dd><p>Returns self in cylindrical format (no conversion needed).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The current instance in cylindrical format.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Self</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CartesianCoordinates">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">CartesianCoordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_structured</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_3D</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/coordinates.html#CartesianCoordinates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a set of points in cartesian coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>np.ndarray</em>) – x-coordinates (must be a 1D array).</p></li>
+<li><p><strong>y</strong> (<em>np.ndarray</em>) – y-coordinates (must be a 1D array).</p></li>
+<li><p><strong>z</strong> (<em>np.ndarray</em>) – z-coordinates (must be a 1D array).</p></li>
+<li><p><strong>is_structured</strong> (<em>bool</em>) – Indicates if the mesh is structured. Default is False.</p></li>
+<li><p><strong>is_3D</strong> (<em>bool</em>) – Indicates if the data represents 3D coordinates. Default is False.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CartesianCoordinates.x">
+<span class="sig-name descname"><span class="pre">x</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></span><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates.x" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CartesianCoordinates.y">
+<span class="sig-name descname"><span class="pre">y</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></span><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates.y" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CartesianCoordinates.z">
+<span class="sig-name descname"><span class="pre">z</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></span><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates.z" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CartesianCoordinates.is_structured">
+<span class="sig-name descname"><span class="pre">is_structured</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></span><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates.is_structured" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CartesianCoordinates.is_3D">
+<span class="sig-name descname"><span class="pre">is_3D</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></span><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates.is_3D" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CartesianCoordinates.x_boundaries">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">x_boundaries</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates.x_boundaries" title="Link to this definition">#</a></dt>
+<dd><p>Calculates the minimum and maximum x-values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Minimum and maximum x-values.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Tuple[float, float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CartesianCoordinates.y_boundaries">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">y_boundaries</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates.y_boundaries" title="Link to this definition">#</a></dt>
+<dd><p>Calculates the minimum and maximum y-values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Minimum and maximum y-values.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Tuple[float, float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CartesianCoordinates.dx">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">dx</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates.dx" title="Link to this definition">#</a></dt>
+<dd><p>Calculates the grid spacing in the x-direction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Grid spacing in the x-direction.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the mesh is unstructured.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CartesianCoordinates.dy">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">dy</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates.dy" title="Link to this definition">#</a></dt>
+<dd><p>Calculates the grid spacing in the x-direction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Grid spacing in the x-direction.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the mesh is unstructured.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CartesianCoordinates.generate_from_boundaries">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">generate_from_boundaries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_limits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_limits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_limits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_points</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFiberModes.coordinates.CartesianCoordinates" title="PyFiberModes.coordinates.CartesianCoordinates"><span class="pre">CartesianCoordinates</span></a></span></span><a class="reference internal" href="../_modules/PyFiberModes/coordinates.html#CartesianCoordinates.generate_from_boundaries"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates.generate_from_boundaries" title="Link to this definition">#</a></dt>
+<dd><p>Generates a structured cartesian coordinate system from boundaries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x_limits</strong> (<em>list</em>) – Limits of x-axis [min, max].</p></li>
+<li><p><strong>y_limits</strong> (<em>list</em>) – Limits of y-axis [min, max].</p></li>
+<li><p><strong>z_limits</strong> (<em>list</em>) – Limits of z-axis [min, max].</p></li>
+<li><p><strong>x_points</strong> (<em>int</em>) – Number of points along x-axis.</p></li>
+<li><p><strong>y_points</strong> (<em>int</em>) – Number of points along y-axis.</p></li>
+<li><p><strong>z_points</strong> (<em>int</em>) – Number of points along z-axis.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Structured cartesian coordinate system.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#PyFiberModes.coordinates.CartesianCoordinates" title="PyFiberModes.coordinates.CartesianCoordinates">CartesianCoordinates</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CartesianCoordinates.generate_from_square">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">generate_from_square</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(0.0,</span> <span class="pre">0.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_points</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFiberModes.coordinates.CartesianCoordinates" title="PyFiberModes.coordinates.CartesianCoordinates"><span class="pre">CartesianCoordinates</span></a></span></span><a class="reference internal" href="../_modules/PyFiberModes/coordinates.html#CartesianCoordinates.generate_from_square"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates.generate_from_square" title="Link to this definition">#</a></dt>
+<dd><p>Generates a structured 2D square coordinate system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>length</strong> (<em>float</em>) – The length of the square’s side.</p></li>
+<li><p><strong>center</strong> (<em>Tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em><em>, </em><em>optional</em>) – The coordinates of the square’s center (x0, y0). Default is (0.0, 0.0).</p></li>
+<li><p><strong>n_points</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of points along each dimension (x, y). Default is 100.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Cartesian coordinate system with x, y mesh grids and z set to 0.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#PyFiberModes.coordinates.CartesianCoordinates" title="PyFiberModes.coordinates.CartesianCoordinates">CartesianCoordinates</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CartesianCoordinates.centering">
+<span class="sig-name descname"><span class="pre">centering</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/coordinates.html#CartesianCoordinates.centering"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates.centering" title="Link to this definition">#</a></dt>
+<dd><p>Recenters the coordinates so that their mean is zero along each axis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Modifies the CartesianCoordinates instance in place.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CartesianCoordinates.to_cylindrical">
+<span class="sig-name descname"><span class="pre">to_cylindrical</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFiberModes.coordinates.CylindricalCoordinates" title="PyFiberModes.coordinates.CylindricalCoordinates"><span class="pre">CylindricalCoordinates</span></a></span></span><a class="reference internal" href="../_modules/PyFiberModes/coordinates.html#CartesianCoordinates.to_cylindrical"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates.to_cylindrical" title="Link to this definition">#</a></dt>
+<dd><p>Converts cartesian coordinates to cylindrical coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Corresponding cylindrical coordinates.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#PyFiberModes.coordinates.CylindricalCoordinates" title="PyFiberModes.coordinates.CylindricalCoordinates">CylindricalCoordinates</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CartesianCoordinates.shift_coordinates">
+<span class="sig-name descname"><span class="pre">shift_coordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shift</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/coordinates.html#CartesianCoordinates.shift_coordinates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates.shift_coordinates" title="Link to this definition">#</a></dt>
+<dd><p>Shifts the coordinates by specified amounts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>shift</strong> (<em>Tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>, </em><em>float</em><em>]</em>) – Amounts to shift along x, y, z.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Updated cartesian coordinates.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Self</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CartesianCoordinates.scale_coordinates">
+<span class="sig-name descname"><span class="pre">scale_coordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/coordinates.html#CartesianCoordinates.scale_coordinates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates.scale_coordinates" title="Link to this definition">#</a></dt>
+<dd><p>Scales the coordinates by specified factors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>scale</strong> (<em>Tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>, </em><em>float</em><em>]</em>) – Scaling factors for x, y, and z coordinates.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Modifies the CartesianCoordinates instance in place.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.CylindricalCoordinates"><code class="docutils literal notranslate"><span class="pre">CylindricalCoordinates</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.CylindricalCoordinates.rho"><code class="docutils literal notranslate"><span class="pre">CylindricalCoordinates.rho</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.CylindricalCoordinates.phi"><code class="docutils literal notranslate"><span class="pre">CylindricalCoordinates.phi</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.CylindricalCoordinates.z"><code class="docutils literal notranslate"><span class="pre">CylindricalCoordinates.z</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.CylindricalCoordinates.to_cartesian"><code class="docutils literal notranslate"><span class="pre">CylindricalCoordinates.to_cartesian()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.CylindricalCoordinates.to_cylindrical"><code class="docutils literal notranslate"><span class="pre">CylindricalCoordinates.to_cylindrical()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field"><code class="docutils literal notranslate"><span class="pre">Field</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.cartesian_coordinates"><code class="docutils literal notranslate"><span class="pre">Field.cartesian_coordinates</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.cylindrical_coordinates"><code class="docutils literal notranslate"><span class="pre">Field.cylindrical_coordinates</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.fiber"><code class="docutils literal notranslate"><span class="pre">Field.fiber</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.mode"><code class="docutils literal notranslate"><span class="pre">Field.mode</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.limit"><code class="docutils literal notranslate"><span class="pre">Field.limit</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.n_point"><code class="docutils literal notranslate"><span class="pre">Field.n_point</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.initialize_array"><code class="docutils literal notranslate"><span class="pre">Field.initialize_array()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.get_azimuthal_dependency"><code class="docutils literal notranslate"><span class="pre">Field.get_azimuthal_dependency()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.get_components"><code class="docutils literal notranslate"><span class="pre">Field.get_components()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.get_index_iterator"><code class="docutils literal notranslate"><span class="pre">Field.get_index_iterator()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.wrapper_get_field"><code class="docutils literal notranslate"><span class="pre">Field.wrapper_get_field()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.Ex"><code class="docutils literal notranslate"><span class="pre">Field.Ex()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.Ey"><code class="docutils literal notranslate"><span class="pre">Field.Ey()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.Ez"><code class="docutils literal notranslate"><span class="pre">Field.Ez()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.Er"><code class="docutils literal notranslate"><span class="pre">Field.Er()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.Ephi"><code class="docutils literal notranslate"><span class="pre">Field.Ephi()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.Et"><code class="docutils literal notranslate"><span class="pre">Field.Et()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.Epol"><code class="docutils literal notranslate"><span class="pre">Field.Epol()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.Emod"><code class="docutils literal notranslate"><span class="pre">Field.Emod()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.Hx"><code class="docutils literal notranslate"><span class="pre">Field.Hx()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.Hy"><code class="docutils literal notranslate"><span class="pre">Field.Hy()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.Hz"><code class="docutils literal notranslate"><span class="pre">Field.Hz()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.Hr"><code class="docutils literal notranslate"><span class="pre">Field.Hr()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.Hphi"><code class="docutils literal notranslate"><span class="pre">Field.Hphi()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.Ht"><code class="docutils literal notranslate"><span class="pre">Field.Ht()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.Hpol"><code class="docutils literal notranslate"><span class="pre">Field.Hpol()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.Hmod"><code class="docutils literal notranslate"><span class="pre">Field.Hmod()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.get_effective_area"><code class="docutils literal notranslate"><span class="pre">Field.get_effective_area()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.get_integrale_square"><code class="docutils literal notranslate"><span class="pre">Field.get_integrale_square()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.get_intensity"><code class="docutils literal notranslate"><span class="pre">Field.get_intensity()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.get_normalization_constant"><code class="docutils literal notranslate"><span class="pre">Field.get_normalization_constant()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.get_poynting_vector"><code class="docutils literal notranslate"><span class="pre">Field.get_poynting_vector()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.get_power"><code class="docutils literal notranslate"><span class="pre">Field.get_power()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.get_confinement_factor"><code class="docutils literal notranslate"><span class="pre">Field.get_confinement_factor()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.overlap"><code class="docutils literal notranslate"><span class="pre">Field.overlap()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.plot"><code class="docutils literal notranslate"><span class="pre">Field.plot()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CylindricalCoordinates"><code class="docutils literal notranslate"><span class="pre">CylindricalCoordinates</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CylindricalCoordinates.rho"><code class="docutils literal notranslate"><span class="pre">CylindricalCoordinates.rho</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CylindricalCoordinates.phi"><code class="docutils literal notranslate"><span class="pre">CylindricalCoordinates.phi</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CylindricalCoordinates.z"><code class="docutils literal notranslate"><span class="pre">CylindricalCoordinates.z</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CylindricalCoordinates.to_cartesian"><code class="docutils literal notranslate"><span class="pre">CylindricalCoordinates.to_cartesian()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CylindricalCoordinates.to_cylindrical"><code class="docutils literal notranslate"><span class="pre">CylindricalCoordinates.to_cylindrical()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CartesianCoordinates"><code class="docutils literal notranslate"><span class="pre">CartesianCoordinates</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CartesianCoordinates.x"><code class="docutils literal notranslate"><span class="pre">CartesianCoordinates.x</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CartesianCoordinates.y"><code class="docutils literal notranslate"><span class="pre">CartesianCoordinates.y</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CartesianCoordinates.z"><code class="docutils literal notranslate"><span class="pre">CartesianCoordinates.z</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CartesianCoordinates.is_structured"><code class="docutils literal notranslate"><span class="pre">CartesianCoordinates.is_structured</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CartesianCoordinates.is_3D"><code class="docutils literal notranslate"><span class="pre">CartesianCoordinates.is_3D</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CartesianCoordinates.x_boundaries"><code class="docutils literal notranslate"><span class="pre">CartesianCoordinates.x_boundaries</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CartesianCoordinates.y_boundaries"><code class="docutils literal notranslate"><span class="pre">CartesianCoordinates.y_boundaries</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CartesianCoordinates.dx"><code class="docutils literal notranslate"><span class="pre">CartesianCoordinates.dx</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CartesianCoordinates.dy"><code class="docutils literal notranslate"><span class="pre">CartesianCoordinates.dy</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CartesianCoordinates.generate_from_boundaries"><code class="docutils literal notranslate"><span class="pre">CartesianCoordinates.generate_from_boundaries()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CartesianCoordinates.generate_from_square"><code class="docutils literal notranslate"><span class="pre">CartesianCoordinates.generate_from_square()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CartesianCoordinates.centering"><code class="docutils literal notranslate"><span class="pre">CartesianCoordinates.centering()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CartesianCoordinates.to_cylindrical"><code class="docutils literal notranslate"><span class="pre">CartesianCoordinates.to_cylindrical()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CartesianCoordinates.shift_coordinates"><code class="docutils literal notranslate"><span class="pre">CartesianCoordinates.shift_coordinates()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CartesianCoordinates.scale_coordinates"><code class="docutils literal notranslate"><span class="pre">CartesianCoordinates.scale_coordinates()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/code/fields.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2024, Martin Poinsinet de Sivry-Houle.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.0.4.
+    <br/>
+  </p>
+</div>
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.17.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
