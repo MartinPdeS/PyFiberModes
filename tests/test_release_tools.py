@@ -18,8 +18,10 @@ def load_tool(name):
 
 def test_release_metadata_is_synchronized_and_changelog_has_current_version():
     checker = load_tool("check_release")
-    assert set(checker.versions().values()) == {"0.10.0"}
-    assert "0.10.0" in checker.changelog_versions()
+    versions = checker.versions()
+    current_version = versions["pyproject.toml"]
+    assert set(versions.values()) == {current_version}
+    assert current_version in checker.changelog_versions()
 
 
 def test_citation_and_zenodo_metadata_agree():
