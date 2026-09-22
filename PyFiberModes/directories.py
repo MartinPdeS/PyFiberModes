@@ -1,32 +1,30 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+"""Canonical filesystem locations used by PyFiberModes and its documentation."""
 
 from pathlib import Path
-import PyFiberModes
 
 
 __all__ = [
-    'root_path',
-    'project_path',
-    'examples_path',
-    'doc_path',
-    'doc_css_path',
+    "PACKAGE_PATH",
+    "PROJECT_PATH",
+    "DOCS_PATH",
+    "EXAMPLES_PATH",
+    "DOC_CSS_PATH",
+    "root_path",
+    "project_path",
+    "examples_path",
+    "doc_path",
+    "doc_css_path",
 ]
 
-root_path = Path(PyFiberModes.__path__[0])
+PACKAGE_PATH = Path(__file__).resolve().parent
+PROJECT_PATH = PACKAGE_PATH.parent
+DOCS_PATH = PROJECT_PATH / "docs"
+EXAMPLES_PATH = DOCS_PATH / "examples"
+DOC_CSS_PATH = DOCS_PATH / "source" / "_static" / "default.css"
 
-project_path = root_path.parents[0]
-
-doc_path = project_path.joinpath('docs')
-
-examples_path = doc_path.joinpath('examples')
-
-logo_path = doc_path.joinpath('images/logo.png')
-
-doc_css_path = doc_path.joinpath('source/_static/default.css')
-
-if __name__ == '__main__':
-    for path_name in __all__:
-        path = locals()[path_name]
-        print(path)
-        assert path.exists(), f"Path {path_name} do not exists"
+# Backwards-compatible aliases for the original public names.
+root_path = PACKAGE_PATH
+project_path = PROJECT_PATH
+doc_path = DOCS_PATH
+examples_path = EXAMPLES_PATH
+doc_css_path = DOC_CSS_PATH

@@ -6,6 +6,12 @@ use [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Consolidated filesystem locations in the root `directories` module and removed
+  the duplicate internal `tools` package.
+- Moved solver-test helpers out of the distributed package and into the test suite.
+
 ## [0.11.0] - 2026-09-22
 
 ### Added

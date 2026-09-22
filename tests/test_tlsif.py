@@ -4,8 +4,8 @@
 import numpy
 import pytest
 from PyFiberModes.fiber import load_fiber
-from PyFiberModes.tools.utils import get_mode_beta
 from PyFiberModes import HE11, TE01, TM01, EH11, LP01
+from tests.helpers import get_mode_beta
 
 
 def test_solver():
