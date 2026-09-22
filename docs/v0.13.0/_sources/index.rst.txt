@@ -14,6 +14,7 @@
 
     getting_started.rst
     theory.rst
+    architecture.rst
     workflows.rst
     performance.rst
     troubleshooting.rst

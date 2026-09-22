@@ -172,6 +172,13 @@
 
 
 <li class="nav-item ">
+  <a class="nav-link nav-internal" href="../architecture.html">
+    Architecture
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../workflows.html">
     Workflows
   </a>
@@ -184,13 +191,6 @@
   </a>
 </li>
 
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../troubleshooting.html">
-    Troubleshooting
-  </a>
-</li>
-
             <li class="nav-item dropdown">
                 <button class="btn dropdown-toggle nav-item" type="button"
                 data-bs-toggle="dropdown" aria-expanded="false"
@@ -199,6 +199,13 @@
                 </button>
                 <ul id="pst-nav-more-links" class="dropdown-menu">
                     
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../troubleshooting.html">
+    Troubleshooting
+  </a>
+</li>
+
+
 <li class=" ">
   <a class="nav-link dropdown-item nav-internal" href="../examples.html">
     Example galleries
@@ -365,6 +372,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../theory.html">
     Theory and conventions
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../architecture.html">
+    Architecture
   </a>
 </li>
 
@@ -635,34 +649,6 @@
 <dd><p>Radial order of the mode (positive integer). It corresponds to the number of concentric rings in the mode fields.</p>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="PyFiberModes.mode.Mode.get_LP_equvalent_mode">
-<span class="sig-name descname"><span class="pre">get_LP_equvalent_mode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/mode.html#Mode.get_LP_equvalent_mode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.mode.Mode.get_LP_equvalent_mode" title="Link to this definition">#</a></dt>
-<dd><p>Return the weak-guidance LP equivalent of this mode.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Corresponding linearly polarized mode.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#PyFiberModes.mode.Mode" title="PyFiberModes.mode.Mode">Mode</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="PyFiberModes.mode.Mode.get_lower_neff_mode">
-<span class="sig-name descname"><span class="pre">get_lower_neff_mode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/mode.html#Mode.get_lower_neff_mode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.mode.Mode.get_lower_neff_mode" title="Link to this definition">#</a></dt>
-<dd><p>Return the adjacent LP mode with lower effective index.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Next LP azimuthal order, or <code class="docutils literal notranslate"><span class="pre">None</span></code> for non-LP families.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#PyFiberModes.mode.Mode" title="PyFiberModes.mode.Mode">Mode</a> or None</p>
-</dd>
-</dl>
-</dd></dl>
-
 </dd></dl>
 
 <p id="module-PyFiberModes.fundamentals">Fundamental normalized-frequency and propagation relations.</p>
@@ -884,6 +870,104 @@
 
 </dd></dl>
 
+<p id="module-PyFiberModes.models">Validated immutable configuration models for fibers and solvers.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="PyFiberModes.models.LayerSpec">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">LayerSpec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refractive_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/models.html#LayerSpec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.models.LayerSpec" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Describe one immutable concentric step-index layer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – Human-readable layer name.</p></li>
+<li><p><strong>radius</strong> (<em>float</em>) – Outer radius in meters. The outermost layer may use infinity.</p></li>
+<li><p><strong>refractive_index</strong> (<em>float</em>) – Positive finite refractive index.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFiberModes.models.LayerSpec.name">
+<span class="sig-name descname"><span class="pre">name</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#PyFiberModes.models.LayerSpec.name" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFiberModes.models.LayerSpec.radius">
+<span class="sig-name descname"><span class="pre">radius</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><a class="headerlink" href="#PyFiberModes.models.LayerSpec.radius" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFiberModes.models.LayerSpec.refractive_index">
+<span class="sig-name descname"><span class="pre">refractive_index</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><a class="headerlink" href="#PyFiberModes.models.LayerSpec.refractive_index" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="PyFiberModes.models.SolverSettings">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">SolverSettings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1e-08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iterations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">effective_index_step</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raise_on_failure</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/models.html#SolverSettings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.models.SolverSettings" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Configure root searches consistently across solver implementations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tolerance</strong> (<em>float</em><em>, </em><em>optional</em>) – Absolute root tolerance.</p></li>
+<li><p><strong>max_iterations</strong> (<em>int</em><em>, </em><em>optional</em>) – Maximum root-finding iterations.</p></li>
+<li><p><strong>effective_index_step</strong> (<em>float</em><em>, </em><em>optional</em>) – Maximum effective-index bracketing step.</p></li>
+<li><p><strong>raise_on_failure</strong> (<em>bool</em><em>, </em><em>optional</em>) – Raise <code class="xref py py-class docutils literal notranslate"><span class="pre">ConvergenceError</span></code> instead of returning a failed result.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFiberModes.models.SolverSettings.tolerance">
+<span class="sig-name descname"><span class="pre">tolerance</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><a class="headerlink" href="#PyFiberModes.models.SolverSettings.tolerance" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFiberModes.models.SolverSettings.max_iterations">
+<span class="sig-name descname"><span class="pre">max_iterations</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><a class="headerlink" href="#PyFiberModes.models.SolverSettings.max_iterations" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFiberModes.models.SolverSettings.effective_index_step">
+<span class="sig-name descname"><span class="pre">effective_index_step</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><a class="headerlink" href="#PyFiberModes.models.SolverSettings.effective_index_step" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFiberModes.models.SolverSettings.raise_on_failure">
+<span class="sig-name descname"><span class="pre">raise_on_failure</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#PyFiberModes.models.SolverSettings.raise_on_failure" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<p id="module-PyFiberModes.exceptions">Domain-specific exceptions raised by PyFiberModes.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="PyFiberModes.exceptions.PyFiberModesError">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">PyFiberModesError</span></span><a class="reference internal" href="../_modules/PyFiberModes/exceptions.html#PyFiberModesError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.exceptions.PyFiberModesError" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Base class for package-specific errors.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="PyFiberModes.exceptions.ValidationError">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ValidationError</span></span><a class="reference internal" href="../_modules/PyFiberModes/exceptions.html#ValidationError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.exceptions.ValidationError" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#PyFiberModes.exceptions.PyFiberModesError" title="PyFiberModes.exceptions.PyFiberModesError"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyFiberModesError</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code></p>
+<p>Indicate invalid physical geometry or solver configuration.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="PyFiberModes.exceptions.SolverError">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">SolverError</span></span><a class="reference internal" href="../_modules/PyFiberModes/exceptions.html#SolverError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.exceptions.SolverError" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#PyFiberModes.exceptions.PyFiberModesError" title="PyFiberModes.exceptions.PyFiberModesError"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyFiberModesError</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">RuntimeError</span></code></p>
+<p>Indicate that a modal solver could not complete normally.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="PyFiberModes.exceptions.ConvergenceError">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ConvergenceError</span></span><a class="reference internal" href="../_modules/PyFiberModes/exceptions.html#ConvergenceError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.exceptions.ConvergenceError" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#PyFiberModes.exceptions.SolverError" title="PyFiberModes.exceptions.SolverError"><code class="xref py py-class docutils literal notranslate"><span class="pre">SolverError</span></code></a></p>
+<p>Indicate that a numerical solver did not converge to a valid root.</p>
+</dd></dl>
+
 </section>
 
 
@@ -921,8 +1005,6 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.mode.Mode.family"><code class="docutils literal notranslate"><span class="pre">Mode.family</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.mode.Mode.nu"><code class="docutils literal notranslate"><span class="pre">Mode.nu</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.mode.Mode.m"><code class="docutils literal notranslate"><span class="pre">Mode.m</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.mode.Mode.get_LP_equvalent_mode"><code class="docutils literal notranslate"><span class="pre">Mode.get_LP_equvalent_mode()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.mode.Mode.get_lower_neff_mode"><code class="docutils literal notranslate"><span class="pre">Mode.get_lower_neff_mode()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.fundamentals.get_delta_from_fiber"><code class="docutils literal notranslate"><span class="pre">get_delta_from_fiber()</span></code></a></li>
@@ -938,6 +1020,23 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.source.Source.frequency"><code class="docutils literal notranslate"><span class="pre">Source.frequency</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.models.LayerSpec"><code class="docutils literal notranslate"><span class="pre">LayerSpec</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.models.LayerSpec.name"><code class="docutils literal notranslate"><span class="pre">LayerSpec.name</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.models.LayerSpec.radius"><code class="docutils literal notranslate"><span class="pre">LayerSpec.radius</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.models.LayerSpec.refractive_index"><code class="docutils literal notranslate"><span class="pre">LayerSpec.refractive_index</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.models.SolverSettings"><code class="docutils literal notranslate"><span class="pre">SolverSettings</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.models.SolverSettings.tolerance"><code class="docutils literal notranslate"><span class="pre">SolverSettings.tolerance</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.models.SolverSettings.max_iterations"><code class="docutils literal notranslate"><span class="pre">SolverSettings.max_iterations</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.models.SolverSettings.effective_index_step"><code class="docutils literal notranslate"><span class="pre">SolverSettings.effective_index_step</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.models.SolverSettings.raise_on_failure"><code class="docutils literal notranslate"><span class="pre">SolverSettings.raise_on_failure</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.exceptions.PyFiberModesError"><code class="docutils literal notranslate"><span class="pre">PyFiberModesError</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.exceptions.ValidationError"><code class="docutils literal notranslate"><span class="pre">ValidationError</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.exceptions.SolverError"><code class="docutils literal notranslate"><span class="pre">SolverError</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.exceptions.ConvergenceError"><code class="docutils literal notranslate"><span class="pre">ConvergenceError</span></code></a></li>
 </ul>
   </nav></div>
 

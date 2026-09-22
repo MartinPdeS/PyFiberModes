@@ -172,6 +172,13 @@
 
 
 <li class="nav-item ">
+  <a class="nav-link nav-internal" href="../architecture.html">
+    Architecture
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../workflows.html">
     Workflows
   </a>
@@ -184,13 +191,6 @@
   </a>
 </li>
 
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../troubleshooting.html">
-    Troubleshooting
-  </a>
-</li>
-
             <li class="nav-item dropdown">
                 <button class="btn dropdown-toggle nav-item" type="button"
                 data-bs-toggle="dropdown" aria-expanded="false"
@@ -199,6 +199,13 @@
                 </button>
                 <ul id="pst-nav-more-links" class="dropdown-menu">
                     
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../troubleshooting.html">
+    Troubleshooting
+  </a>
+</li>
+
+
 <li class=" ">
   <a class="nav-link dropdown-item nav-internal" href="../examples.html">
     Example galleries
@@ -365,6 +372,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../theory.html">
     Theory and conventions
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../architecture.html">
+    Architecture
   </a>
 </li>
 
@@ -573,65 +587,6 @@
 <span id="fields-and-coordinates"></span><h1>Fields and coordinates<a class="headerlink" href="#module-PyFiberModes.field" title="Link to this heading">#</a></h1>
 <p>Vectorized electric and magnetic field evaluation on Cartesian grids.</p>
 <dl class="py class">
-<dt class="sig sig-object py" id="PyFiberModes.field.CylindricalCoordinates">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">CylindricalCoordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rho</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#CylindricalCoordinates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.CylindricalCoordinates" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Store cylindrical coordinate arrays used by a field grid.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>rho</strong> (<em>numpy.ndarray</em>) – Radial distances.</p></li>
-<li><p><strong>phi</strong> (<em>numpy.ndarray</em>) – Azimuthal angles in radians.</p></li>
-<li><p><strong>z</strong> (<em>numpy.ndarray</em>) – Longitudinal positions.</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="PyFiberModes.field.CylindricalCoordinates.rho">
-<span class="sig-name descname"><span class="pre">rho</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></span><a class="headerlink" href="#PyFiberModes.field.CylindricalCoordinates.rho" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="PyFiberModes.field.CylindricalCoordinates.phi">
-<span class="sig-name descname"><span class="pre">phi</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></span><a class="headerlink" href="#PyFiberModes.field.CylindricalCoordinates.phi" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="PyFiberModes.field.CylindricalCoordinates.z">
-<span class="sig-name descname"><span class="pre">z</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></span><a class="headerlink" href="#PyFiberModes.field.CylindricalCoordinates.z" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="PyFiberModes.field.CylindricalCoordinates.to_cartesian">
-<span class="sig-name descname"><span class="pre">to_cartesian</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">object</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#CylindricalCoordinates.to_cartesian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.CylindricalCoordinates.to_cartesian" title="Link to this definition">#</a></dt>
-<dd><p>Convert the coordinate arrays to Cartesian form.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Equivalent Cartesian coordinate arrays.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#PyFiberModes.coordinates.CartesianCoordinates" title="PyFiberModes.coordinates.CartesianCoordinates">CartesianCoordinates</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="PyFiberModes.field.CylindricalCoordinates.to_cylindrical">
-<span class="sig-name descname"><span class="pre">to_cylindrical</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#CylindricalCoordinates.to_cylindrical"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.CylindricalCoordinates.to_cylindrical" title="Link to this definition">#</a></dt>
-<dd><p>Return this already-cylindrical coordinate object.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The current object.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#PyFiberModes.field.CylindricalCoordinates" title="PyFiberModes.field.CylindricalCoordinates">CylindricalCoordinates</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fiber</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.mode.Mode"><span class="pre">Mode</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_point</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">101</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
@@ -663,7 +618,7 @@
 <dd><p>Cylindrical coordinates corresponding to the cartesian grid.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#PyFiberModes.field.CylindricalCoordinates" title="PyFiberModes.field.CylindricalCoordinates">CylindricalCoordinates</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="#PyFiberModes.coordinates.CylindricalCoordinates" title="PyFiberModes.coordinates.CylindricalCoordinates">CylindricalCoordinates</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1849,14 +1804,6 @@ or returned. Default is True.</p></li>
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.CylindricalCoordinates"><code class="docutils literal notranslate"><span class="pre">CylindricalCoordinates</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.CylindricalCoordinates.rho"><code class="docutils literal notranslate"><span class="pre">CylindricalCoordinates.rho</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.CylindricalCoordinates.phi"><code class="docutils literal notranslate"><span class="pre">CylindricalCoordinates.phi</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.CylindricalCoordinates.z"><code class="docutils literal notranslate"><span class="pre">CylindricalCoordinates.z</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.CylindricalCoordinates.to_cartesian"><code class="docutils literal notranslate"><span class="pre">CylindricalCoordinates.to_cartesian()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.CylindricalCoordinates.to_cylindrical"><code class="docutils literal notranslate"><span class="pre">CylindricalCoordinates.to_cylindrical()</span></code></a></li>
-</ul>
-</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field"><code class="docutils literal notranslate"><span class="pre">Field</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.cartesian_coordinates"><code class="docutils literal notranslate"><span class="pre">Field.cartesian_coordinates</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.cylindrical_coordinates"><code class="docutils literal notranslate"><span class="pre">Field.cylindrical_coordinates</span></code></a></li>

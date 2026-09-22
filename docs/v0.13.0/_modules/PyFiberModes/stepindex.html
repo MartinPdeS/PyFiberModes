@@ -168,6 +168,13 @@
 
 
 <li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../architecture.html">
+    Architecture
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../workflows.html">
     Workflows
   </a>
@@ -180,13 +187,6 @@
   </a>
 </li>
 
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../troubleshooting.html">
-    Troubleshooting
-  </a>
-</li>
-
             <li class="nav-item dropdown">
                 <button class="btn dropdown-toggle nav-item" type="button"
                 data-bs-toggle="dropdown" aria-expanded="false"
@@ -195,6 +195,13 @@
                 </button>
                 <ul id="pst-nav-more-links" class="dropdown-menu">
                     
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../troubleshooting.html">
+    Troubleshooting
+  </a>
+</li>
+
+
 <li class=" ">
   <a class="nav-link dropdown-item nav-internal" href="../../examples.html">
     Example galleries
@@ -359,6 +366,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../theory.html">
     Theory and conventions
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../architecture.html">
+    Architecture
   </a>
 </li>
 
@@ -553,6 +567,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.special</span><span class="w"> </span><span class="kn">import</span> <span class="n">j1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">i1</span><span class="p">,</span> <span class="n">k1</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.special</span><span class="w"> </span><span class="kn">import</span> <span class="n">jvp</span><span class="p">,</span> <span class="n">yvp</span><span class="p">,</span> <span class="n">ivp</span><span class="p">,</span> <span class="n">kvp</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">mu_0</span><span class="p">,</span> <span class="n">epsilon_0</span><span class="p">,</span> <span class="n">physical_constants</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">ValidationError</span>
 
 <span class="c1"># Physical constants</span>
 <span class="n">ETA_0</span> <span class="o">=</span> <span class="n">physical_constants</span><span class="p">[</span><span class="s1">'characteristic impedance of vacuum'</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
@@ -584,6 +599,12 @@
 <span class="sd">        Post-initialization of the class.</span>
 <span class="sd">        Computes additional attributes such as refractive index and thickness.</span>
 <span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius_in</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius_out</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius_in</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="s2">"layer radii must define a positive annulus"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_list</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="s2">"a layer requires at least one refractive index"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">index</span><span class="p">)</span> <span class="ow">or</span> <span class="n">index</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_list</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="s2">"refractive indices must be positive and finite"</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">refractive_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">thickness</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius_out</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius_in</span>
 
@@ -617,7 +638,7 @@
 
 <div class="viewcode-block" id="StepIndex.get_index_at_radius">
 <a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.stepindex.StepIndex.get_index_at_radius">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_index_at_radius</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_index_at_radius</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radius</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Get the refractive index at a specific radius.</span>
 
@@ -631,12 +652,18 @@
 <span class="sd">        float or None</span>
 <span class="sd">            Refractive index at the given radius if within bounds, else None.</span>
 <span class="sd">        """</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">refractive_index</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius_in</span> <span class="o">&lt;=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">radius</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius_out</span> <span class="k">else</span> <span class="kc">None</span></div>
+        <span class="n">radius_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">radius</span><span class="p">)</span>
+        <span class="n">inside</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">radius_array</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius_in</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">radius_array</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius_out</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">radius_array</span><span class="o">.</span><span class="n">ndim</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">inside</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">refractive_index</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">refractive_index</span> <span class="k">if</span> <span class="nb">bool</span><span class="p">(</span><span class="n">inside</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span></div>
 
 
 <div class="viewcode-block" id="StepIndex.get_U_W_parameter">
 <a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.stepindex.StepIndex.get_U_W_parameter">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_U_W_parameter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">neff</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_U_W_parameter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">neff</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Calculate the U or W parameter for waveguides.</span>
 
@@ -664,11 +691,12 @@
 <span class="sd">        float</span>
 <span class="sd">            U or W parameter value.</span>
 <span class="sd">        """</span>
-        <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_index_at_radius</span><span class="p">(</span><span class="n">radius</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="mi">0</span>
-
-        <span class="k">return</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span><span class="p">)</span> <span class="o">*</span> <span class="n">radius</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">index</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">neff</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span></div>
+        <span class="n">radius_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">radius</span><span class="p">)</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_index_at_radius</span><span class="p">(</span><span class="n">radius_array</span><span class="p">)</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span><span class="p">)</span> <span class="o">*</span> <span class="n">radius_array</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">index</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">neff</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">nan</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="StepIndex.get_psi">

@@ -172,6 +172,13 @@
 
 
 <li class="nav-item ">
+  <a class="nav-link nav-internal" href="../architecture.html">
+    Architecture
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../workflows.html">
     Workflows
   </a>
@@ -184,13 +191,6 @@
   </a>
 </li>
 
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../troubleshooting.html">
-    Troubleshooting
-  </a>
-</li>
-
             <li class="nav-item dropdown">
                 <button class="btn dropdown-toggle nav-item" type="button"
                 data-bs-toggle="dropdown" aria-expanded="false"
@@ -199,6 +199,13 @@
                 </button>
                 <ul id="pst-nav-more-links" class="dropdown-menu">
                     
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../troubleshooting.html">
+    Troubleshooting
+  </a>
+</li>
+
+
 <li class=" ">
   <a class="nav-link dropdown-item nav-internal" href="../examples.html">
     Example galleries
@@ -365,6 +372,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../theory.html">
     Theory and conventions
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../architecture.html">
+    Architecture
   </a>
 </li>
 
@@ -998,6 +1012,220 @@ maximum material indices.</p>
 
 </dd></dl>
 
+<p id="module-PyFiberModes.services">Focused orchestration services used by the <code class="xref py py-class docutils literal notranslate"><span class="pre">Fiber</span></code> façade.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="PyFiberModes.services.ModalAnalysis">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ModalAnalysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fiber</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">settings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="fundamentals.html#PyFiberModes.models.SolverSettings" title="PyFiberModes.models.SolverSettings"><span class="pre">SolverSettings</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/services.html#ModalAnalysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.services.ModalAnalysis" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Solve and cache modal properties for one fiber.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fiber</strong> (<a class="reference internal" href="fibers.html#PyFiberModes.fiber.Fiber" title="PyFiberModes.fiber.Fiber"><em>Fiber</em></a>) – Fiber model owned by this service.</p></li>
+<li><p><strong>settings</strong> (<a class="reference internal" href="fundamentals.html#PyFiberModes.models.SolverSettings" title="PyFiberModes.models.SolverSettings"><em>SolverSettings</em></a><em>, </em><em>optional</em>) – Numerical settings shared by solves.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.services.ModalAnalysis.clear">
+<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/services.html#ModalAnalysis.clear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.services.ModalAnalysis.clear" title="Link to this definition">#</a></dt>
+<dd><p>Discard all cached modal solutions.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.services.ModalAnalysis.effective_index_result">
+<span class="sig-name descname"><span class="pre">effective_index_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFiberModes.solver.results.SolverResult" title="PyFiberModes.solver.results.SolverResult"><span class="pre">SolverResult</span></a><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/PyFiberModes/services.html#ModalAnalysis.effective_index_result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.services.ModalAnalysis.effective_index_result" title="Link to this definition">#</a></dt>
+<dd><p>Return a diagnostic effective-index result for a mode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mode</strong> (<a class="reference internal" href="fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.mode.Mode"><em>Mode</em></a>) – Mode to solve.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Cached value and convergence status.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#PyFiberModes.solver.results.SolverResult" title="PyFiberModes.solver.results.SolverResult">SolverResult</a>[float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.services.ModalAnalysis.effective_index">
+<span class="sig-name descname"><span class="pre">effective_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/services.html#ModalAnalysis.effective_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.services.ModalAnalysis.effective_index" title="Link to this definition">#</a></dt>
+<dd><p>Return an effective index through the scalar convenience API.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.services.ModalAnalysis.cutoff_result">
+<span class="sig-name descname"><span class="pre">cutoff_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFiberModes.solver.results.SolverResult" title="PyFiberModes.solver.results.SolverResult"><span class="pre">SolverResult</span></a><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/PyFiberModes/services.html#ModalAnalysis.cutoff_result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.services.ModalAnalysis.cutoff_result" title="Link to this definition">#</a></dt>
+<dd><p>Return a cached normalized-cutoff result.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mode</strong> (<a class="reference internal" href="fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.mode.Mode"><em>Mode</em></a>) – Mode whose cutoff is requested.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Normalized cutoff and explicit status.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#PyFiberModes.solver.results.SolverResult" title="PyFiberModes.solver.results.SolverResult">SolverResult</a>[float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="PyFiberModes.services.ModalAnalysis.cache_size">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">cache_size</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><a class="headerlink" href="#PyFiberModes.services.ModalAnalysis.cache_size" title="Link to this definition">#</a></dt>
+<dd><p>Return the number of cached modal quantities.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="PyFiberModes.services.FieldAnalysis">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">FieldAnalysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fiber</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/services.html#FieldAnalysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.services.FieldAnalysis" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Construct sampled and radial fields for one fiber.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>fiber</strong> (<a class="reference internal" href="fibers.html#PyFiberModes.fiber.Fiber" title="PyFiberModes.fiber.Fiber"><em>Fiber</em></a>) – Fiber model owned by this service.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.services.FieldAnalysis.mode_field">
+<span class="sig-name descname"><span class="pre">mode_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_point</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">101</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/services.html#FieldAnalysis.mode_field"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.services.FieldAnalysis.mode_field" title="Link to this definition">#</a></dt>
+<dd><p>Construct a two-dimensional field grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mode</strong> (<a class="reference internal" href="fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.mode.Mode"><em>Mode</em></a>) – Mode to sample.</p></li>
+<li><p><strong>limit</strong> (<em>float</em><em>, </em><em>optional</em>) – Half-width of the Cartesian domain.</p></li>
+<li><p><strong>n_point</strong> (<em>int</em><em>, </em><em>optional</em>) – Samples along each Cartesian axis.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Sampled vector field.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="fields.html#PyFiberModes.field.Field" title="PyFiberModes.field.Field">Field</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<p id="module-PyFiberModes.solver.results">Structured numerical results returned by solver service APIs.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="PyFiberModes.solver.results.SolverResult">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">SolverResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">T</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">converged</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">residual</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iterations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bracket</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple[float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">float]</span> <span class="pre">|</span> <span class="pre">None</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict[str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">object]</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/solver/results.html#SolverResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.results.SolverResult" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Generic</span></code>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">T</span></code>]</p>
+<p>Describe a numerical solver outcome without ambiguous sentinel values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> (<em>T</em><em> or </em><em>None</em>) – Computed value, or <code class="docutils literal notranslate"><span class="pre">None</span></code> when unsuccessful.</p></li>
+<li><p><strong>converged</strong> (<em>bool</em>) – Whether a valid solution was obtained.</p></li>
+<li><p><strong>residual</strong> (<em>float</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Residual of the characteristic equation when available.</p></li>
+<li><p><strong>iterations</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Number of iterations when reported by the backend.</p></li>
+<li><p><strong>bracket</strong> (<em>tuple</em><em> of </em><em>float</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Root bracket used by the backend.</p></li>
+<li><p><strong>message</strong> (<em>str</em><em>, </em><em>optional</em>) – Human-readable status information.</p></li>
+<li><p><strong>metadata</strong> (<em>dict</em><em>, </em><em>optional</em>) – Additional backend-specific diagnostics.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFiberModes.solver.results.SolverResult.value">
+<span class="sig-name descname"><span class="pre">value</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">T</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#PyFiberModes.solver.results.SolverResult.value" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFiberModes.solver.results.SolverResult.converged">
+<span class="sig-name descname"><span class="pre">converged</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#PyFiberModes.solver.results.SolverResult.converged" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFiberModes.solver.results.SolverResult.residual">
+<span class="sig-name descname"><span class="pre">residual</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#PyFiberModes.solver.results.SolverResult.residual" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFiberModes.solver.results.SolverResult.iterations">
+<span class="sig-name descname"><span class="pre">iterations</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#PyFiberModes.solver.results.SolverResult.iterations" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFiberModes.solver.results.SolverResult.bracket">
+<span class="sig-name descname"><span class="pre">bracket</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#PyFiberModes.solver.results.SolverResult.bracket" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFiberModes.solver.results.SolverResult.message">
+<span class="sig-name descname"><span class="pre">message</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#PyFiberModes.solver.results.SolverResult.message" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFiberModes.solver.results.SolverResult.metadata">
+<span class="sig-name descname"><span class="pre">metadata</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">object</span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#PyFiberModes.solver.results.SolverResult.metadata" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.solver.results.SolverResult.unwrap">
+<span class="sig-name descname"><span class="pre">unwrap</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">T</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/solver/results.html#SolverResult.unwrap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.results.SolverResult.unwrap" title="Link to this definition">#</a></dt>
+<dd><p>Return the value or raise when the solve failed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Successfully computed value.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>T</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="fundamentals.html#PyFiberModes.exceptions.ConvergenceError" title="PyFiberModes.exceptions.ConvergenceError"><strong>ConvergenceError</strong></a> – If <code class="docutils literal notranslate"><span class="pre">converged</span></code> is false or no value is available.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<p id="module-PyFiberModes.solver.protocols">Structural interfaces implemented by modal solver backends.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="PyFiberModes.solver.protocols.EffectiveIndexSolver">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">EffectiveIndexSolver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/solver/protocols.html#EffectiveIndexSolver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.protocols.EffectiveIndexSolver" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Protocol</span></code></p>
+<p>Protocol for effective-index solver implementations.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.solver.protocols.EffectiveIndexSolver.solve">
+<span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.mode.Mode"><span class="pre">Mode</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_neff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/solver/protocols.html#EffectiveIndexSolver.solve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.protocols.EffectiveIndexSolver.solve" title="Link to this definition">#</a></dt>
+<dd><p>Solve the effective index for <code class="docutils literal notranslate"><span class="pre">mode</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="PyFiberModes.solver.protocols.CutoffSolver">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">CutoffSolver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/solver/protocols.html#CutoffSolver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.protocols.CutoffSolver" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Protocol</span></code></p>
+<p>Protocol for normalized-cutoff solver implementations.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.solver.protocols.CutoffSolver.solve">
+<span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.mode.Mode"><span class="pre">Mode</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/solver/protocols.html#CutoffSolver.solve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.protocols.CutoffSolver.solve" title="Link to this definition">#</a></dt>
+<dd><p>Solve the normalized cutoff for <code class="docutils literal notranslate"><span class="pre">mode</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="PyFiberModes.solver.protocols.RadialFieldSolver">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">RadialFieldSolver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/solver/protocols.html#RadialFieldSolver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.protocols.RadialFieldSolver" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Protocol</span></code></p>
+<p>Protocol for cylindrical radial-field solver implementations.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.solver.protocols.RadialFieldSolver.get_LP_field">
+<span class="sig-name descname"><span class="pre">get_LP_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/solver/protocols.html#RadialFieldSolver.get_LP_field"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.protocols.RadialFieldSolver.get_LP_field" title="Link to this definition">#</a></dt>
+<dd><p>Evaluate an LP field at a radial position.</p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
 
@@ -1063,6 +1291,41 @@ maximum material indices.</p>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.propagation.CoupledModeSystem"><code class="docutils literal notranslate"><span class="pre">CoupledModeSystem</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.propagation.CoupledModeSystem.propagate"><code class="docutils literal notranslate"><span class="pre">CoupledModeSystem.propagate()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.services.ModalAnalysis"><code class="docutils literal notranslate"><span class="pre">ModalAnalysis</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.services.ModalAnalysis.clear"><code class="docutils literal notranslate"><span class="pre">ModalAnalysis.clear()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.services.ModalAnalysis.effective_index_result"><code class="docutils literal notranslate"><span class="pre">ModalAnalysis.effective_index_result()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.services.ModalAnalysis.effective_index"><code class="docutils literal notranslate"><span class="pre">ModalAnalysis.effective_index()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.services.ModalAnalysis.cutoff_result"><code class="docutils literal notranslate"><span class="pre">ModalAnalysis.cutoff_result()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.services.ModalAnalysis.cache_size"><code class="docutils literal notranslate"><span class="pre">ModalAnalysis.cache_size</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.services.FieldAnalysis"><code class="docutils literal notranslate"><span class="pre">FieldAnalysis</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.services.FieldAnalysis.mode_field"><code class="docutils literal notranslate"><span class="pre">FieldAnalysis.mode_field()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.results.SolverResult"><code class="docutils literal notranslate"><span class="pre">SolverResult</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.results.SolverResult.value"><code class="docutils literal notranslate"><span class="pre">SolverResult.value</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.results.SolverResult.converged"><code class="docutils literal notranslate"><span class="pre">SolverResult.converged</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.results.SolverResult.residual"><code class="docutils literal notranslate"><span class="pre">SolverResult.residual</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.results.SolverResult.iterations"><code class="docutils literal notranslate"><span class="pre">SolverResult.iterations</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.results.SolverResult.bracket"><code class="docutils literal notranslate"><span class="pre">SolverResult.bracket</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.results.SolverResult.message"><code class="docutils literal notranslate"><span class="pre">SolverResult.message</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.results.SolverResult.metadata"><code class="docutils literal notranslate"><span class="pre">SolverResult.metadata</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.results.SolverResult.unwrap"><code class="docutils literal notranslate"><span class="pre">SolverResult.unwrap()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.protocols.EffectiveIndexSolver"><code class="docutils literal notranslate"><span class="pre">EffectiveIndexSolver</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.protocols.EffectiveIndexSolver.solve"><code class="docutils literal notranslate"><span class="pre">EffectiveIndexSolver.solve()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.protocols.CutoffSolver"><code class="docutils literal notranslate"><span class="pre">CutoffSolver</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.protocols.CutoffSolver.solve"><code class="docutils literal notranslate"><span class="pre">CutoffSolver.solve()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.protocols.RadialFieldSolver"><code class="docutils literal notranslate"><span class="pre">RadialFieldSolver</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.protocols.RadialFieldSolver.get_LP_field"><code class="docutils literal notranslate"><span class="pre">RadialFieldSolver.get_LP_field()</span></code></a></li>
 </ul>
 </li>
 </ul>

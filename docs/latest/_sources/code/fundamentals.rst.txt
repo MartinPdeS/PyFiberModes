@@ -12,3 +12,11 @@ Modes and fundamentals
 .. automodule:: PyFiberModes.source
    :members:
    :member-order: bysource
+
+.. automodule:: PyFiberModes.models
+   :members:
+   :member-order: bysource
+
+.. automodule:: PyFiberModes.exceptions
+   :members:
+   :member-order: bysource
