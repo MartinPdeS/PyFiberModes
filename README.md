@@ -21,10 +21,9 @@
 | PyFiberModes/solver/tlsif/cutoff.py |      215 |      190 |       72 |        0 |      8.71% |22-23, 28-47, 50-79, 97-133, 145-165, 179-198, 212-226, 240-256, 270-286, 300-311, 314-339, 343-374, 377-394 |
 | PyFiberModes/source.py              |       17 |        5 |        0 |        0 |     70.59% |21, 33, 45, 56, 67 |
 | PyFiberModes/stepindex.py           |      124 |        2 |       22 |        1 |     97.95% |   54, 112 |
-| PyFiberModes/tools/directories.py   |       16 |       16 |        4 |        0 |      0.00% |      4-39 |
-| **TOTAL**                           | **1856** |  **735** |  **420** |   **46** | **57.51%** |           |
+| **TOTAL**                           | **1829** |  **719** |  **412** |   **46** | **57.74%** |           |
 
-3 files skipped due to complete coverage.
+2 files skipped due to complete coverage.
 
 
 ## Setup coverage badge
