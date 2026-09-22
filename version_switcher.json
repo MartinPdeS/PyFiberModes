@@ -6,6 +6,12 @@
 }
 ,
 {
+  "name": "v0.11.0",
+  "version": "v0.11.0",
+  "url": "https://martinpdes.github.io/PyFiberModes/docs/v0.11.0"
+}
+,
+{
   "name": "v0.10.0",
   "version": "v0.10.0",
   "url": "https://martinpdes.github.io/PyFiberModes/docs/v0.10.0"
