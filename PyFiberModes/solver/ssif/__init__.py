@@ -1,2 +1,2 @@
-from .neff import NeffSolver
-from .cutoff import CutoffSolver
+from .neff import NeffSolver as NeffSolver
+from .cutoff import CutoffSolver as CutoffSolver

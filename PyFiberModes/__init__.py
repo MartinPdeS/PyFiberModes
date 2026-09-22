@@ -2,6 +2,9 @@ from PyFiberModes.mode import Mode, Family  # noqa: F401
 from PyFiberModes.mode_instances import *  # noqa: F403
 from PyFiberModes.factory import FiberFactory
 from PyFiberModes.field import Field
+from PyFiberModes.analysis import ModeSweepResult, find_modes, sweep_modes
+from PyFiberModes.optimization import DesignParameter, DesignResult, optimize_fiber
+from PyFiberModes.propagation import CoupledModeSystem, PropagationResult, coupling_matrix, overlap
 
 
 try:
@@ -17,6 +20,9 @@ __all__ = [  # noqa: F405
     'ModeFamily',
     'FiberFactory',
     'Field',
+    'ModeSweepResult', 'find_modes', 'sweep_modes',
+    'DesignParameter', 'DesignResult', 'optimize_fiber',
+    'CoupledModeSystem', 'PropagationResult', 'coupling_matrix', 'overlap',
     'HE11',
     'HE12',
     'HE22',

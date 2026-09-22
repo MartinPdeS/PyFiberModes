@@ -90,6 +90,33 @@ def test_ez(field_instance):
     assert ez.shape == field_instance.cartesian_coordinates.x.shape
 
 
+def test_radial_field_solution_is_cached(field_instance, mock_fiber):
+    field_instance.Ex()
+    first_call_count = mock_fiber.get_radial_field.call_count
+    field_instance.Ex()
+    assert first_call_count == max(257, 2 * field_instance.n_point)
+    assert mock_fiber.get_radial_field.call_count == first_call_count
+
+
+def test_poynting_power_and_confinement(field_instance, monkeypatch):
+    shape = field_instance.cartesian_coordinates.x.shape
+    zero = np.zeros(shape)
+    one = np.ones(shape)
+    monkeypatch.setattr(field_instance, "Ex", lambda *args: one)
+    monkeypatch.setattr(field_instance, "Ey", lambda *args: zero)
+    monkeypatch.setattr(field_instance, "Ez", lambda *args: zero)
+    monkeypatch.setattr(field_instance, "Hx", lambda *args: zero)
+    monkeypatch.setattr(field_instance, "Hy", lambda *args: one)
+    monkeypatch.setattr(field_instance, "Hz", lambda *args: zero)
+    monkeypatch.setattr(field_instance, "Emod", lambda *args: one)
+    sx, sy, sz = field_instance.get_poynting_vector()
+    assert np.allclose(sx, 0)
+    assert np.allclose(sy, 0)
+    assert np.allclose(sz, 0.5)
+    assert field_instance.get_power() > 0
+    assert 0 < field_instance.get_confinement_factor(field_instance.limit / 2) < 1
+
+
 def test_get_intensity(field_instance):
     """
     Test the computation of the mode intensity.

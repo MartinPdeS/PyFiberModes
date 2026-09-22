@@ -178,6 +178,7 @@ class Fiber(object):
         self.wavelength = wavelength
         for layer in self.layers:
             layer.wavelength = wavelength
+        self.get_radial_field.cache_clear()
 
     def add_layer(self, name: str, radius: float, index: float) -> None:
         """
@@ -757,6 +758,16 @@ class Fiber(object):
                 mode_exist.append(True)
 
         return mode_exist
+
+    def find_modes(self, families=("LP",), max_nu: int = 6, max_m: int = 6):
+        """Automatically discover guided modes at the current wavelength."""
+        from PyFiberModes.analysis import find_modes
+        return find_modes(self, families=families, max_nu=max_nu, max_m=max_m)
+
+    def sweep(self, parameters, **kwargs):
+        """Evaluate modal metrics over wavelength or a custom parameter."""
+        from PyFiberModes.analysis import sweep_modes
+        return sweep_modes(self, parameters, **kwargs)
 
     def print_data(self, data_type_list: list[str], mode_list: list[Mode]) -> None:
         """

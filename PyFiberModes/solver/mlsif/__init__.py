@@ -1,1 +1,1 @@
-from .neff import NeffSolver
+from .neff import NeffSolver as NeffSolver

@@ -1,6 +1,6 @@
 package:
   name: pyfibermodes
-  version: {{ GIT_DESCRIBE_TAG }}
+  version: 0.10.0
 
 source:
   path: ../
@@ -24,7 +24,7 @@ requirements:
   run:
     - martinpdes::mpsplots
     - martinpdes::pyfinitdiff
-    - martinpdes::pyoptik
+    - martinpdes::pyoptik >=2,<3
     - pyyaml
     - matplotlib
     - numpy

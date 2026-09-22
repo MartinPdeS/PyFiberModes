@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use PyFiberModes in your research, please cite this software."
+title: "PyFiberModes"
+type: software
+authors:
+  - family-names: "Poinsinet de Sivry-Houle"
+    given-names: "Martin"
+abstract: >
+  PyFiberModes is a Python package for solving and analysing guided modes in
+  circularly symmetric step-index and multilayer optical fibers.
+license: "MIT"
+repository-code: "https://github.com/MartinPdeS/PyFiberModes"
+url: "https://martinpdes.github.io/PyFiberModes/"
+keywords:
+  - optical fibers
+  - guided modes
+  - effective index
+  - dispersion
+  - coupled-mode theory

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "PyFiberModes"
-dynamic = ["version"]
+version = "0.10.0"
 description = "A package for light propagation in fiber optics."
 license = {file = "LICENSE"}
 readme = "README.rst"
@@ -15,6 +15,7 @@ classifiers = [
     'Programming Language :: Python :: 3',
     'Programming Language :: Python :: 3.11',
     'Programming Language :: Python :: 3.12',
+    'Programming Language :: Python :: 3.13',
     'Programming Language :: Python :: Implementation :: CPython',
     'Development Status :: 4 - Beta',
     'Topic :: Scientific/Engineering :: Physics',
@@ -25,13 +26,19 @@ classifiers = [
 keywords = ["finit-difference", "matrix"]
 
 dependencies = [
-    "PyOptik",
+    "PyOptik>=2,<3",
     "MPSPlots",
     "PyFinitDiff",
     "pyyaml",
     "numpy",
     "scipy",
 ]
+
+[project.urls]
+Homepage = "https://github.com/MartinPdeS/PyFiberModes"
+Repository = "https://github.com/MartinPdeS/PyFiberModes"
+Issues = "https://github.com/MartinPdeS/PyFiberModes/issues"
+Documentation = "https://martinpdes.github.io/PyFiberModes/"
 
 [tool.setuptools]
 packages = {find = {where = ["."], include = ["PyFiberModes*"]}}
@@ -48,7 +55,9 @@ testing = [
     "pytest >=7.4,<9.0",
     "pytest-cov >=2,<8",
     "pytest-json-report ~=1.5",
-    "coverage ~=7.6"
+    "coverage ~=7.6",
+    "ruff>=0.8,<1",
+    "tomli>=2,<3; python_version<'3.11'",
 ]
 
 
@@ -61,5 +70,16 @@ documentation = [
 ]
 
 dev = [
-    "flake8 ==7.3.0",
+    "ruff>=0.8,<1",
 ]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F"]
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"PyFiberModes/solver/mlsif/neff.py" = ["F821", "F841"]

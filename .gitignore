@@ -24,6 +24,10 @@
 !CMakeLists.txt
 !pytest.ini
 !.coveragerc
+!.zenodo.json
+!CITATION.cff
+!CHANGELOG.md
+!MANIFEST.in
 
 # But ignore docs/build inside docs and code
 docs/build/

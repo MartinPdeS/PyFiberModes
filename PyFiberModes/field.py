@@ -68,6 +68,33 @@ class Field:
         self.cartesian_coordinates = CartesianCoordinates.generate_from_square(length=2 * self.limit, n_points=self.n_point)
 
         self.cylindrical_coordinates = self.cartesian_coordinates.to_cylindrical()
+        self._radial_cache = {}
+
+    def _radial_component(self, field: str, component: str) -> np.ndarray:
+        """Evaluate one radial component and interpolate it over the 2-D grid.
+
+        Circular symmetry means the expensive analytical solver only needs to
+        run on a radial line. The resulting interpolation is fully vectorized.
+        """
+        key = (field, component)
+        if key not in self._radial_cache:
+            count = max(257, 2 * self.n_point)
+            radii = np.linspace(0.0, np.sqrt(2.0) * self.limit, count)
+            values = np.empty(count, dtype=complex)
+            for index, radius in enumerate(radii):
+                electric, magnetic = self.fiber.get_radial_field(
+                    mode=self.mode, radius=float(radius)
+                )
+                vector = electric if field == "E" else magnetic
+                value = getattr(vector, component)
+                values[index] = complex(value)
+            self._radial_cache[key] = radii, values
+        radii, values = self._radial_cache[key]
+        rho = self.cylindrical_coordinates.rho
+        real = np.interp(rho, radii, values.real)
+        imaginary = np.interp(rho, radii, values.imag)
+        result = real + 1j * imaginary
+        return np.real_if_close(result)
 
     @staticmethod
     def initialize_array(shape: tuple) -> np.ndarray:
@@ -211,16 +238,8 @@ class Field:
         """
         if self.mode.family == 'LP':
             # Initialize array for the electric field component
-            array = self.initialize_array(self.cartesian_coordinates.x.shape)
             azimuthal_dependency = self.get_azimuthal_dependency(phi=phi, dependency_type='f')
-
-            # Iterate over grid points and calculate E_x
-            for index in self.get_index_iterator(array):
-                e_field, _ = self.fiber.get_radial_field(
-                    mode=self.mode,
-                    radius=self.cylindrical_coordinates.rho[index]
-                )
-                array[index] = e_field.rho * azimuthal_dependency[index]
+            array = self._radial_component("E", "rho") * azimuthal_dependency
         else:
             # For non-LP modes, calculate using transverse field and polarization
             polarization = self.Epol(phi, theta)
@@ -273,16 +292,8 @@ class Field:
         """
         if self.mode.family == 'LP':
             # Initialize array for the electric field component
-            array = self.initialize_array(self.cartesian_coordinates.x.shape)
             azimuthal_dependency = self.get_azimuthal_dependency(phi=phi, dependency_type='f')
-
-            # Iterate over grid points and calculate E_y
-            for index in self.get_index_iterator(array):
-                e_field, _ = self.fiber.get_radial_field(
-                    mode=self.mode,
-                    radius=self.cylindrical_coordinates.rho[index]
-                )
-                array[index] = e_field.phi * azimuthal_dependency[index]
+            array = self._radial_component("E", "phi") * azimuthal_dependency
             return array
         else:
             # For non-LP modes, calculate using transverse field and polarization
@@ -327,18 +338,9 @@ class Field:
         Jaques Bures, Optical Fiber Theory, Eq. 3.71.
         """
         # Initialize the array for the z-component
-        array = self.initialize_array(self.cartesian_coordinates.x.shape)
-
         # Compute azimuthal dependency
         azimuthal_dependency = self.get_azimuthal_dependency(phi=phi, dependency_type='f')
-
-        # Iterate over grid points and calculate E_z
-        for index in self.get_index_iterator(array):
-            e_field, _ = self.fiber.get_radial_field(
-                mode=self.mode,
-                radius=self.cylindrical_coordinates.rho[index]
-            )
-            array[index] = e_field.z * azimuthal_dependency[index]
+        array = self._radial_component("E", "z") * azimuthal_dependency
 
         return array
 
@@ -391,15 +393,8 @@ class Field:
             array = self.Et(phi, theta) * np.cos(polarization)
         else:
             # Compute for non-LP mode using azimuthal dependency and radial field
-            array = self.initialize_array(self.cartesian_coordinates.x.shape)
             azimuthal_dependency = self.get_azimuthal_dependency(phi=phi, dependency_type='f')
-
-            for index in self.get_index_iterator(array):
-                e_field, _ = self.fiber.get_radial_field(
-                    mode=self.mode,
-                    radius=self.cylindrical_coordinates.rho[index]
-                )
-                array[index] = e_field.rho * azimuthal_dependency[index]
+            array = self._radial_component("E", "rho") * azimuthal_dependency
 
         return array
 
@@ -452,15 +447,8 @@ class Field:
             array = self.Et(phi, theta) * np.sin(polarization)
         else:
             # Compute for non-LP mode using azimuthal dependency and azimuthal field
-            array = self.initialize_array(self.cartesian_coordinates.x.shape)
             azimuthal_dependency = self.get_azimuthal_dependency(phi=phi, dependency_type='g')
-
-            for index in self.get_index_iterator(array):
-                e_field, _ = self.fiber.get_radial_field(
-                    mode=self.mode,
-                    radius=self.cylindrical_coordinates.rho[index]
-                )
-                array[index] = e_field.phi * azimuthal_dependency[index]
+            array = self._radial_component("E", "phi") * azimuthal_dependency
 
         return array
 
@@ -637,17 +625,8 @@ class Field:
 
         """
         if self.mode.family == 'LP':
-            array = numpy.zeros(self.cartesian_coordinates.x.shape)
             azimuthal_dependency_f = self.get_azimuthal_dependency(phi=phi, dependency_type='f')
-
-            for index in self.get_index_iterator(array):
-
-                _, h_field = self.fiber.get_radial_field(
-                    mode=self.mode,
-                    radius=self.cylindrical_coordinates.rho[index]
-                )
-
-                array[index] = h_field.rho * azimuthal_dependency_f[index]
+            array = self._radial_component("H", "rho") * azimuthal_dependency_f
 
         else:
             polarisation = self.Hpol(phi, theta)
@@ -689,16 +668,8 @@ class Field:
 
         """
         if self.mode.family == 'LP':
-            array = numpy.zeros(self.cartesian_coordinates.x.shape)
             azimuthal_dependency_f = self.get_azimuthal_dependency(phi=phi, dependency_type='f')
-            for index in self.get_index_iterator(array):
-
-                _, h_field = self.fiber.get_radial_field(
-                    mode=self.mode,
-                    radius=self.cylindrical_coordinates.rho[index]
-                )
-
-                array[index] = h_field.phi * azimuthal_dependency_f[index]
+            array = self._radial_component("H", "phi") * azimuthal_dependency_f
 
         else:
             polarisation = self.Hpol(phi, theta)
@@ -734,16 +705,8 @@ class Field:
             If the fiber object does not implement `get_radial_field`.
 
         """
-        array = numpy.zeros(self.cartesian_coordinates.x.shape)
         azimuthal_dependency_f = self.get_azimuthal_dependency(phi=phi, dependency_type='f')
-        for index in self.get_index_iterator(array):
-
-            _, h_field = self.fiber.get_radial_field(
-                mode=self.mode,
-                radius=self.cylindrical_coordinates.rho[index]
-            )
-
-            array[index] = h_field.z * azimuthal_dependency_f[index]
+        array = self._radial_component("H", "z") * azimuthal_dependency_f
         return array
 
     def Hr(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
@@ -781,17 +744,8 @@ class Field:
             array = radial * azimuthal
 
         else:
-            array = numpy.zeros(self.cartesian_coordinates.x.shape)
             azimuthal_dependency_f = self.get_azimuthal_dependency(phi=phi, dependency_type='f')
-
-            for index in self.get_index_iterator(array):
-
-                er, hr = self.fiber.get_radial_field(
-                    mode=self.mode,
-                    radius=self.cylindrical_coordinates.rho[index]
-                )
-
-                array[index] = hr[0] * azimuthal_dependency_f[index]
+            array = self._radial_component("H", "rho") * azimuthal_dependency_f
 
         return array
 
@@ -827,17 +781,8 @@ class Field:
             polarisation = self.Hpol(phi, theta) - self.cylindrical_coordinates.phi
             array = self.Ht(phi, theta) * numpy.sin(polarisation)
         else:
-            array = numpy.zeros(self.cartesian_coordinates.x.shape)
             azimuthal_dependency_g = self.get_azimuthal_dependency(phi=phi, dependency_type='g')
-
-            for index in self.get_index_iterator(array):
-
-                er, hr = self.fiber.get_radial_field(
-                    mode=self.mode,
-                    radius=self.cylindrical_coordinates.rho[index]
-                )
-
-                array[index] = hr[1] * azimuthal_dependency_g[index]
+            array = self._radial_component("H", "phi") * azimuthal_dependency_g
 
         return array
 
@@ -993,14 +938,10 @@ class Field:
 
         """
         field_array_norm = self.Emod()
-
-        integral = self.get_integrale_square(array=self.Emod())
-
-        term_0 = numpy.square(integral)
-
-        term_1 = numpy.sum(numpy.power(field_array_norm, 4))
-
-        return (term_0 / term_1)
+        integral = self.get_integrale_square(array=field_array_norm)
+        cell_area = self.cartesian_coordinates.dx * self.cartesian_coordinates.dy
+        fourth_moment = numpy.sum(numpy.abs(field_array_norm) ** 4) * cell_area
+        return float(numpy.real(integral**2 / fourth_moment))
 
     def get_integrale_square(self, array: numpy.ndarray) -> float:
         r"""
@@ -1020,7 +961,7 @@ class Field:
             The squared integral of the array.
 
         """
-        square_field = numpy.square(array)
+        square_field = numpy.abs(array) ** 2
 
         sum_square_field = numpy.sum(square_field)
 
@@ -1048,15 +989,9 @@ class Field:
             The intensity of the mode.
 
         """
-        HE11_n_eff = self.fiber.get_effective_index(
-            mode=HE11,
-            wavelength=self.fiber.wavelength
-        )
+        HE11_n_eff = self.fiber.get_effective_index(mode=HE11)
 
-        n_eff = self.fiber.get_effective_index(
-            mode=self.mode,
-            wavelength=self.fiber.wavelength
-        )
+        n_eff = self.fiber.get_effective_index(mode=self.mode)
 
         norm_squared = self.get_integrale_square(array=self.Et())
 
@@ -1083,17 +1018,38 @@ class Field:
             The normalization constant, :math:`N`.
 
         """
-        neff = self.fiber.neff(mode=HE11, wavelength=self.fiber.wavelength)
+        neff = self.fiber.get_effective_index(mode=HE11)
 
         intensity = self.get_intensity()
 
         return 0.5 * scipy.constants.epsilon_0 * neff * scipy.constants.c * intensity
 
-    def get_poynting_vector(self):
-        """
-        Gets the Poynting vector but is not implemented yet.
-        """
-        raise NotImplementedError('Not yet implemented')
+    def get_poynting_vector(self, phi: float = 0, theta: float = 0):
+        """Return the time-averaged Cartesian Poynting-vector components."""
+        electric = numpy.stack((self.Ex(phi, theta), self.Ey(phi, theta), self.Ez(phi, theta)))
+        magnetic = numpy.stack((self.Hx(phi, theta), self.Hy(phi, theta), self.Hz(phi, theta)))
+        vector = 0.5 * numpy.real(numpy.cross(electric, numpy.conjugate(magnetic), axisa=0, axisb=0, axisc=0))
+        return tuple(vector)
+
+    def get_power(self, phi: float = 0, theta: float = 0) -> float:
+        """Integrate the longitudinal time-averaged power over the grid."""
+        _, _, poynting_z = self.get_poynting_vector(phi, theta)
+        cell_area = self.cartesian_coordinates.dx * self.cartesian_coordinates.dy
+        return float(numpy.sum(poynting_z) * cell_area)
+
+    def get_confinement_factor(self, radius: float) -> float:
+        """Return the fraction of electric energy inside ``radius``."""
+        density = numpy.abs(self.Emod()) ** 2
+        total = numpy.sum(density)
+        if total == 0:
+            return 0.0
+        inside = self.cylindrical_coordinates.rho <= radius
+        return float(numpy.sum(density[inside]) / total)
+
+    def overlap(self, other) -> complex:
+        """Return the normalized vector-field overlap with another field."""
+        from PyFiberModes.propagation import overlap
+        return overlap(self, other)
 
     def plot(self, plot_type: list = (), show: bool = True, save_filename: str = None) -> plt.Figure:
         """
@@ -1121,6 +1077,9 @@ class Field:
         for ax, field_string in zip(axes, plot_type):
             ax.set_aspect('equal')
             field = getattr(self, field_string)()
+            field = numpy.real_if_close(field)
+            if numpy.iscomplexobj(field):
+                field = numpy.abs(field)
             max_abs = abs(max(field.max(), field.min()))
             ax.pcolormesh(field, vmin=-max_abs, vmax=max_abs, cmap=blue_black_red)
 
