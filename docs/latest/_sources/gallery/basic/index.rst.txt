@@ -7,6 +7,10 @@ Examples: API
 
 A gallery of examples and that showcase how PyFiberModes can be used. Some examples demonstrate the use of the API in general and some demonstrate specific applications in tutorial form.
 
+.. raw:: html
+
+  <div id='sg-tag-list' class='sphx-glr-tag-list'></div>
+
 
 .. raw:: html
 
@@ -23,7 +27,7 @@ A gallery of examples and that showcase how PyFiberModes can be used. Some examp
   .. image:: /gallery/basic/images/thumb/sphx_glr_plot_U_vs_V_thumb.png
     :alt:
 
-  :ref:`sphx_glr_gallery_basic_plot_U_vs_V.py`
+  :doc:`/gallery/basic/plot_U_vs_V`
 
 .. raw:: html
 
@@ -40,7 +44,7 @@ A gallery of examples and that showcase how PyFiberModes can be used. Some examp
   .. image:: /gallery/basic/images/thumb/sphx_glr_plot_comparison_solvers_thumb.png
     :alt:
 
-  :ref:`sphx_glr_gallery_basic_plot_comparison_solvers.py`
+  :doc:`/gallery/basic/plot_comparison_solvers`
 
 .. raw:: html
 
@@ -57,7 +61,7 @@ A gallery of examples and that showcase how PyFiberModes can be used. Some examp
   .. image:: /gallery/basic/images/thumb/sphx_glr_plot_dispersion_thumb.png
     :alt:
 
-  :ref:`sphx_glr_gallery_basic_plot_dispersion.py`
+  :doc:`/gallery/basic/plot_dispersion`
 
 .. raw:: html
 
@@ -74,7 +78,7 @@ A gallery of examples and that showcase how PyFiberModes can be used. Some examp
   .. image:: /gallery/basic/images/thumb/sphx_glr_plot_effective_index_thumb.png
     :alt:
 
-  :ref:`sphx_glr_gallery_basic_plot_effective_index.py`
+  :doc:`/gallery/basic/plot_effective_index`
 
 .. raw:: html
 
@@ -91,7 +95,7 @@ A gallery of examples and that showcase how PyFiberModes can be used. Some examp
   .. image:: /gallery/basic/images/thumb/sphx_glr_plot_fiber_LP_modes_thumb.png
     :alt:
 
-  :ref:`sphx_glr_gallery_basic_plot_fiber_LP_modes.py`
+  :doc:`/gallery/basic/plot_fiber_LP_modes`
 
 .. raw:: html
 
@@ -108,7 +112,7 @@ A gallery of examples and that showcase how PyFiberModes can be used. Some examp
   .. image:: /gallery/basic/images/thumb/sphx_glr_plot_group_index_thumb.png
     :alt:
 
-  :ref:`sphx_glr_gallery_basic_plot_group_index.py`
+  :doc:`/gallery/basic/plot_group_index`
 
 .. raw:: html
 
@@ -125,7 +129,7 @@ A gallery of examples and that showcase how PyFiberModes can be used. Some examp
   .. image:: /gallery/basic/images/thumb/sphx_glr_plot_mode_field_thumb.png
     :alt:
 
-  :ref:`sphx_glr_gallery_basic_plot_mode_field.py`
+  :doc:`/gallery/basic/plot_mode_field`
 
 .. raw:: html
 
@@ -142,7 +146,7 @@ A gallery of examples and that showcase how PyFiberModes can be used. Some examp
   .. image:: /gallery/basic/images/thumb/sphx_glr_plot_mode_field_1_thumb.png
     :alt:
 
-  :ref:`sphx_glr_gallery_basic_plot_mode_field_1.py`
+  :doc:`/gallery/basic/plot_mode_field_1`
 
 .. raw:: html
 
@@ -159,7 +163,7 @@ A gallery of examples and that showcase how PyFiberModes can be used. Some examp
   .. image:: /gallery/basic/images/thumb/sphx_glr_plot_mode_field_2_thumb.png
     :alt:
 
-  :ref:`sphx_glr_gallery_basic_plot_mode_field_2.py`
+  :doc:`/gallery/basic/plot_mode_field_2`
 
 .. raw:: html
 
@@ -176,7 +180,7 @@ A gallery of examples and that showcase how PyFiberModes can be used. Some examp
   .. image:: /gallery/basic/images/thumb/sphx_glr_plot_neff_tapered_fiber_thumb.png
     :alt:
 
-  :ref:`sphx_glr_gallery_basic_plot_neff_tapered_fiber.py`
+  :doc:`/gallery/basic/plot_neff_tapered_fiber`
 
 .. raw:: html
 
