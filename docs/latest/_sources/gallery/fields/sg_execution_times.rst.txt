@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:00.415** total execution time for 1 file **from gallery/fields**:
+**00:00.443** total execution time for 1 file **from gallery/fields**:
 
 .. container::
 
@@ -33,5 +33,5 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_gallery_fields_plot_vector_components.py` (``plot_vector_components.py``)
-     - 00:00.415
+     - 00:00.443
      - 0.0
