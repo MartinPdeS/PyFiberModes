@@ -6,6 +6,8 @@ use [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.11.0] - 2026-09-22
+
 ### Added
 
 - Automatic guided-mode discovery and structured parameter sweeps.
@@ -31,5 +33,6 @@ use [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Established the current tagged baseline for subsequent documented releases.
 
-[Unreleased]: https://github.com/MartinPdeS/PyFiberModes/compare/v0.10.0...HEAD
+[Unreleased]: https://github.com/MartinPdeS/PyFiberModes/compare/v0.11.0...HEAD
+[0.11.0]: https://github.com/MartinPdeS/PyFiberModes/releases/tag/v0.11.0
 [0.10.0]: https://github.com/MartinPdeS/PyFiberModes/releases/tag/v0.10.0
