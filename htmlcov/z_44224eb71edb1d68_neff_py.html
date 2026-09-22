@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Coverage for PyFiberModes/solver/ssif/neff.py: 46.46%</title>
+    <title>Coverage for PyFiberModes/solver/ssif/neff.py: 51.33%</title>
     <link rel="icon" sizes="32x32" href="favicon_32_cb_c827f16f.png">
     <link rel="stylesheet" href="style_cb_4667309f.css" type="text/css">
     <script src="coverage_html_cb_dd2e7eb5.js" defer></script>
@@ -12,7 +12,7 @@
     <div class="content">
         <h1>
             <span class="text">Coverage for </span><b>PyFiberModes<span class="sep">/</span>solver<span class="sep">/</span>ssif<span class="sep">/</span>neff.py</b>:
-            <span class="pc_cov">46.46%</span>
+            <span class="pc_cov">51.33%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
@@ -56,8 +56,8 @@
         </aside>
         <h2>
             <span class="text">194 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">91<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">103<span class="text"> missing</span></button>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">100<span class="text"> run</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">94<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">0<span class="text"> excluded</span></button>
             <button type="button" class="par run show_par button_toggle_par" value="par" data-shortcut="p" title="Toggle lines partially run">8<span class="text"> partial</span></button>
         </h2>
@@ -67,7 +67,7 @@
             <a id="nextFileLink" class="nav" href="z_2798809ee2ca980f_cutoff_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.15.4">coverage.py v7.15.4</a>,
-            created at 2026-09-22 20:19 +0000
+            created at 2026-09-22 20:48 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -297,21 +297,21 @@
     <p class="pln"><span class="n"><a id="t213" href="#t213">213</a></span><span class="t"><span class="str">        tuple</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t214" href="#t214">214</a></span><span class="t"><span class="str">            The lp field.</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t215" href="#t215">215</a></span><span class="t"><span class="str">        &quot;&quot;&quot;</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t216" href="#t216">216</a></span><span class="t">        <span class="nam">core</span><span class="op">,</span> <span class="nam">clad</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">fiber</span><span class="op">.</span><span class="nam">layers</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t216" href="#t216">216</a></span><span class="t">        <span class="nam">core</span><span class="op">,</span> <span class="nam">clad</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">fiber</span><span class="op">.</span><span class="nam">layers</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t217" href="#t217">217</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t218" href="#t218">218</a></span><span class="t">        <span class="nam">u</span><span class="op">,</span> <span class="nam">w</span><span class="op">,</span> <span class="nam">v</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">get_U_W_V_parameter</span><span class="op">(</span><span class="nam">neff</span><span class="op">=</span><span class="nam">neff</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t218" href="#t218">218</a></span><span class="t">        <span class="nam">u</span><span class="op">,</span> <span class="nam">w</span><span class="op">,</span> <span class="nam">v</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">get_U_W_V_parameter</span><span class="op">(</span><span class="nam">neff</span><span class="op">=</span><span class="nam">neff</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t219" href="#t219">219</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t220" href="#t220">220</a></span><span class="t">        <span class="key">if</span> <span class="nam">radius</span> <span class="op">&lt;</span> <span class="nam">core</span><span class="op">.</span><span class="nam">radius_out</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t221" href="#t221">221</a></span><span class="t">            <span class="nam">ex</span> <span class="op">=</span> <span class="nam">j0</span><span class="op">(</span><span class="nam">u</span> <span class="op">*</span> <span class="nam">radius</span> <span class="op">/</span> <span class="nam">core</span><span class="op">.</span><span class="nam">radius_out</span><span class="op">)</span> <span class="op">/</span> <span class="nam">j0</span><span class="op">(</span><span class="nam">u</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t220" href="#t220">220</a></span><span class="t">        <span class="key">if</span> <span class="nam">radius</span> <span class="op">&lt;</span> <span class="nam">core</span><span class="op">.</span><span class="nam">radius_out</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t221" href="#t221">221</a></span><span class="t">            <span class="nam">ex</span> <span class="op">=</span> <span class="nam">j0</span><span class="op">(</span><span class="nam">u</span> <span class="op">*</span> <span class="nam">radius</span> <span class="op">/</span> <span class="nam">core</span><span class="op">.</span><span class="nam">radius_out</span><span class="op">)</span> <span class="op">/</span> <span class="nam">j0</span><span class="op">(</span><span class="nam">u</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t222" href="#t222">222</a></span><span class="t">        <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t223" href="#t223">223</a></span><span class="t">            <span class="nam">ex</span> <span class="op">=</span> <span class="nam">k0</span><span class="op">(</span><span class="nam">w</span> <span class="op">*</span> <span class="nam">radius</span> <span class="op">/</span> <span class="nam">core</span><span class="op">.</span><span class="nam">radius_out</span><span class="op">)</span> <span class="op">/</span> <span class="nam">k0</span><span class="op">(</span><span class="nam">w</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t223" href="#t223">223</a></span><span class="t">            <span class="nam">ex</span> <span class="op">=</span> <span class="nam">k0</span><span class="op">(</span><span class="nam">w</span> <span class="op">*</span> <span class="nam">radius</span> <span class="op">/</span> <span class="nam">core</span><span class="op">.</span><span class="nam">radius_out</span><span class="op">)</span> <span class="op">/</span> <span class="nam">k0</span><span class="op">(</span><span class="nam">w</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t224" href="#t224">224</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t225" href="#t225">225</a></span><span class="t">        <span class="nam">hy</span> <span class="op">=</span> <span class="nam">neff</span> <span class="op">*</span> <span class="nam">numpy</span><span class="op">.</span><span class="nam">sqrt</span><span class="op">(</span><span class="nam">epsilon_0</span> <span class="op">/</span> <span class="nam">mu_0</span><span class="op">)</span> <span class="op">*</span> <span class="nam">ex</span>  <span class="com"># Snyder &amp; Love uses nco, but Bures uses neff</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t225" href="#t225">225</a></span><span class="t">        <span class="nam">hy</span> <span class="op">=</span> <span class="nam">neff</span> <span class="op">*</span> <span class="nam">numpy</span><span class="op">.</span><span class="nam">sqrt</span><span class="op">(</span><span class="nam">epsilon_0</span> <span class="op">/</span> <span class="nam">mu_0</span><span class="op">)</span> <span class="op">*</span> <span class="nam">ex</span>  <span class="com"># Snyder &amp; Love uses nco, but Bures uses neff</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t226" href="#t226">226</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t227" href="#t227">227</a></span><span class="t">        <span class="nam">e_field</span> <span class="op">=</span> <span class="nam">numpy</span><span class="op">.</span><span class="nam">array</span><span class="op">(</span><span class="op">(</span><span class="nam">ex</span><span class="op">,</span> <span class="num">0</span><span class="op">,</span> <span class="num">0</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t228" href="#t228">228</a></span><span class="t">        <span class="nam">h_field</span> <span class="op">=</span> <span class="nam">numpy</span><span class="op">.</span><span class="nam">array</span><span class="op">(</span><span class="op">(</span><span class="num">0</span><span class="op">,</span> <span class="nam">hy</span><span class="op">,</span> <span class="num">0</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t227" href="#t227">227</a></span><span class="t">        <span class="nam">e_field</span> <span class="op">=</span> <span class="nam">numpy</span><span class="op">.</span><span class="nam">array</span><span class="op">(</span><span class="op">(</span><span class="nam">ex</span><span class="op">,</span> <span class="num">0</span><span class="op">,</span> <span class="num">0</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t228" href="#t228">228</a></span><span class="t">        <span class="nam">h_field</span> <span class="op">=</span> <span class="nam">numpy</span><span class="op">.</span><span class="nam">array</span><span class="op">(</span><span class="op">(</span><span class="num">0</span><span class="op">,</span> <span class="nam">hy</span><span class="op">,</span> <span class="num">0</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t229" href="#t229">229</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t230" href="#t230">230</a></span><span class="t">        <span class="key">return</span> <span class="nam">e_field</span><span class="op">,</span> <span class="nam">h_field</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t230" href="#t230">230</a></span><span class="t">        <span class="key">return</span> <span class="nam">e_field</span><span class="op">,</span> <span class="nam">h_field</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t231" href="#t231">231</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t232" href="#t232">232</a></span><span class="t">    <span class="key">def</span> <span class="nam">get_TE_field</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">nu</span><span class="op">:</span> <span class="nam">int</span><span class="op">,</span> <span class="nam">neff</span><span class="op">:</span> <span class="nam">float</span><span class="op">,</span> <span class="nam">radius</span><span class="op">:</span> <span class="nam">float</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="nam">numpy</span><span class="op">.</span><span class="nam">ndarray</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t233" href="#t233">233</a></span><span class="t">        <span class="str">r&quot;&quot;&quot;Gets the TE field in the form of a tuple containing two numpy arrays.</span>&nbsp;</span><span class="r"></span></p>
@@ -731,7 +731,7 @@
             <a class="nav" href="z_2798809ee2ca980f_cutoff_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.15.4">coverage.py v7.15.4</a>,
-            created at 2026-09-22 20:19 +0000
+            created at 2026-09-22 20:48 +0000
         </p>
     </div>
 </footer>
