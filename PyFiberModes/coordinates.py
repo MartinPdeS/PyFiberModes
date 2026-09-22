@@ -74,9 +74,9 @@ class CartesianCoordinates:
 
     def __post_init__(self) -> None:
         """Convert all coordinate arrays to floating-point arrays."""
-        self.x = self.x.astype(float)
-        self.y = self.y.astype(float)
-        self.z = self.z.astype(float)
+        self.x = np.asarray(self.x, dtype=float)
+        self.y = np.asarray(self.y, dtype=float)
+        self.z = np.asarray(self.z, dtype=float)
 
     @property
     def x_boundaries(self) -> Tuple[float, float]:
@@ -119,7 +119,8 @@ class CartesianCoordinates:
         """
         if self.is_structured:
             x_min, x_max = self.x_boundaries
-            return (x_max - x_min) / len(self.x)
+            unique_x = np.unique(self.x)
+            return float(unique_x[1] - unique_x[0])
         raise ValueError("dx value cannot be inferred from an unstructured mesh.")
 
     @property
@@ -139,7 +140,8 @@ class CartesianCoordinates:
         """
         if self.is_structured:
             y_min, y_max = self.y_boundaries
-            return (y_max - y_min) / len(self.y)
+            unique_y = np.unique(self.y)
+            return float(unique_y[1] - unique_y[0])
         raise ValueError("dx value cannot be inferred from an unstructured mesh.")
 
     @classmethod

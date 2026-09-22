@@ -6,6 +6,23 @@ use [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Added validated immutable layer and solver settings, structural solver
+  protocols, domain-specific exceptions, and structured solver diagnostics.
+- Added deterministic physical-reference, convergence, caching, architecture,
+  and opt-in `pytest-benchmark` performance suites.
+
+### Changed
+
+- Unified cylindrical coordinates under one canonical model, split modal and
+  field orchestration into focused services, and added geometry-aware caching.
+- Vectorized radial index lookup and routed field construction through a
+  single batched radial-field interface.
+- Standardized the group-velocity API on `get_group_velocity` and removed
+  unreferenced experimental modules, unfinished solver branches, misspelled
+  methods, lowercase directory aliases, and obsolete compatibility wrappers.
+
 ## [0.13.0] - 2026-09-22
 
 ### Changed

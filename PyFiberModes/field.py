@@ -10,56 +10,13 @@ from dataclasses import dataclass
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 from PyFiberModes.coordinates import CartesianCoordinates
+from PyFiberModes.coordinates import CylindricalCoordinates as CylindricalCoordinates  # noqa: F401
 
 
 BLUE_BLACK_RED = LinearSegmentedColormap.from_list(
     "blue_black_red",
     ("#2455a4", "#000000", "#d73027"),
 )
-
-
-@dataclass
-class CylindricalCoordinates:
-    """Store cylindrical coordinate arrays used by a field grid.
-
-    Parameters
-    ----------
-    rho : numpy.ndarray
-        Radial distances.
-    phi : numpy.ndarray
-        Azimuthal angles in radians.
-    z : numpy.ndarray
-        Longitudinal positions.
-    """
-    rho: numpy.ndarray
-    phi: numpy.ndarray
-    z: numpy.ndarray
-
-    def to_cartesian(self) -> object:
-        """Convert the coordinate arrays to Cartesian form.
-
-        Returns
-        -------
-        CartesianCoordinates
-            Equivalent Cartesian coordinate arrays.
-        """
-        x = self.rho * numpy.cos(self.phi)
-        y = self.rho * numpy.sin(self.phi)
-        z = self.z
-
-        cartesian_coordinate = CartesianCoordinates(x=x, y=y, z=z)
-
-        return cartesian_coordinate
-
-    def to_cylindrical(self):
-        """Return this already-cylindrical coordinate object.
-
-        Returns
-        -------
-        CylindricalCoordinates
-            The current object.
-        """
-        return self
 
 
 @dataclass
@@ -123,22 +80,14 @@ class Field:
 
         count = max(257, 2 * self.n_point)
         radii = np.linspace(0.0, np.sqrt(2.0) * self.limit, count)
-        component_names = ("rho", "phi", "z")
+        electric, magnetic = self.fiber.get_radial_fields(
+            mode=self.mode, radius=radii
+        )
         values = {
-            (field_name, component): np.empty(count, dtype=complex)
-            for field_name in ("E", "H")
-            for component in component_names
+            (field_name, component): np.asarray(getattr(vector, component), dtype=complex)
+            for field_name, vector in (("E", electric), ("H", magnetic))
+            for component in ("rho", "phi", "z")
         }
-
-        for index, radius in enumerate(radii):
-            electric, magnetic = self.fiber.get_radial_field(
-                mode=self.mode, radius=float(radius)
-            )
-            for field_name, vector in (("E", electric), ("H", magnetic)):
-                for component in component_names:
-                    values[field_name, component][index] = complex(
-                        getattr(vector, component)
-                    )
 
         self._radial_cache = {
             key: (radii, component_values)

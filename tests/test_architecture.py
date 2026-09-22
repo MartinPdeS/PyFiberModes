@@ -20,14 +20,6 @@ def test_directory_locations_are_derived_from_module_location():
     assert directories.DOC_CSS_PATH.is_file()
 
 
-def test_legacy_directory_names_are_aliases():
-    assert directories.root_path is directories.PACKAGE_PATH
-    assert directories.project_path is directories.PROJECT_PATH
-    assert directories.doc_path is directories.DOCS_PATH
-    assert directories.examples_path is directories.EXAMPLES_PATH
-    assert directories.doc_css_path is directories.DOC_CSS_PATH
-
-
 def test_package_has_no_generic_tools_namespace():
     tools_path = directories.PACKAGE_PATH / "tools"
     assert not tools_path.exists() or not any(tools_path.glob("*.py"))

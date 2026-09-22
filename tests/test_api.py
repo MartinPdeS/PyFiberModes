@@ -16,7 +16,7 @@ function_list = [
     "get_normalized_beta",
     "get_phase_velocity",
     "get_group_index",
-    "get_groupe_velocity",
+    "get_group_velocity",
     "get_S_parameter",
     "get_mode_field"
 ]
@@ -26,7 +26,7 @@ attribute_list = [
     "effective_index",
     "normalized_beta",
     "phase_velocity",
-    "groupe_velocity",
+    "group_velocity",
 ]
 
 

@@ -14,6 +14,17 @@ def mock_fiber():
     """
     fiber = MagicMock()
     fiber.get_radial_field = MagicMock(return_value=(MagicMock(), MagicMock()))
+    def radial_fields(mode, radius):
+        """Return deterministic batched cylindrical test fields."""
+        shape = np.asarray(radius).shape
+        electric = SimpleNamespace(
+            rho=np.ones(shape), phi=2 * np.ones(shape), z=3 * np.ones(shape)
+        )
+        magnetic = SimpleNamespace(
+            rho=4 * np.ones(shape), phi=5 * np.ones(shape), z=6 * np.ones(shape)
+        )
+        return electric, magnetic
+    fiber.get_radial_fields = MagicMock(side_effect=radial_fields)
     fiber.wavelength = 1.55e-6
     fiber.get_effective_index = MagicMock(return_value=1.45)
     return fiber
@@ -93,37 +104,37 @@ def test_ez(field_instance):
 
 def test_radial_field_solution_is_cached(field_instance, mock_fiber):
     field_instance.Ex()
-    first_call_count = mock_fiber.get_radial_field.call_count
+    first_call_count = mock_fiber.get_radial_fields.call_count
     field_instance.Ex()
-    assert first_call_count == max(257, 2 * field_instance.n_point)
-    assert mock_fiber.get_radial_field.call_count == first_call_count
+    assert first_call_count == 1
+    assert mock_fiber.get_radial_fields.call_count == first_call_count
 
 
 def test_all_radial_components_share_one_solver_pass(field_instance, mock_fiber):
     electric = SimpleNamespace(rho=1, phi=2, z=3)
     magnetic = SimpleNamespace(rho=4, phi=5, z=6)
-    mock_fiber.get_radial_field.return_value = electric, magnetic
+    mock_fiber.get_radial_fields.return_value = electric, magnetic
 
     fields = field_instance.get_components()
-    expected_calls = max(257, 2 * field_instance.n_point)
+    expected_calls = 1
 
     assert set(fields) == {"Ex", "Ey", "Ez", "Hx", "Hy", "Hz"}
-    assert mock_fiber.get_radial_field.call_count == expected_calls
+    assert mock_fiber.get_radial_fields.call_count == expected_calls
     assert field_instance.get_components()["Ex"] is fields["Ex"]
-    assert mock_fiber.get_radial_field.call_count == expected_calls
+    assert mock_fiber.get_radial_fields.call_count == expected_calls
 
 
 def test_field_cache_is_invalidated_by_wavelength_change(field_instance, mock_fiber):
     electric = SimpleNamespace(rho=1, phi=2, z=3)
     magnetic = SimpleNamespace(rho=4, phi=5, z=6)
-    mock_fiber.get_radial_field.return_value = electric, magnetic
-    expected_calls = max(257, 2 * field_instance.n_point)
+    mock_fiber.get_radial_fields.return_value = electric, magnetic
+    expected_calls = 1
 
     field_instance.get_components(("Ex",))
     mock_fiber.wavelength = 1.31e-6
     field_instance.get_components(("Ex",))
 
-    assert mock_fiber.get_radial_field.call_count == 2 * expected_calls
+    assert mock_fiber.get_radial_fields.call_count == 2 * expected_calls
 
 
 def test_get_components_rejects_unknown_names(field_instance):

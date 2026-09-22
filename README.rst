@@ -53,6 +53,9 @@ Features
 * Constrained optimization of layer radii, refractive indices, and custom parameters.
 * Constant or longitudinally varying coupled-mode propagation.
 * A catalog of common and example fiber definitions stored as readable YAML files.
+* Structured solver diagnostics, validated configuration models, and explicit
+  solver protocols for extending numerical backends.
+* Geometry-aware modal caching and vectorized radial index and field workflows.
 
 Installation
 ------------

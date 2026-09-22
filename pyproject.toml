@@ -60,6 +60,10 @@ testing = [
     "tomli>=2,<3; python_version<'3.11'",
 ]
 
+benchmarking = [
+    "pytest-benchmark>=5,<6",
+]
+
 
 documentation = [
     "numpydoc ==1.10.0",

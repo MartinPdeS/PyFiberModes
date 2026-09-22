@@ -2,11 +2,13 @@
 
 import logging
 import numpy
+from abc import ABC, abstractmethod
 
 from scipy.optimize import brentq, root_scalar
+from PyFiberModes.solver.results import SolverResult
 
 
-class BaseSolver(object):
+class BaseSolver(ABC):
     """Provide shared scalar root-finding operations for fiber solvers.
 
     Parameters
@@ -33,7 +35,8 @@ class BaseSolver(object):
         self.fiber = fiber
         self.wavelength = wavelength
 
-    def solver(self, *args, **kwargs):
+    @abstractmethod
+    def solve(self, *args, **kwargs):
         """Solve a modal equation in a concrete subclass.
 
         Parameters
@@ -49,6 +52,38 @@ class BaseSolver(object):
             Always raised by the abstract base implementation.
         """
         raise NotImplementedError()
+
+    @staticmethod
+    def evaluate_many(function, values, function_args: tuple = ()) -> numpy.ndarray:
+        """Evaluate a characteristic function over an array when possible.
+
+        Parameters
+        ----------
+        function : callable
+            Characteristic function.
+        values : array-like
+            Evaluation positions.
+        function_args : tuple, optional
+            Extra function arguments.
+
+        Returns
+        -------
+        numpy.ndarray
+            Function values. Scalar-only functions transparently fall back to
+            a Python iteration.
+        """
+        values = numpy.asarray(values, dtype=float)
+        try:
+            result = numpy.asarray(function(values, *function_args))
+            if result.shape == values.shape:
+                return result
+        except (TypeError, ValueError):
+            pass
+        return numpy.fromiter(
+            (function(value, *function_args) for value in values),
+            dtype=float,
+            count=values.size,
+        )
 
     def find_function_first_root(
             self,
@@ -161,8 +196,7 @@ class BaseSolver(object):
         x_list = [x_low, x_high]
         x_list.sort()
         x_list = numpy.linspace(*x_list, n_slice)
-        y_list = [function(x, *function_args) for x in x_list]
-        y_list = numpy.asarray(y_list)
+        y_list = self.evaluate_many(function, x_list, function_args)
 
         non_nan_idx = ~numpy.isnan(y_list)
 
@@ -217,7 +251,44 @@ class BaseSolver(object):
         float
             The root of the function
         """
-        y_low, y_high = function(x_low, *function_args), function(x_high, *function_args)
+        result = self.find_root_result_within_range(
+            function=function,
+            x_low=x_low,
+            x_high=x_high,
+            function_args=function_args,
+            max_iteration=max_iteration,
+            tolerance=tolerance,
+        )
+        return result.value if result.converged else numpy.nan
+
+    def find_root_result_within_range(
+            self,
+            function,
+            x_low: float,
+            x_high: float,
+            function_args: tuple = (),
+            max_iteration: int = 100,
+            tolerance: float = 1e-8) -> SolverResult[float]:
+        """Find a root and retain convergence diagnostics.
+
+        Parameters
+        ----------
+        function : callable
+            Scalar characteristic equation.
+        x_low, x_high : float
+            Search interval.
+        function_args : tuple, optional
+            Additional characteristic-function arguments.
+        max_iteration : int, optional
+            Maximum Brent iterations.
+        tolerance : float, optional
+            Absolute convergence tolerance.
+
+        Returns
+        -------
+        SolverResult[float]
+            Root, residual, iteration count, bracket, and status.
+        """
 
         boundaries = self.get_new_x_low_x_high(
             function=function,
@@ -228,8 +299,9 @@ class BaseSolver(object):
         )
 
         if numpy.isscalar(boundaries) and numpy.isnan(boundaries):
-            logging.warning(f"Couldn't find neff root in range:[{x_low}, {x_high}] for mode")
-            return numpy.nan
+            message = f"could not bracket a root in [{x_low}, {x_high}]"
+            logging.warning(message)
+            return SolverResult(value=None, converged=False, message=message)
 
         x_low, x_high, y_low, y_high = boundaries
 
@@ -244,6 +316,14 @@ class BaseSolver(object):
             options=dict(disp=True)
         )
 
-        return x_root.root
+        residual = abs(float(function(x_root.root, *function_args)))
+        return SolverResult(
+            value=float(x_root.root) if x_root.converged else None,
+            converged=bool(x_root.converged),
+            residual=residual,
+            iterations=x_root.iterations,
+            bracket=(float(x_low), float(x_high)),
+            message=x_root.flag,
+        )
 
 # -

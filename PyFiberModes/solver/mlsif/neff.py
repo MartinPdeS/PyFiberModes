@@ -10,21 +10,6 @@ from PyFiberModes.mode import Mode
 eta0 = physical_constants['characteristic impedance of vacuum'][0]
 
 
-class NameSpace():
-    """Store solver intermediates as dynamically named attributes.
-
-    Parameters
-    ----------
-    **kwargs
-        Attribute names and values to store.
-    """
-
-    def __init__(self, **kwargs):
-        """Populate attributes from keyword arguments."""
-        for key, value in kwargs.items():
-            setattr(self, key, value)
-
-
 class NeffSolver(BaseSolver):
     """Solve effective indices for arbitrary multilayer step-index fibers.
 
@@ -50,7 +35,6 @@ class NeffSolver(BaseSolver):
         float
             The neff lower boundary.
         """
-        lower_order_mode = None
         lower_order_mode = None
 
         if mode.family == 'HE':
@@ -137,87 +121,6 @@ class NeffSolver(BaseSolver):
             value = numpy.nan
 
         return value
-
-    def get_LP_field_for_future(self, nu: int, neff: float, radius: float) -> tuple[float, float]:
-        """        Gets the :math:`LP_{
-        u, m}` mode field.
-
-        Parameters
-        ----------
-        nu : int
-            The nu parameter of the LP mode
-        neff : float
-            The effective index
-        radius : float
-            The radius for evaluation
-
-        Returns
-        -------
-        tuple
-            The LP electric and magnetic field in a tuple.
-        """
-        n_layers = len(self.fiber.layers)
-        C = numpy.array((1, 0))
-
-        test = NameSpace(layer=[], index=[], C=[])
-
-        for i in range(1, n_layers):
-            layer_out = self.fiber.layers[i]
-            layer_in = self.fiber.layers[i - 1]
-
-            test.layer.append(layer_in)
-            test.index.append(radius < layer_in.radius_out)
-            test.C.append(C)
-
-            # if radius < layer_in.radius_out:
-            #     eval_layer = self.fiber.layers[i - 1]
-            #     break
-
-            A = layer_in.get_psi(
-                radius=layer_in.radius_out,
-                neff=neff,
-                nu=nu,
-                C=C
-            )
-
-            C = layer_out.get_LP_constants(
-                radius=layer_in.radius_out,
-                neff=neff,
-                nu=nu,
-                A=A
-            )
-
-        else:
-            eval_layer = self.fiber.layers[-1]
-
-            u = eval_layer.get_U_W_parameter(
-                radius=layer_in.radius_out,
-                neff=neff
-            )
-
-            C = (0, A[0] / kn(nu, u))
-
-            test.layer.append(eval_layer)
-            test.index.append(None)
-            test.C.append(C)
-
-        E_x = numpy.zeros(radius.shape)
-        for layer, index, C in zip(test.layer, test.index, test.C):
-            pass
-
-        ex, _ = eval_layer.get_psi(
-            radius=radius,
-            neff=neff,
-            nu=nu,
-            C=C
-        )
-
-        hy = neff * numpy.sqrt(epsilon_0 / mu_0) * ex
-
-        e_field = numpy.array((ex, 0, 0))
-        h_field = numpy.array((0, hy, 0))
-
-        return e_field, h_field
 
     def get_LP_field(self, nu: int, neff: float, radius: float) -> tuple[float, float]:
         """        Gets the :math:`LP_{

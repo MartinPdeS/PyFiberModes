@@ -7,7 +7,7 @@ from sphinx_gallery.sorting import FileNameSortKey
 import matplotlib.pyplot as plt
 from pathlib import Path
 import PyFiberModes
-from PyFiberModes.directories import doc_css_path
+from PyFiberModes.directories import DOC_CSS_PATH
 
 package_name = "PyFiberModes"
 version = PyFiberModes.__version__
@@ -18,7 +18,7 @@ sys.path.append(str(current_dir.resolve()))
 
 
 def setup(app):
-    app.add_css_file(str(doc_css_path))
+    app.add_css_file(str(DOC_CSS_PATH))
 
 
 autodoc_mock_imports = [

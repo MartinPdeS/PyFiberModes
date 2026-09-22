@@ -9,6 +9,7 @@ from scipy.special import j0, y0, i0, k0
 from scipy.special import j1, y1, i1, k1
 from scipy.special import jvp, yvp, ivp, kvp
 from scipy.constants import mu_0, epsilon_0, physical_constants
+from PyFiberModes.exceptions import ValidationError
 
 # Physical constants
 ETA_0 = physical_constants['characteristic impedance of vacuum'][0]
@@ -38,6 +39,12 @@ class Geometry:
         Post-initialization of the class.
         Computes additional attributes such as refractive index and thickness.
         """
+        if self.radius_in < 0 or self.radius_out <= self.radius_in:
+            raise ValidationError("layer radii must define a positive annulus")
+        if not self.index_list:
+            raise ValidationError("a layer requires at least one refractive index")
+        if any(not np.isfinite(index) or index <= 0 for index in self.index_list):
+            raise ValidationError("refractive indices must be positive and finite")
         self.refractive_index = self.index_list[0]
         self.thickness = self.radius_out - self.radius_in
 
@@ -66,7 +73,7 @@ class StepIndex(Geometry):
         Refractive-index values associated with the layer.
     """
 
-    def get_index_at_radius(self, radius: float) -> float:
+    def get_index_at_radius(self, radius):
         """
         Get the refractive index at a specific radius.
 
@@ -80,9 +87,15 @@ class StepIndex(Geometry):
         float or None
             Refractive index at the given radius if within bounds, else None.
         """
-        return self.refractive_index if self.radius_in <= abs(radius) <= self.radius_out else None
+        radius_array = np.asarray(radius)
+        inside = (np.abs(radius_array) >= self.radius_in) & (
+            np.abs(radius_array) <= self.radius_out
+        )
+        if radius_array.ndim:
+            return np.where(inside, self.refractive_index, np.nan)
+        return self.refractive_index if bool(inside) else None
 
-    def get_U_W_parameter(self, radius: float, neff: float) -> float:
+    def get_U_W_parameter(self, radius, neff: float):
         r"""
         Calculate the U or W parameter for waveguides.
 
@@ -110,11 +123,12 @@ class StepIndex(Geometry):
         float
             U or W parameter value.
         """
-        index = self.get_index_at_radius(radius)
-        if index is None:
-            return 0
-
-        return (2 * numpy.pi / self.wavelength) * radius * np.sqrt(abs(index**2 - neff**2))
+        radius_array = np.asarray(radius)
+        index = self.get_index_at_radius(radius_array)
+        value = (2 * numpy.pi / self.wavelength) * radius_array * np.sqrt(
+            np.abs(np.asarray(index) ** 2 - neff**2)
+        )
+        return np.nan_to_num(value, nan=0.0)
 
     def get_psi(self, radius: float, neff: float, nu: int, C: list) -> tuple:
         r"""

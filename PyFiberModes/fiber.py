@@ -15,14 +15,14 @@ from PyFinitDiff.finite_difference_1D import get_function_derivative
 from PyFiberModes.field import Field
 
 from PyFiberModes.fundamentals import (
-    get_effective_index,
-    get_mode_cutoff_v0,
     get_radial_field,
     get_propagation_constant_from_omega
 )
 
 from PyFiberModes import loader
 from PyFiberModes.coordinates import CylindricalCoordinates
+from PyFiberModes.exceptions import ValidationError
+from PyFiberModes.services import FieldAnalysis, ModalAnalysis
 
 
 @dataclass
@@ -55,9 +55,62 @@ class Fiber(object):
 
     def __post_init__(self):
         """Initialize mutable layer and solver state after construction."""
+        if self.wavelength is not None and (
+            not numpy.isfinite(self.wavelength) or self.wavelength <= 0
+        ):
+            raise ValidationError("wavelength must be positive and finite")
         self.layers_parameters = []
         self.radius_in = 0
         self.layers = []
+        self._analysis_service = None
+        self._field_service = None
+
+    @property
+    def geometry_signature(self) -> tuple:
+        """Return an immutable signature of all solver-relevant fiber state.
+
+        Returns
+        -------
+        tuple
+            Wavelength and ordered layer geometry/index values.
+        """
+        layers = tuple(
+            (layer.radius_in, layer.radius_out, layer.refractive_index)
+            for layer in self.layers
+        )
+        return self.wavelength, layers
+
+    @property
+    def analysis(self) -> ModalAnalysis:
+        """Return the focused modal-analysis service.
+
+        Returns
+        -------
+        ModalAnalysis
+            Geometry-aware cached analysis service.
+        """
+        if self._analysis_service is None:
+            self._analysis_service = ModalAnalysis(self)
+        return self._analysis_service
+
+    @property
+    def fields(self) -> FieldAnalysis:
+        """Return the focused field-construction service.
+
+        Returns
+        -------
+        FieldAnalysis
+            Field orchestration service.
+        """
+        if self._field_service is None:
+            self._field_service = FieldAnalysis(self)
+        return self._field_service
+
+    def clear_caches(self) -> None:
+        """Clear modal and radial-field caches after a physical mutation."""
+        if self._analysis_service is not None:
+            self._analysis_service.clear()
+        self.get_radial_field.cache_clear()
 
     def scale(self, factor: float) -> None:
         """
@@ -195,7 +248,7 @@ class Fiber(object):
         self.wavelength = wavelength
         for layer in self.layers:
             layer.wavelength = wavelength
-        self.get_radial_field.cache_clear()
+        self.clear_caches()
 
     def add_layer(self, name: str, radius: float, index: float) -> None:
         """
@@ -214,6 +267,16 @@ class Fiber(object):
         -----
         Layers should be added in order, starting with the innermost layer (core).
         """
+        if not name:
+            raise ValidationError("layer name must not be empty")
+        if not numpy.isfinite(index) or index <= 0:
+            raise ValidationError("refractive index must be positive and finite")
+        radius = float(radius)
+        if radius <= 0:
+            radius = numpy.inf
+        if radius <= self.radius_in:
+            raise ValidationError("layer radii must be strictly increasing")
+
         self.layer_names.append(name)
         self.index_list.append(index)
 
@@ -231,6 +294,7 @@ class Fiber(object):
         self.layers.append(layer)
 
         self.radius_in = radius
+        self.clear_caches()
 
     def initialize_layers(self) -> None:
         """Initializes the layers.
@@ -240,6 +304,8 @@ class Fiber(object):
         None
             No returns
         """
+        if not self.layers:
+            raise ValidationError("a fiber must contain at least one layer")
         self.layers[-1].is_last_layer = True
         self.layers[0].is_first_layer = True
 
@@ -247,6 +313,7 @@ class Fiber(object):
 
         for position, layer in enumerate(self.layers):
             layer.position = position
+        self.clear_caches()
 
     def get_layer_at_radius(self, radius: float) -> StepIndex:
         """Gets the layer that is associated to a given radius.
@@ -263,8 +330,29 @@ class Fiber(object):
         """
         radius = abs(radius)
         for layer in self.layers:
-            if (radius > layer.radius_in) and (radius < layer.radius_out):
+            if layer.radius_in <= radius <= layer.radius_out:
                 return layer
+        raise ValidationError(f"radius {radius} lies outside the fiber geometry")
+
+    def get_index_profile(self, radius) -> numpy.ndarray:
+        """Evaluate the refractive-index profile for many radii at once.
+
+        Parameters
+        ----------
+        radius : array-like
+            Scalar or array of radial positions in meters.
+
+        Returns
+        -------
+        numpy.ndarray
+            Refractive indices with the same shape as ``radius``.
+        """
+        radii = numpy.abs(numpy.asarray(radius, dtype=float))
+        boundaries = numpy.asarray([layer.radius_out for layer in self.layers])
+        indices = numpy.asarray([layer.refractive_index for layer in self.layers])
+        positions = numpy.searchsorted(boundaries, radii, side="left")
+        positions = numpy.clip(positions, 0, len(indices) - 1)
+        return indices[positions]
 
     @property
     def radius(self) -> float:
@@ -417,13 +505,8 @@ class Fiber(object):
         float
             The cutoff wavelength.
         """
-        cutoff_V0 = get_mode_cutoff_v0(
-            mode=mode,
-            fiber=self,
-            wavelength=self.wavelength
-        )
-
-        return cutoff_V0
+        result = self.analysis.cutoff_result(mode)
+        return result.value if result.converged else numpy.nan
 
     def get_mode_cutoff_wavelength(self, mode: Mode) -> float:
         """
@@ -472,13 +555,22 @@ class Fiber(object):
         float
             The effective index.
         """
-        neff = get_effective_index(
-            fiber=self,
-            wavelength=self.wavelength,
-            mode=mode
-        )
+        return self.analysis.effective_index(mode)
 
-        return neff
+    def solve_effective_index(self, mode: Mode):
+        """Return a structured effective-index solver result.
+
+        Parameters
+        ----------
+        mode : Mode
+            Mode to solve.
+
+        Returns
+        -------
+        SolverResult[float]
+            Value and explicit convergence diagnostics.
+        """
+        return self.analysis.effective_index_result(mode)
 
     def get_normalized_beta(self, mode: Mode) -> float:
         """Gets the normalized propagation constant [beta].
@@ -493,11 +585,7 @@ class Fiber(object):
         float
             The normalized propagation constant.
         """
-        neff = get_effective_index(
-            fiber=self,
-            wavelength=self.wavelength,
-            mode=mode,
-        )
+        neff = self.get_effective_index(mode)
 
         n_max = self.maximum_index
 
@@ -522,11 +610,7 @@ class Fiber(object):
         float
             The propagation constant [:math:`beta`].
         """
-        neff = get_effective_index(
-            fiber=self,
-            wavelength=self.wavelength,
-            mode=mode,
-        )
+        neff = self.get_effective_index(mode)
 
         beta = neff * (2 * numpy.pi / self.wavelength)
 
@@ -555,11 +639,7 @@ class Fiber(object):
 
         where :math:`n_{eff}` is the effective refractive index.
         """
-        n_eff = get_effective_index(
-            fiber=self,
-            wavelength=self.wavelength,
-            mode=mode,
-        )
+        n_eff = self.get_effective_index(mode)
 
         return constants.c / n_eff
 
@@ -589,34 +669,20 @@ class Fiber(object):
 
         return derivative * constants.c
 
-    def get_groupe_velocity(self, mode: Mode) -> float:
-        r"""Gets the groupe velocity defined as:
-
-        .. math::
-            \left( \frac{\partial \beta}{\partial \omega} \right)^{-1}
+    def get_group_velocity(self, mode: Mode) -> float:
+        """Compute the correctly named modal group velocity.
 
         Parameters
         ----------
         mode : Mode
-            The mode to consider
+            Mode to evaluate.
 
         Returns
         -------
         float
-            The groupe velocity.
+            Group velocity in meters per second.
         """
-        omega = c * 2 * numpy.pi / self.wavelength
-
-        derivative = get_function_derivative(
-            function=get_propagation_constant_from_omega,
-            x_eval=omega,
-            derivative=1,
-            accuracy=4,
-            delta=1e12,  # This value is critical for accurate computation
-            function_kwargs=dict(fiber=self, mode=mode)
-        )
-
-        return 1 / derivative
+        return constants.c / self.get_group_index(mode)
 
     def get_group_velocity_dispersion(self, mode: Mode) -> float:
         r"""Gets the fiber group velocity dispersion defined as:
@@ -736,20 +802,12 @@ class Fiber(object):
         Field
             The field instance of the mode.
         """
-        if limit is None:
-            limit = self.radius * 5.5
-
-        field = Field(
-            fiber=self,
-            mode=mode,
-            limit=limit,
-            n_point=n_point
-        )
-
-        return field
+        return self.fields.mode_field(mode=mode, limit=limit, n_point=n_point)
 
     @cache
-    def get_radial_field(self, mode: Mode, radius: float) -> CylindricalCoordinates:
+    def get_radial_field(
+        self, mode: Mode, radius: float
+    ) -> tuple[CylindricalCoordinates, CylindricalCoordinates]:
         r"""Gets the mode field without the azimuthal component.
         Tuple structure is [:math:`E_{r}`, :math:`E_{\phi}`, :math:`E_{z}`], [:math:`H_{r}`, :math:`H_{\phi}`, :math:`H_{z}`]
 
@@ -762,8 +820,8 @@ class Fiber(object):
 
         Returns
         -------
-        PyFiberModes.coordinates.CylindricalCoordinates
-            The radial field.
+        tuple[CylindricalCoordinates, CylindricalCoordinates]
+            Electric and magnetic radial fields.
         """
         radial_field = get_radial_field(
             fiber=self,
@@ -773,6 +831,35 @@ class Fiber(object):
         )
 
         return radial_field
+
+    def get_radial_fields(self, mode: Mode, radius) -> tuple[CylindricalCoordinates, CylindricalCoordinates]:
+        """Evaluate radial electric and magnetic fields over an array.
+
+        Parameters
+        ----------
+        mode : Mode
+            Mode to evaluate.
+        radius : array-like
+            Radial sampling positions.
+
+        Returns
+        -------
+        tuple[CylindricalCoordinates, CylindricalCoordinates]
+            Electric and magnetic cylindrical components as arrays.
+        """
+        radii = numpy.asarray(radius, dtype=float)
+        flat = radii.ravel()
+        solved = [self.get_radial_field(mode, float(value)) for value in flat]
+
+        def assemble(position):
+            """Assemble one electric or magnetic coordinate container."""
+            values = [item[position] for item in solved]
+            return CylindricalCoordinates(*(
+                numpy.asarray([getattr(value, name) for value in values]).reshape(radii.shape)
+                for name in ("rho", "phi", "z")
+            ))
+
+        return assemble(0), assemble(1)
 
     def get_radial_field_norm(self, mode: Mode, radius: float) -> float:
         r"""Gets the norm of the mode field without the azimuthal component.
@@ -790,12 +877,7 @@ class Fiber(object):
         float
             The radial field.
         """
-        e_field, h_field = get_radial_field(
-            fiber=self,
-            mode=mode,
-            wavelength=self.wavelength,
-            radius=radius
-        )
+        e_field, h_field = self.get_radial_field(mode=mode, radius=radius)
 
         norm = numpy.sqrt(e_field.rho**2 + e_field.phi**2 + e_field.z**2)
 
@@ -817,7 +899,7 @@ class Fiber(object):
         mode_exist = []
         for mode in mode_list:
             neff = self.get_effective_index(mode=mode)
-            if neff is numpy.nan:
+            if not numpy.isfinite(neff):
                 mode_exist.append(False)
             else:
                 mode_exist.append(True)
