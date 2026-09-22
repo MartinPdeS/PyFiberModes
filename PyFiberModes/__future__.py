@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+"""Experimental field-normalization helpers retained for future APIs."""
 
 import numpy
 
@@ -7,20 +6,28 @@ from PyFiberModes import Mode
 
 
 def get_normalized_LP_coupling(fiber, mode_0: Mode, mode_1: Mode) -> float:
-    r"""
-    Gets the normalized coupling between two supermodes as defined in Equation 7.39 Jacques Bures.
+    r"""Calculate normalized coupling between two LP supermodes.
+
+    Parameters
+    ----------
+    fiber : Fiber
+        Fiber providing propagation constants and interface fields.
+    mode_0, mode_1 : Mode
+        Linearly polarized modes to couple.
+
+    Returns
+    -------
+    float
+        Normalized coupling coefficient.
+
+    Notes
+    -----
+    The calculation follows Equation 7.39 of Jacques Bures,
+    *Optical Fiber Theory*:
 
     .. math::
 
         \tilde{C_{ij}} = \frac{0.5 k_0^2}{(\beta_0 - \beta_1) \sqrt{\beta_0 * \beta_1}} \sum_i r_i^2 \psi_0(r_i) * \psi_1(r_i)
-
-    :param      mode_0:  The mode 0
-    :type       mode_0:  Mode
-    :param      mode_1:  The mode 1
-    :type       mode_1:  Mode
-
-    :returns:   The normalized coupling.
-    :rtype:     float
     """
     assert mode_0.family == 'LP' and mode_1.family == 'LP', "The normalized coupling equation are only valid for scalar [LP] modes"
 
@@ -56,6 +63,20 @@ def get_normalized_LP_coupling(fiber, mode_0: Mode, mode_1: Mode) -> float:
 
 
 def get_LP_mode_norm(fiber, mode: Mode) -> float:
+    """Calculate the radial normalization integral of an LP mode.
+
+    Parameters
+    ----------
+    fiber : Fiber
+        Fiber providing radial fields and outer radius.
+    mode : Mode
+        Linearly polarized mode to normalize.
+
+    Returns
+    -------
+    float
+        Scalar radial-field norm.
+    """
     radius_list = numpy.linspace(0, 2 * fiber.radius, 100)
 
     amplitudes = get_LP_mode_radial_field(
@@ -70,6 +91,24 @@ def get_LP_mode_norm(fiber, mode: Mode) -> float:
 
 
 def get_LP_mode_radial_normalized_field(fiber, mode: Mode, radius_list: numpy.ndarray = None) -> float:
+    """Sample and normalize the scalar radial field of an LP mode.
+
+    Parameters
+    ----------
+    fiber : Fiber
+        Fiber providing radial fields.
+    mode : Mode
+        Linearly polarized mode to sample.
+    radius_list : numpy.ndarray, optional
+        Radial sampling positions in meters.
+
+    Returns
+    -------
+    normalized_field : numpy.ndarray
+        Unit-normalized scalar field samples.
+    radius_list : numpy.ndarray
+        Radial positions associated with the samples.
+    """
     if radius_list is None:
         radius_list = numpy.linspace(0, 2 * fiber.radius, 200)
 
@@ -85,6 +124,22 @@ def get_LP_mode_radial_normalized_field(fiber, mode: Mode, radius_list: numpy.nd
 
 
 def get_LP_mode_radial_field(fiber, mode: Mode, radius_list: numpy.ndarray) -> float:
+    """Sample the scalar radial electric field of an LP mode.
+
+    Parameters
+    ----------
+    fiber : Fiber
+        Fiber providing radial fields.
+    mode : Mode
+        Linearly polarized mode to sample.
+    radius_list : numpy.ndarray
+        Radial sampling positions in meters.
+
+    Returns
+    -------
+    numpy.ndarray
+        Radial electric-field amplitude at each position.
+    """
     amplitudes = numpy.empty(radius_list.size)
 
     for idx, rho in enumerate(radius_list):
@@ -95,6 +150,20 @@ def get_LP_mode_radial_field(fiber, mode: Mode, radius_list: numpy.ndarray) -> f
 
 
 def get_scalar_field_norm(rho_list: numpy.ndarray, field: numpy.ndarray) -> float:
+    r"""Integrate the cylindrical norm of a scalar radial field.
+
+    Parameters
+    ----------
+    rho_list : numpy.ndarray
+        Uniform radial sampling positions.
+    field : numpy.ndarray
+        Scalar field amplitude at each radial position.
+
+    Returns
+    -------
+    float
+        Value of :math:`2\pi\int |E(\rho)|^2\rho\,d\rho`.
+    """
     rho_list = numpy.asarray(rho_list)
     field = numpy.asarray(field)
     dr = rho_list[1] - rho_list[0]

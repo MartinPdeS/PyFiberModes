@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+"""Effective-index and radial-field solver for standard step-index fibers."""
 
 import numpy
 import logging
@@ -19,11 +18,29 @@ Solver for standard layer step-index solver: SSIF
 
 
 class NeffSolver(BaseSolver):
-    """
-    Effective index solver for standard step-index fiber
+    """Solve effective indices and fields for a two-layer fiber.
+
+    Parameters
+    ----------
+    fiber : Fiber
+        Standard step-index fiber.
+    wavelength : float
+        Vacuum wavelength in meters.
     """
 
     def get_mode_with_lower_neff(self, mode: Mode) -> Mode:
+        """Select a neighboring mode used as a lower solution boundary.
+
+        Parameters
+        ----------
+        mode : Mode
+            Mode being solved.
+
+        Returns
+        -------
+        Mode
+            Related LP mode expected to have a lower effective index.
+        """
         match mode.family:
             case 'LP':
                 lower_neff_mode = Mode('LP', mode.nu + 1, mode.m)
@@ -37,14 +54,17 @@ class NeffSolver(BaseSolver):
         return lower_neff_mode
 
     def get_clad_index_from_V0(self, V0: float) -> float:
-        """
-        Gets a clad index value associated to a certain V0 parameter for the same exact fiber.
+        """Gets a clad index value associated to a certain V0 parameter for the same exact fiber.
 
-        :param      V0:   The V number
-        :type       V0:   float
+        Parameters
+        ----------
+        V0 : float
+            The V number
 
-        :returns:   The clad index
-        :rtype:     float
+        Returns
+        -------
+        float
+            The clad index
         """
         core = self.fiber.first_layer
 
@@ -60,14 +80,17 @@ class NeffSolver(BaseSolver):
         return numpy.sqrt(n_clad_2)
 
     def get_low_neff_boundary(self, mode: Mode) -> float:
-        """
-        Gets the lower neff boundary using a lower neff mode.
+        """Gets the lower neff boundary using a lower neff mode.
 
-        :param      mode:  The current mode
-        :type       mode:  Mode
+        Parameters
+        ----------
+        mode : Mode
+            The current mode
 
-        :returns:   The low neff boundary.
-        :rtype:     float
+        Returns
+        -------
+        float
+            The low neff boundary.
         """
         core, clad = self.fiber.layers
 
@@ -85,14 +108,17 @@ class NeffSolver(BaseSolver):
         return lower_neff_boundary
 
     def get_ceq_function(self, mode: Mode) -> object:
-        """
-        Gets the adequat phase matching mode equation function.
+        """Gets the adequat phase matching mode equation function.
 
-        :param      mode:  The mode
-        :type       mode:  Mode
+        Parameters
+        ----------
+        mode : Mode
+            The mode
 
-        :returns:   The ceq function.
-        :rtype:     object
+        Returns
+        -------
+        object
+            The ceq function.
         """
         match mode.family:
             case 'LP':
@@ -112,20 +138,23 @@ class NeffSolver(BaseSolver):
             delta_neff: float,
             max_iteration: int = 100,
             epsilon: float = 1e-14) -> float:
-        """
-        Solve and return the effective index (neff) for a given mode.
+        """Solve and return the effective index (neff) for a given mode.
 
-        :param      mode:                 The mode
-        :type       mode:                 Mode
-        :param      delta_neff:           The delta neff
-        :type       delta_neff:           float
-        :param      max_iteration:        The maximum iteration, compute time heavily depend on it.
-        :type       max_iteration:        int
-        :param      epsilon:              The epsilon
-        :type       epsilon:              float
+        Parameters
+        ----------
+        mode : Mode
+            The mode
+        delta_neff : float
+            The delta neff
+        max_iteration : int
+            The maximum iteration, compute time heavily depend on it.
+        epsilon : float
+            The epsilon
 
-        :returns:   The effective index of the mode
-        :rtype:     float
+        Returns
+        -------
+        float
+            The effective index of the mode
         """
         mode_cutoff_V0 = self.fiber.get_mode_cutoff_v0(mode=mode)
 
@@ -153,8 +182,7 @@ class NeffSolver(BaseSolver):
         return result
 
     def get_LP_field(self, nu: int, neff: float, radius: float) -> tuple:
-        r"""
-        Gets the LP field in the form of a tuple containing two numpy arrays.
+        r"""Gets the LP field in the form of a tuple containing two numpy arrays.
         Tuple structure is [:math:`E_{x}`, 0, 0], [0, :math:`H_{y}`, 0].
 
         The field are computed with as:
@@ -171,15 +199,19 @@ class NeffSolver(BaseSolver):
             E_x &= k_0\left( W * r \ r_{core} \right) / k_0(W) \\[10pt]
             H_y &= n_{eff} * \sqrt{\epsilon_0 / \mu_0} * E_x \\[10pt]
 
-        :param      nu:          The nu parameter of the mode
-        :type       nu:          int
-        :param      neff:        The effective index
-        :type       neff:        float
-        :param      radius:      The radius
-        :type       radius:      float
+        Parameters
+        ----------
+        nu : int
+            The nu parameter of the mode
+        neff : float
+            The effective index
+        radius : float
+            The radius
 
-        :returns:   The lp field.
-        :rtype:     tuple
+        Returns
+        -------
+        tuple
+            The lp field.
         """
         core, clad = self.fiber.layers
 
@@ -198,8 +230,7 @@ class NeffSolver(BaseSolver):
         return e_field, h_field
 
     def get_TE_field(self, nu: int, neff: float, radius: float) -> numpy.ndarray:
-        r"""
-        Gets the TE field in the form of a tuple containing two numpy arrays.
+        r"""Gets the TE field in the form of a tuple containing two numpy arrays.
         Tuple structure is [0, :math:`E_{\phi}`, 0], [:math:`H_{r}`, 0, :math:`H_{z}`]
 
         The field are computed within the core and radius:
@@ -219,15 +250,19 @@ class NeffSolver(BaseSolver):
             E_\phi &= -k_1(W * r/r_{core}) / k_1(W) \\[10pt]
             H_r &= n_{eff} * \sqrt{\epsilon_0 / \mu_0} * E_\phi \\[10pt]
 
-        :param      nu:          The nu parameter of the mode
-        :type       nu:          int
-        :param      neff:        The effective index
-        :type       neff:        float
-        :param      radius:      The radius
-        :type       radius:      float
+        Parameters
+        ----------
+        nu : int
+            The nu parameter of the mode
+        neff : float
+            The effective index
+        radius : float
+            The radius
 
-        :returns:   The TE field.
-        :rtype:     tuple
+        Returns
+        -------
+        tuple
+            The TE field.
         """
         core, clad = self.fiber.layers
 
@@ -251,8 +286,7 @@ class NeffSolver(BaseSolver):
         return e_field, h_field
 
     def get_TM_field(self, nu: int, neff: float, radius: float) -> tuple:
-        r"""
-        Gets the TM field in the form of a tuple containing two numpy arrays.
+        r"""Gets the TM field in the form of a tuple containing two numpy arrays.
         Tuple structure is [:math:`E_{r}`, 0, :math:`E_{z}`], [0, :math:`H_{\phi}`, 0]
 
 
@@ -273,15 +307,19 @@ class NeffSolver(BaseSolver):
             E_r &= \frac{n_{core}}{n_{clad}} k_1(W * r/r_{core}) / k_1(W)\\[10pt]
             H_\phi &= \sqrt{\epsilon_0 / \mu_0} * \frac{n_{core}}{n_{clad}} * k_1(W * r/r_{core}) / k_1(W) \\[10pt]
 
-        :param      nu:          The nu parameter of the mode
-        :type       nu:          int
-        :param      neff:        The effective index
-        :type       neff:        float
-        :param      radius:      The radius
-        :type       radius:      float
+        Parameters
+        ----------
+        nu : int
+            The nu parameter of the mode
+        neff : float
+            The effective index
+        radius : float
+            The radius
 
-        :returns:   The LP field.
-        :rtype:     tuple
+        Returns
+        -------
+        tuple
+            The LP field.
         """
         core, clad = self.fiber.layers
 
@@ -313,19 +351,22 @@ class NeffSolver(BaseSolver):
         return e_field, h_field
 
     def get_HE_field(self, nu: float, neff: float, radius: float) -> tuple:
-        r"""
-        Gets the HE field in the form of a tuple containing two numpy arrays.
+        r"""Gets the HE field in the form of a tuple containing two numpy arrays.
         Tuple structure is [:math:`E_{r}`, :math:`E_{\phi}`, :math:`E_{z}`], [:math:`H_{r}`, :math:`H_{\phi}`, :math:`H_{z}`]
 
-        :param      nu:          The nu parameter of the mode
-        :type       nu:          int
-        :param      neff:        The effective index
-        :type       neff:        float
-        :param      radius:      The radius
-        :type       radius:      float
+        Parameters
+        ----------
+        nu : int
+            The nu parameter of the mode
+        neff : float
+            The effective index
+        radius : float
+            The radius
 
-        :returns:   The HE field.
-        :rtype:     tuple
+        Returns
+        -------
+        tuple
+            The HE field.
         """
         core, clad = self.fiber.layers
 
@@ -387,25 +428,25 @@ class NeffSolver(BaseSolver):
         return e_field, h_field
 
     def get_EH_field(self, *args, **kwargs) -> tuple:
-        r"""
-        Gets the EH field in the form of a tuple containing two numpy arrays.
+        r"""Gets the EH field in the form of a tuple containing two numpy arrays.
         Tuple structure is [:math:`E_{r}`, :math:`E_{\phi}`, :math:`E_{z}`], [:math:`H_{r}`, :math:`H_{\phi}`, :math:`H_{z}`]
 
-        :param      nu:          The nu parameter of the mode
-        :type       nu:          int
-        :param      neff:        The effective index
-        :type       neff:        float
-        :param      radius:      The radius
-        :type       radius:      float
+        Parameters
+        ----------
+        *args
+            Positional arguments forwarded to :meth:`get_HE_field`.
+        **kwargs
+            Keyword arguments forwarded to :meth:`get_HE_field`.
 
-        :returns:   The LP field.
-        :rtype:     tuple
+        Returns
+        -------
+        tuple
+            The LP field.
         """
         return self.get_HE_field(*args, **kwargs)
 
     def get_U_W_V_parameter(self, neff: float) -> tuple:
-        r"""
-        Gets the U, W parameter of the fiber. Those are computed as:
+        r"""Gets the U, W parameter of the fiber. Those are computed as:
 
         .. math:
 
@@ -413,11 +454,15 @@ class NeffSolver(BaseSolver):
             W &= r_{core} * k_0 * \sqrt{n_{eff}^2 - n_{core}^2} \\[10pt]
             V &= \sqrt{U^2 + W^2} \\[10pt]
 
-        :param      neff:        The effective index
-        :type       neff:        float
+        Parameters
+        ----------
+        neff : float
+            The effective index
 
-        :returns:   The U and W parameter.
-        :rtype:     tuple
+        Returns
+        -------
+        tuple
+            The U and W parameter.
         """
         core, clad = self.fiber.layers
 
@@ -432,19 +477,26 @@ class NeffSolver(BaseSolver):
         return U, W, V
 
     def get_LP_equation(self, neff: float, nu: int) -> float:
-        """
-        Return the value of the phase matching equation for LP mode.
+        """        Return the value of the phase matching equation for LP mode.
 
-        .. math::
-            U * j_{\nu -1}(U) * k_{\nu}(W) + W * j_{\nu}(U) * k_{\nu - 1}(W)
+                .. math::
+                    U * j_{
+        u -1}(U) * k_{
+        u}(W) + W * j_{
+        u}(U) * k_{
+        u - 1}(W)
 
-        :param      neff:        The effective index
-        :type       neff:        float
-        :param      nu:          The nu parameter of the mode
-        :type       nu:          int
+        Parameters
+        ----------
+        neff : float
+            The effective index
+        nu : int
+            The nu parameter of the mode
 
-        :returns:   Dont know
-        :rtype:     float
+        Returns
+        -------
+        float
+            Dont know
         """
         u, w, _ = self.get_U_W_V_parameter(neff=neff)
 
@@ -453,38 +505,44 @@ class NeffSolver(BaseSolver):
         return value
 
     def get_TE_equation(self, neff: float, nu: int) -> float:
-        """
-        Return the value of the phase matching equation for TE mode.
+        """Return the value of the phase matching equation for TE mode.
 
         .. math::
             U * j_0(U) * k_1(W) + W * j_1(U) * k_0(W)
 
-        :param      neff:        The effective index
-        :type       neff:        float
-        :param      nu:          The nu parameter of the mode
-        :type       nu:          int
+        Parameters
+        ----------
+        neff : float
+            The effective index
+        nu : int
+            The nu parameter of the mode
 
-        :returns:   Dont know
-        :rtype:     float
+        Returns
+        -------
+        float
+            Dont know
         """
         U, W, _ = self.get_U_W_V_parameter(neff=neff)
 
         return U * j0(U) * k1(W) + W * j1(U) * k0(W)
 
     def get_TM_equation(self, neff: float, nu: int) -> float:
-        """
-        Return the value of the phase matching equation for TM mode.
+        """Return the value of the phase matching equation for TM mode.
 
         .. math::
             U * j_0(U) * k_1(W) * n_{clad}^2 + W * j_1(U) * k_0(W) * n_{core}^2
 
-        :param      neff:        The effective index
-        :type       neff:        float
-        :param      nu:          The nu parameter of the mode
-        :type       nu:          int
+        Parameters
+        ----------
+        neff : float
+            The effective index
+        nu : int
+            The nu parameter of the mode
 
-        :returns:   Dont know
-        :rtype:     float
+        Returns
+        -------
+        float
+            Dont know
         """
         core, clad = self.fiber.layers
 
@@ -497,16 +555,19 @@ class NeffSolver(BaseSolver):
         return U * j0(U) * k1(W) * n_clad**2 + W * j1(U) * k0(W) * n_core**2
 
     def get_HE_EH_terms(self, neff, nu: int) -> float:
-        """
-        Return the value of the terms for the equation for HE or EH mode.
+        """Return the value of the terms for the equation for HE or EH mode.
 
-        :param      neff:        The effective index
-        :type       neff:        float
-        :param      nu:          The nu parameter of the mode
-        :type       nu:          int
+        Parameters
+        ----------
+        neff : float
+            The effective index
+        nu : int
+            The nu parameter of the mode
 
-        :returns:   Dont know
-        :rtype:     float
+        Returns
+        -------
+        float
+            Dont know
         """
         core, clad = self.fiber.layers
 
@@ -530,16 +591,19 @@ class NeffSolver(BaseSolver):
         return term_0, term_4
 
     def get_HE_equation(self, neff: float, nu: int) -> float:
-        """
-        Return the value of the phase matching equation for HE mode.
+        """Return the value of the phase matching equation for HE mode.
 
-        :param      neff:        The effective index
-        :type       neff:        float
-        :param      nu:          The nu parameter of the mode
-        :type       nu:          int
+        Parameters
+        ----------
+        neff : float
+            The effective index
+        nu : int
+            The nu parameter of the mode
 
-        :returns:   Dont know
-        :rtype:     float
+        Returns
+        -------
+        float
+            Dont know
         """
         term_0, term_1 = self.get_HE_EH_terms(
             neff=neff,
@@ -551,16 +615,19 @@ class NeffSolver(BaseSolver):
         return value
 
     def get_EH_equation(self, neff: float, nu: int) -> float:
-        """
-        Return the value of the phase matching equation for EH mode.
+        """Return the value of the phase matching equation for EH mode.
 
-        :param      neff:        The effective index
-        :type       neff:        float
-        :param      nu:          The nu parameter of the mode
-        :type       nu:          int
+        Parameters
+        ----------
+        neff : float
+            The effective index
+        nu : int
+            The nu parameter of the mode
 
-        :returns:   Dont know
-        :rtype:     float
+        Returns
+        -------
+        float
+            Dont know
         """
         term_0, term_1 = self.get_HE_EH_terms(
             neff=neff,

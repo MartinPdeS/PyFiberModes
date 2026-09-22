@@ -4,7 +4,7 @@
 import sys
 import os
 from sphinx_gallery.sorting import FileNameSortKey
-from MPSPlots.styles import use_mpsplots_style
+import matplotlib.pyplot as plt
 from pathlib import Path
 import PyFiberModes
 from PyFiberModes.directories import doc_css_path
@@ -22,24 +22,25 @@ def setup(app):
 
 
 autodoc_mock_imports = [
-    'numpy',
-    'matplotlib',
-    'numpydoc',
+    "numpy",
+    "matplotlib",
+    "numpydoc",
 ]
 
 project = package_name
-copyright = '2024, Martin Poinsinet de Sivry-Houle'
-author = 'Martin Poinsinet de Sivry-Houle'
+copyright = "2024, Martin Poinsinet de Sivry-Houle"
+author = "Martin Poinsinet de Sivry-Houle"
 
 
 extensions = [
-    'sphinx.ext.mathjax',
-    'sphinx_gallery.gen_gallery',
-    'sphinx.ext.autodoc',
-    'sphinx.ext.napoleon',
-    'sphinx.ext.viewcode',
-    'sphinx.ext.autosectionlabel',
-    'sphinx.ext.intersphinx',
+    "sphinx.ext.mathjax",
+    "sphinx_gallery.gen_gallery",
+    "sphinx.ext.autodoc",
+    "sphinx.ext.napoleon",
+    "sphinx.ext.viewcode",
+    "sphinx.ext.autosectionlabel",
+    "sphinx.ext.intersphinx",
+    "sphinx_design",
 ]
 
 # Napoleon settings for docstrings
@@ -47,49 +48,55 @@ napoleon_google_docstring = False
 napoleon_numpy_docstring = True
 
 html_logo = "_static/thumbnail.png"
-html_favicon = "_static/thumbnail.png"
+html_favicon = "_static/favicon.png"
 
 
 def reset_mpl(gallery_conf, fname):
-    use_mpsplots_style()
+    plt.rcdefaults()
 
 
 examples_files = [
-    'basic', 'DCF', 'SMF28'
+    "basic",
+    "SMF28",
+    "DCF",
+    "fields",
+    "analysis",
+    "validation",
+    "benchmarks",
 ]
 
 sphinx_gallery_conf = {
-    "examples_dirs": ['../examples/' + f for f in examples_files],
-    "gallery_dirs": ['gallery/' + f for f in examples_files],
-    'image_scrapers': ('matplotlib'),
-    'ignore_pattern': '/__',
-    'filename_pattern': r'.*\.py',
-    'plot_gallery': True,
-    'thumbnail_size': [600, 600],
-    'download_all_examples': False,
-    'reset_modules': reset_mpl,
-    'line_numbers': False,
-    'remove_config_comments': True,
-    'capture_repr': ('_repr_html_', '__repr__'),
-    'nested_sections': True,
-    'within_subsection_order': FileNameSortKey,
+    "examples_dirs": ["../examples/" + f for f in examples_files],
+    "gallery_dirs": ["gallery/" + f for f in examples_files],
+    "image_scrapers": ("matplotlib"),
+    "ignore_pattern": "/__",
+    "filename_pattern": r".*\.py",
+    "plot_gallery": True,
+    "thumbnail_size": [600, 600],
+    "download_all_examples": False,
+    "reset_modules": reset_mpl,
+    "line_numbers": False,
+    "remove_config_comments": True,
+    "capture_repr": ("_repr_html_", "__repr__"),
+    "nested_sections": True,
+    "within_subsection_order": FileNameSortKey,
 }
 
 autodoc_default_options = {
-    'members': True,
-    'members-order': 'bysource',
-    'undoc-members': False,
-    'show-inheritance': True,
+    "members": True,
+    "members-order": "bysource",
+    "undoc-members": False,
+    "show-inheritance": True,
 }
 
 autosectionlabel_prefix_document = True
 numpydoc_show_class_members = False
 add_module_names = False
 
-source_suffix = '.rst'
-master_doc = 'index'
-language = 'en'
-highlight_language = 'python3'
+source_suffix = ".rst"
+master_doc = "index"
+language = "en"
+highlight_language = "python3"
 html_theme = "pydata_sphinx_theme"
 
 # -- Options for HTML output -------------------------------------------------
@@ -105,38 +112,39 @@ binder_branch = f"v{major}.{minor}.x"
 
 html_theme_options = dict()
 
-html_theme_options['logo'] = dict(text=package_name, image="_static/thumbnail.png")
+html_theme_options["logo"] = dict(text=package_name, image="_static/thumbnail.png")
 html_theme_options["show_nav_level"] = 0
 
-html_theme_options.update({
-    "icon_links": [
-        {
-            "name": "GitHub",
-            "url": f"https://github.com/MartinPdeS/{package_name}",
-            "icon": "fa-brands fa-github",
-        },
-        {
-            "name": "PyPI",
-            "url": f"https://pypi.org/project/{package_name}/",
-            "icon": "fa-solid fa-box",
-        },
-        {
-            "name": "Anaconda",
-            "url": f"https://anaconda.org/MartinPdeS/{package_name}",
-            "icon": "fa-brands fa-python",
-        },
-    ],
-    "navbar_align": "left",
-    "navbar_end": ["version-switcher", "navbar-icon-links"],
-    "show_prev_next": False,
-    "show_version_warning_banner": True,
-    # Footer
-    "footer_start": ["copyright"],
-    "footer_end": ["sphinx-version", "theme-version"],
-    # Other
-    "pygments_light_style": "default",
-    "pygments_dark_style": "github-dark",
-}
+html_theme_options.update(
+    {
+        "icon_links": [
+            {
+                "name": "GitHub",
+                "url": f"https://github.com/MartinPdeS/{package_name}",
+                "icon": "fa-brands fa-github",
+            },
+            {
+                "name": "PyPI",
+                "url": f"https://pypi.org/project/{package_name}/",
+                "icon": "fa-solid fa-box",
+            },
+            {
+                "name": "Anaconda",
+                "url": f"https://anaconda.org/MartinPdeS/{package_name}",
+                "icon": "fa-brands fa-python",
+            },
+        ],
+        "navbar_align": "left",
+        "navbar_end": ["version-switcher", "theme-switcher", "navbar-icon-links"],
+        "show_prev_next": False,
+        "show_version_warning_banner": True,
+        # Footer
+        "footer_start": ["copyright"],
+        "footer_end": ["sphinx-version", "theme-version"],
+        # Other
+        "pygments_light_style": "default",
+        "pygments_dark_style": "github-dark",
+    }
 )
 
 current_version = os.getenv("tag", "latest")
@@ -146,32 +154,40 @@ html_theme_options["switcher"] = dict(
     version_match=current_version,
 )
 
-htmlhelp_basename = f'{package_name}doc'
+htmlhelp_basename = f"{package_name}doc"
 
 latex_elements = {}
 
 
 latex_documents = [
-    (master_doc, f'{package_name}.tex', f'{package_name} Documentation',
-     'Martin Poinsinet de Sivry-Houle', 'manual'),
+    (
+        master_doc,
+        f"{package_name}.tex",
+        f"{package_name} Documentation",
+        "Martin Poinsinet de Sivry-Houle",
+        "manual",
+    ),
 ]
 
-man_pages = [
-    (master_doc, 'supymode', f'{package_name} Documentation',
-     [author], 1)
-]
+man_pages = [(master_doc, "supymode", f"{package_name} Documentation", [author], 1)]
 
 texinfo_documents = [
-    (master_doc, package_name, f'{package_name} Documentation',
-     author, package_name, 'One line description of project.',
-     'Miscellaneous'),
+    (
+        master_doc,
+        package_name,
+        f"{package_name} Documentation",
+        author,
+        package_name,
+        "One line description of project.",
+        "Miscellaneous",
+    ),
 ]
 
 epub_title = project
 
-html_static_path = ['_static']
-templates_path = ['_templates']
-html_css_files = ['default.css']
-epub_exclude_files = ['search.html']
+html_static_path = ["_static"]
+templates_path = ["_templates"]
+html_css_files = ["default.css"]
+epub_exclude_files = ["search.html"]
 
 # -

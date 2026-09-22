@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+"""Load and normalize YAML fiber definitions."""
 
 import yaml
 import numpy as np

@@ -8,7 +8,25 @@ from scipy.integrate import solve_ivp
 
 
 def overlap(field_a, field_b, *, normalized: bool = True) -> complex:
-    """Return the electric-field overlap integral on a shared grid."""
+    """Calculate the electric-field overlap on a shared Cartesian grid.
+
+    Parameters
+    ----------
+    field_a, field_b : Field
+        Field objects sampled on grids with identical shapes and spacing.
+    normalized : bool, optional
+        Divide the inner product by both field norms when true.
+
+    Returns
+    -------
+    complex
+        Complex overlap integral or normalized overlap coefficient.
+
+    Raises
+    ------
+    ValueError
+        If the two field grids have different shapes.
+    """
     if field_a.cartesian_coordinates.x.shape != field_b.cartesian_coordinates.x.shape:
         raise ValueError("fields must use the same grid shape")
     components_a = (field_a.Ex(), field_a.Ey(), field_a.Ez())
@@ -24,7 +42,20 @@ def overlap(field_a, field_b, *, normalized: bool = True) -> complex:
 
 
 def coupling_matrix(fields: Sequence, perturbation=None) -> np.ndarray:
-    """Build a Hermitian overlap/coupling matrix from mode fields."""
+    """Build a Hermitian coupling matrix from sampled mode fields.
+
+    Parameters
+    ----------
+    fields : sequence of Field
+        Mode fields defined on a common Cartesian grid.
+    perturbation : scalar or numpy.ndarray, optional
+        Spatial weighting applied to each overlap integrand.
+
+    Returns
+    -------
+    numpy.ndarray
+        Complex Hermitian matrix with a zero diagonal.
+    """
     count = len(fields)
     matrix = np.zeros((count, count), dtype=complex)
     weight = 1.0 if perturbation is None else np.asarray(perturbation)
@@ -46,28 +77,90 @@ def coupling_matrix(fields: Sequence, perturbation=None) -> np.ndarray:
 
 @dataclass(frozen=True)
 class PropagationResult:
+    """Store longitudinal coupled-mode propagation results.
+
+    Parameters
+    ----------
+    z : numpy.ndarray
+        Longitudinal sample positions.
+    amplitudes : numpy.ndarray
+        Complex modal amplitudes shaped ``(n_positions, n_modes)``.
+    """
     z: np.ndarray
     amplitudes: np.ndarray
 
     @property
     def powers(self):
+        """Return modal powers at every longitudinal position.
+
+        Returns
+        -------
+        numpy.ndarray
+            Squared amplitude magnitudes with the same shape as
+            :attr:`amplitudes`.
+        """
         return np.abs(self.amplitudes) ** 2
 
 
 class CoupledModeSystem:
-    """Propagate modal amplitudes using dA/dz = -i(β+κ)A."""
+    r"""Represent a longitudinal coupled-mode system.
+
+    Parameters
+    ----------
+    betas : array-like
+        Propagation constants for each mode.
+    coupling : array-like or callable
+        Constant coupling matrix or function ``coupling(z)``.
+
+    Notes
+    -----
+    Amplitudes satisfy :math:`dA/dz = -i(\beta + \kappa)A`.
+    """
 
     def __init__(self, betas, coupling):
+        """Initialize propagation constants and modal coupling.
+
+        Parameters
+        ----------
+        betas : array-like
+            Propagation constants for each mode.
+        coupling : array-like or callable
+            Constant or position-dependent coupling matrix.
+        """
         self.betas = np.asarray(betas, dtype=float)
         self.coupling = coupling
 
     def propagate(self, initial, z, **solve_options) -> PropagationResult:
+        """Propagate initial modal amplitudes over longitudinal positions.
+
+        Parameters
+        ----------
+        initial : array-like
+            Complex modal amplitudes at ``z[0]``.
+        z : array-like
+            Ordered longitudinal evaluation positions.
+        **solve_options
+            Additional options forwarded to :func:`scipy.integrate.solve_ivp`.
+
+        Returns
+        -------
+        PropagationResult
+            Positions and propagated modal amplitudes.
+
+        Raises
+        ------
+        ValueError
+            If initial amplitudes and propagation constants differ in length.
+        RuntimeError
+            If numerical integration fails.
+        """
         z = np.asarray(z, dtype=float)
         initial = np.asarray(initial, dtype=complex)
         if initial.shape != self.betas.shape:
             raise ValueError("initial amplitudes and betas must have the same length")
 
         def derivative(position, amplitudes):
+            """Evaluate the coupled-mode ordinary differential equation."""
             coupling = self.coupling(position) if callable(self.coupling) else self.coupling
             hamiltonian = np.diag(self.betas) + np.asarray(coupling, dtype=complex)
             return -1j * hamiltonian @ amplitudes

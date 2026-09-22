@@ -1,11 +1,25 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+"""Optical-source wavelength and frequency conversions."""
 
 from scipy.constants import c, pi
 
 
 class Source():
+    """Represent a monochromatic optical source.
+
+    Parameters
+    ----------
+    wavelength : float
+        Vacuum wavelength in meters.
+    """
+
     def __init__(self, wavelength: float):
+        """Initialize a source from its vacuum wavelength.
+
+        Parameters
+        ----------
+        wavelength : float
+            Vacuum wavelength in meters.
+        """
         self.wavelength = wavelength
 
     @property

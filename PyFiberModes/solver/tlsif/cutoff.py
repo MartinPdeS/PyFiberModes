@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+"""Modal cutoff solver for three-layer step-index fibers."""
 
 from PyFiberModes.mode import Mode
 from PyFiberModes.mode_instances import HE11, LP01, LP11, TE01
@@ -18,13 +17,44 @@ Solver for three layer step-index solver: TLSIF
 
 
 class NameSpace():
+    """Store solver intermediates as dynamically named attributes.
+
+    Parameters
+    ----------
+    **kwargs
+        Attribute names and values to store.
+    """
+
     def __init__(self, **kwargs):
+        """Populate attributes from keyword arguments."""
         for key, value in kwargs.items():
             setattr(self, key, value)
 
 
 class CutoffSolver(BaseSolver):
+    """Solve normalized cutoffs for a three-layer step-index fiber.
+
+    Parameters
+    ----------
+    fiber : Fiber
+        Three-layer fiber to solve.
+    wavelength : float
+        Reference vacuum wavelength in meters.
+    """
+
     def get_lower_neff_mode(self, mode: Mode) -> Mode:
+        """Choose the preceding mode that bounds a cutoff search.
+
+        Parameters
+        ----------
+        mode : Mode
+            Mode whose cutoff is requested.
+
+        Returns
+        -------
+        Mode
+            Neighboring lower-order mode.
+        """
         lower_neff_mode = None
 
         if mode.family == 'HE':
@@ -47,6 +77,18 @@ class CutoffSolver(BaseSolver):
         return lower_neff_mode
 
     def solve(self, mode: Mode):
+        """Calculate the normalized cutoff frequency of a mode.
+
+        Parameters
+        ----------
+        mode : Mode
+            Mode whose cutoff is requested.
+
+        Returns
+        -------
+        float
+            Cutoff V-number, or ``numpy.nan`` when no root is found.
+        """
         lower_neff_mode = self.get_lower_neff_mode(mode=mode)
 
         if (mode.m >= 2 or mode.family == 'EH'):
@@ -85,14 +127,19 @@ class CutoffSolver(BaseSolver):
         )
 
     def get_parameters(self, V0: float, nu: int) -> tuple:
-        """
-        { function_description }
+        """Compute layer and normalized-frequency parameters.
 
-        :param      V0:   The V0 parameter
-        :type       V0:   float
+        Parameters
+        ----------
+        V0 : float
+            The V0 parameter
+        nu : int
+            Azimuthal mode order.
 
-        :returns:   The computed parameters
-        :rtype:     tuple
+        Returns
+        -------
+        tuple
+            The computed parameters
         """
         r1 = self.fiber.layers[0].radius_out
         r2 = self.fiber.layers[1].radius_out
@@ -133,14 +180,17 @@ class CutoffSolver(BaseSolver):
         return data_structure
 
     def _get_delta_(self, p: NameSpace) -> float:
-        """
-        Gets the delta. s3 is sign of Delta
+        """Gets the delta. s3 is sign of Delta
 
-        :param      p:    { parameter_description }
-        :type       p:    NameSpace
+        Parameters
+        ----------
+        p : NameSpace
+            { parameter_description }
 
-        :returns:   The delta.
-        :rtype:     float
+        Returns
+        -------
+        float
+            The delta.
         """
         if p.s1 < 0:
             f = ivp(p.nu, p.u1r1) / (iv(p.nu, p.u1r1) * p.u1r1)  # c
@@ -165,16 +215,19 @@ class CutoffSolver(BaseSolver):
         return p.u2r1 * (p.nu / p.u2r1**2 + (kappa1 + p.s3 * numpy.sqrt(d)) * 0.5)
 
     def _lpcoeq(self, v0: float, nu: int) -> float:
-        """
-        Not sure here.
+        """Not sure here.
 
-        :param      v0:   The V parameter
-        :type       v0:   float
-        :param      nu:   The radial parameter of the mode.
-        :type       nu:   int
+        Parameters
+        ----------
+        v0 : float
+            The V parameter
+        nu : int
+            The radial parameter of the mode.
 
-        :returns:   Not to sure
-        :rtype:     float
+        Returns
+        -------
+        float
+            Not to sure
         """
         p = self.get_parameters(v0, nu)
 
@@ -198,16 +251,19 @@ class CutoffSolver(BaseSolver):
         return f11a * f2a * p.u1r1 - f11b * f2b * p.u2r1
 
     def _tecoeq(self, v0: float, nu: int) -> float:
-        """
-        Not sure here.
+        """Not sure here.
 
-        :param      v0:   The V parameter
-        :type       v0:   float
-        :param      nu:   The radial parameter of the mode.
-        :type       nu:   int
+        Parameters
+        ----------
+        v0 : float
+            The V parameter
+        nu : int
+            The radial parameter of the mode.
 
-        :returns:   Not to sure
-        :rtype:     float
+        Returns
+        -------
+        float
+            Not to sure
         """
         p = self.get_parameters(v0, nu)
 
@@ -226,16 +282,19 @@ class CutoffSolver(BaseSolver):
         return f11a * f2a - f11b * f2b
 
     def _tmcoeq(self, v0: float, nu: int) -> float:
-        """
-        Not sure here.
+        """Not sure here.
 
-        :param      v0:   The V parameter
-        :type       v0:   float
-        :param      nu:   The radial parameter of the mode.
-        :type       nu:   int
+        Parameters
+        ----------
+        v0 : float
+            The V parameter
+        nu : int
+            The radial parameter of the mode.
 
-        :returns:   Not to sure
-        :rtype:     float
+        Returns
+        -------
+        float
+            Not to sure
         """
         p = self.get_parameters(v0, nu)
 
@@ -256,16 +315,19 @@ class CutoffSolver(BaseSolver):
         return f11a * p.n2sq * f2a - f11b * p.n1sq * f2b * p.u2r1
 
     def _ehcoeq(self, v0: float, nu: int) -> float:
-        """
-        Not sure here.
+        """Not sure here.
 
-        :param      v0:   The V parameter
-        :type       v0:   float
-        :param      nu:   The radial parameter of the mode.
-        :type       nu:   int
+        Parameters
+        ----------
+        v0 : float
+            The V parameter
+        nu : int
+            The radial parameter of the mode.
 
-        :returns:   Not to sure
-        :rtype:     float
+        Returns
+        -------
+        float
+            Not to sure
         """
         p = self.get_parameters(v0, nu)
 
@@ -286,16 +348,19 @@ class CutoffSolver(BaseSolver):
         return value
 
     def _hecoeq(self, v0: float, nu: int):
-        """
-        Not sure here.
+        """Not sure here.
 
-        :param      v0:   The V parameter
-        :type       v0:   float
-        :param      nu:   The radial parameter of the mode.
-        :type       nu:   int
+        Parameters
+        ----------
+        v0 : float
+            The V parameter
+        nu : int
+            The radial parameter of the mode.
 
-        :returns:   Not to sure
-        :rtype:     float
+        Returns
+        -------
+        float
+            Not to sure
         """
         p = self.get_parameters(v0, nu)
 
@@ -311,6 +376,18 @@ class CutoffSolver(BaseSolver):
             return self._function_2_(p=p)
 
     def _function_1_(self, p: NameSpace) -> float:
+        """Evaluate the first three-layer cutoff equation branch.
+
+        Parameters
+        ----------
+        p : NameSpace
+            Precomputed refractive-index and Bessel-function parameters.
+
+        Returns
+        -------
+        float
+            Characteristic-equation residual.
+        """
         if p.s2 < 0:  # a
             b11 = iv(p.nu, p.u2r1)
             b12 = kn(p.nu, p.u2r1)
@@ -339,6 +416,18 @@ class CutoffSolver(BaseSolver):
         return f1 + f2 * delta
 
     def _function_2_(self, p: NameSpace) -> float:
+        """Evaluate the second three-layer cutoff equation branch.
+
+        Parameters
+        ----------
+        p : NameSpace
+            Precomputed refractive-index and Bessel-function parameters.
+
+        Returns
+        -------
+        float
+            Characteristic-equation residual.
+        """
 
         with numpy.errstate(invalid='ignore'):
             delta = self._get_delta_(p=p)
@@ -374,6 +463,18 @@ class CutoffSolver(BaseSolver):
             return f1 + n0sq * f2
 
     def _function_3_(self, p: NameSpace) -> float:
+        """Evaluate the third three-layer cutoff equation branch.
+
+        Parameters
+        ----------
+        p : NameSpace
+            Precomputed refractive-index and Bessel-function parameters.
+
+        Returns
+        -------
+        float
+            Characteristic-equation residual.
+        """
         n0sq = (p.n3sq - p.n2sq) / (p.n2sq + p.n3sq)
         b11 = jn(p.nu, p.u2r1)
         b12 = yn(p.nu, p.u2r1)

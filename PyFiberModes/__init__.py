@@ -1,3 +1,5 @@
+"""Public API for circular optical-fiber mode analysis."""
+
 from PyFiberModes.mode import Mode, Family  # noqa: F401
 from PyFiberModes.mode_instances import *  # noqa: F403
 from PyFiberModes.factory import FiberFactory

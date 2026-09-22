@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+"""Common predefined propagation-mode identifiers."""
 
 from PyFiberModes.mode import Mode
 

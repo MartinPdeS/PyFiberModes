@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+"""Core fiber model and modal-property calculations."""
 
 import numpy
 from typing import Generator
@@ -55,6 +54,7 @@ class Fiber(object):
     index_list: list = field(default_factory=list)
 
     def __post_init__(self):
+        """Initialize mutable layer and solver state after construction."""
         self.layers_parameters = []
         self.radius_in = 0
         self.layers = []
@@ -112,68 +112,85 @@ class Fiber(object):
 
     @property
     def last_layer(self) -> StepIndex:
-        """
-        Returns the last layer
+        """Returns the last layer
 
-        :returns:   The last layer.
-        :rtype:     StepIndex
+        Returns
+        -------
+        StepIndex
+            The last layer.
         """
         return self.layers[-1]
 
     @property
     def penultimate_layer(self) -> StepIndex:
-        """
-        Returns the second to last layer
+        """Returns the second to last layer
 
-        :returns:   The second to last layer.
-        :rtype:     StepIndex
+        Returns
+        -------
+        StepIndex
+            The second to last layer.
         """
         return self.layers[-2]
 
     @property
     def first_layer(self) -> StepIndex:
-        """
-        Returns the first layer
+        """Returns the first layer
 
-        :returns:   The first layer.
-        :rtype:     StepIndex
+        Returns
+        -------
+        StepIndex
+            The first layer.
         """
         return self.layers[0]
 
     def __hash__(self):
+        """Return a hash derived from the ordered fiber layers.
+
+        Returns
+        -------
+        int
+            Hash of the layer tuple.
+        """
         return hash(tuple(self.layers))
 
     def __getitem__(self, index: int) -> StepIndex:
-        """
-        Returns the nth layer.
+        """Returns the nth layer.
 
-        :param      index:  The index
-        :type       index:  int
+        Parameters
+        ----------
+        index : int
+            The index
 
-        :returns:   The step index.
-        :rtype:     StepIndex
+        Returns
+        -------
+        StepIndex
+            The step index.
         """
         return self.layers[index]
 
     def iterate_interfaces(self) -> Generator:
-        """
-        Iterates through pair of layers that forms interfaces
+        """Iterates through pair of layers that forms interfaces
 
-        :returns:   The two layers that form the interfaces.
-        :rtype:     tuple[StepIndex, StepIndex]
+        Yields
+        ------
+        tuple[StepIndex, StepIndex]
+            The two layers that form the interfaces.
         """
         for layer_in, layer_out in pairwise(self.layers):
             yield layer_in, layer_out
 
     def update_wavelength(self, wavelength: float) -> None:
-        """
-        Update the wavelength of the fiber and all its layers
+        """Update the wavelength of the fiber and all its layers
 
-        :param      wavelength:  The wavelength
-        :type       wavelength:  float
+        Parameters
+        ----------
+        wavelength : float
+            The wavelength
 
-        :returns:   No return
-        :rtype:     None
+        Returns
+        -------
+        None
+            No return
         """
         self.wavelength = wavelength
         for layer in self.layers:
@@ -216,11 +233,12 @@ class Fiber(object):
         self.radius_in = radius
 
     def initialize_layers(self) -> None:
-        """
-        Initializes the layers.
+        """Initializes the layers.
 
-        :returns:   No returns
-        :rtype:     None
+        Returns
+        -------
+        None
+            No returns
         """
         self.layers[-1].is_last_layer = True
         self.layers[0].is_first_layer = True
@@ -231,11 +249,17 @@ class Fiber(object):
             layer.position = position
 
     def get_layer_at_radius(self, radius: float) -> StepIndex:
-        """
-        Gets the layer that is associated to a given radius.
+        """Gets the layer that is associated to a given radius.
 
-        :param      radius:  The radius
-        :type       radius:  float
+        Parameters
+        ----------
+        radius : float
+            The radius
+
+        Returns
+        -------
+        StepIndex
+            Layer whose radial interval contains ``radius``.
         """
         radius = abs(radius)
         for layer in self.layers:
@@ -244,11 +268,12 @@ class Fiber(object):
 
     @property
     def radius(self) -> float:
-        """
-        Gets the fiber total radius taking account for all layers.
+        """Gets the fiber total radius taking account for all layers.
 
-        :returns:   The fiber radius.
-        :rtype:     float
+        Returns
+        -------
+        float
+            The fiber radius.
         """
         layer_radius = [
             layer.radius_out for layer in self.layers[:-1]
@@ -259,14 +284,17 @@ class Fiber(object):
         return largest_radius
 
     def get_index_at_radius(self, radius: float) -> float:
-        """
-        Gets the refractive index at a given radius.
+        """Gets the refractive index at a given radius.
 
-        :param      radius:      The radius
-        :type       radius:      float
+        Parameters
+        ----------
+        radius : float
+            The radius
 
-        :returns:   The refractive index at given radius.
-        :rtype:     float
+        Returns
+        -------
+        float
+            The refractive index at given radius.
         """
         layer = self.get_layer_at_radius(radius)
 
@@ -274,14 +302,12 @@ class Fiber(object):
 
     @property
     def maximum_index(self) -> float:
-        """
-        Gets the maximum refractive index of the fiber.
+        """Gets the maximum refractive index of the fiber.
 
-        :param      layer_idx:   The layer index
-        :type       layer_idx:   int
-
-        :returns:   The minimum index.
-        :rtype:     float
+        Returns
+        -------
+        float
+            The minimum index.
         """
         layers_maximum_index = [
             layer.refractive_index for layer in self.layers
@@ -291,14 +317,12 @@ class Fiber(object):
 
     @property
     def minimum_index(self) -> float:
-        """
-        Gets the minimum refractive index of the fiber.
+        """Gets the minimum refractive index of the fiber.
 
-        :param      layer_idx:   The layer index
-        :type       layer_idx:   int
-
-        :returns:   The minimum index.
-        :rtype:     float
+        Returns
+        -------
+        float
+            The minimum index.
         """
         layers_maximum_index = [
             layer.refractive_index for layer in self.layers
@@ -334,15 +358,16 @@ class Fiber(object):
 
     @property
     def M_number(self) -> float:
-        r"""
-        Gets the m number representing an approximation of the number of existing mode
+        r"""Gets the m number representing an approximation of the number of existing mode
         in the fiber. It's valide only for highly multimode fibers M number is defined as:
 
         .. math::
             M = \frac{V^2}{2}
 
-        :returns:   The M number.
-        :rtype:     float
+        Returns
+        -------
+        float
+            The M number.
         """
         return self.V_number**2 / 2
 
@@ -380,14 +405,17 @@ class Fiber(object):
         return V0
 
     def get_mode_cutoff_v0(self, mode: Mode) -> float:
-        """
-        Gets the cutoff wavelength of the fiber.
+        """Gets the cutoff wavelength of the fiber.
 
-        :param      mode:  The mode to consider
-        :type       mode:  Mode
+        Parameters
+        ----------
+        mode : Mode
+            The mode to consider
 
-        :returns:   The cutoff wavelength.
-        :rtype:     float
+        Returns
+        -------
+        float
+            The cutoff wavelength.
         """
         cutoff_V0 = get_mode_cutoff_v0(
             mode=mode,
@@ -432,14 +460,17 @@ class Fiber(object):
         return cutoff_wavelength
 
     def get_effective_index(self, mode: Mode) -> float:
-        """
-        Gets the effective index.
+        """Gets the effective index.
 
-        :param      mode:    The mode to consider
-        :type       mode:    Mode
+        Parameters
+        ----------
+        mode : Mode
+            The mode to consider
 
-        :returns:   The effective index.
-        :rtype:     float
+        Returns
+        -------
+        float
+            The effective index.
         """
         neff = get_effective_index(
             fiber=self,
@@ -450,14 +481,17 @@ class Fiber(object):
         return neff
 
     def get_normalized_beta(self, mode: Mode) -> float:
-        """
-        Gets the normalized propagation constant [beta].
+        """Gets the normalized propagation constant [beta].
 
-        :param      mode:    The mode to consider
-        :type       mode:    Mode
+        Parameters
+        ----------
+        mode : Mode
+            The mode to consider
 
-        :returns:   The normalized propagation constant.
-        :rtype:     float
+        Returns
+        -------
+        float
+            The normalized propagation constant.
         """
         neff = get_effective_index(
             fiber=self,
@@ -476,14 +510,17 @@ class Fiber(object):
         return numerator / denominator
 
     def get_propagation_constant(self, mode: Mode) -> float:
-        r"""
-        Gets the propagation constant [:math:`beta`].
+        r"""Gets the propagation constant [:math:`beta`].
 
-        :param      mode:    The mode to consider
-        :type       mode:    Mode
+        Parameters
+        ----------
+        mode : Mode
+            The mode to consider
 
-        :returns:   The propagation constant [:math:`beta`].
-        :rtype:     float
+        Returns
+        -------
+        float
+            The propagation constant [:math:`beta`].
         """
         neff = get_effective_index(
             fiber=self,
@@ -527,14 +564,17 @@ class Fiber(object):
         return constants.c / n_eff
 
     def get_group_index(self, mode: Mode) -> float:
-        """
-        Gets the group index.
+        """Gets the group index.
 
-        :param      mode:    The mode to consider
-        :type       mode:    Mode
+        Parameters
+        ----------
+        mode : Mode
+            The mode to consider
 
-        :returns:   The group index.
-        :rtype:     float
+        Returns
+        -------
+        float
+            The group index.
         """
         omega = c * 2 * numpy.pi / self.wavelength
 
@@ -550,17 +590,20 @@ class Fiber(object):
         return derivative * constants.c
 
     def get_groupe_velocity(self, mode: Mode) -> float:
-        r"""
-        Gets the groupe velocity defined as:
+        r"""Gets the groupe velocity defined as:
 
         .. math::
             \left( \frac{\partial \beta}{\partial \omega} \right)^{-1}
 
-        :param      mode:    The mode to consider
-        :type       mode:    Mode
+        Parameters
+        ----------
+        mode : Mode
+            The mode to consider
 
-        :returns:   The groupe velocity.
-        :rtype:     float
+        Returns
+        -------
+        float
+            The groupe velocity.
         """
         omega = c * 2 * numpy.pi / self.wavelength
 
@@ -576,17 +619,20 @@ class Fiber(object):
         return 1 / derivative
 
     def get_group_velocity_dispersion(self, mode: Mode) -> float:
-        r"""
-        Gets the fiber group velocity dispersion defined as:
+        r"""Gets the fiber group velocity dispersion defined as:
 
         .. math::
             \frac{\partial^2 \beta}{\partial \omega^2}
 
-        :param      mode:   The mode to consider
-        :type       mode:   Mode
+        Parameters
+        ----------
+        mode : Mode
+            The mode to consider
 
-        :returns:   The group_velocity dispersion
-        :rtype:     float
+        Returns
+        -------
+        float
+            The group_velocity dispersion
         """
         omega = c * 2 * numpy.pi / self.wavelength
 
@@ -674,20 +720,21 @@ class Fiber(object):
             mode: Mode,
             limit: float = None,
             n_point: int = 101) -> Field:
-        """
-        Get field class
+        """Get field class
 
-        :param      mode:        The mode to consider
-        :type       mode:        Mode
-        :param      wavelength:  The wavelength to consider
-        :type       wavelength:  float
-        :param      limit:       The limit boundary
-        :type       limit:       float
-        :param      n_point:     The number of point for axis discreditization
-        :type       n_point:     int
+        Parameters
+        ----------
+        mode : Mode
+            The mode to consider
+        limit : float
+            The limit boundary
+        n_point : int
+            The number of point for axis discreditization
 
-        :returns:   The field instance of the mode.
-        :rtype:     Field
+        Returns
+        -------
+        Field
+            The field instance of the mode.
         """
         if limit is None:
             limit = self.radius * 5.5
@@ -703,17 +750,20 @@ class Fiber(object):
 
     @cache
     def get_radial_field(self, mode: Mode, radius: float) -> CylindricalCoordinates:
-        r"""
-        Gets the mode field without the azimuthal component.
+        r"""Gets the mode field without the azimuthal component.
         Tuple structure is [:math:`E_{r}`, :math:`E_{\phi}`, :math:`E_{z}`], [:math:`H_{r}`, :math:`H_{\phi}`, :math:`H_{z}`]
 
-        :param      mode:        The mode to consider
-        :type       mode:        Mode
-        :param      radius:      The radius
-        :type       radius:      float
+        Parameters
+        ----------
+        mode : Mode
+            The mode to consider
+        radius : float
+            The radius
 
-        :returns:   The radial field.
-        :rtype:     CylindricalCoordinates
+        Returns
+        -------
+        PyFiberModes.coordinates.CylindricalCoordinates
+            The radial field.
         """
         radial_field = get_radial_field(
             fiber=self,
@@ -725,17 +775,20 @@ class Fiber(object):
         return radial_field
 
     def get_radial_field_norm(self, mode: Mode, radius: float) -> float:
-        r"""
-        Gets the norm of the mode field without the azimuthal component.
+        r"""Gets the norm of the mode field without the azimuthal component.
         Tuple structure is [:math:`E_{r}`, :math:`E_{\phi}`, :math:`E_{z}`], [:math:`H_{r}`, :math:`H_{\phi}`, :math:`H_{z}`]
 
-        :param      mode:        The mode to consider
-        :type       mode:        Mode
-        :param      radius:      The radius
-        :type       radius:      float
+        Parameters
+        ----------
+        mode : Mode
+            The mode to consider
+        radius : float
+            The radius
 
-        :returns:   The radial field.
-        :rtype:     float
+        Returns
+        -------
+        float
+            The radial field.
         """
         e_field, h_field = get_radial_field(
             fiber=self,
@@ -749,6 +802,18 @@ class Fiber(object):
         return norm
 
     def does_mode_exist(self, *mode_list) -> list:
+        """Test whether effective-index solutions exist for several modes.
+
+        Parameters
+        ----------
+        *mode_list : Mode
+            Modes to evaluate.
+
+        Returns
+        -------
+        list of bool
+            Existence flag for each supplied mode.
+        """
         mode_exist = []
         for mode in mode_list:
             neff = self.get_effective_index(mode=mode)
@@ -760,26 +825,57 @@ class Fiber(object):
         return mode_exist
 
     def find_modes(self, families=("LP",), max_nu: int = 6, max_m: int = 6):
-        """Automatically discover guided modes at the current wavelength."""
+        """Automatically discover guided modes at the current wavelength.
+
+        Parameters
+        ----------
+        families : iterable of str, optional
+            Mode families to search.
+        max_nu : int, optional
+            Largest azimuthal order to inspect.
+        max_m : int, optional
+            Largest radial order to inspect.
+
+        Returns
+        -------
+        list of Mode
+            Guided modes found in the requested search range.
+        """
         from PyFiberModes.analysis import find_modes
         return find_modes(self, families=families, max_nu=max_nu, max_m=max_m)
 
     def sweep(self, parameters, **kwargs):
-        """Evaluate modal metrics over wavelength or a custom parameter."""
+        """Evaluate modal metrics over wavelength or a custom parameter.
+
+        Parameters
+        ----------
+        parameters : array-like or mapping
+            Parameter values passed to :func:`PyFiberModes.analysis.sweep_modes`.
+        **kwargs
+            Additional sweep configuration.
+
+        Returns
+        -------
+        ModeSweepResult
+            Computed modal quantities across the parameter grid.
+        """
         from PyFiberModes.analysis import sweep_modes
         return sweep_modes(self, parameters, **kwargs)
 
     def print_data(self, data_type_list: list[str], mode_list: list[Mode]) -> None:
-        """
-        Prints the given data for the given modes.
+        """Prints the given data for the given modes.
 
-        :param      data_type_list:  The data type list
-        :type       data_type_list:  list[str]
-        :param      mode_list:       The mode list
-        :type       mode_list:       list[Mode]
+        Parameters
+        ----------
+        data_type_list : list[str]
+            The data type list
+        mode_list : list[Mode]
+            The mode list
 
-        :returns:   No return
-        :rtype:     None
+        Returns
+        -------
+        None
+            No return
         """
         for data_type in data_type_list:
             first_line = f"{data_type} @ wavelength: {self.wavelength}:\n"
@@ -794,6 +890,22 @@ class Fiber(object):
 
 
 def get_fiber_from_delta_and_V0(delta: float, V0: float, wavelength: float) -> Fiber:
+    """Construct an SMF28-like fiber from relative contrast and V-number.
+
+    Parameters
+    ----------
+    delta : float
+        Relative core-cladding refractive-index difference.
+    V0 : float
+        Target normalized frequency.
+    wavelength : float
+        Vacuum wavelength in meters.
+
+    Returns
+    -------
+    Fiber
+        Two-layer fiber adjusted to the requested contrast and V-number.
+    """
     fiber = load_fiber(fiber_name='SMF28', wavelength=wavelength)
 
     core, clad = fiber.layers
@@ -811,16 +923,21 @@ def get_fiber_from_delta_and_V0(delta: float, V0: float, wavelength: float) -> F
 
 
 def load_fiber(fiber_name: str, wavelength: float = None, add_air_layer: bool = False) -> Fiber:
-    """
-    Loads a fiber as type that suit PyFiberModes.
+    """Load a named YAML fiber definition.
 
-    :param      fiber_name:  The fiber name
-    :type       fiber_name:  str
-    :param      wavelength:  The wavelength to consider
-    :type       wavelength:  float
+    Parameters
+    ----------
+    fiber_name : str
+        Configuration filename without the ``.yaml`` suffix.
+    wavelength : float, optional
+        Vacuum wavelength in meters used to evaluate material indices.
+    add_air_layer : bool, optional
+        Add an outer air layer when true.
 
-    :returns:   The loaded fiber
-    :rtype:     Fiber
+    Returns
+    -------
+    Fiber
+        Constructed fiber with initialized step-index layers.
     """
     fiber_dict = loader.load_fiber_as_dict(
         fiber_name=fiber_name,

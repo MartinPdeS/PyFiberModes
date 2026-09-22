@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+"""Factories for constructing parameterized multilayer fibers."""
 
 from itertools import product
 from dataclasses import dataclass, field
@@ -12,7 +11,7 @@ class ProxyLayer:
     """
     Represents a layer configuration in a fiber, with name, radius, and refractive index.
 
-    Attributes
+    Parameters
     ----------
     name : str
         Name of the layer.
@@ -26,6 +25,7 @@ class ProxyLayer:
     index: list = field(default_factory=list)
 
     def __post_init__(self):
+        """Normalize scalar layer parameters into one-dimensional arrays."""
         self.name = [self.name]
         self.radius = np.atleast_1d(self.radius)
         self.index = np.atleast_1d(self.index)
@@ -64,6 +64,13 @@ class FiberFactory:
     """
 
     def __init__(self, wavelength: float):
+        """Initialize an empty fiber-configuration factory.
+
+        Parameters
+        ----------
+        wavelength : float
+            Vacuum wavelength in meters for generated fibers.
+        """
         self.layers_list = []
         self.neff_solver = None
         self.cutoff_solver = None

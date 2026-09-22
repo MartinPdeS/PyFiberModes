@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+"""Step-index layer model and radial electromagnetic field coefficients."""
 
 import numpy
 import numpy as np
@@ -55,12 +54,16 @@ class Geometry:
 
 
 class StepIndex(Geometry):
-    """
-    Step-index structure for optical fibers and waveguides.
+    """Represent one annular step-index layer.
 
-    Inherits
-    --------
-    Geometry
+    Parameters
+    ----------
+    radius_in : float
+        Inner layer radius in meters.
+    radius_out : float
+        Outer layer radius in meters.
+    index_list : list of float
+        Refractive-index values associated with the layer.
     """
 
     def get_index_at_radius(self, radius: float) -> float:

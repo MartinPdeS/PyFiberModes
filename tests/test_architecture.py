@@ -1,7 +1,13 @@
 from pathlib import Path
+import sys
 
 import PyFiberModes
 from PyFiberModes import directories
+
+if sys.version_info >= (3, 11):
+    import tomllib
+else:
+    import tomli as tomllib
 
 
 def test_directory_locations_are_derived_from_module_location():
@@ -25,3 +31,14 @@ def test_legacy_directory_names_are_aliases():
 def test_package_has_no_generic_tools_namespace():
     tools_path = directories.PACKAGE_PATH / "tools"
     assert not tools_path.exists() or not any(tools_path.glob("*.py"))
+
+
+def test_mpsplots_is_not_a_declared_dependency():
+    pyproject = tomllib.loads((directories.PROJECT_PATH / "pyproject.toml").read_text())
+    conda_recipe = (directories.PROJECT_PATH / "conda.recipe" / "meta.yaml").read_text().lower()
+
+    dependencies = [dependency.lower() for dependency in pyproject["project"]["dependencies"]]
+
+    assert not any("mpsplots" in dependency for dependency in dependencies)
+    assert "mpsplots" not in conda_recipe
+    assert any(dependency.startswith("matplotlib") for dependency in dependencies)

@@ -17,3 +17,23 @@ div.highlight a {
 .bd-footer .footer-items__end, .bd-footer .footer-items__start {
   flex-direction: row;
 }
+
+.sd-card {
+  border: 1px solid color-mix(in srgb, var(--pst-color-border) 75%, #14d9ff 25%);
+  border-radius: 0.9rem;
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+.sd-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0.8rem 1.8rem rgb(14 34 90 / 16%);
+}
+
+.navbar-brand img,
+.bd-header .navbar-brand img {
+  max-height: 3rem;
+}
+
+.bd-content img[alt="PyFiberModes logo"] {
+  filter: drop-shadow(0 0.7rem 1rem rgb(20 217 255 / 20%));
+}

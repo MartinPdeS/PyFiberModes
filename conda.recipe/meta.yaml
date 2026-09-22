@@ -22,7 +22,6 @@ requirements:
     - setuptools-scm >=8.0
     - pip
   run:
-    - martinpdes::mpsplots
     - martinpdes::pyfinitdiff
     - martinpdes::pyoptik >=2,<3
     - pyyaml

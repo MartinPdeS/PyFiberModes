@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+"""Fundamental normalized-frequency and propagation relations."""
 
 import numpy
 import numpy as np
@@ -220,9 +219,9 @@ def get_radial_field(
     r"""
     Compute the radial field components of a mode in cylindrical coordinates.
 
-    The tuple structure contains:
-    - \((E_r, E_\phi, E_z)\): Electric field components.
-    - \((H_r, H_\phi, H_z)\): Magnetic field components.
+    The returned pair contains the cylindrical electric components
+    :math:`(E_r, E_\phi, E_z)` and magnetic components
+    :math:`(H_r, H_\phi, H_z)`.
 
     Parameters
     ----------

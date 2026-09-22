@@ -1,5 +1,6 @@
 import pytest
 import numpy as np
+from types import SimpleNamespace
 from unittest.mock import MagicMock
 from PyFiberModes.field import Field
 from PyFiberModes.coordinates import CartesianCoordinates, CylindricalCoordinates
@@ -98,6 +99,38 @@ def test_radial_field_solution_is_cached(field_instance, mock_fiber):
     assert mock_fiber.get_radial_field.call_count == first_call_count
 
 
+def test_all_radial_components_share_one_solver_pass(field_instance, mock_fiber):
+    electric = SimpleNamespace(rho=1, phi=2, z=3)
+    magnetic = SimpleNamespace(rho=4, phi=5, z=6)
+    mock_fiber.get_radial_field.return_value = electric, magnetic
+
+    fields = field_instance.get_components()
+    expected_calls = max(257, 2 * field_instance.n_point)
+
+    assert set(fields) == {"Ex", "Ey", "Ez", "Hx", "Hy", "Hz"}
+    assert mock_fiber.get_radial_field.call_count == expected_calls
+    assert field_instance.get_components()["Ex"] is fields["Ex"]
+    assert mock_fiber.get_radial_field.call_count == expected_calls
+
+
+def test_field_cache_is_invalidated_by_wavelength_change(field_instance, mock_fiber):
+    electric = SimpleNamespace(rho=1, phi=2, z=3)
+    magnetic = SimpleNamespace(rho=4, phi=5, z=6)
+    mock_fiber.get_radial_field.return_value = electric, magnetic
+    expected_calls = max(257, 2 * field_instance.n_point)
+
+    field_instance.get_components(("Ex",))
+    mock_fiber.wavelength = 1.31e-6
+    field_instance.get_components(("Ex",))
+
+    assert mock_fiber.get_radial_field.call_count == 2 * expected_calls
+
+
+def test_get_components_rejects_unknown_names(field_instance):
+    with pytest.raises(ValueError, match="Unknown field component"):
+        field_instance.get_components(("not_a_component",))
+
+
 def test_poynting_power_and_confinement(field_instance, monkeypatch):
     shape = field_instance.cartesian_coordinates.x.shape
     zero = np.zeros(shape)
@@ -141,6 +174,9 @@ def test_plot(field_instance):
     """
     fig = field_instance.plot(plot_type=['Ex', 'Ey'], show=False)
     assert fig is not None
+
+    single_component_figure = field_instance.plot(plot_type=["Ex"], show=False)
+    assert single_component_figure is not None
 
 
 if __name__ == "__main__":

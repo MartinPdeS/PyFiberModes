@@ -6,6 +6,18 @@ use [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Replaced MPSPlots styling and colormaps with native Matplotlib equivalents,
+  removing MPSPlots from all runtime and documentation dependencies.
+- Field maps now share one radial solver pass across all electric and magnetic
+  components and cache interpolated, azimuthal, and batched component arrays.
+- Added NumPyDoc documentation across modules, public APIs, data models, and
+  numerical solver helpers, with structural coverage enforced by tests.
+- Reorganized the documentation into learning, theory, workflow, performance,
+  troubleshooting, gallery, and task-oriented API sections; added four new
+  example series and a unified logo and favicon identity.
+
 ## [0.12.0] - 2026-09-22
 
 ### Changed

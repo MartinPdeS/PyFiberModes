@@ -1,3 +1,5 @@
+"""Cartesian and cylindrical sampling-grid definitions."""
+
 import numpy as np
 from dataclasses import dataclass
 from typing import Tuple
@@ -8,7 +10,7 @@ class CylindricalCoordinates:
     """
     Represents a set of points in cylindrical coordinates.
 
-    Attributes
+    Parameters
     ----------
     rho : np.ndarray
         Radial distance from the z-axis.
@@ -51,7 +53,7 @@ class CartesianCoordinates:
     """
     Represents a set of points in cartesian coordinates.
 
-    Attributes
+    Parameters
     ----------
     x : np.ndarray
         x-coordinates (must be a 1D array).
@@ -71,6 +73,7 @@ class CartesianCoordinates:
     is_3D: bool = False
 
     def __post_init__(self) -> None:
+        """Convert all coordinate arrays to floating-point arrays."""
         self.x = self.x.astype(float)
         self.y = self.y.astype(float)
         self.z = self.z.astype(float)

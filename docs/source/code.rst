@@ -1,55 +1,42 @@
-.. _source_code:
+.. _api_reference:
 
-Source Code
-===========
+API reference
+=============
 
-Welcome to the PyFiberModes Source Code Documentation. This section provides a comprehensive overview of the key classes, functions, and utilities available within the `PyFiberModes` library. Each component is documented in detail, with information on its members, inherited properties, and direct links to the source code.
+The public API is grouped by task. NumPyDoc descriptions, signatures,
+inheritance, and source links are generated directly from the package.
 
-Class Documentation
-===================
+.. toctree::
+   :maxdepth: 2
 
-Below, you will find detailed, automatically generated documentation for significant classes and functions in the `PyFiberModes` library. These descriptions are intended to help you understand how each class and function fits into the overall framework, and how to utilize them effectively in your projects.
+   code/fibers
+   code/fields
+   code/analysis
+   code/fundamentals
 
+.. grid:: 2
+   :gutter: 2
 
+   .. grid-item-card:: Fibers and layers
+      :link: code/fibers
+      :link-type: doc
 
-Fiber
------
-.. automodule:: PyFiberModes.fiber
-   :members:
-   :inherited-members:
-   :member-order: bysource
+      Build, load, and inspect concentric fiber structures.
 
+   .. grid-item-card:: Fields
+      :link: code/fields
+      :link-type: doc
 
-Field
------
- .. autoclass:: PyFiberModes.field.Field
-   :members:
-   :member-order: bysource
-   :show-inheritance:
-   :undoc-members:
+      Evaluate vector components and derived optical quantities.
 
+   .. grid-item-card:: Analysis and propagation
+      :link: code/analysis
+      :link-type: doc
 
+      Discover, sweep, optimize, overlap, and propagate modes.
 
-Step-index
-----------
- .. autoclass:: PyFiberModes.stepindex.StepIndex
-   :members:
-   :member-order: bysource
-   :show-inheritance:
-   :undoc-members:
+   .. grid-item-card:: Modes and fundamentals
+      :link: code/fundamentals
+      :link-type: doc
 
-
-Fiber factory
--------------
- .. autoclass:: PyFiberModes.factory.FiberFactory
-   :members:
-   :member-order: bysource
-   :show-inheritance:
-
-
-.. Solver single clad fiber
-.. ------------------------
-..  .. automodule:: PyFiberModes.solver.ssif
-..     :members:
-..     :member-order: bysource
-..     :show-inheritance:
+      Mode identifiers and lower-level analytical helpers.

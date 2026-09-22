@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+"""Effective-index solver for multilayer step-index fibers."""
 
 import numpy
 from scipy.special import kn, kvp, k0, k1, jn, jvp, yn, yvp, iv, ivp
@@ -12,23 +11,44 @@ eta0 = physical_constants['characteristic impedance of vacuum'][0]
 
 
 class NameSpace():
+    """Store solver intermediates as dynamically named attributes.
+
+    Parameters
+    ----------
+    **kwargs
+        Attribute names and values to store.
+    """
+
     def __init__(self, **kwargs):
+        """Populate attributes from keyword arguments."""
         for key, value in kwargs.items():
             setattr(self, key, value)
 
 
 class NeffSolver(BaseSolver):
+    """Solve effective indices for arbitrary multilayer step-index fibers.
+
+    Parameters
+    ----------
+    fiber : Fiber
+        Multilayer fiber to solve.
+    wavelength : float
+        Vacuum wavelength in meters.
+    """
     def get_neff_lower_boundary(self, mode: Mode, delta_neff: float = 1e-6) -> float:
-        """
-        Gets the lower boundary for neff value.
+        """Gets the lower boundary for neff value.
 
-        :param      mode:                 The mode to evaluate
-        :type       mode:                 Mode
-        :param      delta_neff:           The delta neff
-        :type       delta_neff:           float
+        Parameters
+        ----------
+        mode : Mode
+            The mode to evaluate
+        delta_neff : float
+            The delta neff
 
-        :returns:   The neff lower boundary.
-        :rtype:     float
+        Returns
+        -------
+        float
+            The neff lower boundary.
         """
         lower_order_mode = None
         lower_order_mode = None
@@ -65,6 +85,20 @@ class NeffSolver(BaseSolver):
         return lower_neff_boundary
 
     def solve(self, mode: Mode, delta_neff: float) -> float:
+        """Find an effective-index root for a mode.
+
+        Parameters
+        ----------
+        mode : Mode
+            Mode whose effective index is requested.
+        delta_neff : float
+            Maximum effective-index search step.
+
+        Returns
+        -------
+        float
+            Effective index, or ``numpy.nan`` when no valid interval exists.
+        """
         higher_neff_boundary = self.get_neff_lower_boundary(mode=mode)
 
         lower_neff_boundary = self.fiber.last_layer.refractive_index
@@ -105,18 +139,22 @@ class NeffSolver(BaseSolver):
         return value
 
     def get_LP_field_for_future(self, nu: int, neff: float, radius: float) -> tuple[float, float]:
-        """
-        Gets the :math:`LP_{\nu, m}` mode field.
+        """        Gets the :math:`LP_{
+        u, m}` mode field.
 
-        :param      nu:      The nu parameter of the LP mode
-        :type       nu:      int
-        :param      neff:    The effective index
-        :type       neff:    float
-        :param      radius:  The radius for evaluation
-        :type       radius:  float
+        Parameters
+        ----------
+        nu : int
+            The nu parameter of the LP mode
+        neff : float
+            The effective index
+        radius : float
+            The radius for evaluation
 
-        :returns:   The LP electric and magnetic field in a tuple.
-        :rtype:     tuple
+        Returns
+        -------
+        tuple
+            The LP electric and magnetic field in a tuple.
         """
         n_layers = len(self.fiber.layers)
         C = numpy.array((1, 0))
@@ -182,18 +220,22 @@ class NeffSolver(BaseSolver):
         return e_field, h_field
 
     def get_LP_field(self, nu: int, neff: float, radius: float) -> tuple[float, float]:
-        """
-        Gets the :math:`LP_{\nu, m}` mode field.
+        """        Gets the :math:`LP_{
+        u, m}` mode field.
 
-        :param      nu:      The nu parameter of the LP mode
-        :type       nu:      int
-        :param      neff:    The effective index
-        :type       neff:    float
-        :param      radius:  The radius for evaluation
-        :type       radius:  float
+        Parameters
+        ----------
+        nu : int
+            The nu parameter of the LP mode
+        neff : float
+            The effective index
+        radius : float
+            The radius for evaluation
 
-        :returns:   The LP electric and magnetic field in a tuple.
-        :rtype:     tuple[float, float]
+        Returns
+        -------
+        tuple[float, float]
+            The LP electric and magnetic field in a tuple.
         """
         C = numpy.array((1, 0))
 
@@ -241,22 +283,25 @@ class NeffSolver(BaseSolver):
             neff: float,
             nu: int,
             C: tuple) -> tuple[float, float]:
-        """
-        Gets the LP field evaluation from parameters.
+        """Gets the LP field evaluation from parameters.
 
-        :param      eval_layer:  The layer at which the field is evaluated
-        :type       eval_layer:  object
-        :param      nu:          The nu parameter of the LP mode
-        :type       nu:          int
-        :param      neff:        The effective index
-        :type       neff:        float
-        :param      radius:      The radius for evaluation
-        :type       radius:      float
-        :param      C:           Constants
-        :type       C:           tuple
+        Parameters
+        ----------
+        eval_layer : object
+            The layer at which the field is evaluated
+        radius : float
+            The radius for evaluation
+        neff : float
+            The effective index
+        nu : int
+            The nu parameter of the LP mode
+        C : tuple
+            Constants
 
-        :returns:   The LP field.
-        :rtype:     tuple[float, float]
+        Returns
+        -------
+        tuple[float, float]
+            The LP field.
         """
         ex, _ = eval_layer.get_psi(
             radius=radius,
@@ -273,40 +318,49 @@ class NeffSolver(BaseSolver):
         return e_field, h_field
 
     def get_TE_field(self, wavelength: float, nu: int, neff: float, radius: float) -> tuple[float, float]:
-        """
-        Gets the transverse electric TE field.
+        """Gets the transverse electric TE field.
 
-        :param      wavelength:           The wavelength to consider
-        :type       wavelength:           float
-        :param      nu:                   The radial parameter of the mode
-        :type       nu:                   int
-        :param      neff:                 The effective index of the mode
-        :type       neff:                 float
-        :param      radius:               The radius at which field is evaluated
-        :type       radius:               float
+        Parameters
+        ----------
+        wavelength : float
+            Vacuum wavelength in meters.
+        nu : int
+            The radial parameter of the mode
+        neff : float
+            The effective index of the mode
+        radius : float
+            The radius at which field is evaluated
 
-        :returns:   The TE field.
-        :rtype:     tuple[float, float]
+        Returns
+        -------
+        tuple[float, float]
+            The TE field.
 
-        :raises     NotImplementedError:  Method not yet implemented
+        Raises
+        ------
+        NotImplementedError
+            Method not yet implemented
         """
         raise NotImplementedError()
 
     def get_TM_field(self, wavelength: float, nu: int, neff: float, radius: float) -> tuple[float, float]:
-        """
-        Gets the transverse magnetic TM field.
+        """Gets the transverse magnetic TM field.
 
-        :param      wavelength:           The wavelength to consider
-        :type       wavelength:           float
-        :param      nu:                   The radial parameter of the mode
-        :type       nu:                   int
-        :param      neff:                 The effective index of the mode
-        :type       neff:                 float
-        :param      radius:               The radius at which field is evaluated
-        :type       radius:               float
+        Parameters
+        ----------
+        wavelength : float
+            Vacuum wavelength in meters.
+        nu : int
+            The radial parameter of the mode
+        neff : float
+            The effective index of the mode
+        radius : float
+            The radius at which field is evaluated
 
-        :returns:   The TM field.
-        :rtype:     tuple[float, float]
+        Returns
+        -------
+        tuple[float, float]
+            The TM field.
         """
         n_layer = len(self.fiber.layers)
         C = numpy.array((1, 0))
@@ -355,20 +409,21 @@ class NeffSolver(BaseSolver):
         return numpy.array((0, ephi, 0)), numpy.array((hr, 0, hz))
 
     def get_EH_field(self, nu: int, neff: float, radius: float) -> tuple[float, float]:
-        """
-        Gets the hybrid EH field.
+        """Gets the hybrid EH field.
 
-        :param      wavelength:           The wavelength to consider
-        :type       wavelength:           float
-        :param      nu:                   The radial parameter of the mode
-        :type       nu:                   int
-        :param      neff:                 The effective index of the mode
-        :type       neff:                 float
-        :param      radius:               The radius at which field is evaluated
-        :type       radius:               float
+        Parameters
+        ----------
+        nu : int
+            The radial parameter of the mode
+        neff : float
+            The effective index of the mode
+        radius : float
+            The radius at which field is evaluated
 
-        :returns:   The EH field.
-        :rtype:     tuple[float, float]
+        Returns
+        -------
+        tuple[float, float]
+            The EH field.
         """
         return self.get_HE_field(
             nu=nu,
@@ -377,20 +432,21 @@ class NeffSolver(BaseSolver):
         )
 
     def get_HE_field(self, nu: int, neff: float, radius: float) -> tuple[float, float]:
-        """
-        Gets the hybrid HE field.
+        """Gets the hybrid HE field.
 
-        :param      wavelength:           The wavelength to consider
-        :type       wavelength:           float
-        :param      nu:                   The radial parameter of the mode
-        :type       nu:                   int
-        :param      neff:                 The effective index of the mode
-        :type       neff:                 float
-        :param      radius:               The radius at which field is evaluated
-        :type       radius:               float
+        Parameters
+        ----------
+        nu : int
+            The radial parameter of the mode
+        neff : float
+            The effective index of the mode
+        radius : float
+            The radius at which field is evaluated
 
-        :returns:   The HE field.
-        :rtype:     tuple[float, float]
+        Returns
+        -------
+        tuple[float, float]
+            The HE field.
         """
         self.get_HE_equation(neff=neff, nu=nu)
 
@@ -452,6 +508,20 @@ class NeffSolver(BaseSolver):
         return numpy.array((Er, Ep, Ez)), numpy.array((Hr, Hp, Hz))
 
     def get_LP_equation(self, neff: float, nu: int) -> tuple[float, float]:
+        """Evaluate the multilayer LP characteristic equation.
+
+        Parameters
+        ----------
+        neff : float
+            Trial effective index.
+        nu : int
+            Azimuthal order.
+
+        Returns
+        -------
+        float
+            Characteristic-equation residual.
+        """
         C = numpy.zeros((self.fiber.n_interface, 2))
         C[0, 0] = 1
 
@@ -488,6 +558,20 @@ class NeffSolver(BaseSolver):
         return u * kvp(nu, u) * A[0] - kn(nu, u) * A[1]
 
     def get_TE_equation(self, neff: float, nu: int) -> tuple[float, float]:
+        """Evaluate the multilayer TE characteristic equation.
+
+        Parameters
+        ----------
+        neff : float
+            Trial effective index.
+        nu : int
+            Azimuthal order.
+
+        Returns
+        -------
+        float
+            Characteristic-equation residual.
+        """
         EH = numpy.empty(4)
 
         for layer in self.fiber.layers[:-1]:
@@ -511,6 +595,20 @@ class NeffSolver(BaseSolver):
         return Ep + (2 * numpy.pi / self.wavelength) * self.fiber.last_layer.radius_in / u * eta0 * Hz * F4
 
     def get_TM_equation(self, neff: float, nu: int) -> tuple[float, float]:
+        """Evaluate the multilayer TM characteristic equation.
+
+        Parameters
+        ----------
+        neff : float
+            Trial effective index.
+        nu : int
+            Azimuthal order.
+
+        Returns
+        -------
+        float
+            Characteristic-equation residual.
+        """
         EH = numpy.empty(4)
 
         for layer in self.fiber.layers[:-1]:
@@ -536,6 +634,20 @@ class NeffSolver(BaseSolver):
         return Hp - (2 * numpy.pi / self.wavelength) * self.fiber.last_layer.radius_in / u * numpy.sqrt(epsilon_0 / mu_0) * self.fiber.last_layer.refractive_index**2 * Ez * F4
 
     def get_HE_equation(self, neff: float, nu: int) -> float:
+        """Evaluate the multilayer hybrid-mode characteristic equation.
+
+        Parameters
+        ----------
+        neff : float
+            Trial effective index.
+        nu : int
+            Azimuthal order.
+
+        Returns
+        -------
+        float
+            Determinant residual for the hybrid boundary conditions.
+        """
         EH = numpy.empty((4, 2))
 
         for layer in self.fiber.layers[:-1]:
@@ -578,6 +690,20 @@ class NeffSolver(BaseSolver):
         return E[0] * H[1] - E[1] * H[0]
 
     def get_EH_equation(self, neff: float, nu: int) -> float:
+        """Evaluate the EH equation through the shared hybrid determinant.
+
+        Parameters
+        ----------
+        neff : float
+            Trial effective index.
+        nu : int
+            Azimuthal order.
+
+        Returns
+        -------
+        float
+            Hybrid characteristic-equation residual.
+        """
         return self.get_HE_equation(
             neff=neff,
             nu=nu

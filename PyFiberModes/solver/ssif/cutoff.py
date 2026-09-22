@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+"""Modal cutoff solver for standard step-index fibers."""
 
 import numpy
 import logging
@@ -19,12 +18,30 @@ Solver for standard layer step-index solver: SSIF
 
 
 class CutoffSolver(BaseSolver):
-    """
-    Cutoff solver for standard step-index fiber.
+    """Solve normalized modal cutoffs for a two-layer step-index fiber.
+
+    Parameters
+    ----------
+    fiber : Fiber
+        Standard step-index fiber.
+    wavelength : float
+        Reference vacuum wavelength in meters.
     """
     logger = logging.getLogger(__name__)
 
     def solve(self, mode: Mode) -> float:
+        """Calculate the normalized cutoff frequency of a mode.
+
+        Parameters
+        ----------
+        mode : Mode
+            Mode whose cutoff is requested.
+
+        Returns
+        -------
+        float
+            Cutoff V-number.
+        """
         nu = mode.nu
         m = mode.m
 
@@ -45,6 +62,22 @@ class CutoffSolver(BaseSolver):
         return jn_zeros(nu, m)[m - 1]
 
     def _get_mode_cutoff_HE(self, V0: float, nu: int, mode: Mode) -> float:
+        """Evaluate an HE cutoff while accounting for material dispersion.
+
+        Parameters
+        ----------
+        V0 : float
+            Trial normalized frequency.
+        nu : int
+            Azimuthal order.
+        mode : Mode
+            Hybrid electric mode used to obtain cutoff wavelength.
+
+        Returns
+        -------
+        float
+            Dispersion-adjusted cutoff residual.
+        """
         core, clad = self.fiber.layers
 
         cutoff_wavelength = self.fiber.get_mode_cutoff_wavelength(mode=mode)
@@ -64,6 +97,20 @@ class CutoffSolver(BaseSolver):
         return (1 + ratio) * jn(nu - 2, V0) - (1 - ratio) * jn(nu, V0)
 
     def get_mode_cutoff_HE(self, V0, nu):
+        """Evaluate the hybrid-mode cutoff characteristic equation.
+
+        Parameters
+        ----------
+        V0 : float
+            Trial normalized frequency.
+        nu : int
+            Azimuthal order.
+
+        Returns
+        -------
+        float
+            Characteristic-equation residual.
+        """
         core, clad = self.fiber.layers
 
         n_ratio = core.refractive_index**2 / clad.refractive_index**2
@@ -71,6 +118,18 @@ class CutoffSolver(BaseSolver):
         return (1 + n_ratio) * jn(nu - 2, V0) - (1 - n_ratio) * jn(nu, V0)
 
     def find_HE_mode_cutoff(self, mode: Mode) -> float:
+        """Find a higher-order HE-mode cutoff by bracketing Bessel roots.
+
+        Parameters
+        ----------
+        mode : Mode
+            Hybrid electric mode.
+
+        Returns
+        -------
+        float
+            Cutoff V-number, or zero if no root is found.
+        """
         if mode.m > 1:
             lower_neff_mode = Mode(
                 family=mode.family,
