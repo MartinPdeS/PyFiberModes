@@ -30,7 +30,7 @@
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/styles/pydata-sphinx-theme.css?v=bb40232b" />
-    <link rel="stylesheet" type="text/css" href="/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/docs/source/_static/default.css" />
+    <link rel="stylesheet" type="text/css" href="/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/docs/source/_static/default.css" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
@@ -1058,6 +1058,18 @@ Tuple structure is [<span class="math notranslate nohighlight">\(E_{r}\)</span>,
 <dd></dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.fiber.Fiber.find_modes">
+<span class="sig-name descname"><span class="pre">find_modes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">families</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('LP',)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_m</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">6</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyFiberModes/fiber.html#Fiber.find_modes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.fiber.Fiber.find_modes" title="Link to this definition">#</a></dt>
+<dd><p>Automatically discover guided modes at the current wavelength.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.fiber.Fiber.sweep">
+<span class="sig-name descname"><span class="pre">sweep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyFiberModes/fiber.html#Fiber.sweep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.fiber.Fiber.sweep" title="Link to this definition">#</a></dt>
+<dd><p>Evaluate modal metrics over wavelength or a custom parameter.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.fiber.Fiber.print_data">
 <span class="sig-name descname"><span class="pre">print_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_type_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Mode</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/PyFiberModes/fiber.html#Fiber.print_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.fiber.Fiber.print_data" title="Link to this definition">#</a></dt>
 <dd><p>Prints the given data for the given modes.</p>
@@ -1898,8 +1910,26 @@ uses the cylindrical components.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.get_poynting_vector">
-<span class="sig-name descname"><span class="pre">get_poynting_vector</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyFiberModes/field.html#Field.get_poynting_vector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_poynting_vector" title="Link to this definition">#</a></dt>
-<dd><p>Gets the Poynting vector but is not implemented yet.</p>
+<span class="sig-name descname"><span class="pre">get_poynting_vector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyFiberModes/field.html#Field.get_poynting_vector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_poynting_vector" title="Link to this definition">#</a></dt>
+<dd><p>Return the time-averaged Cartesian Poynting-vector components.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.get_power">
+<span class="sig-name descname"><span class="pre">get_power</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/PyFiberModes/field.html#Field.get_power"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_power" title="Link to this definition">#</a></dt>
+<dd><p>Integrate the longitudinal time-averaged power over the grid.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.get_confinement_factor">
+<span class="sig-name descname"><span class="pre">get_confinement_factor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/PyFiberModes/field.html#Field.get_confinement_factor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_confinement_factor" title="Link to this definition">#</a></dt>
+<dd><p>Return the fraction of electric energy inside <code class="docutils literal notranslate"><span class="pre">radius</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.overlap">
+<span class="sig-name descname"><span class="pre">overlap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">complex</span></span></span><a class="reference internal" href="_modules/PyFiberModes/field.html#Field.overlap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.overlap" title="Link to this definition">#</a></dt>
+<dd><p>Return the normalized vector-field overlap with another field.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -2283,6 +2313,8 @@ functions depending on the refractive index regime.</p>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.fiber.Fiber.get_radial_field"><code class="docutils literal notranslate"><span class="pre">Fiber.get_radial_field()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.fiber.Fiber.get_radial_field_norm"><code class="docutils literal notranslate"><span class="pre">Fiber.get_radial_field_norm()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.fiber.Fiber.does_mode_exist"><code class="docutils literal notranslate"><span class="pre">Fiber.does_mode_exist()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.fiber.Fiber.find_modes"><code class="docutils literal notranslate"><span class="pre">Fiber.find_modes()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.fiber.Fiber.sweep"><code class="docutils literal notranslate"><span class="pre">Fiber.sweep()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.fiber.Fiber.print_data"><code class="docutils literal notranslate"><span class="pre">Fiber.print_data()</span></code></a></li>
 </ul>
 </li>
@@ -2323,6 +2355,9 @@ functions depending on the refractive index regime.</p>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.get_intensity"><code class="docutils literal notranslate"><span class="pre">Field.get_intensity()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.get_normalization_constant"><code class="docutils literal notranslate"><span class="pre">Field.get_normalization_constant()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.get_poynting_vector"><code class="docutils literal notranslate"><span class="pre">Field.get_poynting_vector()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.get_power"><code class="docutils literal notranslate"><span class="pre">Field.get_power()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.get_confinement_factor"><code class="docutils literal notranslate"><span class="pre">Field.get_confinement_factor()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.overlap"><code class="docutils literal notranslate"><span class="pre">Field.overlap()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.plot"><code class="docutils literal notranslate"><span class="pre">Field.plot()</span></code></a></li>
 </ul>
 </li>

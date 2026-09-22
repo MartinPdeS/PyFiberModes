@@ -30,7 +30,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/pydata-sphinx-theme.css?v=bb40232b" />
-    <link rel="stylesheet" type="text/css" href="/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/docs/source/_static/default.css" />
+    <link rel="stylesheet" type="text/css" href="/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/docs/source/_static/default.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
@@ -481,16 +481,16 @@ to download the full example code.</p>
 <section id="generating-the-fiber-structures">
 <h2>Generating the fiber structures<a class="headerlink" href="#generating-the-fiber-structures" title="Link to this heading">#</a></h2>
 <p>Here we create the different fiber design that we want to explore</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">fiber</span> <span class="o">=</span> <span class="n">load_fiber</span><span class="p">(</span><span class="s1">&#39;SMF28&#39;</span><span class="p">,</span> <span class="n">wavelength</span><span class="o">=</span><span class="mf">1310e-9</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">fiber</span> <span class="o">=</span> <span class="n">load_fiber</span><span class="p">(</span><span class="s1">'SMF28'</span><span class="p">,</span> <span class="n">wavelength</span><span class="o">=</span><span class="mf">1310e-9</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Preparing the figure</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">figure</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
 <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
-    <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Mode fields for vectorial mode if x-direction&#39;</span><span class="p">,</span>
-    <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Radius&#39;</span><span class="p">,</span>
-    <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;Amplitude&#39;</span>
+    <span class="n">title</span><span class="o">=</span><span class="s1">'Mode fields for vectorial mode if x-direction'</span><span class="p">,</span>
+    <span class="n">xlabel</span><span class="o">=</span><span class="s1">'Radius'</span><span class="p">,</span>
+    <span class="n">ylabel</span><span class="o">=</span><span class="s1">'Amplitude'</span>
 <span class="p">)</span>
 
 <span class="k">for</span> <span class="n">mode</span> <span class="ow">in</span> <span class="p">[</span><span class="n">HE11</span><span class="p">,</span> <span class="n">LP01</span><span class="p">,</span> <span class="n">LP11</span><span class="p">]:</span>
@@ -512,7 +512,7 @@ to download the full example code.</p>
 <span class="c1"># -</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_mode_field_001.png" srcset="../../_images/sphx_glr_plot_mode_field_001.png" alt="Mode fields for vectorial mode if x-direction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 7.385 seconds)</p>
+<img src="../../_images/sphx_glr_plot_mode_field_001.png" srcset="../../_images/sphx_glr_plot_mode_field_001.png" alt="Mode fields for vectorial mode if x-direction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 1.278 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-gallery-basic-plot-mode-field-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/249650b3dc8a37ca34cefa4cd84ba2b5/plot_mode_field.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_mode_field.ipynb</span></code></a></p>

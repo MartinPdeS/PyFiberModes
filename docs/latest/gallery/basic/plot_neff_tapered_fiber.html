@@ -30,7 +30,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/pydata-sphinx-theme.css?v=bb40232b" />
-    <link rel="stylesheet" type="text/css" href="/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/docs/source/_static/default.css" />
+    <link rel="stylesheet" type="text/css" href="/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/docs/source/_static/default.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
@@ -494,8 +494,8 @@ to download the full example code.</p>
 </div>
 <p>Constructing fiber</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">fiber</span> <span class="o">=</span> <span class="n">Fiber</span><span class="p">(</span><span class="n">wavelength</span><span class="o">=</span><span class="mf">1550e-9</span><span class="p">)</span>
-<span class="n">fiber</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;core&#39;</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">20e-6</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mf">1.4494</span><span class="p">)</span>
-<span class="n">fiber</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;clad&#39;</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">62.5e-6</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mf">1.4444</span><span class="p">)</span>
+<span class="n">fiber</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">'core'</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">20e-6</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mf">1.4494</span><span class="p">)</span>
+<span class="n">fiber</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">'clad'</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">62.5e-6</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mf">1.4444</span><span class="p">)</span>
 <span class="n">fiber</span><span class="o">.</span><span class="n">initialize_layers</span><span class="p">()</span>
 
 <span class="n">itr_list</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
@@ -511,16 +511,16 @@ to download the full example code.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">figure</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
 <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
-    <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Mode fields for vectorial mode if x-direction&#39;</span><span class="p">,</span>
-    <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Inverse taper ratio&#39;</span><span class="p">,</span>
-    <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;Effective index&#39;</span>
+    <span class="n">title</span><span class="o">=</span><span class="s1">'Mode fields for vectorial mode if x-direction'</span><span class="p">,</span>
+    <span class="n">xlabel</span><span class="o">=</span><span class="s1">'Inverse taper ratio'</span><span class="p">,</span>
+    <span class="n">ylabel</span><span class="o">=</span><span class="s1">'Effective index'</span>
 <span class="p">)</span>
 
 <span class="k">for</span> <span class="n">mode</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">data_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
         <span class="n">itr_list</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span>
         <span class="n">label</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
-        <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span>
+        <span class="n">linestyle</span><span class="o">=</span><span class="s1">'-'</span><span class="p">,</span>
         <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span>
     <span class="p">)</span>
 
@@ -530,7 +530,7 @@ to download the full example code.</p>
 <span class="c1"># -</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_neff_tapered_fiber_001.png" srcset="../../_images/sphx_glr_plot_neff_tapered_fiber_001.png" alt="Mode fields for vectorial mode if x-direction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.349 seconds)</p>
+<img src="../../_images/sphx_glr_plot_neff_tapered_fiber_001.png" srcset="../../_images/sphx_glr_plot_neff_tapered_fiber_001.png" alt="Mode fields for vectorial mode if x-direction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.384 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-gallery-basic-plot-neff-tapered-fiber-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/e8eb19cc7f72105f3a05cac2b081e4fa/plot_neff_tapered_fiber.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_neff_tapered_fiber.ipynb</span></code></a></p>

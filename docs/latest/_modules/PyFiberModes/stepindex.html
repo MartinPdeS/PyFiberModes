@@ -29,7 +29,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/pydata-sphinx-theme.css?v=bb40232b" />
-    <link rel="stylesheet" type="text/css" href="/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/docs/source/_static/default.css" />
+    <link rel="stylesheet" type="text/css" href="/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/docs/source/_static/default.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
@@ -434,12 +434,12 @@ document.write(`
 <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">mu_0</span><span class="p">,</span> <span class="n">epsilon_0</span><span class="p">,</span> <span class="n">physical_constants</span>
 
 <span class="c1"># Physical constants</span>
-<span class="n">ETA_0</span> <span class="o">=</span> <span class="n">physical_constants</span><span class="p">[</span><span class="s1">&#39;characteristic impedance of vacuum&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">ETA_0</span> <span class="o">=</span> <span class="n">physical_constants</span><span class="p">[</span><span class="s1">'characteristic impedance of vacuum'</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 
 
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">Geometry</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Represents a geometric structure with refractive indices and radii.</span>
 
 <span class="sd">    Parameters</span>
@@ -450,47 +450,47 @@ document.write(`
 <span class="sd">        Maximum radius of the structure.</span>
 <span class="sd">    index_list : list</span>
 <span class="sd">        List of refractive indices for the structure.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">radius_in</span><span class="p">:</span> <span class="nb">float</span>
     <span class="n">radius_out</span><span class="p">:</span> <span class="nb">float</span>
     <span class="n">index_list</span><span class="p">:</span> <span class="nb">list</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Post-initialization of the class.</span>
 <span class="sd">        Computes additional attributes such as refractive index and thickness.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">refractive_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">thickness</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius_out</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius_in</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Computes a unique hash for the object based on its attributes.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        int</span>
 <span class="sd">            Hash value for the object.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="nb">hash</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">radius_in</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius_out</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index_list</span><span class="p">)))</span>
 
 
 <div class="viewcode-block" id="StepIndex">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.stepindex.StepIndex">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">StepIndex</span><span class="p">(</span><span class="n">Geometry</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Step-index structure for optical fibers and waveguides.</span>
 
 <span class="sd">    Inherits</span>
 <span class="sd">    --------</span>
 <span class="sd">    Geometry</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="StepIndex.get_index_at_radius">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.stepindex.StepIndex.get_index_at_radius">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_index_at_radius</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Get the refractive index at a specific radius.</span>
 
 <span class="sd">        Parameters</span>
@@ -502,14 +502,14 @@ document.write(`
 <span class="sd">        -------</span>
 <span class="sd">        float or None</span>
 <span class="sd">            Refractive index at the given radius if within bounds, else None.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">refractive_index</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius_in</span> <span class="o">&lt;=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">radius</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius_out</span> <span class="k">else</span> <span class="kc">None</span></div>
 
 
 <div class="viewcode-block" id="StepIndex.get_U_W_parameter">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.stepindex.StepIndex.get_U_W_parameter">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_U_W_parameter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">neff</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Calculate the U or W parameter for waveguides.</span>
 
 <span class="sd">        The U and W parameters are defined as:</span>
@@ -535,7 +535,7 @@ document.write(`
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
 <span class="sd">            U or W parameter value.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_index_at_radius</span><span class="p">(</span><span class="n">radius</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="mi">0</span>
@@ -546,7 +546,7 @@ document.write(`
 <div class="viewcode-block" id="StepIndex.get_psi">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.stepindex.StepIndex.get_psi">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_psi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">neff</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">nu</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">C</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Compute the :math:`\psi` function and its derivative.</span>
 
 <span class="sd">        The function :math:`\psi` is computed using Bessel functions for core layers</span>
@@ -557,14 +557,14 @@ document.write(`
 <span class="sd">        .. math::</span>
 <span class="sd">            \psi = C_0 J_\nu(U) + C_1 Y_\nu(U)</span>
 
-<span class="sd">            \dot{\psi} = C_0 U J&#39;_\nu(U) + C_1 U Y&#39;_\nu(U)</span>
+<span class="sd">            \dot{\psi} = C_0 U J'_\nu(U) + C_1 U Y'_\nu(U)</span>
 
 <span class="sd">        Cladding Layer:</span>
 
 <span class="sd">        .. math::</span>
 <span class="sd">            \psi = C_0 I_\nu(U) + C_1 K_\nu(U)</span>
 
-<span class="sd">            \dot{\psi} = C_0 U I&#39;_\nu(U) + C_1 U K&#39;_\nu(U)</span>
+<span class="sd">            \dot{\psi} = C_0 U I'_\nu(U) + C_1 U K'_\nu(U)</span>
 
 <span class="sd">        where:</span>
 <span class="sd">            - J$_\nu$, Y$_\nu$: Bessel functions of the first and second kind.</span>
@@ -589,7 +589,7 @@ document.write(`
 <span class="sd">        tuple</span>
 <span class="sd">            A tuple containing :math:`\psi`: The field value and :math:`\dot{\psi}`: The derivative of the field value.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">u</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_U_W_parameter</span><span class="p">(</span><span class="n">radius</span><span class="o">=</span><span class="n">radius</span><span class="p">,</span> <span class="n">neff</span><span class="o">=</span><span class="n">neff</span><span class="p">)</span>
         <span class="n">layer_max_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">refractive_index</span>
 
@@ -612,7 +612,7 @@ document.write(`
 <div class="viewcode-block" id="StepIndex.get_LP_constants">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.stepindex.StepIndex.get_LP_constants">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_LP_constants</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">neff</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">nu</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">A</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Calculate the LP mode constants.</span>
 
 <span class="sd">        The constants are derived from Bessel or modified Bessel functions</span>
@@ -633,7 +633,7 @@ document.write(`
 <span class="sd">        -------</span>
 <span class="sd">        tuple</span>
 <span class="sd">            LP mode constants.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">u</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_U_W_parameter</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="n">neff</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">neff</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">refractive_index</span><span class="p">:</span>
             <span class="n">term_0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">u</span> <span class="o">*</span> <span class="n">yvp</span><span class="p">(</span><span class="n">nu</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span> <span class="o">*</span> <span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">yn</span><span class="p">(</span><span class="n">nu</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span> <span class="o">*</span> <span class="n">A</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
@@ -648,7 +648,7 @@ document.write(`
 <div class="viewcode-block" id="StepIndex.EH_fields">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.stepindex.StepIndex.EH_fields">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">EH_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radius_in</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">radius_out</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">nu</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">neff</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">EH</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">TM</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Compute the EH field components.</span>
 
 <span class="sd">        The EH field components are derived based on the mode parameters and</span>
@@ -673,7 +673,7 @@ document.write(`
 <span class="sd">        -------</span>
 <span class="sd">        list</span>
 <span class="sd">            Updated EH field components.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">u</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_U_W_parameter</span><span class="p">(</span><span class="n">radius</span><span class="o">=</span><span class="n">radius_out</span><span class="p">,</span> <span class="n">neff</span><span class="o">=</span><span class="n">neff</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">radius_in</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -747,7 +747,7 @@ document.write(`
 <div class="viewcode-block" id="StepIndex.get_V_constant">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.stepindex.StepIndex.get_V_constant">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_V_constant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radius_in</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">radius_out</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">neff</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">nu</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">EH</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Compute the V constants for the mode.</span>
 
 <span class="sd">        This method calculates the constants using Bessel or modified Bessel</span>
@@ -770,7 +770,7 @@ document.write(`
 <span class="sd">        -------</span>
 <span class="sd">        np.ndarray</span>
 <span class="sd">            Solution to the linear system representing the V constants.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># Initialize the coefficient matrix</span>
         <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
 
@@ -824,7 +824,7 @@ document.write(`
             <span class="n">c</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
             <span class="n">idx</span><span class="p">:</span> <span class="nb">tuple</span>
             <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Compute the TE/TM constants for the waveguide.</span>
 
 <span class="sd">        This method calculates the constants using standard or modified Bessel</span>
@@ -849,7 +849,7 @@ document.write(`
 <span class="sd">        -------</span>
 <span class="sd">        np.ndarray</span>
 <span class="sd">            Solution to the linear system representing the TE/TM constants.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># Initialize the coefficient matrix</span>
         <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
 

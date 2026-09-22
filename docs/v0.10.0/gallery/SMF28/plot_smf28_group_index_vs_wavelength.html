@@ -30,7 +30,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/pydata-sphinx-theme.css?v=bb40232b" />
-    <link rel="stylesheet" type="text/css" href="/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/docs/source/_static/default.css" />
+    <link rel="stylesheet" type="text/css" href="/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/docs/source/_static/default.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
@@ -484,7 +484,7 @@ to download the full example code.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">wavelength_list</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">500e-9</span><span class="p">,</span> <span class="mf">3000e-9</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
 <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">wavelegnth</span> <span class="ow">in</span> <span class="n">wavelength_list</span><span class="p">:</span>
-    <span class="n">smf28</span> <span class="o">=</span> <span class="n">load_fiber</span><span class="p">(</span><span class="n">fiber_name</span><span class="o">=</span><span class="s1">&#39;SMF28&#39;</span><span class="p">,</span> <span class="n">wavelength</span><span class="o">=</span><span class="n">wavelegnth</span><span class="p">)</span>
+    <span class="n">smf28</span> <span class="o">=</span> <span class="n">load_fiber</span><span class="p">(</span><span class="n">fiber_name</span><span class="o">=</span><span class="s1">'SMF28'</span><span class="p">,</span> <span class="n">wavelength</span><span class="o">=</span><span class="n">wavelegnth</span><span class="p">)</span>
     <span class="n">dispersion</span> <span class="o">=</span> <span class="n">smf28</span><span class="o">.</span><span class="n">get_effective_index</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">LP01</span><span class="p">)</span>
     <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dispersion</span><span class="p">)</span>
 
@@ -492,9 +492,9 @@ to download the full example code.</p>
 <span class="n">figure</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
 <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
-    <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Mode fields for vectorial mode if x-direction&#39;</span><span class="p">,</span>
-    <span class="n">xlabel</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;Wavelength [$\mu m$]&#39;</span><span class="p">,</span>
-    <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;Group index&#39;</span><span class="p">,</span>
+    <span class="n">title</span><span class="o">=</span><span class="s1">'Mode fields for vectorial mode if x-direction'</span><span class="p">,</span>
+    <span class="n">xlabel</span><span class="o">=</span><span class="sa">r</span><span class="s1">'Wavelength [$\mu m$]'</span><span class="p">,</span>
+    <span class="n">ylabel</span><span class="o">=</span><span class="s1">'Group index'</span><span class="p">,</span>
 <span class="p">)</span>
 
 
@@ -504,7 +504,7 @@ to download the full example code.</p>
 <span class="c1"># -</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_smf28_group_index_vs_wavelength_001.png" srcset="../../_images/sphx_glr_plot_smf28_group_index_vs_wavelength_001.png" alt="Mode fields for vectorial mode if x-direction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.506 seconds)</p>
+<img src="../../_images/sphx_glr_plot_smf28_group_index_vs_wavelength_001.png" srcset="../../_images/sphx_glr_plot_smf28_group_index_vs_wavelength_001.png" alt="Mode fields for vectorial mode if x-direction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.581 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-gallery-smf28-plot-smf28-group-index-vs-wavelength-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/851fabdcd0127a469f46674fffcd0a78/plot_smf28_group_index_vs_wavelength.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_smf28_group_index_vs_wavelength.ipynb</span></code></a></p>

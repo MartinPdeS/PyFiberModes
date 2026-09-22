@@ -30,7 +30,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/pydata-sphinx-theme.css?v=bb40232b" />
-    <link rel="stylesheet" type="text/css" href="/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/docs/source/_static/default.css" />
+    <link rel="stylesheet" type="text/css" href="/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/docs/source/_static/default.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
@@ -482,17 +482,17 @@ to download the full example code.</p>
 <p>Here we create the different fiber design that we want to explore</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">core_indexes</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">1.464</span><span class="p">,</span> <span class="mf">1.494</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
 <span class="n">factory</span> <span class="o">=</span> <span class="n">FiberFactory</span><span class="p">(</span><span class="n">wavelength</span><span class="o">=</span><span class="mf">1550e-9</span><span class="p">)</span>
-<span class="n">factory</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;core&quot;</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">4e-6</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">core_indexes</span><span class="p">)</span>
-<span class="n">factory</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;cladding&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mf">1.4444</span><span class="p">)</span>
+<span class="n">factory</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"core"</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">4e-6</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">core_indexes</span><span class="p">)</span>
+<span class="n">factory</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"cladding"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mf">1.4444</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Preparing the figure</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">figure</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
 <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
-    <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Groupe index vs core index&#39;</span><span class="p">,</span>
-    <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Core refractive index&#39;</span><span class="p">,</span>
-    <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;Group index&#39;</span>
+    <span class="n">title</span><span class="o">=</span><span class="s1">'Groupe index vs core index'</span><span class="p">,</span>
+    <span class="n">xlabel</span><span class="o">=</span><span class="s1">'Core refractive index'</span><span class="p">,</span>
+    <span class="n">ylabel</span><span class="o">=</span><span class="s1">'Group index'</span>
 <span class="p">)</span>
 
 <span class="k">for</span> <span class="n">mode</span> <span class="ow">in</span> <span class="p">[</span><span class="n">HE11</span><span class="p">,</span> <span class="n">HE12</span><span class="p">,</span> <span class="n">HE22</span><span class="p">]:</span>
@@ -509,7 +509,7 @@ to download the full example code.</p>
 <span class="c1"># -</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_group_index_001.png" srcset="../../_images/sphx_glr_plot_group_index_001.png" alt="Groupe index vs core index" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 2.449 seconds)</p>
+<img src="../../_images/sphx_glr_plot_group_index_001.png" srcset="../../_images/sphx_glr_plot_group_index_001.png" alt="Groupe index vs core index" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 2.615 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-gallery-basic-plot-group-index-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/a519af8ee15bcdf99ee6122c44859bbd/plot_group_index.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_group_index.ipynb</span></code></a></p>

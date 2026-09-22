@@ -29,7 +29,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/pydata-sphinx-theme.css?v=bb40232b" />
-    <link rel="stylesheet" type="text/css" href="/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/docs/source/_static/default.css" />
+    <link rel="stylesheet" type="text/css" href="/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/docs/source/_static/default.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
@@ -452,7 +452,7 @@ document.write(`
 <a class="viewcode-back" href="../../code.html#PyFiberModes.fiber.Fiber">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">Fiber</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    A class to represent an optical fiber with multiple layers.</span>
 
 <span class="sd">    This class provides functionality to define and manipulate</span>
@@ -471,7 +471,7 @@ document.write(`
 <span class="sd">        Types of layers (e.g., core, cladding).</span>
 <span class="sd">    index_list : list of float</span>
 <span class="sd">        Refractive indices for each layer.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">wavelength</span><span class="p">:</span> <span class="nb">float</span>
     <span class="n">layer_names</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
     <span class="n">layer_radius</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
@@ -486,8 +486,8 @@ document.write(`
 <div class="viewcode-block" id="Fiber.scale">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.fiber.Fiber.scale">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factor</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Scale the fiber&#39;s geometry by a given factor.</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Scale the fiber's geometry by a given factor.</span>
 
 <span class="sd">        This method scales all radii in the fiber by the specified factor.</span>
 
@@ -504,7 +504,7 @@ document.write(`
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
 <span class="sd">        This operation does not modify the original fiber.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">scaled_fiber</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">scaled_fiber</span><span class="o">.</span><span class="n">layers</span><span class="p">:</span>
             <span class="n">layer</span><span class="o">.</span><span class="n">radius_in</span> <span class="o">*=</span> <span class="n">factor</span>
@@ -515,63 +515,63 @@ document.write(`
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">n_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Number of layers in the fiber.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        int</span>
 <span class="sd">            The total number of layers.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">n_interface</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Number of interfaces in the fiber.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        int</span>
 <span class="sd">            The number of interfaces, calculated as `n_layer - 1`.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">last_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StepIndex</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Returns the last layer</span>
 
 <span class="sd">        :returns:   The last layer.</span>
 <span class="sd">        :rtype:     StepIndex</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">penultimate_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StepIndex</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Returns the second to last layer</span>
 
 <span class="sd">        :returns:   The second to last layer.</span>
 <span class="sd">        :rtype:     StepIndex</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">first_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StepIndex</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Returns the first layer</span>
 
 <span class="sd">        :returns:   The first layer.</span>
 <span class="sd">        :rtype:     StepIndex</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">hash</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">))</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StepIndex</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Returns the nth layer.</span>
 
 <span class="sd">        :param      index:  The index</span>
@@ -579,18 +579,18 @@ document.write(`
 
 <span class="sd">        :returns:   The step index.</span>
 <span class="sd">        :rtype:     StepIndex</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
 
 <div class="viewcode-block" id="Fiber.iterate_interfaces">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.fiber.Fiber.iterate_interfaces">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">iterate_interfaces</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Iterates through pair of layers that forms interfaces</span>
 
 <span class="sd">        :returns:   The two layers that form the interfaces.</span>
 <span class="sd">        :rtype:     tuple[StepIndex, StepIndex]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">for</span> <span class="n">layer_in</span><span class="p">,</span> <span class="n">layer_out</span> <span class="ow">in</span> <span class="n">pairwise</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">):</span>
             <span class="k">yield</span> <span class="n">layer_in</span><span class="p">,</span> <span class="n">layer_out</span></div>
 
@@ -598,7 +598,7 @@ document.write(`
 <div class="viewcode-block" id="Fiber.update_wavelength">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.fiber.Fiber.update_wavelength">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">update_wavelength</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Update the wavelength of the fiber and all its layers</span>
 
 <span class="sd">        :param      wavelength:  The wavelength</span>
@@ -606,22 +606,23 @@ document.write(`
 
 <span class="sd">        :returns:   No return</span>
 <span class="sd">        :rtype:     None</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span> <span class="o">=</span> <span class="n">wavelength</span>
         <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">:</span>
-            <span class="n">layer</span><span class="o">.</span><span class="n">wavelength</span> <span class="o">=</span> <span class="n">wavelength</span></div>
+            <span class="n">layer</span><span class="o">.</span><span class="n">wavelength</span> <span class="o">=</span> <span class="n">wavelength</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_radial_field</span><span class="o">.</span><span class="n">cache_clear</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="Fiber.add_layer">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.fiber.Fiber.add_layer">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">add_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Add a layer to the fiber.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        name : str</span>
-<span class="sd">            Name of the layer (e.g., &quot;core&quot;, &quot;cladding&quot;).</span>
+<span class="sd">            Name of the layer (e.g., "core", "cladding").</span>
 <span class="sd">        radius : float</span>
 <span class="sd">            Outer radius of the layer in meters.</span>
 <span class="sd">        index : float</span>
@@ -630,7 +631,7 @@ document.write(`
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
 <span class="sd">        Layers should be added in order, starting with the innermost layer (core).</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">layer_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">index_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
 
@@ -653,12 +654,12 @@ document.write(`
 <div class="viewcode-block" id="Fiber.initialize_layers">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.fiber.Fiber.initialize_layers">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">initialize_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Initializes the layers.</span>
 
 <span class="sd">        :returns:   No returns</span>
 <span class="sd">        :rtype:     None</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">is_last_layer</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">is_first_layer</span> <span class="o">=</span> <span class="kc">True</span>
 
@@ -671,12 +672,12 @@ document.write(`
 <div class="viewcode-block" id="Fiber.get_layer_at_radius">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.fiber.Fiber.get_layer_at_radius">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_layer_at_radius</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StepIndex</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Gets the layer that is associated to a given radius.</span>
 
 <span class="sd">        :param      radius:  The radius</span>
 <span class="sd">        :type       radius:  float</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">radius</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">radius</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">:</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">radius</span> <span class="o">&gt;</span> <span class="n">layer</span><span class="o">.</span><span class="n">radius_in</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">radius</span> <span class="o">&lt;</span> <span class="n">layer</span><span class="o">.</span><span class="n">radius_out</span><span class="p">):</span>
@@ -685,12 +686,12 @@ document.write(`
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">radius</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Gets the fiber total radius taking account for all layers.</span>
 
 <span class="sd">        :returns:   The fiber radius.</span>
 <span class="sd">        :rtype:     float</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">layer_radius</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">layer</span><span class="o">.</span><span class="n">radius_out</span> <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="p">]</span>
@@ -702,7 +703,7 @@ document.write(`
 <div class="viewcode-block" id="Fiber.get_index_at_radius">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.fiber.Fiber.get_index_at_radius">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_index_at_radius</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Gets the refractive index at a given radius.</span>
 
 <span class="sd">        :param      radius:      The radius</span>
@@ -710,7 +711,7 @@ document.write(`
 
 <span class="sd">        :returns:   The refractive index at given radius.</span>
 <span class="sd">        :rtype:     float</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">layer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_layer_at_radius</span><span class="p">(</span><span class="n">radius</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">layer</span><span class="o">.</span><span class="n">refractive_index</span></div>
@@ -718,7 +719,7 @@ document.write(`
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">maximum_index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Gets the maximum refractive index of the fiber.</span>
 
 <span class="sd">        :param      layer_idx:   The layer index</span>
@@ -726,7 +727,7 @@ document.write(`
 
 <span class="sd">        :returns:   The minimum index.</span>
 <span class="sd">        :rtype:     float</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">layers_maximum_index</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">layer</span><span class="o">.</span><span class="n">refractive_index</span> <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span>
         <span class="p">]</span>
@@ -735,7 +736,7 @@ document.write(`
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">minimum_index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Gets the minimum refractive index of the fiber.</span>
 
 <span class="sd">        :param      layer_idx:   The layer index</span>
@@ -743,7 +744,7 @@ document.write(`
 
 <span class="sd">        :returns:   The minimum index.</span>
 <span class="sd">        :rtype:     float</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">layers_maximum_index</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">layer</span><span class="o">.</span><span class="n">refractive_index</span> <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span>
         <span class="p">]</span>
@@ -753,7 +754,7 @@ document.write(`
 <div class="viewcode-block" id="Fiber.get_NA">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.fiber.Fiber.get_NA">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_NA</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Compute the numerical aperture (NA) of the fiber.</span>
 
 <span class="sd">        The numerical aperture is defined as:</span>
@@ -769,7 +770,7 @@ document.write(`
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
 <span class="sd">            The numerical aperture of the fiber.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">n_max</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maximum_index</span>
 
         <span class="n">last_layer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
@@ -781,21 +782,21 @@ document.write(`
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">M_number</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Gets the m number representing an approximation of the number of existing mode</span>
-<span class="sd">        in the fiber. It&#39;s valide only for highly multimode fibers M number is defined as:</span>
+<span class="sd">        in the fiber. It's valide only for highly multimode fibers M number is defined as:</span>
 
 <span class="sd">        .. math::</span>
 <span class="sd">            M = \frac{V^2}{2}</span>
 
 <span class="sd">        :returns:   The M number.</span>
 <span class="sd">        :rtype:     float</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">V_number</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="mi">2</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">V_number</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Compute the V-number (normalized frequency) of the fiber.</span>
 
 <span class="sd">        The V-number is given by:</span>
@@ -817,7 +818,7 @@ document.write(`
 <span class="sd">        -----</span>
 <span class="sd">        The V-number determines whether the fiber supports single-mode</span>
 <span class="sd">        or multimode operation.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">NA</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_NA</span><span class="p">()</span>
 
         <span class="n">inner_radius</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_layer</span><span class="o">.</span><span class="n">radius_in</span>
@@ -829,7 +830,7 @@ document.write(`
 <div class="viewcode-block" id="Fiber.get_mode_cutoff_v0">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.fiber.Fiber.get_mode_cutoff_v0">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_mode_cutoff_v0</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Gets the cutoff wavelength of the fiber.</span>
 
 <span class="sd">        :param      mode:  The mode to consider</span>
@@ -837,7 +838,7 @@ document.write(`
 
 <span class="sd">        :returns:   The cutoff wavelength.</span>
 <span class="sd">        :rtype:     float</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">cutoff_V0</span> <span class="o">=</span> <span class="n">get_mode_cutoff_v0</span><span class="p">(</span>
             <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
             <span class="n">fiber</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
@@ -850,7 +851,7 @@ document.write(`
 <div class="viewcode-block" id="Fiber.get_mode_cutoff_wavelength">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.fiber.Fiber.get_mode_cutoff_wavelength">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_mode_cutoff_wavelength</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Compute the cutoff wavelength for a given mode.</span>
 
 <span class="sd">        Parameters</span>
@@ -866,7 +867,7 @@ document.write(`
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
 <span class="sd">        A mode is no longer guided when the wavelength exceeds the cutoff.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">cutoff_V0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_mode_cutoff_v0</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">cutoff_V0</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -887,7 +888,7 @@ document.write(`
 <div class="viewcode-block" id="Fiber.get_effective_index">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.fiber.Fiber.get_effective_index">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_effective_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Gets the effective index.</span>
 
 <span class="sd">        :param      mode:    The mode to consider</span>
@@ -895,7 +896,7 @@ document.write(`
 
 <span class="sd">        :returns:   The effective index.</span>
 <span class="sd">        :rtype:     float</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">neff</span> <span class="o">=</span> <span class="n">get_effective_index</span><span class="p">(</span>
             <span class="n">fiber</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
             <span class="n">wavelength</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span><span class="p">,</span>
@@ -908,7 +909,7 @@ document.write(`
 <div class="viewcode-block" id="Fiber.get_normalized_beta">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.fiber.Fiber.get_normalized_beta">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_normalized_beta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Gets the normalized propagation constant [beta].</span>
 
 <span class="sd">        :param      mode:    The mode to consider</span>
@@ -916,7 +917,7 @@ document.write(`
 
 <span class="sd">        :returns:   The normalized propagation constant.</span>
 <span class="sd">        :rtype:     float</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">neff</span> <span class="o">=</span> <span class="n">get_effective_index</span><span class="p">(</span>
             <span class="n">fiber</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
             <span class="n">wavelength</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span><span class="p">,</span>
@@ -937,7 +938,7 @@ document.write(`
 <div class="viewcode-block" id="Fiber.get_propagation_constant">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.fiber.Fiber.get_propagation_constant">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_propagation_constant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Gets the propagation constant [:math:`beta`].</span>
 
 <span class="sd">        :param      mode:    The mode to consider</span>
@@ -945,7 +946,7 @@ document.write(`
 
 <span class="sd">        :returns:   The propagation constant [:math:`beta`].</span>
 <span class="sd">        :rtype:     float</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">neff</span> <span class="o">=</span> <span class="n">get_effective_index</span><span class="p">(</span>
             <span class="n">fiber</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
             <span class="n">wavelength</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span><span class="p">,</span>
@@ -960,7 +961,7 @@ document.write(`
 <div class="viewcode-block" id="Fiber.get_phase_velocity">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.fiber.Fiber.get_phase_velocity">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_phase_velocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Compute the phase velocity of a mode in the fiber.</span>
 
 <span class="sd">        Parameters</span>
@@ -981,7 +982,7 @@ document.write(`
 <span class="sd">            v_p = \frac{c}{n_{eff}}</span>
 
 <span class="sd">        where :math:`n_{eff}` is the effective refractive index.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">n_eff</span> <span class="o">=</span> <span class="n">get_effective_index</span><span class="p">(</span>
             <span class="n">fiber</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
             <span class="n">wavelength</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span><span class="p">,</span>
@@ -994,7 +995,7 @@ document.write(`
 <div class="viewcode-block" id="Fiber.get_group_index">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.fiber.Fiber.get_group_index">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_group_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Gets the group index.</span>
 
 <span class="sd">        :param      mode:    The mode to consider</span>
@@ -1002,7 +1003,7 @@ document.write(`
 
 <span class="sd">        :returns:   The group index.</span>
 <span class="sd">        :rtype:     float</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">omega</span> <span class="o">=</span> <span class="n">c</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span>
 
         <span class="n">derivative</span> <span class="o">=</span> <span class="n">get_function_derivative</span><span class="p">(</span>
@@ -1020,7 +1021,7 @@ document.write(`
 <div class="viewcode-block" id="Fiber.get_groupe_velocity">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.fiber.Fiber.get_groupe_velocity">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_groupe_velocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Gets the groupe velocity defined as:</span>
 
 <span class="sd">        .. math::</span>
@@ -1031,7 +1032,7 @@ document.write(`
 
 <span class="sd">        :returns:   The groupe velocity.</span>
 <span class="sd">        :rtype:     float</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">omega</span> <span class="o">=</span> <span class="n">c</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span>
 
         <span class="n">derivative</span> <span class="o">=</span> <span class="n">get_function_derivative</span><span class="p">(</span>
@@ -1049,7 +1050,7 @@ document.write(`
 <div class="viewcode-block" id="Fiber.get_group_velocity_dispersion">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.fiber.Fiber.get_group_velocity_dispersion">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_group_velocity_dispersion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Gets the fiber group velocity dispersion defined as:</span>
 
 <span class="sd">        .. math::</span>
@@ -1060,7 +1061,7 @@ document.write(`
 
 <span class="sd">        :returns:   The group_velocity dispersion</span>
 <span class="sd">        :rtype:     float</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">omega</span> <span class="o">=</span> <span class="n">c</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span>
 
         <span class="n">derivative</span> <span class="o">=</span> <span class="n">get_function_derivative</span><span class="p">(</span>
@@ -1078,7 +1079,7 @@ document.write(`
 <div class="viewcode-block" id="Fiber.get_dispersion">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.fiber.Fiber.get_dispersion">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_dispersion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Compute the modal dispersion in the fiber.</span>
 
 <span class="sd">        Dispersion is defined as:</span>
@@ -1104,7 +1105,7 @@ document.write(`
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
 <span class="sd">        Dispersion affects pulse broadening in fiber optics, particularly for long-haul transmission.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">gvd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_group_velocity_dispersion</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span>
 
         <span class="n">factor</span> <span class="o">=</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">constants</span><span class="o">.</span><span class="n">c</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span><span class="o">**</span><span class="mi">2</span>
@@ -1115,7 +1116,7 @@ document.write(`
 <div class="viewcode-block" id="Fiber.get_S_parameter">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.fiber.Fiber.get_S_parameter">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_S_parameter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Compute the S-parameter (third-order dispersion).</span>
 
 <span class="sd">        The S-parameter is defined as:</span>
@@ -1132,7 +1133,7 @@ document.write(`
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
 <span class="sd">            The S-parameter in appropriate units.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">omega</span> <span class="o">=</span> <span class="n">c</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span>
 
         <span class="n">derivative</span> <span class="o">=</span> <span class="n">get_function_derivative</span><span class="p">(</span>
@@ -1156,7 +1157,7 @@ document.write(`
             <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">,</span>
             <span class="n">limit</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
             <span class="n">n_point</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">101</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Field</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Get field class</span>
 
 <span class="sd">        :param      mode:        The mode to consider</span>
@@ -1170,7 +1171,7 @@ document.write(`
 
 <span class="sd">        :returns:   The field instance of the mode.</span>
 <span class="sd">        :rtype:     Field</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="n">limit</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">limit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">*</span> <span class="mf">5.5</span>
 
@@ -1188,7 +1189,7 @@ document.write(`
 <a class="viewcode-back" href="../../code.html#PyFiberModes.fiber.Fiber.get_radial_field">[docs]</a>
     <span class="nd">@cache</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_radial_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CylindricalCoordinates</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Gets the mode field without the azimuthal component.</span>
 <span class="sd">        Tuple structure is [:math:`E_{r}`, :math:`E_{\phi}`, :math:`E_{z}`], [:math:`H_{r}`, :math:`H_{\phi}`, :math:`H_{z}`]</span>
 
@@ -1199,7 +1200,7 @@ document.write(`
 
 <span class="sd">        :returns:   The radial field.</span>
 <span class="sd">        :rtype:     CylindricalCoordinates</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">radial_field</span> <span class="o">=</span> <span class="n">get_radial_field</span><span class="p">(</span>
             <span class="n">fiber</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
             <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
@@ -1213,7 +1214,7 @@ document.write(`
 <div class="viewcode-block" id="Fiber.get_radial_field_norm">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.fiber.Fiber.get_radial_field_norm">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_radial_field_norm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Gets the norm of the mode field without the azimuthal component.</span>
 <span class="sd">        Tuple structure is [:math:`E_{r}`, :math:`E_{\phi}`, :math:`E_{z}`], [:math:`H_{r}`, :math:`H_{\phi}`, :math:`H_{z}`]</span>
 
@@ -1224,7 +1225,7 @@ document.write(`
 
 <span class="sd">        :returns:   The radial field.</span>
 <span class="sd">        :rtype:     float</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">e_field</span><span class="p">,</span> <span class="n">h_field</span> <span class="o">=</span> <span class="n">get_radial_field</span><span class="p">(</span>
             <span class="n">fiber</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
             <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
@@ -1251,10 +1252,26 @@ document.write(`
         <span class="k">return</span> <span class="n">mode_exist</span></div>
 
 
+<div class="viewcode-block" id="Fiber.find_modes">
+<a class="viewcode-back" href="../../code.html#PyFiberModes.fiber.Fiber.find_modes">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">find_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">families</span><span class="o">=</span><span class="p">(</span><span class="s2">"LP"</span><span class="p">,),</span> <span class="n">max_nu</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span> <span class="n">max_m</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">6</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Automatically discover guided modes at the current wavelength."""</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes.analysis</span><span class="w"> </span><span class="kn">import</span> <span class="n">find_modes</span>
+        <span class="k">return</span> <span class="n">find_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">families</span><span class="o">=</span><span class="n">families</span><span class="p">,</span> <span class="n">max_nu</span><span class="o">=</span><span class="n">max_nu</span><span class="p">,</span> <span class="n">max_m</span><span class="o">=</span><span class="n">max_m</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Fiber.sweep">
+<a class="viewcode-back" href="../../code.html#PyFiberModes.fiber.Fiber.sweep">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">sweep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Evaluate modal metrics over wavelength or a custom parameter."""</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes.analysis</span><span class="w"> </span><span class="kn">import</span> <span class="n">sweep_modes</span>
+        <span class="k">return</span> <span class="n">sweep_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
 <div class="viewcode-block" id="Fiber.print_data">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.fiber.Fiber.print_data">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">print_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_type_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">mode_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Mode</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Prints the given data for the given modes.</span>
 
 <span class="sd">        :param      data_type_list:  The data type list</span>
@@ -1264,17 +1281,17 @@ document.write(`
 
 <span class="sd">        :returns:   No return</span>
 <span class="sd">        :rtype:     None</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">for</span> <span class="n">data_type</span> <span class="ow">in</span> <span class="n">data_type_list</span><span class="p">:</span>
-            <span class="n">first_line</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">data_type</span><span class="si">}</span><span class="s2"> @ wavelength: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">first_line</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">first_line</span><span class="p">))</span>
+            <span class="n">first_line</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">data_type</span><span class="si">}</span><span class="s2"> @ wavelength: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="s2">"</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">first_line</span><span class="p">,</span> <span class="s2">"-"</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">first_line</span><span class="p">))</span>
             <span class="k">for</span> <span class="n">mode</span> <span class="ow">in</span> <span class="n">mode_list</span><span class="p">:</span>
-                <span class="n">data_type_string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;get_</span><span class="si">{</span><span class="n">data_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="n">data_type_string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"get_</span><span class="si">{</span><span class="n">data_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span>
                 <span class="n">data</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_type_string</span><span class="p">)(</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span>
-                <span class="n">output_string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">mode</span><span class="w"> </span><span class="si">= }</span><span class="s2"> </span><span class="se">\t</span><span class="s2"> </span><span class="si">{</span><span class="n">data_type</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">data</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="n">output_string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">mode</span><span class="w"> </span><span class="si">= }</span><span class="s2"> </span><span class="se">\t</span><span class="s2"> </span><span class="si">{</span><span class="n">data_type</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">data</span><span class="si">}</span><span class="s2">"</span>
                 <span class="nb">print</span><span class="p">(</span><span class="n">output_string</span><span class="p">)</span>
 
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="p">)</span></div>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">'</span><span class="se">\n\n</span><span class="s1">'</span><span class="p">)</span></div>
 </div>
 
 
@@ -1282,7 +1299,7 @@ document.write(`
 <div class="viewcode-block" id="get_fiber_from_delta_and_V0">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.fiber.get_fiber_from_delta_and_V0">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_fiber_from_delta_and_V0</span><span class="p">(</span><span class="n">delta</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">V0</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Fiber</span><span class="p">:</span>
-    <span class="n">fiber</span> <span class="o">=</span> <span class="n">load_fiber</span><span class="p">(</span><span class="n">fiber_name</span><span class="o">=</span><span class="s1">&#39;SMF28&#39;</span><span class="p">,</span> <span class="n">wavelength</span><span class="o">=</span><span class="n">wavelength</span><span class="p">)</span>
+    <span class="n">fiber</span> <span class="o">=</span> <span class="n">load_fiber</span><span class="p">(</span><span class="n">fiber_name</span><span class="o">=</span><span class="s1">'SMF28'</span><span class="p">,</span> <span class="n">wavelength</span><span class="o">=</span><span class="n">wavelength</span><span class="p">)</span>
 
     <span class="n">core</span><span class="p">,</span> <span class="n">clad</span> <span class="o">=</span> <span class="n">fiber</span><span class="o">.</span><span class="n">layers</span>
 
@@ -1302,7 +1319,7 @@ document.write(`
 <div class="viewcode-block" id="load_fiber">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.fiber.load_fiber">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">load_fiber</span><span class="p">(</span><span class="n">fiber_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">add_air_layer</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Fiber</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Loads a fiber as type that suit PyFiberModes.</span>
 
 <span class="sd">    :param      fiber_name:  The fiber name</span>
@@ -1312,20 +1329,20 @@ document.write(`
 
 <span class="sd">    :returns:   The loaded fiber</span>
 <span class="sd">    :rtype:     Fiber</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">fiber_dict</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">load_fiber_as_dict</span><span class="p">(</span>
         <span class="n">fiber_name</span><span class="o">=</span><span class="n">fiber_name</span><span class="p">,</span>
         <span class="n">wavelength</span><span class="o">=</span><span class="n">wavelength</span><span class="p">,</span>
-        <span class="n">order</span><span class="o">=</span><span class="s1">&#39;out-to-in&#39;</span>
+        <span class="n">order</span><span class="o">=</span><span class="s1">'out-to-in'</span>
     <span class="p">)</span>
 
     <span class="n">fiber</span> <span class="o">=</span> <span class="n">Fiber</span><span class="p">(</span><span class="n">wavelength</span><span class="o">=</span><span class="n">wavelength</span><span class="p">)</span>
 
-    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">fiber_dict</span><span class="p">[</span><span class="s1">&#39;layers&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">fiber_dict</span><span class="p">[</span><span class="s1">'layers'</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="n">fiber</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span><span class="o">**</span><span class="n">layer</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">add_air_layer</span><span class="p">:</span>
-        <span class="n">fiber</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;air&#39;</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+        <span class="n">fiber</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">'air'</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
 
     <span class="n">fiber</span><span class="o">.</span><span class="n">initialize_layers</span><span class="p">()</span>
 

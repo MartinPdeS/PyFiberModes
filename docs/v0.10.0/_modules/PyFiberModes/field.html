@@ -29,7 +29,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/pydata-sphinx-theme.css?v=bb40232b" />
-    <link rel="stylesheet" type="text/css" href="/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/docs/source/_static/default.css" />
+    <link rel="stylesheet" type="text/css" href="/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/docs/source/_static/default.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
@@ -459,7 +459,7 @@ document.write(`
 <a class="viewcode-back" href="../../code.html#PyFiberModes.field.Field">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">Field</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    A class representing the electric and magnetic field components in a fiber.</span>
 
 <span class="sd">    Parameters</span>
@@ -479,32 +479,59 @@ document.write(`
 <span class="sd">        Cartesian coordinates generated for the field computation.</span>
 <span class="sd">    cylindrical_coordinates : CylindricalCoordinates</span>
 <span class="sd">        Cylindrical coordinates corresponding to the cartesian grid.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">fiber</span><span class="p">:</span> <span class="nb">object</span>
     <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span>
     <span class="n">limit</span><span class="p">:</span> <span class="nb">float</span>
     <span class="n">n_point</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">101</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Generate the mesh coordinates that are used for field computation.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cartesian_coordinates</span> <span class="o">=</span> <span class="n">CartesianCoordinates</span><span class="o">.</span><span class="n">generate_from_square</span><span class="p">(</span><span class="n">length</span><span class="o">=</span><span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">limit</span><span class="p">,</span> <span class="n">n_points</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_point</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">cylindrical_coordinates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cartesian_coordinates</span><span class="o">.</span><span class="n">to_cylindrical</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_radial_cache</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_radial_component</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">component</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Evaluate one radial component and interpolate it over the 2-D grid.</span>
+
+<span class="sd">        Circular symmetry means the expensive analytical solver only needs to</span>
+<span class="sd">        run on a radial line. The resulting interpolation is fully vectorized.</span>
+<span class="sd">        """</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">component</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_radial_cache</span><span class="p">:</span>
+            <span class="n">count</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">257</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_point</span><span class="p">)</span>
+            <span class="n">radii</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">limit</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">radius</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">radii</span><span class="p">):</span>
+                <span class="n">electric</span><span class="p">,</span> <span class="n">magnetic</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">get_radial_field</span><span class="p">(</span>
+                    <span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">radius</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="n">vector</span> <span class="o">=</span> <span class="n">electric</span> <span class="k">if</span> <span class="n">field</span> <span class="o">==</span> <span class="s2">"E"</span> <span class="k">else</span> <span class="n">magnetic</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">vector</span><span class="p">,</span> <span class="n">component</span><span class="p">)</span>
+                <span class="n">values</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="nb">complex</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_radial_cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">radii</span><span class="p">,</span> <span class="n">values</span>
+        <span class="n">radii</span><span class="p">,</span> <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_radial_cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="n">rho</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cylindrical_coordinates</span><span class="o">.</span><span class="n">rho</span>
+        <span class="n">real</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">radii</span><span class="p">,</span> <span class="n">values</span><span class="o">.</span><span class="n">real</span><span class="p">)</span>
+        <span class="n">imaginary</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">radii</span><span class="p">,</span> <span class="n">values</span><span class="o">.</span><span class="n">imag</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">real</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">imaginary</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">real_if_close</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Field.initialize_array">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.field.Field.initialize_array">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">initialize_array</span><span class="p">(</span><span class="n">shape</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize an array of zeros.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Initialize an array of zeros."""</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Field.get_azimuthal_dependency">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.field.Field.get_azimuthal_dependency">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_azimuthal_dependency</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phi</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">dependency_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Compute the azimuthal dependency for the field based on the given type.</span>
 
 <span class="sd">        The azimuthal dependencies are defined as:</span>
@@ -522,10 +549,10 @@ document.write(`
 <span class="sd">        ----------</span>
 <span class="sd">        phi : float</span>
 <span class="sd">            Phase shift of the field in radians.</span>
-<span class="sd">        dependency_type : {&#39;f&#39;, &#39;g&#39;}</span>
+<span class="sd">        dependency_type : {'f', 'g'}</span>
 <span class="sd">            The type of azimuthal dependency to compute:</span>
-<span class="sd">            - &#39;f&#39; for cosine dependency.</span>
-<span class="sd">            - &#39;g&#39; for sine dependency.</span>
+<span class="sd">            - 'f' for cosine dependency.</span>
+<span class="sd">            - 'g' for sine dependency.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -535,26 +562,26 @@ document.write(`
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>
 <span class="sd">        ValueError</span>
-<span class="sd">            If `dependency_type` is not &#39;f&#39; or &#39;g&#39;.</span>
+<span class="sd">            If `dependency_type` is not 'f' or 'g'.</span>
 
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
 <span class="sd">        This method is referenced in Eq. 3.71 of Jaques Bures for the calculation</span>
 <span class="sd">        of field azimuthal behavior in optical fibers.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">angle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">nu</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">cylindrical_coordinates</span><span class="o">.</span><span class="n">phi</span> <span class="o">+</span> <span class="n">phi</span>
-        <span class="k">if</span> <span class="n">dependency_type</span> <span class="o">==</span> <span class="s2">&quot;f&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">dependency_type</span> <span class="o">==</span> <span class="s2">"f"</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">dependency_type</span> <span class="o">==</span> <span class="s2">&quot;g&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">dependency_type</span> <span class="o">==</span> <span class="s2">"g"</span><span class="p">:</span>
             <span class="k">return</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid dependency type. Use &#39;f&#39; for cosine or &#39;g&#39; for sine.&quot;</span><span class="p">)</span></div>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Invalid dependency type. Use 'f' for cosine or 'g' for sine."</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Field.get_index_iterator">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.field.Field.get_index_iterator">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_index_iterator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">array</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Generate an iterator for multi-dimensional array indices.</span>
 
 <span class="sd">        This method provides a way to iterate through all indices of a</span>
@@ -570,8 +597,8 @@ document.write(`
 <span class="sd">        tuple</span>
 <span class="sd">            Multi-dimensional index corresponding to the current element.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">iterator</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nditer</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;multi_index&#39;</span><span class="p">])</span>
+<span class="sd">        """</span>
+        <span class="n">iterator</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nditer</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="p">[</span><span class="s1">'multi_index'</span><span class="p">])</span>
         <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">iterator</span><span class="p">:</span>
             <span class="k">yield</span> <span class="n">iterator</span><span class="o">.</span><span class="n">multi_index</span></div>
 
@@ -579,7 +606,7 @@ document.write(`
 <div class="viewcode-block" id="Field.wrapper_get_field">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.field.Field.wrapper_get_field">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">wrapper_get_field</span><span class="p">(</span><span class="n">function</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Decorator for wrapping field computation methods.</span>
 
 <span class="sd">        This decorator can be used to add pre- or post-processing steps</span>
@@ -595,7 +622,7 @@ document.write(`
 <span class="sd">        callable</span>
 <span class="sd">            The wrapped function.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">def</span><span class="w"> </span><span class="nf">wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">wrapper</span></div>
@@ -604,10 +631,10 @@ document.write(`
 <div class="viewcode-block" id="Field.Ex">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.field.Field.Ex">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">Ex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phi</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">theta</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Compute the x-component of the electric field, :math:`E_x`.</span>
 
-<span class="sd">        The x-component of the electric field is calculated based on the field&#39;s mode family.</span>
+<span class="sd">        The x-component of the electric field is calculated based on the field's mode family.</span>
 <span class="sd">        For LP (linearly polarized) modes, it uses the radial electric field and the azimuthal</span>
 <span class="sd">        dependency :math:`f_\nu(\phi)`. For other modes, the x-component is derived using the</span>
 <span class="sd">        transverse electric field and its polarization angle.</span>
@@ -646,19 +673,11 @@ document.write(`
 <span class="sd">        ----------</span>
 <span class="sd">        Jaques Bures, Optical Fiber Theory, Eq. 3.71.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">family</span> <span class="o">==</span> <span class="s1">&#39;LP&#39;</span><span class="p">:</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">family</span> <span class="o">==</span> <span class="s1">'LP'</span><span class="p">:</span>
             <span class="c1"># Initialize array for the electric field component</span>
-            <span class="n">array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initialize_array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cartesian_coordinates</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-            <span class="n">azimuthal_dependency</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_azimuthal_dependency</span><span class="p">(</span><span class="n">phi</span><span class="o">=</span><span class="n">phi</span><span class="p">,</span> <span class="n">dependency_type</span><span class="o">=</span><span class="s1">&#39;f&#39;</span><span class="p">)</span>
-
-            <span class="c1"># Iterate over grid points and calculate E_x</span>
-            <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_index_iterator</span><span class="p">(</span><span class="n">array</span><span class="p">):</span>
-                <span class="n">e_field</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">get_radial_field</span><span class="p">(</span>
-                    <span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span>
-                    <span class="n">radius</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cylindrical_coordinates</span><span class="o">.</span><span class="n">rho</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
-                <span class="p">)</span>
-                <span class="n">array</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">e_field</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">azimuthal_dependency</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+            <span class="n">azimuthal_dependency</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_azimuthal_dependency</span><span class="p">(</span><span class="n">phi</span><span class="o">=</span><span class="n">phi</span><span class="p">,</span> <span class="n">dependency_type</span><span class="o">=</span><span class="s1">'f'</span><span class="p">)</span>
+            <span class="n">array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_radial_component</span><span class="p">(</span><span class="s2">"E"</span><span class="p">,</span> <span class="s2">"rho"</span><span class="p">)</span> <span class="o">*</span> <span class="n">azimuthal_dependency</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># For non-LP modes, calculate using transverse field and polarization</span>
             <span class="n">polarization</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Epol</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
@@ -670,10 +689,10 @@ document.write(`
 <div class="viewcode-block" id="Field.Ey">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.field.Field.Ey">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">Ey</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phi</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">theta</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Compute the y-component of the electric field, :math:`E_y`.</span>
 
-<span class="sd">        The y-component of the electric field is calculated based on the field&#39;s mode family.</span>
+<span class="sd">        The y-component of the electric field is calculated based on the field's mode family.</span>
 <span class="sd">        For LP (linearly polarized) modes, it uses the azimuthal dependency :math:`f_\nu(\phi)`</span>
 <span class="sd">        and the azimuthal electric field. For other modes, it is derived using the transverse</span>
 <span class="sd">        electric field and its polarization angle.</span>
@@ -711,19 +730,11 @@ document.write(`
 <span class="sd">        References</span>
 <span class="sd">        ----------</span>
 <span class="sd">        Jaques Bures, Optical Fiber Theory, Eq. 3.71.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">family</span> <span class="o">==</span> <span class="s1">&#39;LP&#39;</span><span class="p">:</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">family</span> <span class="o">==</span> <span class="s1">'LP'</span><span class="p">:</span>
             <span class="c1"># Initialize array for the electric field component</span>
-            <span class="n">array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initialize_array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cartesian_coordinates</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-            <span class="n">azimuthal_dependency</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_azimuthal_dependency</span><span class="p">(</span><span class="n">phi</span><span class="o">=</span><span class="n">phi</span><span class="p">,</span> <span class="n">dependency_type</span><span class="o">=</span><span class="s1">&#39;f&#39;</span><span class="p">)</span>
-
-            <span class="c1"># Iterate over grid points and calculate E_y</span>
-            <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_index_iterator</span><span class="p">(</span><span class="n">array</span><span class="p">):</span>
-                <span class="n">e_field</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">get_radial_field</span><span class="p">(</span>
-                    <span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span>
-                    <span class="n">radius</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cylindrical_coordinates</span><span class="o">.</span><span class="n">rho</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
-                <span class="p">)</span>
-                <span class="n">array</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">e_field</span><span class="o">.</span><span class="n">phi</span> <span class="o">*</span> <span class="n">azimuthal_dependency</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+            <span class="n">azimuthal_dependency</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_azimuthal_dependency</span><span class="p">(</span><span class="n">phi</span><span class="o">=</span><span class="n">phi</span><span class="p">,</span> <span class="n">dependency_type</span><span class="o">=</span><span class="s1">'f'</span><span class="p">)</span>
+            <span class="n">array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_radial_component</span><span class="p">(</span><span class="s2">"E"</span><span class="p">,</span> <span class="s2">"phi"</span><span class="p">)</span> <span class="o">*</span> <span class="n">azimuthal_dependency</span>
             <span class="k">return</span> <span class="n">array</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># For non-LP modes, calculate using transverse field and polarization</span>
@@ -736,7 +747,7 @@ document.write(`
 <div class="viewcode-block" id="Field.Ez">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.field.Field.Ez">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">Ez</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phi</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">theta</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Compute the z-component of the electric field, :math:`E_z`.</span>
 
 <span class="sd">        The z-component of the electric field is calculated using the azimuthal dependency</span>
@@ -769,20 +780,11 @@ document.write(`
 <span class="sd">        References</span>
 <span class="sd">        ----------</span>
 <span class="sd">        Jaques Bures, Optical Fiber Theory, Eq. 3.71.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># Initialize the array for the z-component</span>
-        <span class="n">array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initialize_array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cartesian_coordinates</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-
         <span class="c1"># Compute azimuthal dependency</span>
-        <span class="n">azimuthal_dependency</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_azimuthal_dependency</span><span class="p">(</span><span class="n">phi</span><span class="o">=</span><span class="n">phi</span><span class="p">,</span> <span class="n">dependency_type</span><span class="o">=</span><span class="s1">&#39;f&#39;</span><span class="p">)</span>
-
-        <span class="c1"># Iterate over grid points and calculate E_z</span>
-        <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_index_iterator</span><span class="p">(</span><span class="n">array</span><span class="p">):</span>
-            <span class="n">e_field</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">get_radial_field</span><span class="p">(</span>
-                <span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span>
-                <span class="n">radius</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cylindrical_coordinates</span><span class="o">.</span><span class="n">rho</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
-            <span class="p">)</span>
-            <span class="n">array</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">e_field</span><span class="o">.</span><span class="n">z</span> <span class="o">*</span> <span class="n">azimuthal_dependency</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+        <span class="n">azimuthal_dependency</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_azimuthal_dependency</span><span class="p">(</span><span class="n">phi</span><span class="o">=</span><span class="n">phi</span><span class="p">,</span> <span class="n">dependency_type</span><span class="o">=</span><span class="s1">'f'</span><span class="p">)</span>
+        <span class="n">array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_radial_component</span><span class="p">(</span><span class="s2">"E"</span><span class="p">,</span> <span class="s2">"z"</span><span class="p">)</span> <span class="o">*</span> <span class="n">azimuthal_dependency</span>
 
         <span class="k">return</span> <span class="n">array</span></div>
 
@@ -790,10 +792,10 @@ document.write(`
 <div class="viewcode-block" id="Field.Er">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.field.Field.Er">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">Er</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phi</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">theta</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Compute the radial component of the electric field, :math:`E_r`.</span>
 
-<span class="sd">        The radial component of the electric field is calculated differently based on the field&#39;s</span>
+<span class="sd">        The radial component of the electric field is calculated differently based on the field's</span>
 <span class="sd">        mode family. For LP (linearly polarized) modes, it uses the transverse electric field and</span>
 <span class="sd">        its polarization. For other modes, it incorporates the azimuthal dependency</span>
 <span class="sd">        :math:`f_\nu(\phi)` and the radial electric field component :math:`E_\rho`.</span>
@@ -831,22 +833,15 @@ document.write(`
 <span class="sd">        References</span>
 <span class="sd">        ----------</span>
 <span class="sd">        Jaques Bures, Optical Fiber Theory, Eq. 3.71.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">family</span> <span class="o">==</span> <span class="s1">&#39;LP&#39;</span><span class="p">:</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">family</span> <span class="o">==</span> <span class="s1">'LP'</span><span class="p">:</span>
             <span class="c1"># Compute for LP mode using transverse field and polarization</span>
             <span class="n">polarization</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Epol</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">cylindrical_coordinates</span><span class="o">.</span><span class="n">phi</span>
             <span class="n">array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Et</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">polarization</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># Compute for non-LP mode using azimuthal dependency and radial field</span>
-            <span class="n">array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initialize_array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cartesian_coordinates</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-            <span class="n">azimuthal_dependency</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_azimuthal_dependency</span><span class="p">(</span><span class="n">phi</span><span class="o">=</span><span class="n">phi</span><span class="p">,</span> <span class="n">dependency_type</span><span class="o">=</span><span class="s1">&#39;f&#39;</span><span class="p">)</span>
-
-            <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_index_iterator</span><span class="p">(</span><span class="n">array</span><span class="p">):</span>
-                <span class="n">e_field</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">get_radial_field</span><span class="p">(</span>
-                    <span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span>
-                    <span class="n">radius</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cylindrical_coordinates</span><span class="o">.</span><span class="n">rho</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
-                <span class="p">)</span>
-                <span class="n">array</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">e_field</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">azimuthal_dependency</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+            <span class="n">azimuthal_dependency</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_azimuthal_dependency</span><span class="p">(</span><span class="n">phi</span><span class="o">=</span><span class="n">phi</span><span class="p">,</span> <span class="n">dependency_type</span><span class="o">=</span><span class="s1">'f'</span><span class="p">)</span>
+            <span class="n">array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_radial_component</span><span class="p">(</span><span class="s2">"E"</span><span class="p">,</span> <span class="s2">"rho"</span><span class="p">)</span> <span class="o">*</span> <span class="n">azimuthal_dependency</span>
 
         <span class="k">return</span> <span class="n">array</span></div>
 
@@ -854,10 +849,10 @@ document.write(`
 <div class="viewcode-block" id="Field.Ephi">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.field.Field.Ephi">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">Ephi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phi</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">theta</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Compute the azimuthal component of the electric field, :math:`E_\phi`.</span>
 
-<span class="sd">        The azimuthal component of the electric field is calculated based on the field&#39;s mode family.</span>
+<span class="sd">        The azimuthal component of the electric field is calculated based on the field's mode family.</span>
 <span class="sd">        For LP (linearly polarized) modes, it uses the transverse electric field and its polarization.</span>
 <span class="sd">        For other modes, it incorporates the azimuthal dependency :math:`g_\nu(\phi)` and the azimuthal</span>
 <span class="sd">        electric field component :math:`E_\phi`.</span>
@@ -895,22 +890,15 @@ document.write(`
 <span class="sd">        References</span>
 <span class="sd">        ----------</span>
 <span class="sd">        Jaques Bures, Optical Fiber Theory, Eq. 3.71.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">family</span> <span class="o">==</span> <span class="s1">&#39;LP&#39;</span><span class="p">:</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">family</span> <span class="o">==</span> <span class="s1">'LP'</span><span class="p">:</span>
             <span class="c1"># Compute for LP mode using transverse field and polarization</span>
             <span class="n">polarization</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Epol</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">cylindrical_coordinates</span><span class="o">.</span><span class="n">phi</span>
             <span class="n">array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Et</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">polarization</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># Compute for non-LP mode using azimuthal dependency and azimuthal field</span>
-            <span class="n">array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initialize_array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cartesian_coordinates</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-            <span class="n">azimuthal_dependency</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_azimuthal_dependency</span><span class="p">(</span><span class="n">phi</span><span class="o">=</span><span class="n">phi</span><span class="p">,</span> <span class="n">dependency_type</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">)</span>
-
-            <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_index_iterator</span><span class="p">(</span><span class="n">array</span><span class="p">):</span>
-                <span class="n">e_field</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">get_radial_field</span><span class="p">(</span>
-                    <span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span>
-                    <span class="n">radius</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cylindrical_coordinates</span><span class="o">.</span><span class="n">rho</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
-                <span class="p">)</span>
-                <span class="n">array</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">e_field</span><span class="o">.</span><span class="n">phi</span> <span class="o">*</span> <span class="n">azimuthal_dependency</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+            <span class="n">azimuthal_dependency</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_azimuthal_dependency</span><span class="p">(</span><span class="n">phi</span><span class="o">=</span><span class="n">phi</span><span class="p">,</span> <span class="n">dependency_type</span><span class="o">=</span><span class="s1">'g'</span><span class="p">)</span>
+            <span class="n">array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_radial_component</span><span class="p">(</span><span class="s2">"E"</span><span class="p">,</span> <span class="s2">"phi"</span><span class="p">)</span> <span class="o">*</span> <span class="n">azimuthal_dependency</span>
 
         <span class="k">return</span> <span class="n">array</span></div>
 
@@ -918,7 +906,7 @@ document.write(`
 <div class="viewcode-block" id="Field.Et">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.field.Field.Et">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">Et</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phi</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">theta</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Compute the transverse component of the electric field, :math:`E_T`.</span>
 
 <span class="sd">        The transverse electric field is computed as the magnitude of the</span>
@@ -948,8 +936,8 @@ document.write(`
 <span class="sd">        -------</span>
 <span class="sd">        numpy.ndarray</span>
 <span class="sd">            The transverse electric field, :math:`E_T`, computed over the Cartesian grid.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">family</span> <span class="o">==</span> <span class="s1">&#39;LP&#39;</span><span class="p">:</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">family</span> <span class="o">==</span> <span class="s1">'LP'</span><span class="p">:</span>
             <span class="n">e_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ex</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
             <span class="n">e_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ey</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
             <span class="n">e_transverse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
@@ -968,7 +956,7 @@ document.write(`
 <div class="viewcode-block" id="Field.Epol">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.field.Field.Epol">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">Epol</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phi</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">theta</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Compute the polarization angle of the transverse electric field, :math:`\theta_{\text{pol}}`.</span>
 
 <span class="sd">        The polarization angle is the direction of the transverse electric field vector</span>
@@ -998,8 +986,8 @@ document.write(`
 <span class="sd">        -------</span>
 <span class="sd">        numpy.ndarray</span>
 <span class="sd">            The polarization angle of the transverse electric field in radians.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">family</span> <span class="o">==</span> <span class="s1">&#39;LP&#39;</span><span class="p">:</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">family</span> <span class="o">==</span> <span class="s1">'LP'</span><span class="p">:</span>
             <span class="n">e_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ey</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
             <span class="n">e_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ex</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
             <span class="n">e_polarization</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">e_y</span><span class="p">,</span> <span class="n">e_x</span><span class="p">)</span>
@@ -1014,7 +1002,7 @@ document.write(`
 <div class="viewcode-block" id="Field.Emod">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.field.Field.Emod">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">Emod</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phi</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">theta</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Compute the modulus (magnitude) of the electric field vector, :math:`|\vec{E}|`.</span>
 
 <span class="sd">        The electric field modulus is the magnitude of the field vector, which</span>
@@ -1044,8 +1032,8 @@ document.write(`
 <span class="sd">        -------</span>
 <span class="sd">        numpy.ndarray</span>
 <span class="sd">            The modulus of the electric field, :math:`|\vec{E}|`, computed over the Cartesian grid.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">family</span> <span class="o">==</span> <span class="s1">&#39;LP&#39;</span><span class="p">:</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">family</span> <span class="o">==</span> <span class="s1">'LP'</span><span class="p">:</span>
             <span class="n">e_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ex</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
             <span class="n">e_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ey</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
             <span class="n">e_z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ez</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
@@ -1066,7 +1054,7 @@ document.write(`
 <div class="viewcode-block" id="Field.Hx">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.field.Field.Hx">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">Hx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phi</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">theta</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Compute the x-component of the magnetic field :math:`H_x`.</span>
 
 <span class="sd">        For LP (linearly polarized) modes, this is computed using the radial</span>
@@ -1097,19 +1085,10 @@ document.write(`
 <span class="sd">        AttributeError</span>
 <span class="sd">            If the fiber object does not implement `get_radial_field`.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">family</span> <span class="o">==</span> <span class="s1">&#39;LP&#39;</span><span class="p">:</span>
-            <span class="n">array</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cartesian_coordinates</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-            <span class="n">azimuthal_dependency_f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_azimuthal_dependency</span><span class="p">(</span><span class="n">phi</span><span class="o">=</span><span class="n">phi</span><span class="p">,</span> <span class="n">dependency_type</span><span class="o">=</span><span class="s1">&#39;f&#39;</span><span class="p">)</span>
-
-            <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_index_iterator</span><span class="p">(</span><span class="n">array</span><span class="p">):</span>
-
-                <span class="n">_</span><span class="p">,</span> <span class="n">h_field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">get_radial_field</span><span class="p">(</span>
-                    <span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span>
-                    <span class="n">radius</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cylindrical_coordinates</span><span class="o">.</span><span class="n">rho</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
-                <span class="p">)</span>
-
-                <span class="n">array</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">h_field</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">azimuthal_dependency_f</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">family</span> <span class="o">==</span> <span class="s1">'LP'</span><span class="p">:</span>
+            <span class="n">azimuthal_dependency_f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_azimuthal_dependency</span><span class="p">(</span><span class="n">phi</span><span class="o">=</span><span class="n">phi</span><span class="p">,</span> <span class="n">dependency_type</span><span class="o">=</span><span class="s1">'f'</span><span class="p">)</span>
+            <span class="n">array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_radial_component</span><span class="p">(</span><span class="s2">"H"</span><span class="p">,</span> <span class="s2">"rho"</span><span class="p">)</span> <span class="o">*</span> <span class="n">azimuthal_dependency_f</span>
 
         <span class="k">else</span><span class="p">:</span>
             <span class="n">polarisation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Hpol</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
@@ -1121,7 +1100,7 @@ document.write(`
 <div class="viewcode-block" id="Field.Hy">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.field.Field.Hy">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">Hy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phi</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">theta</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Compute the y-component of the magnetic field :math:`H_y`.</span>
 
 <span class="sd">        For LP modes, this is computed using the azimuthal component :math:`H_\phi`</span>
@@ -1152,18 +1131,10 @@ document.write(`
 <span class="sd">        AttributeError</span>
 <span class="sd">            If the fiber object does not implement `get_radial_field`.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">family</span> <span class="o">==</span> <span class="s1">&#39;LP&#39;</span><span class="p">:</span>
-            <span class="n">array</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cartesian_coordinates</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-            <span class="n">azimuthal_dependency_f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_azimuthal_dependency</span><span class="p">(</span><span class="n">phi</span><span class="o">=</span><span class="n">phi</span><span class="p">,</span> <span class="n">dependency_type</span><span class="o">=</span><span class="s1">&#39;f&#39;</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_index_iterator</span><span class="p">(</span><span class="n">array</span><span class="p">):</span>
-
-                <span class="n">_</span><span class="p">,</span> <span class="n">h_field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">get_radial_field</span><span class="p">(</span>
-                    <span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span>
-                    <span class="n">radius</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cylindrical_coordinates</span><span class="o">.</span><span class="n">rho</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
-                <span class="p">)</span>
-
-                <span class="n">array</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">h_field</span><span class="o">.</span><span class="n">phi</span> <span class="o">*</span> <span class="n">azimuthal_dependency_f</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">family</span> <span class="o">==</span> <span class="s1">'LP'</span><span class="p">:</span>
+            <span class="n">azimuthal_dependency_f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_azimuthal_dependency</span><span class="p">(</span><span class="n">phi</span><span class="o">=</span><span class="n">phi</span><span class="p">,</span> <span class="n">dependency_type</span><span class="o">=</span><span class="s1">'f'</span><span class="p">)</span>
+            <span class="n">array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_radial_component</span><span class="p">(</span><span class="s2">"H"</span><span class="p">,</span> <span class="s2">"phi"</span><span class="p">)</span> <span class="o">*</span> <span class="n">azimuthal_dependency_f</span>
 
         <span class="k">else</span><span class="p">:</span>
             <span class="n">polarisation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Hpol</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
@@ -1175,7 +1146,7 @@ document.write(`
 <div class="viewcode-block" id="Field.Hz">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.field.Field.Hz">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">Hz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phi</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">theta</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Compute the z-component of the magnetic field :math:`H_z`.</span>
 
 <span class="sd">        The z-component is calculated for all modes using the longitudinal field</span>
@@ -1201,24 +1172,16 @@ document.write(`
 <span class="sd">        AttributeError</span>
 <span class="sd">            If the fiber object does not implement `get_radial_field`.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">array</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cartesian_coordinates</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-        <span class="n">azimuthal_dependency_f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_azimuthal_dependency</span><span class="p">(</span><span class="n">phi</span><span class="o">=</span><span class="n">phi</span><span class="p">,</span> <span class="n">dependency_type</span><span class="o">=</span><span class="s1">&#39;f&#39;</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_index_iterator</span><span class="p">(</span><span class="n">array</span><span class="p">):</span>
-
-            <span class="n">_</span><span class="p">,</span> <span class="n">h_field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">get_radial_field</span><span class="p">(</span>
-                <span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span>
-                <span class="n">radius</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cylindrical_coordinates</span><span class="o">.</span><span class="n">rho</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
-            <span class="p">)</span>
-
-            <span class="n">array</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">h_field</span><span class="o">.</span><span class="n">z</span> <span class="o">*</span> <span class="n">azimuthal_dependency_f</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+<span class="sd">        """</span>
+        <span class="n">azimuthal_dependency_f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_azimuthal_dependency</span><span class="p">(</span><span class="n">phi</span><span class="o">=</span><span class="n">phi</span><span class="p">,</span> <span class="n">dependency_type</span><span class="o">=</span><span class="s1">'f'</span><span class="p">)</span>
+        <span class="n">array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_radial_component</span><span class="p">(</span><span class="s2">"H"</span><span class="p">,</span> <span class="s2">"z"</span><span class="p">)</span> <span class="o">*</span> <span class="n">azimuthal_dependency_f</span>
         <span class="k">return</span> <span class="n">array</span></div>
 
 
 <div class="viewcode-block" id="Field.Hr">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.field.Field.Hr">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">Hr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phi</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">theta</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Compute the radial component of the magnetic field :math:`H_r`.</span>
 
 <span class="sd">        For LP modes, this is computed using the transverse field :math:`H_T` and</span>
@@ -1244,25 +1207,16 @@ document.write(`
 <span class="sd">        np.ndarray</span>
 <span class="sd">            The magnetic field in the radial direction over the Cartesian grid.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">family</span> <span class="o">==</span> <span class="s1">&#39;LP&#39;</span><span class="p">:</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">family</span> <span class="o">==</span> <span class="s1">'LP'</span><span class="p">:</span>
             <span class="n">radial</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ht</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
             <span class="n">polarisation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Hpol</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">cylindrical_coordinates</span><span class="o">.</span><span class="n">phi</span>
             <span class="n">azimuthal</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">polarisation</span><span class="p">)</span>
             <span class="n">array</span> <span class="o">=</span> <span class="n">radial</span> <span class="o">*</span> <span class="n">azimuthal</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">array</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cartesian_coordinates</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-            <span class="n">azimuthal_dependency_f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_azimuthal_dependency</span><span class="p">(</span><span class="n">phi</span><span class="o">=</span><span class="n">phi</span><span class="p">,</span> <span class="n">dependency_type</span><span class="o">=</span><span class="s1">&#39;f&#39;</span><span class="p">)</span>
-
-            <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_index_iterator</span><span class="p">(</span><span class="n">array</span><span class="p">):</span>
-
-                <span class="n">er</span><span class="p">,</span> <span class="n">hr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">get_radial_field</span><span class="p">(</span>
-                    <span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span>
-                    <span class="n">radius</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cylindrical_coordinates</span><span class="o">.</span><span class="n">rho</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
-                <span class="p">)</span>
-
-                <span class="n">array</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">hr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">azimuthal_dependency_f</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+            <span class="n">azimuthal_dependency_f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_azimuthal_dependency</span><span class="p">(</span><span class="n">phi</span><span class="o">=</span><span class="n">phi</span><span class="p">,</span> <span class="n">dependency_type</span><span class="o">=</span><span class="s1">'f'</span><span class="p">)</span>
+            <span class="n">array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_radial_component</span><span class="p">(</span><span class="s2">"H"</span><span class="p">,</span> <span class="s2">"rho"</span><span class="p">)</span> <span class="o">*</span> <span class="n">azimuthal_dependency_f</span>
 
         <span class="k">return</span> <span class="n">array</span></div>
 
@@ -1270,7 +1224,7 @@ document.write(`
 <div class="viewcode-block" id="Field.Hphi">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.field.Field.Hphi">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">Hphi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phi</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">theta</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Compute the azimuthal component of the magnetic field :math:`H_\phi`.</span>
 
 <span class="sd">        For LP modes, this is computed using the transverse field :math:`H_T` and</span>
@@ -1296,22 +1250,13 @@ document.write(`
 <span class="sd">        np.ndarray</span>
 <span class="sd">            The magnetic field in the azimuthal direction over the Cartesian grid.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">family</span> <span class="o">==</span> <span class="s1">&#39;LP&#39;</span><span class="p">:</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">family</span> <span class="o">==</span> <span class="s1">'LP'</span><span class="p">:</span>
             <span class="n">polarisation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Hpol</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">cylindrical_coordinates</span><span class="o">.</span><span class="n">phi</span>
             <span class="n">array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ht</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">polarisation</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">array</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cartesian_coordinates</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-            <span class="n">azimuthal_dependency_g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_azimuthal_dependency</span><span class="p">(</span><span class="n">phi</span><span class="o">=</span><span class="n">phi</span><span class="p">,</span> <span class="n">dependency_type</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">)</span>
-
-            <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_index_iterator</span><span class="p">(</span><span class="n">array</span><span class="p">):</span>
-
-                <span class="n">er</span><span class="p">,</span> <span class="n">hr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">get_radial_field</span><span class="p">(</span>
-                    <span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span>
-                    <span class="n">radius</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cylindrical_coordinates</span><span class="o">.</span><span class="n">rho</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
-                <span class="p">)</span>
-
-                <span class="n">array</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">hr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">azimuthal_dependency_g</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+            <span class="n">azimuthal_dependency_g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_azimuthal_dependency</span><span class="p">(</span><span class="n">phi</span><span class="o">=</span><span class="n">phi</span><span class="p">,</span> <span class="n">dependency_type</span><span class="o">=</span><span class="s1">'g'</span><span class="p">)</span>
+            <span class="n">array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_radial_component</span><span class="p">(</span><span class="s2">"H"</span><span class="p">,</span> <span class="s2">"phi"</span><span class="p">)</span> <span class="o">*</span> <span class="n">azimuthal_dependency_g</span>
 
         <span class="k">return</span> <span class="n">array</span></div>
 
@@ -1319,7 +1264,7 @@ document.write(`
 <div class="viewcode-block" id="Field.Ht">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.field.Field.Ht">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">Ht</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phi</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">theta</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Compute the transverse component of the magnetic field, :math:`H_T`.</span>
 
 <span class="sd">        The transverse magnetic field is calculated as the magnitude of the</span>
@@ -1346,8 +1291,8 @@ document.write(`
 <span class="sd">        numpy.ndarray</span>
 <span class="sd">            The transverse magnetic field, :math:`H_T`, computed over the Cartesian grid.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">family</span> <span class="o">==</span> <span class="s1">&#39;LP&#39;</span><span class="p">:</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">family</span> <span class="o">==</span> <span class="s1">'LP'</span><span class="p">:</span>
             <span class="n">h_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Hx</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
             <span class="n">h_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Hy</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">h_x</span><span class="p">)</span> <span class="o">+</span> <span class="n">numpy</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">h_y</span><span class="p">))</span>
@@ -1360,7 +1305,7 @@ document.write(`
 <div class="viewcode-block" id="Field.Hpol">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.field.Field.Hpol">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">Hpol</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phi</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">theta</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Compute the polarization angle of the transverse magnetic field, :math:`\theta_{\text{pol}}`.</span>
 
 <span class="sd">        The polarization angle represents the direction of the transverse magnetic</span>
@@ -1387,8 +1332,8 @@ document.write(`
 <span class="sd">        numpy.ndarray</span>
 <span class="sd">            The polarization angle of the transverse magnetic field in radians.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">family</span> <span class="o">==</span> <span class="s1">&#39;LP&#39;</span><span class="p">:</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">family</span> <span class="o">==</span> <span class="s1">'LP'</span><span class="p">:</span>
             <span class="n">h_polarization</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">Hy</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">theta</span><span class="p">),</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">Hx</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
@@ -1407,7 +1352,7 @@ document.write(`
 <div class="viewcode-block" id="Field.Hmod">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.field.Field.Hmod">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">Hmod</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phi</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">theta</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Compute the modulus (magnitude) of the magnetic field vector, :math:`|\vec{H}|`.</span>
 
 <span class="sd">        The magnetic field modulus is the magnitude of the field vector, which</span>
@@ -1438,8 +1383,8 @@ document.write(`
 <span class="sd">        numpy.ndarray</span>
 <span class="sd">            The modulus of the magnetic field, :math:`|\vec{H}|`, computed over the Cartesian grid.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">family</span> <span class="o">==</span> <span class="s1">&#39;LP&#39;</span><span class="p">:</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">family</span> <span class="o">==</span> <span class="s1">'LP'</span><span class="p">:</span>
             <span class="n">h_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Hx</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
             <span class="n">h_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Hy</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
             <span class="n">h_z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Hz</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
@@ -1460,7 +1405,7 @@ document.write(`
 <div class="viewcode-block" id="Field.get_effective_area">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.field.Field.get_effective_area">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_effective_area</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Compute the effective area of the mode, :math:`A_{\text{eff}}`.</span>
 
 <span class="sd">        The effective area is defined as:</span>
@@ -1477,22 +1422,18 @@ document.write(`
 <span class="sd">        float</span>
 <span class="sd">            The effective area, :math:`A_{\text{eff}}`.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">field_array_norm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Emod</span><span class="p">()</span>
-
-        <span class="n">integral</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_integrale_square</span><span class="p">(</span><span class="n">array</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Emod</span><span class="p">())</span>
-
-        <span class="n">term_0</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">integral</span><span class="p">)</span>
-
-        <span class="n">term_1</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">field_array_norm</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
-
-        <span class="k">return</span> <span class="p">(</span><span class="n">term_0</span> <span class="o">/</span> <span class="n">term_1</span><span class="p">)</span></div>
+        <span class="n">integral</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_integrale_square</span><span class="p">(</span><span class="n">array</span><span class="o">=</span><span class="n">field_array_norm</span><span class="p">)</span>
+        <span class="n">cell_area</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cartesian_coordinates</span><span class="o">.</span><span class="n">dx</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">cartesian_coordinates</span><span class="o">.</span><span class="n">dy</span>
+        <span class="n">fourth_moment</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">field_array_norm</span><span class="p">)</span> <span class="o">**</span> <span class="mi">4</span><span class="p">)</span> <span class="o">*</span> <span class="n">cell_area</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">integral</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="n">fourth_moment</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="Field.get_integrale_square">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.field.Field.get_integrale_square">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_integrale_square</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">array</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Compute the square of the integral of the given array.</span>
 
 <span class="sd">        .. math::</span>
@@ -1508,8 +1449,8 @@ document.write(`
 <span class="sd">        float</span>
 <span class="sd">            The squared integral of the array.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">square_field</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">array</span><span class="p">)</span>
+<span class="sd">        """</span>
+        <span class="n">square_field</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">array</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
 
         <span class="n">sum_square_field</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">square_field</span><span class="p">)</span>
 
@@ -1521,7 +1462,7 @@ document.write(`
 <div class="viewcode-block" id="Field.get_intensity">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.field.Field.get_intensity">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_intensity</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Compute the intensity of the mode, :math:`I`.</span>
 
 <span class="sd">        The intensity is defined as:</span>
@@ -1539,16 +1480,10 @@ document.write(`
 <span class="sd">        float</span>
 <span class="sd">            The intensity of the mode.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">HE11_n_eff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">get_effective_index</span><span class="p">(</span>
-            <span class="n">mode</span><span class="o">=</span><span class="n">HE11</span><span class="p">,</span>
-            <span class="n">wavelength</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">wavelength</span>
-        <span class="p">)</span>
+<span class="sd">        """</span>
+        <span class="n">HE11_n_eff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">get_effective_index</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">HE11</span><span class="p">)</span>
 
-        <span class="n">n_eff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">get_effective_index</span><span class="p">(</span>
-            <span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span>
-            <span class="n">wavelength</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">wavelength</span>
-        <span class="p">)</span>
+        <span class="n">n_eff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">get_effective_index</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">)</span>
 
         <span class="n">norm_squared</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_integrale_square</span><span class="p">(</span><span class="n">array</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Et</span><span class="p">())</span>
 
@@ -1558,7 +1493,7 @@ document.write(`
 <div class="viewcode-block" id="Field.get_normalization_constant">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.field.Field.get_normalization_constant">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_normalization_constant</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Compute the normalization constant, :math:`N`.</span>
 
 <span class="sd">        The normalization constant is defined as:</span>
@@ -1577,8 +1512,8 @@ document.write(`
 <span class="sd">        float</span>
 <span class="sd">            The normalization constant, :math:`N`.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">neff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">neff</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">HE11</span><span class="p">,</span> <span class="n">wavelength</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">wavelength</span><span class="p">)</span>
+<span class="sd">        """</span>
+        <span class="n">neff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">get_effective_index</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">HE11</span><span class="p">)</span>
 
         <span class="n">intensity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_intensity</span><span class="p">()</span>
 
@@ -1587,17 +1522,47 @@ document.write(`
 
 <div class="viewcode-block" id="Field.get_poynting_vector">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.field.Field.get_poynting_vector">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_poynting_vector</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Gets the Poynting vector but is not implemented yet.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;Not yet implemented&#39;</span><span class="p">)</span></div>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_poynting_vector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phi</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">theta</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Return the time-averaged Cartesian Poynting-vector components."""</span>
+        <span class="n">electric</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">Ex</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">theta</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ey</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">theta</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ez</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">theta</span><span class="p">)))</span>
+        <span class="n">magnetic</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">Hx</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">theta</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">Hy</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">theta</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">Hz</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">theta</span><span class="p">)))</span>
+        <span class="n">vector</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">electric</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">conjugate</span><span class="p">(</span><span class="n">magnetic</span><span class="p">),</span> <span class="n">axisa</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">axisb</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">axisc</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">vector</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Field.get_power">
+<a class="viewcode-back" href="../../code.html#PyFiberModes.field.Field.get_power">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_power</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phi</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">theta</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Integrate the longitudinal time-averaged power over the grid."""</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">poynting_z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_poynting_vector</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
+        <span class="n">cell_area</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cartesian_coordinates</span><span class="o">.</span><span class="n">dx</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">cartesian_coordinates</span><span class="o">.</span><span class="n">dy</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">poynting_z</span><span class="p">)</span> <span class="o">*</span> <span class="n">cell_area</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Field.get_confinement_factor">
+<a class="viewcode-back" href="../../code.html#PyFiberModes.field.Field.get_confinement_factor">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_confinement_factor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the fraction of electric energy inside ``radius``."""</span>
+        <span class="n">density</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Emod</span><span class="p">())</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="n">total</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">density</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">total</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.0</span>
+        <span class="n">inside</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cylindrical_coordinates</span><span class="o">.</span><span class="n">rho</span> <span class="o">&lt;=</span> <span class="n">radius</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">density</span><span class="p">[</span><span class="n">inside</span><span class="p">])</span> <span class="o">/</span> <span class="n">total</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Field.overlap">
+<a class="viewcode-back" href="../../code.html#PyFiberModes.field.Field.overlap">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">overlap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">complex</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the normalized vector-field overlap with another field."""</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes.propagation</span><span class="w"> </span><span class="kn">import</span> <span class="n">overlap</span>
+        <span class="k">return</span> <span class="n">overlap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Field.plot">
 <a class="viewcode-back" href="../../code.html#PyFiberModes.field.Field.plot">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plot_type</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">(),</span> <span class="n">show</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">save_filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">plt</span><span class="o">.</span><span class="n">Figure</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Plotting function.</span>
 
 <span class="sd">        Parameters</span>
@@ -1615,13 +1580,16 @@ document.write(`
 <span class="sd">        -------</span>
 <span class="sd">        plt.Figure</span>
 <span class="sd">            The matplotlib Figure object created or used for the plot.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">with</span> <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">context</span><span class="p">(</span><span class="n">mps</span><span class="p">):</span>
             <span class="n">figure</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">plot_type</span><span class="p">))</span>
 
         <span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">field_string</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="p">,</span> <span class="n">plot_type</span><span class="p">):</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">'equal'</span><span class="p">)</span>
             <span class="n">field</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field_string</span><span class="p">)()</span>
+            <span class="n">field</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">real_if_close</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">numpy</span><span class="o">.</span><span class="n">iscomplexobj</span><span class="p">(</span><span class="n">field</span><span class="p">):</span>
+                <span class="n">field</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
             <span class="n">max_abs</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">field</span><span class="o">.</span><span class="n">min</span><span class="p">()))</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="n">max_abs</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">max_abs</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">blue_black_red</span><span class="p">)</span>
 

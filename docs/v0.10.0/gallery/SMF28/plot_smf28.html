@@ -30,7 +30,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/pydata-sphinx-theme.css?v=bb40232b" />
-    <link rel="stylesheet" type="text/css" href="/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/docs/source/_static/default.css" />
+    <link rel="stylesheet" type="text/css" href="/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/docs/source/_static/default.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
@@ -479,11 +479,11 @@ to download the full example code.</p>
 <section id="generating-the-fiber-structures">
 <h2>Generating the fiber structures<a class="headerlink" href="#generating-the-fiber-structures" title="Link to this heading">#</a></h2>
 <p>Here we create the different fiber design that we want to explore</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">smf28</span> <span class="o">=</span> <span class="n">load_fiber</span><span class="p">(</span><span class="n">fiber_name</span><span class="o">=</span><span class="s1">&#39;SMF28&#39;</span><span class="p">,</span> <span class="n">wavelength</span><span class="o">=</span><span class="mf">1310e-9</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">smf28</span> <span class="o">=</span> <span class="n">load_fiber</span><span class="p">(</span><span class="n">fiber_name</span><span class="o">=</span><span class="s1">'SMF28'</span><span class="p">,</span> <span class="n">wavelength</span><span class="o">=</span><span class="mf">1310e-9</span><span class="p">)</span>
 
 
 <span class="n">smf28</span><span class="o">.</span><span class="n">print_data</span><span class="p">(</span>
-    <span class="n">data_type_list</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;mode_cutoff_wavelength&#39;</span><span class="p">,</span> <span class="s1">&#39;effective_index&#39;</span><span class="p">,</span> <span class="s1">&#39;dispersion&#39;</span><span class="p">],</span>
+    <span class="n">data_type_list</span><span class="o">=</span><span class="p">[</span><span class="s1">'mode_cutoff_wavelength'</span><span class="p">,</span> <span class="s1">'effective_index'</span><span class="p">,</span> <span class="s1">'dispersion'</span><span class="p">],</span>
     <span class="n">mode_list</span><span class="o">=</span><span class="p">[</span><span class="n">HE11</span><span class="p">,</span> <span class="n">LP01</span><span class="p">,</span> <span class="n">TE01</span><span class="p">,</span> <span class="n">LP11</span><span class="p">,</span> <span class="n">LP02</span><span class="p">,</span> <span class="n">LP21</span><span class="p">,</span> <span class="n">LP12</span><span class="p">,</span> <span class="n">HE22</span><span class="p">,</span> <span class="n">LP31</span><span class="p">,</span> <span class="n">LP22</span><span class="p">,</span> <span class="n">LP41</span><span class="p">]</span>
 <span class="p">)</span>
 
@@ -538,7 +538,7 @@ mode = LP22      dispersion: nan
 mode = LP41      dispersion: nan
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.042 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.044 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-gallery-smf28-plot-smf28-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/28e1bfa841342b3ac0070c8315dd9b7c/plot_smf28.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_smf28.ipynb</span></code></a></p>
