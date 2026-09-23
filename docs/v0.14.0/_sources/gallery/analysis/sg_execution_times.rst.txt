@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:00.229** total execution time for 3 files **from gallery/analysis**:
+**00:00.227** total execution time for 3 files **from gallery/analysis**:
 
 .. container::
 
@@ -33,7 +33,7 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_gallery_analysis_plot_structured_wavelength_sweep.py` (``plot_structured_wavelength_sweep.py``)
-     - 00:00.137
+     - 00:00.134
      - 0.0
    * - :ref:`sphx_glr_gallery_analysis_plot_coupled_mode_exchange.py` (``plot_coupled_mode_exchange.py``)
      - 00:00.054

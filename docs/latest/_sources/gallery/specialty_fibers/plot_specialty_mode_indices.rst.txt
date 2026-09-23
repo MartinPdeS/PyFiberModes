@@ -61,7 +61,7 @@ Compare the effective indices of low-order modes in a multilayer fiber.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.498 seconds)
+   **Total running time of the script:** (0 minutes 0.480 seconds)
 
 
 .. _sphx_glr_download_gallery_specialty_fibers_plot_specialty_mode_indices.py:
