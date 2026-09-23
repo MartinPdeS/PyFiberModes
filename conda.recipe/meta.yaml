@@ -24,7 +24,6 @@ requirements:
   run:
     - python >=3.11
     - martinpdes::pyfinitdiff
-    - martinpdes::pyoptik >=2,<3
     - pyyaml
     - numpy
     - scipy

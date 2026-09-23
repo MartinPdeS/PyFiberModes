@@ -31,6 +31,7 @@ test:
 
 quality:
 	$(PYTHON) -m ruff check PyFiberModes tests tools
+	$(PYTHON) -m mypy
 
 release-check:
 	$(PYTHON) tools/check_release.py $(if $(VERSION),--version $(VERSION),)

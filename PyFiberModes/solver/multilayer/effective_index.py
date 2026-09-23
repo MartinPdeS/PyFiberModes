@@ -6,6 +6,7 @@ from scipy.constants import mu_0, epsilon_0, physical_constants
 
 from PyFiberModes.solver.base_solver import BaseSolver
 from PyFiberModes.mode import Mode
+from PyFiberModes.solver.results import SolverResult
 
 eta0 = physical_constants['characteristic impedance of vacuum'][0]
 
@@ -83,6 +84,24 @@ class EffectiveIndexSolver(BaseSolver):
         float
             Effective index, or ``numpy.nan`` when no valid interval exists.
         """
+        result = self.solve_result(mode=mode, delta_neff=delta_neff)
+        return result.value if result.converged else numpy.nan
+
+    def solve_result(self, mode: Mode, delta_neff: float) -> SolverResult[float]:
+        """Solve an effective index and retain failure diagnostics.
+
+        Parameters
+        ----------
+        mode : Mode
+            Mode whose effective index is requested.
+        delta_neff : float
+            Maximum effective-index search step.
+
+        Returns
+        -------
+        SolverResult[float]
+            Root value, residual, search bracket, and status explanation.
+        """
         higher_neff_boundary = self.get_neff_lower_boundary(mode=mode)
 
         lower_neff_boundary = self.fiber.last_layer.refractive_index
@@ -100,8 +119,12 @@ class EffectiveIndexSolver(BaseSolver):
                 function = self.get_HE_equation
 
         if higher_neff_boundary <= lower_neff_boundary:
-            print("Impossible bound")
-            return numpy.nan
+            return SolverResult(
+                value=None,
+                converged=False,
+                bracket=(float(lower_neff_boundary), float(higher_neff_boundary)),
+                message=f"no physically valid effective-index interval for {mode}",
+            )
 
         delta_boundary = (higher_neff_boundary - lower_neff_boundary) / 100
         delta_neff = - min(delta_neff, delta_boundary)
@@ -118,9 +141,28 @@ class EffectiveIndexSolver(BaseSolver):
             )
 
         except ValueError:
-            value = numpy.nan
+            return SolverResult(
+                value=None,
+                converged=False,
+                bracket=(float(lower_neff_boundary), float(higher_neff_boundary)),
+                message=f"characteristic equation failed while solving {mode}",
+            )
 
-        return value
+        if not numpy.isfinite(value):
+            return SolverResult(
+                value=None,
+                converged=False,
+                bracket=(float(lower_neff_boundary), float(higher_neff_boundary)),
+                message=f"no sign-changing root found for {mode}",
+            )
+        residual = abs(float(function(value, mode.nu)))
+        return SolverResult(
+            value=float(value),
+            converged=True,
+            residual=residual,
+            bracket=(float(lower_neff_boundary), float(higher_neff_boundary)),
+            message="converged",
+        )
 
     def get_LP_field(self, nu: int, neff: float, radius: float) -> tuple[float, float]:
         """        Gets the :math:`LP_{
@@ -220,13 +262,15 @@ class EffectiveIndexSolver(BaseSolver):
 
         return e_field, h_field
 
-    def get_TE_field(self, wavelength: float, nu: int, neff: float, radius: float) -> tuple[float, float]:
+    def get_TE_field(
+            self,
+            nu: int,
+            neff: float,
+            radius: float) -> tuple[numpy.ndarray, numpy.ndarray]:
         """Gets the transverse electric TE field.
 
         Parameters
         ----------
-        wavelength : float
-            Vacuum wavelength in meters.
         nu : int
             The radial parameter of the mode
         neff : float
@@ -239,20 +283,22 @@ class EffectiveIndexSolver(BaseSolver):
         tuple[float, float]
             The TE field.
 
-        Raises
-        ------
-        NotImplementedError
-            Method not yet implemented
         """
-        raise NotImplementedError()
+        return self._get_axisymmetric_field(
+            effective_index=neff,
+            radius=radius,
+            transverse_magnetic=False,
+        )
 
-    def get_TM_field(self, wavelength: float, nu: int, neff: float, radius: float) -> tuple[float, float]:
+    def get_TM_field(
+            self,
+            nu: int,
+            neff: float,
+            radius: float) -> tuple[numpy.ndarray, numpy.ndarray]:
         """Gets the transverse magnetic TM field.
 
         Parameters
         ----------
-        wavelength : float
-            Vacuum wavelength in meters.
         nu : int
             The radial parameter of the mode
         neff : float
@@ -265,51 +311,116 @@ class EffectiveIndexSolver(BaseSolver):
         tuple[float, float]
             The TM field.
         """
-        n_layer = len(self.fiber.layers)
-        C = numpy.array((1, 0))
-        EH = numpy.zeros(4)
-        radius_in = 0
+        return self._get_axisymmetric_field(
+            effective_index=neff,
+            radius=radius,
+            transverse_magnetic=True,
+        )
 
-        for i in range(n_layer - 1):
-            radius_out = self.fiber.get_outer_radius(layer_idx=i)
-            layer = self.fiber.layers[i]
+    def _get_axisymmetric_field(
+            self,
+            effective_index: float,
+            radius: float,
+            transverse_magnetic: bool) -> tuple[numpy.ndarray, numpy.ndarray]:
+        """Evaluate a TE or TM field in any layer of a multilayer fiber.
 
-            n = layer.refractive_index
+        Parameters
+        ----------
+        effective_index : float
+            Solved modal effective index.
+        radius : float
+            Radial position in meters.
+        transverse_magnetic : bool
+            Select TM polarization when true and TE polarization otherwise.
 
-            u = layer.get_U_W_parameter(radius=radius_out, neff=neff)
+        Returns
+        -------
+        tuple of numpy.ndarray
+            Cylindrical electric and magnetic components ``(r, phi, z)``.
+        """
+        if radius < 0:
+            raise ValueError("radius must be non-negative")
 
-            if i > 0:
-                C = layer.get_TE_TM_constants(
-                    radius_in=radius_in,
-                    radius_out=radius_out,
-                    neff=neff,
-                    EH=EH,
-                    c=numpy.sqrt(epsilon_0 / mu_0) * n**2,
-                    idx=(0, 3)
-                )
+        boundary_field = numpy.zeros(4)
+        evaluation_layer = self.fiber.last_layer
+        outer_radius = self.fiber.last_layer.radius_in
 
-            if radius < radius_out:
+        for layer in self.fiber.layers[:-1]:
+            layer.EH_fields(
+                radius_in=layer.radius_in,
+                radius_out=layer.radius_out,
+                nu=0,
+                neff=effective_index,
+                EH=boundary_field,
+                TM=transverse_magnetic,
+            )
+            if radius <= layer.radius_out:
+                evaluation_layer = layer
+                outer_radius = layer.radius_out
                 break
 
-            if neff < n:
-                c1 = (2 * numpy.pi / self.wavelength) * radius_out / u
-                F3 = jvp(nu, u) / jn(nu, u)
-                F4 = yvp(nu, u) / yn(nu, u)
-            else:
-                c1 = -(2 * numpy.pi / self.wavelength) * radius_out / u
-                F3 = ivp(nu, u) / iv(nu, u)
-                F4 = kvp(nu, u) / kn(nu, u)
+        normalized_radius = evaluation_layer.get_U_W_parameter(
+            radius=outer_radius,
+            neff=effective_index,
+        )
+        radial_argument = normalized_radius * radius / outer_radius
+        wave_number = 2 * numpy.pi / self.wavelength
 
-            c4 = numpy.sqrt(epsilon_0 / mu_0) * n * n * c1
-
-            EH[0] = C[0] + C[1]
-            EH[3] = c4 * (F3 * C[0] + F4 * C[1])
-
-            radius_in = radius_out
+        if evaluation_layer.is_last_layer:
+            basis_value = k0(radial_argument) / k0(normalized_radius)
+            basis_derivative = kvp(0, radial_argument) / k0(normalized_radius)
+            longitudinal_boundary = boundary_field[0 if transverse_magnetic else 1]
+            longitudinal_field = longitudinal_boundary * basis_value
+            longitudinal_derivative = longitudinal_boundary * basis_derivative
+            transverse_scale = -wave_number * outer_radius / normalized_radius
         else:
-            u = self.fiber.last_layer.get_U_W_parameter(radius=radius_out, neff=neff)
+            coefficients = evaluation_layer.C
+            coefficient_offset = 0 if transverse_magnetic else 2
+            first_coefficient = coefficients[coefficient_offset]
+            second_coefficient = coefficients[coefficient_offset + 1]
 
-        return numpy.array((0, ephi, 0)), numpy.array((hr, 0, hz))
+            if effective_index < evaluation_layer.refractive_index:
+                first_basis, second_basis = jn, yn
+                first_derivative, second_derivative = jvp, yvp
+                transverse_scale = wave_number * outer_radius / normalized_radius
+            else:
+                first_basis, second_basis = iv, kn
+                first_derivative, second_derivative = ivp, kvp
+                transverse_scale = -wave_number * outer_radius / normalized_radius
+
+            first_normalization = first_basis(0, normalized_radius)
+            second_normalization = second_basis(0, normalized_radius)
+            longitudinal_field = first_coefficient * first_basis(0, radial_argument) / first_normalization
+            longitudinal_derivative = (
+                first_coefficient * first_derivative(0, radial_argument) / first_normalization
+            )
+            if evaluation_layer.radius_in > 0:
+                longitudinal_field += (
+                    second_coefficient * second_basis(0, radial_argument) / second_normalization
+                )
+                longitudinal_derivative += (
+                    second_coefficient * second_derivative(0, radial_argument) / second_normalization
+                )
+
+        if transverse_magnetic:
+            radial_electric = transverse_scale * effective_index * longitudinal_derivative
+            azimuthal_magnetic = (
+                transverse_scale
+                * numpy.sqrt(epsilon_0 / mu_0)
+                * evaluation_layer.refractive_index**2
+                * longitudinal_derivative
+            )
+            return (
+                numpy.array((radial_electric, 0.0, longitudinal_field)),
+                numpy.array((0.0, azimuthal_magnetic, 0.0)),
+            )
+
+        azimuthal_electric = -transverse_scale * eta0 * longitudinal_derivative
+        radial_magnetic = transverse_scale * effective_index * longitudinal_derivative
+        return (
+            numpy.array((0.0, azimuthal_electric, 0.0)),
+            numpy.array((radial_magnetic, 0.0, longitudinal_field)),
+        )
 
     def get_EH_field(self, nu: int, neff: float, radius: float) -> tuple[float, float]:
         """Gets the hybrid EH field.

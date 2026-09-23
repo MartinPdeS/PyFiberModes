@@ -139,7 +139,10 @@ class CutoffSolver(BaseSolver):
         r1 = self.fiber.layers[0].radius_out
         r2 = self.fiber.layers[1].radius_out
 
-        wavelength = get_wavelength_from_V0(fiber=self.fiber, V0=V0)
+        wavelength = get_wavelength_from_V0(
+            fiber=self.fiber,
+            normalized_frequency=V0,
+        )
 
         if numpy.isinf(wavelength):
             k0 = 1  # because it causes troubles if 0

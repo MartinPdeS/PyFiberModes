@@ -22,6 +22,7 @@ from PyFiberModes.fundamentals import (
 from PyFiberModes import loader
 from PyFiberModes.coordinates import CylindricalCoordinates
 from PyFiberModes.exceptions import ValidationError
+from PyFiberModes.materials import DEFAULT_MATERIALS, MaterialRegistry
 from PyFiberModes.services import FieldAnalysis, ModalAnalysis
 
 
@@ -1004,7 +1005,12 @@ def get_fiber_from_delta_and_V0(delta: float, V0: float, wavelength: float) -> F
     return fiber
 
 
-def load_fiber(fiber_name: str, wavelength: float = None, add_air_layer: bool = False) -> Fiber:
+def load_fiber(
+    fiber_name: str,
+    wavelength: float | None = None,
+    add_air_layer: bool = False,
+    materials: MaterialRegistry = DEFAULT_MATERIALS,
+) -> Fiber:
     """Load a named YAML fiber definition.
 
     Parameters
@@ -1015,6 +1021,8 @@ def load_fiber(fiber_name: str, wavelength: float = None, add_air_layer: bool = 
         Vacuum wavelength in meters used to evaluate material indices.
     add_air_layer : bool, optional
         Add an outer air layer when true.
+    materials : MaterialRegistry, optional
+        Registry used to resolve material names in the YAML definition.
 
     Returns
     -------
@@ -1024,7 +1032,8 @@ def load_fiber(fiber_name: str, wavelength: float = None, add_air_layer: bool = 
     fiber_dict = loader.load_fiber_as_dict(
         fiber_name=fiber_name,
         wavelength=wavelength,
-        order='out-to-in'
+        order='out-to-in',
+        materials=materials,
     )
 
     fiber = Fiber(wavelength=wavelength)

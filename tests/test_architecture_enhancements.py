@@ -58,9 +58,9 @@ def test_modal_service_cache_tracks_geometry(monkeypatch):
     def solve(**kwargs):
         """Record calls to the analytical backend."""
         calls.append(kwargs)
-        return 1.45
+        return SolverResult(value=1.45, converged=True, message="converged")
 
-    monkeypatch.setattr(fundamentals, "get_effective_index", solve)
+    monkeypatch.setattr(fundamentals, "get_effective_index_result", solve)
     assert fiber.get_effective_index(LP01) == fiber.get_effective_index(LP01)
     assert len(calls) == 1
 

@@ -5,6 +5,7 @@ import logging
 
 from PyFiberModes.solver.base_solver import BaseSolver
 from PyFiberModes.mode import Mode
+from PyFiberModes.solver.results import SolverResult
 
 
 from scipy.special import jn, kn, j0, j1, k0, k1, jvp, kvp
@@ -102,7 +103,7 @@ class EffectiveIndexSolver(BaseSolver):
 
         return lower_neff_boundary
 
-    def get_ceq_function(self, mode: Mode) -> object:
+    def get_characteristic_equation(self, mode: Mode):
         """Gets the adequat phase matching mode equation function.
 
         Parameters
@@ -113,7 +114,7 @@ class EffectiveIndexSolver(BaseSolver):
         Returns
         -------
         object
-            The ceq function.
+            The characteristic-equation function.
         """
         match mode.family:
             case 'LP':
@@ -126,6 +127,8 @@ class EffectiveIndexSolver(BaseSolver):
                 return self.get_EH_equation
             case 'HE':
                 return self.get_HE_equation
+
+    get_ceq_function = get_characteristic_equation
 
     def solve(
             self,
@@ -151,30 +154,70 @@ class EffectiveIndexSolver(BaseSolver):
         float
             The effective index of the mode
         """
+        result = self.solve_result(
+            mode=mode,
+            delta_neff=delta_neff,
+            max_iteration=max_iteration,
+            epsilon=epsilon,
+        )
+        return result.value if result.converged else numpy.nan
+
+    def solve_result(
+            self,
+            mode: Mode,
+            delta_neff: float,
+            max_iteration: int = 100,
+            epsilon: float = 1e-14) -> SolverResult[float]:
+        """Solve an effective index and return complete diagnostics.
+
+        Parameters
+        ----------
+        mode : Mode
+            Mode to solve.
+        delta_neff : float
+            Retained scalar-API search-step setting.
+        max_iteration : int, optional
+            Maximum Brent iterations.
+        epsilon : float, optional
+            Offset applied to physical search boundaries.
+
+        Returns
+        -------
+        SolverResult[float]
+            Effective index and explicit convergence information.
+        """
+        del delta_neff
         mode_cutoff_V0 = self.fiber.get_mode_cutoff_v0(mode=mode)
 
         if mode_cutoff_V0 > self.fiber.V_number:
             logging.info(f"Mode: {mode} cutoff V number: {mode_cutoff_V0} is below the fiber V number: {self.fiber.V_number}")
-            return numpy.nan
+            return SolverResult(
+                value=None,
+                converged=False,
+                message=f"{mode} is below cutoff at V={self.fiber.V_number:.6g}",
+            )
 
         n_clad_equivalent = self.get_clad_index_from_V0(V0=mode_cutoff_V0)  # High neff boundary
 
         lower_neff_boundary = self.get_low_neff_boundary(mode=mode)
 
         if n_clad_equivalent < lower_neff_boundary:
-            raise ValueError(f"Error in computation, most probably the given mode: {mode} does not exist in that configuration")
+            return SolverResult(
+                value=None,
+                converged=False,
+                bracket=(float(lower_neff_boundary), float(n_clad_equivalent)),
+                message=f"no physically valid effective-index interval for {mode}",
+            )
 
-        function = self.get_ceq_function(mode=mode)
+        characteristic_equation = self.get_characteristic_equation(mode=mode)
 
-        result = self.find_root_within_range(
-            function=function,
+        return self.find_root_result_within_range(
+            function=characteristic_equation,
             x_low=lower_neff_boundary + epsilon,
             x_high=n_clad_equivalent - epsilon,
             function_args=(mode.nu, ),
             max_iteration=max_iteration
         )
-
-        return result
 
     def get_LP_field(self, nu: int, neff: float, radius: float) -> tuple:
         r"""Gets the LP field in the form of a tuple containing two numpy arrays.

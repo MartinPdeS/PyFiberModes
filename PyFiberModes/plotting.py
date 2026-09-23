@@ -1,7 +1,4 @@
 """Optional Matplotlib visualizations for fiber-mode results."""
-
-from __future__ import annotations
-
 from typing import TYPE_CHECKING
 
 import numpy as np

@@ -10,6 +10,8 @@ use [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Expanded the specialty-fiber, field, analysis, validation, and performance
   galleries so every documentation series contains multiple examples.
+- Defined a stable root-level public API, compatibility and deprecation policy,
+  API snapshot regression test, and migration guide.
 
 ### Changed
 

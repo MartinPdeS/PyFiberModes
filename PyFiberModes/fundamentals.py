@@ -1,12 +1,18 @@
 """Fundamental normalized-frequency and propagation relations."""
 
+from __future__ import annotations
+
 import numpy
 import numpy as np
+from typing import TYPE_CHECKING
 from PyFiberModes.mode import Mode
 from PyFiberModes.mode_instances import HE11, LP01
 from scipy.constants import c
 
 from PyFiberModes.coordinates import CylindricalCoordinates
+
+if TYPE_CHECKING:
+    from PyFiberModes.solver.results import SolverResult
 
 
 def get_delta_from_fiber(fiber) -> float:
@@ -31,7 +37,7 @@ def get_delta_from_fiber(fiber) -> float:
     return 0.5 * (1 - n_ratio)
 
 
-def get_wavelength_from_V0(fiber: object, V0: float) -> float:
+def get_wavelength_from_V0(fiber: object, normalized_frequency: float) -> float:
     r"""
     Compute the wavelength corresponding to a given V-number, \(V_0\).
 
@@ -46,7 +52,7 @@ def get_wavelength_from_V0(fiber: object, V0: float) -> float:
     ----------
     fiber : Fiber
         The fiber object.
-    V0 : float
+    normalized_frequency : float
         The V-number.
 
     Returns
@@ -56,7 +62,7 @@ def get_wavelength_from_V0(fiber: object, V0: float) -> float:
     """
     NA = fiber.get_NA()
     last_layer = fiber.last_layer
-    wavelength = 2 * np.pi / V0 * last_layer.radius_in * NA
+    wavelength = 2 * np.pi / normalized_frequency * last_layer.radius_in * NA
     return wavelength
 
 
@@ -179,6 +185,40 @@ def get_effective_index(
         )
 
     return effective_index_solver.solve(mode=mode, delta_neff=delta_neff)
+
+
+def get_effective_index_result(
+        fiber,
+        wavelength: float,
+        mode: Mode,
+        delta_neff: float = 1e-6) -> "SolverResult[float]":
+    """Compute an effective index with structured convergence diagnostics.
+
+    Parameters
+    ----------
+    fiber : Fiber
+        Fiber to solve.
+    wavelength : float
+        Vacuum wavelength in meters.
+    mode : Mode
+        Mode to solve.
+    delta_neff : float, optional
+        Maximum effective-index search step.
+
+    Returns
+    -------
+    SolverResult[float]
+        Effective index, residual, bracket, iteration count, and explanation.
+    """
+    from PyFiberModes import solver
+
+    solver_class = (
+        solver.two_layer.EffectiveIndexSolver
+        if fiber.n_layer == 2
+        else solver.multilayer.EffectiveIndexSolver
+    )
+    effective_index_solver = solver_class(fiber=fiber, wavelength=wavelength)
+    return effective_index_solver.solve_result(mode=mode, delta_neff=delta_neff)
 
 
 def get_mode_cutoff_v0(

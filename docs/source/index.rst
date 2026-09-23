@@ -15,6 +15,8 @@
     getting_started.rst
     theory.rst
     architecture.rst
+    api_policy.rst
+    migration_guide.rst
     workflows.rst
     performance.rst
     troubleshooting.rst

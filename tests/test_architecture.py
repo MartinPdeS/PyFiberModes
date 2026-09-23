@@ -39,19 +39,22 @@ def test_mpsplots_is_not_a_declared_dependency():
     )
 
 
+def test_pyoptik_is_not_a_declared_dependency():
+    """Keep material models behind the small local protocol."""
+    pyproject = tomllib.loads((directories.PROJECT_PATH / "pyproject.toml").read_text())
+    dependencies = [dependency.lower() for dependency in pyproject["project"]["dependencies"]]
+
+    assert not any("pyoptik" in dependency for dependency in dependencies)
+
+
 def test_importing_core_does_not_import_plotting_module():
     """Keep the package plotting module outside the core import graph."""
     script = """
 import sys
-import types
-
-pyoptik = types.ModuleType("PyOptik")
-pyoptik.MaterialBank = object
-sys.modules["PyOptik"] = pyoptik
-
 import PyFiberModes
 
 assert "PyFiberModes.plotting" not in sys.modules
+assert "PyOptik" not in sys.modules
 """
     subprocess.run(
         [sys.executable, "-c", script],

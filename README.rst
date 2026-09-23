@@ -86,9 +86,9 @@ simulations:
 
    python -c "import PyFiberModes; print(PyFiberModes.__version__)"
 
-PyFiberModes currently uses the ``MaterialBank`` interface provided by
-PyOptik 2.x. Released dependency metadata selects the compatible
-``PyOptik>=2,<3`` range automatically.
+Fiber material names are resolved through a lightweight, pluggable registry.
+PyOptik is not required; applications can register their own dispersive model
+objects or simple wavelength-to-index callables.
 
 First mode calculation
 ----------------------
@@ -284,6 +284,17 @@ contains the API reference and executable example gallery, including:
 * tapered-fiber effective-index studies;
 * double-clad fiber field analysis; and
 * comparisons between supported analytical solvers.
+
+API stability
+-------------
+
+Supported imports come from the package root, for example
+``from PyFiberModes import Fiber, LP01``. The
+`public API policy <https://martinpdes.github.io/PyFiberModes/latest/api_policy.html>`_
+defines compatibility guarantees and the deprecation period. Review the
+`migration guide <https://martinpdes.github.io/PyFiberModes/latest/migration_guide.html>`_
+when upgrading across minor or major versions. Internal solver modules are not
+covered by the compatibility guarantee.
 
 Development and testing
 -----------------------

@@ -1,7 +1,5 @@
 """Focused orchestration services used by the :class:`Fiber` façade."""
 
-from __future__ import annotations
-
 import numpy as np
 
 from PyFiberModes.exceptions import ConvergenceError
@@ -51,20 +49,14 @@ class ModalAnalysis:
         if key in self._cache:
             return self._cache[key]
 
-        from PyFiberModes.fundamentals import get_effective_index
+        from PyFiberModes.fundamentals import get_effective_index_result
 
         try:
-            value = float(get_effective_index(
+            result = get_effective_index_result(
                 fiber=self.fiber,
                 wavelength=self.fiber.wavelength,
                 mode=mode,
                 delta_neff=self.settings.effective_index_step,
-            ))
-            converged = bool(np.isfinite(value))
-            result = SolverResult(
-                value=value if converged else None,
-                converged=converged,
-                message="converged" if converged else f"no guided solution for {mode}",
             )
         except (ArithmeticError, RuntimeError, ValueError) as error:
             result = SolverResult(value=None, converged=False, message=str(error))

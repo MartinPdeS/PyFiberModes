@@ -1,9 +1,15 @@
 """Load and normalize YAML fiber definitions."""
 
-import yaml
-import numpy as np
 from pathlib import Path
-from PyOptik import MaterialBank
+from typing import Any, TypeAlias
+
+import numpy as np
+import yaml
+
+from PyFiberModes.materials import DEFAULT_MATERIALS, MaterialRegistry
+
+LayerData: TypeAlias = dict[str, Any]
+LayerCollection: TypeAlias = dict[str, LayerData]
 
 
 def get_fiber_file_path(fiber_name: str) -> Path:
@@ -23,7 +29,7 @@ def get_fiber_file_path(fiber_name: str) -> Path:
     return Path(__file__).parent / 'fiber_files' / f'{fiber_name}.yaml'
 
 
-def load_yaml_configuration(file_path: Path) -> dict:
+def load_yaml_configuration(file_path: Path) -> dict[str, Any]:
     """
     Load and parse a YAML configuration file.
 
@@ -44,7 +50,12 @@ def load_yaml_configuration(file_path: Path) -> dict:
         return yaml.safe_load(file)
 
 
-def calculate_layer_index(layer: dict, wavelength: float, outer_layer: dict = None) -> float:
+def calculate_layer_index(
+    layer: LayerData,
+    wavelength: float | None,
+    outer_layer: LayerData | None = None,
+    materials: MaterialRegistry = DEFAULT_MATERIALS,
+) -> float:
     """
     Calculate the refractive index for a layer.
 
@@ -62,14 +73,21 @@ def calculate_layer_index(layer: dict, wavelength: float, outer_layer: dict = No
     float
         Computed refractive index for the layer.
     """
-    if 'material' in layer and wavelength:
-        return getattr(MaterialBank, layer['material']).compute_refractive_index(wavelength)
+    if 'material' in layer and wavelength is not None:
+        return materials.refractive_index(str(layer['material']), wavelength)
     elif 'NA' in layer and outer_layer:
         return np.sqrt(layer['NA']**2 + outer_layer['index']**2)
-    return layer.get('index')
+    index = layer.get('index')
+    if index is None:
+        raise ValueError("layer must define material, numerical aperture, or index")
+    return float(index)
 
 
-def process_layers(layers: dict, wavelength: float = None) -> dict:
+def process_layers(
+    layers: LayerCollection,
+    wavelength: float | None = None,
+    materials: MaterialRegistry = DEFAULT_MATERIALS,
+) -> LayerCollection:
     """
     Process and calculate refractive indices for all layers.
 
@@ -89,14 +107,14 @@ def process_layers(layers: dict, wavelength: float = None) -> dict:
     outer_layer = None
 
     for idx, layer in layers.items():
-        layer_index = calculate_layer_index(layer, wavelength, outer_layer)
+        layer_index = calculate_layer_index(layer, wavelength, outer_layer, materials)
         processed_layers[idx] = {**layer, 'index': layer_index}
         outer_layer = processed_layers[idx]
 
     return processed_layers
 
 
-def cleanup_layers(layers: dict) -> dict:
+def cleanup_layers(layers: LayerCollection) -> LayerCollection:
     """
     Remove unnecessary keys from layer dictionaries.
 
@@ -116,7 +134,7 @@ def cleanup_layers(layers: dict) -> dict:
     return layers
 
 
-def reorder_layers(layers: dict, order: str) -> dict:
+def reorder_layers(layers: LayerCollection, order: str) -> LayerCollection:
     """
     Reorder layers based on the specified order.
 
@@ -137,7 +155,12 @@ def reorder_layers(layers: dict, order: str) -> dict:
     return layers
 
 
-def load_fiber_as_dict(fiber_name: str, wavelength: float = None, order: str = 'in-to-out') -> dict:
+def load_fiber_as_dict(
+    fiber_name: str,
+    wavelength: float | None = None,
+    order: str = 'in-to-out',
+    materials: MaterialRegistry = DEFAULT_MATERIALS,
+) -> dict[str, LayerCollection]:
     """
     Load and process a fiber configuration file.
 
@@ -167,7 +190,7 @@ def load_fiber_as_dict(fiber_name: str, wavelength: float = None, order: str = '
     config = load_yaml_configuration(file_path)
     layers = config.get('layers', {})
 
-    processed_layers = process_layers(layers, wavelength)
+    processed_layers = process_layers(layers, wavelength, materials)
     cleaned_layers = cleanup_layers(processed_layers)
     reordered_layers = reorder_layers(cleaned_layers, order)
 

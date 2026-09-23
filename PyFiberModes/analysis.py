@@ -64,7 +64,7 @@ class ModeSweepResult:
         index = self.modes.index(mode)
         return {name: value[:, index] for name, value in self.values.items()}
 
-    def as_records(self) -> list[dict]:
+    def as_records(self) -> list[dict[str, float | Mode]]:
         """Convert the dense result into row-oriented records.
 
         Returns
@@ -133,9 +133,13 @@ def find_modes(fiber, families=("LP",), max_nu=6, max_m=6) -> tuple[Mode, ...]:
     found = []
     for mode in candidate_modes(families, max_nu, max_m):
         try:
-            neff = fiber.get_effective_index(mode)
-            guided = fiber.last_layer.refractive_index < neff <= fiber.maximum_index
-            if np.isfinite(neff) and guided:
+            effective_index = fiber.get_effective_index(mode)
+            guided = (
+                fiber.last_layer.refractive_index
+                < effective_index
+                <= fiber.maximum_index
+            )
+            if np.isfinite(effective_index) and guided:
                 found.append(mode)
         except (ArithmeticError, AssertionError, RuntimeError, ValueError):
             continue
@@ -191,7 +195,6 @@ def sweep_modes(
     parameters = np.asarray(tuple(parameters), dtype=float)
     if parameters.ndim != 1 or not len(parameters):
         raise ValueError("parameters must be a non-empty one-dimensional sequence")
-    working_fiber = deepcopy(fiber)
     if setter is None:
         if parameter_name != "wavelength":
             raise ValueError("a setter is required for non-wavelength sweeps")
@@ -202,19 +205,26 @@ def sweep_modes(
     if modes is None:
         discovered = []
         for parameter in parameters:
-            setter(working_fiber, float(parameter))
-            for mode in find_modes(working_fiber, families, max_nu, max_m):
+            parameter_fiber = deepcopy(fiber)
+            setter(parameter_fiber, float(parameter))
+            for mode in find_modes(parameter_fiber, families, max_nu, max_m):
                 if mode not in discovered:
                     discovered.append(mode)
         modes = discovered
     modes = tuple(modes)
     values = {metric: np.full((len(parameters), len(modes)), np.nan) for metric in metrics}
-    for i, parameter in enumerate(parameters):
-        setter(working_fiber, float(parameter))
-        for j, mode in enumerate(modes):
-            for metric in metrics:
+    parameter_fibers = tuple(deepcopy(fiber) for _ in parameters)
+    for parameter_fiber, parameter in zip(parameter_fibers, parameters, strict=True):
+        setter(parameter_fiber, float(parameter))
+
+    for i, parameter_fiber in enumerate(parameter_fibers):
+        metric_functions = {
+            metric: getattr(parameter_fiber, f"get_{metric}") for metric in metrics
+        }
+        for metric, metric_function in metric_functions.items():
+            for j, mode in enumerate(modes):
                 try:
-                    value = getattr(working_fiber, f"get_{metric}")(mode)
+                    value = metric_function(mode)
                     values[metric][i, j] = value if np.isfinite(value) else np.nan
                 except (ArithmeticError, AssertionError, RuntimeError, ValueError):
                     pass

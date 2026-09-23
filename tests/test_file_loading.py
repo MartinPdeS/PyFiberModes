@@ -1,7 +1,7 @@
 import pytest
 import yaml
 import numpy as np
-from PyOptik import MaterialBank
+from PyFiberModes.materials import FusedSilica, MaterialRegistry
 from PyFiberModes.loader import (  # Replace `your_module_name` with the actual module name
     get_fiber_file_path,
     load_yaml_configuration,
@@ -13,8 +13,7 @@ from PyFiberModes.loader import (  # Replace `your_module_name` with the actual 
 )
 
 WAVELENGTH = 1550e-9
-FUSEDSILICA_RI = MaterialBank.fused_silica.compute_refractive_index(WAVELENGTH)
-CROWN_RI = MaterialBank.crown.compute_refractive_index(WAVELENGTH)
+FUSEDSILICA_RI = FusedSilica().refractive_index(WAVELENGTH)
 
 
 @pytest.fixture
@@ -55,6 +54,19 @@ def test_calculate_layer_index():
     layer_with_na = {'NA': 0.1}
     outer_layer = {'index': 1.5}
     assert np.isclose(calculate_layer_index(layer_with_na, wavelength=None, outer_layer=outer_layer), 1.503329637837291)
+
+
+def test_calculate_layer_index_accepts_pluggable_material():
+    """Custom dispersive materials do not depend on a global material bank."""
+    materials = MaterialRegistry({"custom_glass": lambda wavelength: 1.5 + wavelength})
+
+    index = calculate_layer_index(
+        {"material": "custom_glass"},
+        wavelength=WAVELENGTH,
+        materials=materials,
+    )
+
+    assert index == pytest.approx(1.5 + WAVELENGTH)
 
 
 def test_process_layers():
