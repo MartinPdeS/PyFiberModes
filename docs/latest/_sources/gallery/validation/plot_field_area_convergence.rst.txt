@@ -62,7 +62,7 @@ the reported effective area has stabilized.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.150 seconds)
+   **Total running time of the script:** (0 minutes 0.192 seconds)
 
 
 .. _sphx_glr_download_gallery_validation_plot_field_area_convergence.py:

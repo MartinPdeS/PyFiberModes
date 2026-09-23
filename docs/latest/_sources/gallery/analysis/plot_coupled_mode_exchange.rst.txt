@@ -58,7 +58,7 @@ Propagate two lossless modes coupled by a Hermitian matrix.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.061 seconds)
+   **Total running time of the script:** (0 minutes 0.078 seconds)
 
 
 .. _sphx_glr_download_gallery_analysis_plot_coupled_mode_exchange.py:
