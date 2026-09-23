@@ -7,7 +7,7 @@ Dispersion VS core index
 # %%
 # Imports
 # ~~~~~~~
-from PyFiberModes import FiberFactory, HE11, HE12, HE22
+from PyFiberModes import ConvergenceError, FiberFactory, HE11, HE12, HE22
 import matplotlib.pyplot as plt
 import numpy
 
@@ -34,7 +34,12 @@ ax.set(
 for mode in [HE11, HE12, HE22]:
     data = []
     for fiber in factory:
-        effective_index = fiber.get_dispersion(mode)
+        try:
+            effective_index = fiber.get_dispersion(mode)
+        except ConvergenceError:
+            # Higher-order modes can be unguided below cutoff. Use NaN so the
+            # plot shows a gap without obscuring other guided solutions.
+            effective_index = numpy.nan
         data.append(effective_index)
 
     ax.plot(core_indexes, data, label=str(mode))

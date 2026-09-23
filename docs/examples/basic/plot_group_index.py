@@ -1,13 +1,13 @@
 """
-Dispersion VS core index
-========================
+Group index vs core index
+=========================
 """
 
 
 # %%
 # Imports
 # ~~~~~~~
-from PyFiberModes import FiberFactory, HE11, HE12, HE22
+from PyFiberModes import ConvergenceError, FiberFactory, HE11, HE12, HE22
 import matplotlib.pyplot as plt
 import numpy
 
@@ -26,7 +26,7 @@ factory.add_layer(name="cladding", index=1.4444)
 figure, ax = plt.subplots(1, 1)
 
 ax.set(
-    title='Groupe index vs core index',
+    title='Group index vs core index',
     xlabel='Core refractive index',
     ylabel='Group index'
 )
@@ -34,7 +34,12 @@ ax.set(
 for mode in [HE11, HE12, HE22]:
     data = []
     for fiber in factory:
-        group_index = fiber.get_group_index(mode=mode)
+        try:
+            group_index = fiber.get_group_index(mode=mode)
+        except ConvergenceError:
+            # Higher-order modes can be unguided below cutoff. Use NaN so the
+            # plot shows a gap without obscuring other guided solutions.
+            group_index = numpy.nan
         data.append(group_index)
 
     ax.plot(core_indexes, data, label=str(mode))
