@@ -6,6 +6,16 @@ use [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Raised the minimum supported Python version to 3.11 and aligned CI,
+  contributor guidance, Ruff, and Conda metadata with that policy.
+- Moved Matplotlib rendering into the optional `PyFiberModes.plotting` module
+  and added the `plotting` installation extra, keeping it out of core runtime
+  dependencies while preserving the `Field.plot` convenience method.
+- Replaced generic package descriptions and keywords with fiber-mode,
+  photonics, waveguide, dispersion, and coupled-mode metadata.
+
 ## [0.13.1] - 2026-09-22
 
 ### Added

@@ -5,14 +5,15 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "PyFiberModes"
 version = "0.13.1"
-description = "A package for light propagation in fiber optics."
+description = "Guided-mode analysis and design for circular optical fibers."
 license = {file = "LICENSE"}
 readme = "README.rst"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 authors = [{ name="Martin Poinsinet de Sivry-Houle", email="martin.poinsinet.de.sivry@gmail.com"}]
 classifiers = [
     'Programming Language :: Python',
     'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3 :: Only',
     'Programming Language :: Python :: 3.11',
     'Programming Language :: Python :: 3.12',
     'Programming Language :: Python :: 3.13',
@@ -23,12 +24,19 @@ classifiers = [
     'Intended Audience :: Science/Research',
 ]
 
-keywords = ["finit-difference", "matrix"]
+keywords = [
+    "fiber optics",
+    "guided modes",
+    "mode solver",
+    "optical waveguides",
+    "photonics",
+    "dispersion",
+    "coupled-mode theory",
+]
 
 dependencies = [
     "PyOptik>=2,<3",
     "PyFinitDiff",
-    "matplotlib>=3.8",
     "pyyaml",
     "numpy",
     "scipy",
@@ -57,7 +65,11 @@ testing = [
     "pytest-json-report ~=1.5",
     "coverage ~=7.6",
     "ruff>=0.8,<1",
-    "tomli>=2,<3; python_version<'3.11'",
+    "matplotlib>=3.8",
+]
+
+plotting = [
+    "matplotlib>=3.8",
 ]
 
 benchmarking = [
@@ -66,6 +78,7 @@ benchmarking = [
 
 
 documentation = [
+    "matplotlib>=3.8",
     "numpydoc ==1.10.0",
     "sphinx >=5.1.1",
     "sphinx-gallery ==0.21.0",
@@ -79,7 +92,7 @@ dev = [
 ]
 
 [tool.ruff]
-target-version = "py310"
+target-version = "py311"
 line-length = 100
 
 [tool.ruff.lint]

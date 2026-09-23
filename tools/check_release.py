@@ -7,10 +7,7 @@ from pathlib import Path
 import re
 import subprocess
 import sys
-try:
-    import tomllib
-except ImportError:  # pragma: no cover - exercised by the Python 3.10 CI job
-    import tomli as tomllib
+import tomllib
 
 ROOT = Path(__file__).resolve().parents[1]
 

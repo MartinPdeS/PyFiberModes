@@ -1,6 +1,6 @@
 {
   "title": "PyFiberModes: guided-mode analysis and design for optical fibers",
-  "description": "PyFiberModes solves guided modes in circularly symmetric step-index and multilayer optical fibers, including field analysis, modal sweeps, inverse design, and coupled-mode propagation.",
+  "description": "Guided-mode analysis and design for circular optical fibers, with field analysis, dispersion, modal sweeps, inverse design, and coupled-mode propagation.",
   "creators": [
     {
       "name": "Poinsinet de Sivry-Houle, Martin"
@@ -14,6 +14,9 @@
   "keywords": [
     "optical fibers",
     "guided modes",
+    "mode solver",
+    "optical waveguides",
+    "photonics",
     "effective index",
     "dispersion",
     "coupled-mode theory"

@@ -16,37 +16,41 @@ channels:
 
 requirements:
   host:
-    - python {{ PY_VER }}*
+    - python >=3.11
     - setuptools >=40.8.0
     - wheel
     - setuptools-scm >=8.0
     - pip
   run:
+    - python >=3.11
     - martinpdes::pyfinitdiff
     - martinpdes::pyoptik >=2,<3
     - pyyaml
-    - matplotlib
     - numpy
     - scipy
 
 about:
   home: https://github.com/MartinPdeS/PyFiberModes
   license: MIT
-  summary: "A package for exact fiber optics mode solving."
-  description: PyFiberModes is a package that solves cymetrically symmetric fiber optics propagation modes.
+  summary: "Guided-mode analysis and design for circular optical fibers."
+  description: PyFiberModes solves guided modes in circularly symmetric step-index and multilayer optical fibers.
   dev_url: https://github.com/MartinPdeS/PyFiberModes
-  doc_url: https://PyFiberModes.readthedocs.io
+  doc_url: https://martinpdes.github.io/PyFiberModes/
   license_file: LICENSE
   keywords:
-    - optics
-    - refractive index
-    - fiber
+    - fiber optics
+    - guided modes
+    - mode solver
+    - optical waveguides
+    - photonics
+    - dispersion
 
 test:
   imports:
     - PyFiberModes
   requires:
-    - python {{ PY_VER }}*
+    - python >=3.11
+    - matplotlib>=3.8
     - pytest>=0.6
     - pytest-cov>=2.0
     - pytest-json-report==1.5.0

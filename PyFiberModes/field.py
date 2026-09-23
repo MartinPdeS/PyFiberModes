@@ -1,22 +1,14 @@
 """Vectorized electric and magnetic field evaluation on Cartesian grids."""
 
 import numpy
-from typing import Callable
+from typing import Any, Callable
 import scipy
 import numpy as np
 from PyFiberModes.mode_instances import HE11
 from PyFiberModes.mode import Mode
 from dataclasses import dataclass
-import matplotlib.pyplot as plt
-from matplotlib.colors import LinearSegmentedColormap
 from PyFiberModes.coordinates import CartesianCoordinates
 from PyFiberModes.coordinates import CylindricalCoordinates as CylindricalCoordinates  # noqa: F401
-
-
-BLUE_BLACK_RED = LinearSegmentedColormap.from_list(
-    "blue_black_red",
-    ("#2455a4", "#000000", "#d73027"),
-)
 
 
 @dataclass
@@ -1167,10 +1159,12 @@ class Field:
         return overlap(self, other)
 
     def plot(
-        self, plot_type: list = (), show: bool = True, save_filename: str = None
-    ) -> plt.Figure:
-        """
-        Plotting function.
+        self,
+        plot_type: list[str] | tuple[str, ...] = (),
+        show: bool = True,
+        save_filename: str | None = None,
+    ) -> Any:
+        """Plot selected field components using the optional plotting layer.
 
         Parameters
         ----------
@@ -1184,32 +1178,22 @@ class Field:
 
         Returns
         -------
-        plt.Figure
+        matplotlib.figure.Figure
             The matplotlib Figure object created or used for the plot.
+
+        Raises
+        ------
+        ImportError
+            If the optional plotting dependencies are not installed.
         """
-        with plt.style.context("default"):
-            figure, axes = plt.subplots(1, len(plot_type))
+        from PyFiberModes.plotting import plot_field
 
-        axes = np.atleast_1d(axes)
-        fields = self.get_components(components=plot_type)
-        for ax, field_string in zip(axes, plot_type):
-            ax.set_aspect("equal")
-            field = fields[field_string]
-            field = numpy.real_if_close(field)
-            if numpy.iscomplexobj(field):
-                field = numpy.abs(field)
-            max_abs = abs(max(field.max(), field.min()))
-            ax.pcolormesh(field, vmin=-max_abs, vmax=max_abs, cmap=BLUE_BLACK_RED)
-
-        figure.tight_layout()
-
-        if save_filename:
-            figure.savefig(save_filename)
-
-        if show:
-            plt.show()
-
-        return figure
+        return plot_field(
+            self,
+            plot_type=plot_type,
+            show=show,
+            save_filename=save_filename,
+        )
 
 
 # -

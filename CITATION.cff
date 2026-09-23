@@ -14,6 +14,9 @@ url: "https://martinpdes.github.io/PyFiberModes/"
 keywords:
   - optical fibers
   - guided modes
+  - mode solver
+  - optical waveguides
+  - photonics
   - effective index
   - dispersion
   - coupled-mode theory

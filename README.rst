@@ -60,12 +60,18 @@ Features
 Installation
 ------------
 
-PyFiberModes requires Python 3.10 or newer. Install the released package from
+PyFiberModes requires Python 3.11 or newer. Install the released package from
 PyPI:
 
 .. code-block:: bash
 
    python -m pip install PyFiberModes
+
+Matplotlib-based field visualizations are optional:
+
+.. code-block:: bash
+
+   python -m pip install "PyFiberModes[plotting]"
 
 or from Anaconda:
 
@@ -304,7 +310,7 @@ Or run the complete local check target:
 
    make check
 
-Tests run on Python 3.10 through 3.13 in GitHub Actions. Bug reports and
+Tests run on Python 3.11 through 3.13 in GitHub Actions. Bug reports and
 feature proposals are welcome through the
 `issue tracker <https://github.com/MartinPdeS/PyFiberModes/issues>`_.
 
