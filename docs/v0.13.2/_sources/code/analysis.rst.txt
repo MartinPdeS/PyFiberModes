@@ -24,3 +24,15 @@ Analysis, design, and propagation
 .. automodule:: PyFiberModes.solver.protocols
    :members:
    :member-order: bysource
+
+.. automodule:: PyFiberModes.solver.two_layer
+   :members:
+   :member-order: bysource
+
+.. automodule:: PyFiberModes.solver.three_layer
+   :members:
+   :member-order: bysource
+
+.. automodule:: PyFiberModes.solver.multilayer
+   :members:
+   :member-order: bysource

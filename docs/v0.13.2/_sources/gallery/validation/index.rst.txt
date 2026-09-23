@@ -37,6 +37,40 @@ behavior.
     </div>
 
 
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Repeat a derived field calculation on increasingly fine grids to check that the reported effective area has stabilized.">
+
+.. only:: html
+
+  .. image:: /gallery/validation/images/thumb/sphx_glr_plot_field_area_convergence_thumb.png
+    :alt:
+
+  :doc:`/gallery/validation/plot_field_area_convergence`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Effective-area convergence</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Verify that the normalized propagation parameter remains between zero and one for a guided fundamental mode.">
+
+.. only:: html
+
+  .. image:: /gallery/validation/images/thumb/sphx_glr_plot_normalized_effective_index_thumb.png
+    :alt:
+
+  :doc:`/gallery/validation/plot_normalized_effective_index`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Normalized effective index</div>
+    </div>
+
+
 .. thumbnail-parent-div-close
 
 .. raw:: html
@@ -48,6 +82,8 @@ behavior.
    :hidden:
 
    /gallery/validation/plot_effective_index_bounds
+   /gallery/validation/plot_field_area_convergence
+   /gallery/validation/plot_normalized_effective_index
 
 
 

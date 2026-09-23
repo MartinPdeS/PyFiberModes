@@ -22,6 +22,40 @@ shared field solution.
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="Measure how the sampled electric-field energy accumulates away from the fiber axis.">
+
+.. only:: html
+
+  .. image:: /gallery/fields/images/thumb/sphx_glr_plot_confinement_by_radius_thumb.png
+    :alt:
+
+  :doc:`/gallery/fields/plot_confinement_by_radius`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Confinement by radius</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Rotate the fundamental vector mode without recomputing its shared radial solution.">
+
+.. only:: html
+
+  .. image:: /gallery/fields/images/thumb/sphx_glr_plot_polarization_rotation_thumb.png
+    :alt:
+
+  :doc:`/gallery/fields/plot_polarization_rotation`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Polarization rotation</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="Evaluate several components together so they share one radial solver pass.">
 
 .. only:: html
@@ -47,6 +81,8 @@ shared field solution.
 .. toctree::
    :hidden:
 
+   /gallery/fields/plot_confinement_by_radius
+   /gallery/fields/plot_polarization_rotation
    /gallery/fields/plot_vector_components
 
 

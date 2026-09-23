@@ -62,8 +62,8 @@
     <link rel="icon" href="../../_static/favicon.png"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Field-grid scaling" href="plot_field_grid_scaling.html" />
-    <link rel="prev" title="Effective-index bounds" href="../validation/plot_effective_index_bounds.html" />
+    <link rel="next" title="Component batching" href="plot_component_batching_speedup.html" />
+    <link rel="prev" title="Normalized effective index" href="../validation/plot_normalized_effective_index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.13.2" />
@@ -537,25 +537,34 @@
 <li class="toctree-l2"><a class="reference internal" href="../SMF28/plot_smf28_group_index_vs_wavelength.html">Modal dispersion VS core index</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../DCF/index.html">Examples: double clad fiber</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../DCF/plot_DCF_fields.html">Mode fields</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../specialty_fibers/index.html">Specialty-fiber examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../specialty_fibers/plot_refractive_index_profile.html">Refractive-index profile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../specialty_fibers/plot_specialty_fiber_catalog.html">Specialty-fiber catalog</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../specialty_fibers/plot_specialty_mode_indices.html">Specialty-fiber mode indices</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../fields/index.html">Fields and power</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../fields/plot_confinement_by_radius.html">Confinement by radius</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fields/plot_polarization_rotation.html">Polarization rotation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fields/plot_vector_components.html">Vector field components</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../analysis/index.html">Analysis and design</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../analysis/plot_coupled_mode_exchange.html">Coupled-mode power exchange</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analysis/plot_guided_mode_discovery.html">Guided-mode discovery</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../analysis/plot_structured_wavelength_sweep.html">Structured wavelength sweep</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../validation/index.html">Validation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../validation/plot_effective_index_bounds.html">Effective-index bounds</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../validation/plot_field_area_convergence.html">Effective-area convergence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../validation/plot_normalized_effective_index.html">Normalized effective index</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">Benchmarks</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="plot_component_batching_speedup.html">Component batching</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_field_grid_scaling.html">Field-grid scaling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_modal_cache_speedup.html">Modal-cache speedup</a></li>
 </ul>
 </details></li>
 </ul>
@@ -622,9 +631,15 @@
 <span id="examples-gallery-benchmarks"></span><h1>Benchmarks<a class="headerlink" href="#benchmarks" title="Link to this heading">#</a></h1>
 <p>Reproducible measurements of field-grid scaling and shared-component caching.
 Runtime varies by machine; trends are more meaningful than absolute values.</p>
-<div id='sg-tag-list' class='sphx-glr-tag-list'></div><div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="Measure the cost of evaluating three vector components on increasing grids."><img alt="" src="../../_images/sphx_glr_plot_field_grid_scaling_thumb.png" />
+<div id='sg-tag-list' class='sphx-glr-tag-list'></div><div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="Compare separate field-component requests with the batched API that shares radial and angular intermediates."><img alt="" src="../../_images/sphx_glr_plot_component_batching_speedup_thumb.png" />
+<p><a class="reference internal" href="plot_component_batching_speedup.html"><span class="doc">Component batching</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Component batching</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Measure the cost of evaluating three vector components on increasing grids."><img alt="" src="../../_images/sphx_glr_plot_field_grid_scaling_thumb.png" />
 <p><a class="reference internal" href="plot_field_grid_scaling.html"><span class="doc">Field-grid scaling</span></a></p>
   <div class="sphx-glr-thumbnail-title">Field-grid scaling</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Compare the first effective-index solution with a repeated lookup served by the geometry-aware modal cache."><img alt="" src="../../_images/sphx_glr_plot_modal_cache_speedup_thumb.png" />
+<p><a class="reference internal" href="plot_modal_cache_speedup.html"><span class="doc">Modal-cache speedup</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Modal-cache speedup</div>
 </div></div><div class="toctree-wrapper compound">
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>

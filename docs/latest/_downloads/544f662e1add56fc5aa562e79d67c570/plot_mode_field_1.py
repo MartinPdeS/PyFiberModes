@@ -7,7 +7,7 @@ Mode fields
 # %%
 # Imports
 # ~~~~~~~
-from PyFiberModes import FiberFactory, HE11, LP02
+from PyFiberModes import FiberFactory, LP02
 from PyFiberModes.field import Field
 
 # %%

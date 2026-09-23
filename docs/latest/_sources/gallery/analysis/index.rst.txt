@@ -38,6 +38,23 @@ Discover guided modes, run structured sweeps, and study coupled-mode dynamics.
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="Discover the supported linearly polarized modes and compare their effective indices at one wavelength.">
+
+.. only:: html
+
+  .. image:: /gallery/analysis/images/thumb/sphx_glr_plot_guided_mode_discovery_thumb.png
+    :alt:
+
+  :doc:`/gallery/analysis/plot_guided_mode_discovery`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Guided-mode discovery</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="Sweep a mode without mutating the original fiber state.">
 
 .. only:: html
@@ -64,6 +81,7 @@ Discover guided modes, run structured sweeps, and study coupled-mode dynamics.
    :hidden:
 
    /gallery/analysis/plot_coupled_mode_exchange
+   /gallery/analysis/plot_guided_mode_discovery
    /gallery/analysis/plot_structured_wavelength_sweep
 
 

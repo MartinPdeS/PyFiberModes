@@ -621,10 +621,6 @@
 <span class="sd">    ----------</span>
 <span class="sd">    layers_list : list[ProxyLayer]</span>
 <span class="sd">        List of ProxyLayer objects representing the layers of the fiber.</span>
-<span class="sd">    neff_solver : None</span>
-<span class="sd">        Placeholder for a solver object (if required).</span>
-<span class="sd">    cutoff_solver : None</span>
-<span class="sd">        Placeholder for a cutoff solver object (if required).</span>
 <span class="sd">    wavelength : float</span>
 <span class="sd">        Wavelength used in simulations.</span>
 <span class="sd">    """</span>
@@ -638,8 +634,6 @@
 <span class="sd">            Vacuum wavelength in meters for generated fibers.</span>
 <span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">layers_list</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">neff_solver</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cutoff_solver</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span> <span class="o">=</span> <span class="n">wavelength</span>
 
 <div class="viewcode-block" id="FiberFactory.add_layer">

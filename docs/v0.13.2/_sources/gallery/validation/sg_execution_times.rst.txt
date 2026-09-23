@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:00.108** total execution time for 1 file **from gallery/validation**:
+**00:00.357** total execution time for 3 files **from gallery/validation**:
 
 .. container::
 
@@ -32,6 +32,12 @@ Computation times
    * - Example
      - Time
      - Mem (MB)
+   * - :ref:`sphx_glr_gallery_validation_plot_field_area_convergence.py` (``plot_field_area_convergence.py``)
+     - 00:00.177
+     - 0.0
    * - :ref:`sphx_glr_gallery_validation_plot_effective_index_bounds.py` (``plot_effective_index_bounds.py``)
-     - 00:00.108
+     - 00:00.097
+     - 0.0
+   * - :ref:`sphx_glr_gallery_validation_plot_normalized_effective_index.py` (``plot_normalized_effective_index.py``)
+     - 00:00.082
      - 0.0

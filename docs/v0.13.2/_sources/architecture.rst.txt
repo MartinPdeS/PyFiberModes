@@ -28,6 +28,11 @@ backends. Third-party implementations can satisfy these interfaces without
 inheriting package internals. Package exceptions distinguish invalid physical
 input from solver and convergence failures.
 
+Concrete solvers use descriptive namespaces: ``solver.two_layer`` provides
+effective-index, cutoff, and radial-field calculations;
+``solver.three_layer`` provides three-layer cutoff calculations; and
+``solver.multilayer`` provides the general effective-index calculation.
+
 Performance
 -----------
 

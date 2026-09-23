@@ -597,6 +597,10 @@ to these services, keeping established code compatible.</p>
 backends. Third-party implementations can satisfy these interfaces without
 inheriting package internals. Package exceptions distinguish invalid physical
 input from solver and convergence failures.</p>
+<p>Concrete solvers use descriptive namespaces: <code class="docutils literal notranslate"><span class="pre">solver.two_layer</span></code> provides
+effective-index, cutoff, and radial-field calculations;
+<code class="docutils literal notranslate"><span class="pre">solver.three_layer</span></code> provides three-layer cutoff calculations; and
+<code class="docutils literal notranslate"><span class="pre">solver.multilayer</span></code> provides the general effective-index calculation.</p>
 </section>
 <section id="performance">
 <h2>Performance<a class="headerlink" href="#performance" title="Link to this heading">#</a></h2>

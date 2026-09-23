@@ -618,10 +618,14 @@
 </li>
       <li><a href="code/analysis.html#PyFiberModes.services.ModalAnalysis.cutoff_result">cutoff_result() (ModalAnalysis method)</a>
 </li>
-      <li><a href="code/fibers.html#PyFiberModes.factory.FiberFactory.cutoff_solver">cutoff_solver (FiberFactory attribute)</a>
-</li>
       <li><a href="code/analysis.html#PyFiberModes.solver.protocols.CutoffSolver">CutoffSolver (class in PyFiberModes.solver.protocols)</a>
+
+      <ul>
+        <li><a href="code/analysis.html#PyFiberModes.solver.three_layer.CutoffSolver">(class in PyFiberModes.solver.three_layer)</a>
 </li>
+        <li><a href="code/analysis.html#PyFiberModes.solver.two_layer.CutoffSolver">(class in PyFiberModes.solver.two_layer)</a>
+</li>
+      </ul></li>
       <li><a href="code/fields.html#PyFiberModes.field.Field.cylindrical_coordinates">cylindrical_coordinates (Field attribute)</a>
 </li>
       <li><a href="code/fields.html#PyFiberModes.coordinates.CylindricalCoordinates">CylindricalCoordinates (class in PyFiberModes.coordinates)</a>
@@ -656,16 +660,22 @@
 </li>
       <li><a href="code/fundamentals.html#PyFiberModes.models.SolverSettings.effective_index_step">effective_index_step (SolverSettings attribute)</a>
 </li>
-      <li><a href="code/analysis.html#PyFiberModes.solver.protocols.EffectiveIndexSolver">EffectiveIndexSolver (class in PyFiberModes.solver.protocols)</a>
+      <li><a href="code/analysis.html#PyFiberModes.solver.multilayer.EffectiveIndexSolver">EffectiveIndexSolver (class in PyFiberModes.solver.multilayer)</a>
+
+      <ul>
+        <li><a href="code/analysis.html#PyFiberModes.solver.protocols.EffectiveIndexSolver">(class in PyFiberModes.solver.protocols)</a>
 </li>
+        <li><a href="code/analysis.html#PyFiberModes.solver.two_layer.EffectiveIndexSolver">(class in PyFiberModes.solver.two_layer)</a>
+</li>
+      </ul></li>
       <li><a href="code/fundamentals.html#PyFiberModes.mode.Family.EH">EH (Family attribute)</a>
 </li>
       <li><a href="code/fibers.html#PyFiberModes.stepindex.StepIndex.EH_fields">EH_fields() (StepIndex method)</a>
 </li>
-      <li><a href="code/fields.html#PyFiberModes.field.Field.Emod">Emod() (Field method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code/fields.html#PyFiberModes.field.Field.Emod">Emod() (Field method)</a>
+</li>
       <li><a href="code/fields.html#PyFiberModes.field.Field.Ephi">Ephi() (Field method)</a>
 </li>
       <li><a href="code/fields.html#PyFiberModes.field.Field.Epol">Epol() (Field method)</a>
@@ -710,6 +720,8 @@
 </li>
       <li><a href="code/fibers.html#PyFiberModes.fiber.Fiber.fields">fields (Fiber property)</a>
 </li>
+      <li><a href="code/analysis.html#PyFiberModes.solver.two_layer.CutoffSolver.find_HE_mode_cutoff">find_HE_mode_cutoff() (CutoffSolver method)</a>
+</li>
       <li><a href="code/fibers.html#PyFiberModes.fiber.Fiber.find_modes">find_modes() (Fiber method)</a>
 
       <ul>
@@ -738,6 +750,10 @@
 </li>
       <li><a href="code/fields.html#PyFiberModes.field.Field.get_azimuthal_dependency">get_azimuthal_dependency() (Field method)</a>
 </li>
+      <li><a href="code/analysis.html#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_ceq_function">get_ceq_function() (EffectiveIndexSolver method)</a>
+</li>
+      <li><a href="code/analysis.html#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_clad_index_from_V0">get_clad_index_from_V0() (EffectiveIndexSolver method)</a>
+</li>
       <li><a href="code/fields.html#PyFiberModes.field.Field.get_components">get_components() (Field method)</a>
 </li>
       <li><a href="code/fields.html#PyFiberModes.field.Field.get_confinement_factor">get_confinement_factor() (Field method)</a>
@@ -754,6 +770,10 @@
         <li><a href="code/fundamentals.html#PyFiberModes.fundamentals.get_effective_index">(in module PyFiberModes.fundamentals)</a>
 </li>
       </ul></li>
+      <li><a href="code/analysis.html#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_EH_equation">get_EH_equation() (EffectiveIndexSolver method)</a>, <a href="code/analysis.html#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_EH_equation">[1]</a>
+</li>
+      <li><a href="code/analysis.html#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_EH_field">get_EH_field() (EffectiveIndexSolver method)</a>, <a href="code/analysis.html#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_EH_field">[1]</a>
+</li>
       <li><a href="code/fibers.html#PyFiberModes.fiber.get_fiber_from_delta_and_V0">get_fiber_from_delta_and_V0() (in module PyFiberModes.fiber)</a>
 </li>
       <li><a href="code/fibers.html#PyFiberModes.factory.ProxyLayer.get_generator">get_generator() (ProxyLayer method)</a>
@@ -763,6 +783,12 @@
       <li><a href="code/fibers.html#PyFiberModes.fiber.Fiber.get_group_velocity">get_group_velocity() (Fiber method)</a>
 </li>
       <li><a href="code/fibers.html#PyFiberModes.fiber.Fiber.get_group_velocity_dispersion">get_group_velocity_dispersion() (Fiber method)</a>
+</li>
+      <li><a href="code/analysis.html#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_HE_EH_terms">get_HE_EH_terms() (EffectiveIndexSolver method)</a>
+</li>
+      <li><a href="code/analysis.html#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_HE_equation">get_HE_equation() (EffectiveIndexSolver method)</a>, <a href="code/analysis.html#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_HE_equation">[1]</a>
+</li>
+      <li><a href="code/analysis.html#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_HE_field">get_HE_field() (EffectiveIndexSolver method)</a>, <a href="code/analysis.html#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_HE_field">[1]</a>
 </li>
       <li><a href="code/fibers.html#PyFiberModes.fiber.Fiber.get_index_at_radius">get_index_at_radius() (Fiber method)</a>
 
@@ -780,11 +806,25 @@
 </li>
       <li><a href="code/fibers.html#PyFiberModes.fiber.Fiber.get_layer_at_radius">get_layer_at_radius() (Fiber method)</a>
 </li>
+      <li><a href="code/analysis.html#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_low_neff_boundary">get_low_neff_boundary() (EffectiveIndexSolver method)</a>
+</li>
+      <li><a href="code/analysis.html#PyFiberModes.solver.three_layer.CutoffSolver.get_lower_neff_mode">get_lower_neff_mode() (CutoffSolver method)</a>
+</li>
       <li><a href="code/fibers.html#PyFiberModes.stepindex.StepIndex.get_LP_constants">get_LP_constants() (StepIndex method)</a>
+</li>
+      <li><a href="code/analysis.html#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_LP_equation">get_LP_equation() (EffectiveIndexSolver method)</a>, <a href="code/analysis.html#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_LP_equation">[1]</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="code/analysis.html#PyFiberModes.solver.protocols.RadialFieldSolver.get_LP_field">get_LP_field() (RadialFieldSolver method)</a>
+      <li><a href="code/analysis.html#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_LP_field">get_LP_field() (EffectiveIndexSolver method)</a>, <a href="code/analysis.html#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_LP_field">[1]</a>
+
+      <ul>
+        <li><a href="code/analysis.html#PyFiberModes.solver.protocols.RadialFieldSolver.get_LP_field">(RadialFieldSolver method)</a>
+</li>
+      </ul></li>
+      <li><a href="code/analysis.html#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_LP_field_from_parameters">get_LP_field_from_parameters() (EffectiveIndexSolver method)</a>
+</li>
+      <li><a href="code/analysis.html#PyFiberModes.solver.two_layer.CutoffSolver.get_mode_cutoff_HE">get_mode_cutoff_HE() (CutoffSolver method)</a>
 </li>
       <li><a href="code/fibers.html#PyFiberModes.fiber.Fiber.get_mode_cutoff_v0">get_mode_cutoff_v0() (Fiber method)</a>
 
@@ -796,13 +836,19 @@
 </li>
       <li><a href="code/fibers.html#PyFiberModes.fiber.Fiber.get_mode_field">get_mode_field() (Fiber method)</a>
 </li>
+      <li><a href="code/analysis.html#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_mode_with_lower_neff">get_mode_with_lower_neff() (EffectiveIndexSolver method)</a>
+</li>
       <li><a href="code/fibers.html#PyFiberModes.fiber.Fiber.get_NA">get_NA() (Fiber method)</a>
+</li>
+      <li><a href="code/analysis.html#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_neff_lower_boundary">get_neff_lower_boundary() (EffectiveIndexSolver method)</a>
 </li>
       <li><a href="code/fields.html#PyFiberModes.field.Field.get_normalization_constant">get_normalization_constant() (Field method)</a>
 </li>
       <li><a href="code/fibers.html#PyFiberModes.fiber.Fiber.get_normalized_beta">get_normalized_beta() (Fiber method)</a>
 </li>
       <li><a href="code/fibers.html#PyFiberModes.factory.FiberFactory.get_overall_generator">get_overall_generator() (FiberFactory method)</a>
+</li>
+      <li><a href="code/analysis.html#PyFiberModes.solver.three_layer.CutoffSolver.get_parameters">get_parameters() (CutoffSolver method)</a>
 </li>
       <li><a href="code/fibers.html#PyFiberModes.fiber.Fiber.get_phase_velocity">get_phase_velocity() (Fiber method)</a>
 </li>
@@ -828,11 +874,21 @@
 </li>
       <li><a href="code/fibers.html#PyFiberModes.fiber.Fiber.get_S_parameter">get_S_parameter() (Fiber method)</a>
 </li>
+      <li><a href="code/analysis.html#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_TE_equation">get_TE_equation() (EffectiveIndexSolver method)</a>, <a href="code/analysis.html#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_TE_equation">[1]</a>
+</li>
+      <li><a href="code/analysis.html#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_TE_field">get_TE_field() (EffectiveIndexSolver method)</a>, <a href="code/analysis.html#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_TE_field">[1]</a>
+</li>
       <li><a href="code/fibers.html#PyFiberModes.stepindex.StepIndex.get_TE_TM_constants">get_TE_TM_constants() (StepIndex method)</a>
+</li>
+      <li><a href="code/analysis.html#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_TM_equation">get_TM_equation() (EffectiveIndexSolver method)</a>, <a href="code/analysis.html#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_TM_equation">[1]</a>
+</li>
+      <li><a href="code/analysis.html#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_TM_field">get_TM_field() (EffectiveIndexSolver method)</a>, <a href="code/analysis.html#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_TM_field">[1]</a>
 </li>
       <li><a href="code/fundamentals.html#PyFiberModes.fundamentals.get_U_parameter">get_U_parameter() (in module PyFiberModes.fundamentals)</a>
 </li>
       <li><a href="code/fibers.html#PyFiberModes.stepindex.StepIndex.get_U_W_parameter">get_U_W_parameter() (StepIndex method)</a>
+</li>
+      <li><a href="code/analysis.html#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_U_W_V_parameter">get_U_W_V_parameter() (EffectiveIndexSolver method)</a>
 </li>
       <li><a href="code/fibers.html#PyFiberModes.stepindex.StepIndex.get_V_constant">get_V_constant() (StepIndex method)</a>
 </li>
@@ -908,10 +964,10 @@
 </li>
       <li><a href="code/analysis.html#PyFiberModes.optimization.DesignParameter.layer_radius">layer_radius() (DesignParameter class method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="code/fibers.html#PyFiberModes.fiber.Fiber.layer_types">layer_types (Fiber attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="code/fibers.html#PyFiberModes.factory.FiberFactory.layers_list">layers_list (FiberFactory attribute)</a>
 </li>
       <li><a href="code/fundamentals.html#PyFiberModes.models.LayerSpec">LayerSpec (class in PyFiberModes.models)</a>
@@ -919,6 +975,8 @@
       <li><a href="code/fields.html#PyFiberModes.field.Field.limit">limit (Field attribute)</a>
 </li>
       <li><a href="code/fibers.html#PyFiberModes.fiber.load_fiber">load_fiber() (in module PyFiberModes.fiber)</a>
+</li>
+      <li><a href="code/analysis.html#PyFiberModes.solver.two_layer.CutoffSolver.logger">logger (CutoffSolver attribute)</a>
 </li>
       <li><a href="code/fundamentals.html#PyFiberModes.mode.Family.LP">LP (Family attribute)</a>
 </li>
@@ -986,9 +1044,15 @@
 </li>
         <li><a href="code/analysis.html#module-PyFiberModes.services">PyFiberModes.services</a>
 </li>
+        <li><a href="code/analysis.html#module-PyFiberModes.solver.multilayer">PyFiberModes.solver.multilayer</a>
+</li>
         <li><a href="code/analysis.html#module-PyFiberModes.solver.protocols">PyFiberModes.solver.protocols</a>
 </li>
         <li><a href="code/analysis.html#module-PyFiberModes.solver.results">PyFiberModes.solver.results</a>
+</li>
+        <li><a href="code/analysis.html#module-PyFiberModes.solver.three_layer">PyFiberModes.solver.three_layer</a>
+</li>
+        <li><a href="code/analysis.html#module-PyFiberModes.solver.two_layer">PyFiberModes.solver.two_layer</a>
 </li>
         <li><a href="code/fundamentals.html#module-PyFiberModes.source">PyFiberModes.source</a>
 </li>
@@ -1007,6 +1071,8 @@
 </li>
       <li><a href="code/fields.html#PyFiberModes.field.Field.n_point">n_point (Field attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="code/analysis.html#PyFiberModes.optimization.DesignParameter.name">name (DesignParameter attribute)</a>
 
       <ul>
@@ -1015,10 +1081,6 @@
         <li><a href="code/fibers.html#PyFiberModes.factory.ProxyLayer.name">(ProxyLayer attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="code/fibers.html#PyFiberModes.factory.FiberFactory.neff_solver">neff_solver (FiberFactory attribute)</a>
-</li>
       <li><a href="code/fundamentals.html#PyFiberModes.mode.Mode.nu">nu (Mode attribute)</a>
 </li>
   </ul></td>
@@ -1113,8 +1175,6 @@
         <li><a href="code/fields.html#module-PyFiberModes.field">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     PyFiberModes.fundamentals
 
@@ -1122,6 +1182,8 @@
         <li><a href="code/fundamentals.html#module-PyFiberModes.fundamentals">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     PyFiberModes.mode
 
@@ -1158,6 +1220,13 @@
 </li>
       </ul></li>
       <li>
+    PyFiberModes.solver.multilayer
+
+      <ul>
+        <li><a href="code/analysis.html#module-PyFiberModes.solver.multilayer">module</a>
+</li>
+      </ul></li>
+      <li>
     PyFiberModes.solver.protocols
 
       <ul>
@@ -1169,6 +1238,20 @@
 
       <ul>
         <li><a href="code/analysis.html#module-PyFiberModes.solver.results">module</a>
+</li>
+      </ul></li>
+      <li>
+    PyFiberModes.solver.three_layer
+
+      <ul>
+        <li><a href="code/analysis.html#module-PyFiberModes.solver.three_layer">module</a>
+</li>
+      </ul></li>
+      <li>
+    PyFiberModes.solver.two_layer
+
+      <ul>
+        <li><a href="code/analysis.html#module-PyFiberModes.solver.two_layer">module</a>
 </li>
       </ul></li>
       <li>
@@ -1231,10 +1314,10 @@
 </li>
       <li><a href="code/fields.html#PyFiberModes.coordinates.CartesianCoordinates.shift_coordinates">shift_coordinates() (CartesianCoordinates method)</a>
 </li>
-      <li><a href="code/analysis.html#PyFiberModes.solver.protocols.CutoffSolver.solve">solve() (CutoffSolver method)</a>
+      <li><a href="code/analysis.html#PyFiberModes.solver.protocols.CutoffSolver.solve">solve() (CutoffSolver method)</a>, <a href="code/analysis.html#PyFiberModes.solver.three_layer.CutoffSolver.solve">[1]</a>, <a href="code/analysis.html#PyFiberModes.solver.two_layer.CutoffSolver.solve">[2]</a>
 
       <ul>
-        <li><a href="code/analysis.html#PyFiberModes.solver.protocols.EffectiveIndexSolver.solve">(EffectiveIndexSolver method)</a>
+        <li><a href="code/analysis.html#PyFiberModes.solver.multilayer.EffectiveIndexSolver.solve">(EffectiveIndexSolver method)</a>, <a href="code/analysis.html#PyFiberModes.solver.protocols.EffectiveIndexSolver.solve">[1]</a>, <a href="code/analysis.html#PyFiberModes.solver.two_layer.EffectiveIndexSolver.solve">[2]</a>
 </li>
       </ul></li>
       <li><a href="code/fibers.html#PyFiberModes.fiber.Fiber.solve_effective_index">solve_effective_index() (Fiber method)</a>

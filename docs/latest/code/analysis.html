@@ -1226,6 +1226,835 @@ maximum material indices.</p>
 
 </dd></dl>
 
+<p id="module-PyFiberModes.solver.two_layer">Two-layer step-index fiber solvers.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="PyFiberModes.solver.two_layer.CutoffSolver">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">CutoffSolver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fiber</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wavelength</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/solver/two_layer/cutoff.html#CutoffSolver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.two_layer.CutoffSolver" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSolver</span></code></p>
+<p>Solve normalized modal cutoffs for a two-layer step-index fiber.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fiber</strong> (<a class="reference internal" href="fibers.html#PyFiberModes.fiber.Fiber" title="PyFiberModes.fiber.Fiber"><em>Fiber</em></a>) – Standard step-index fiber.</p></li>
+<li><p><strong>wavelength</strong> (<em>float</em>) – Reference vacuum wavelength in meters.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFiberModes.solver.two_layer.CutoffSolver.logger">
+<span class="sig-name descname"><span class="pre">logger</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Logger</span> <span class="pre">PyFiberModes.solver.two_layer.cutoff</span> <span class="pre">(INFO)&gt;</span></span><a class="headerlink" href="#PyFiberModes.solver.two_layer.CutoffSolver.logger" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.solver.two_layer.CutoffSolver.solve">
+<span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.mode.Mode"><span class="pre">Mode</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/solver/two_layer/cutoff.html#CutoffSolver.solve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.two_layer.CutoffSolver.solve" title="Link to this definition">#</a></dt>
+<dd><p>Calculate the normalized cutoff frequency of a mode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mode</strong> (<a class="reference internal" href="fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.mode.Mode"><em>Mode</em></a>) – Mode whose cutoff is requested.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Cutoff V-number.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.solver.two_layer.CutoffSolver.get_mode_cutoff_HE">
+<span class="sig-name descname"><span class="pre">get_mode_cutoff_HE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">V0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/solver/two_layer/cutoff.html#CutoffSolver.get_mode_cutoff_HE"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.two_layer.CutoffSolver.get_mode_cutoff_HE" title="Link to this definition">#</a></dt>
+<dd><p>Evaluate the hybrid-mode cutoff characteristic equation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>V0</strong> (<em>float</em>) – Trial normalized frequency.</p></li>
+<li><p><strong>nu</strong> (<em>int</em>) – Azimuthal order.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Characteristic-equation residual.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.solver.two_layer.CutoffSolver.find_HE_mode_cutoff">
+<span class="sig-name descname"><span class="pre">find_HE_mode_cutoff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.mode.Mode"><span class="pre">Mode</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/solver/two_layer/cutoff.html#CutoffSolver.find_HE_mode_cutoff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.two_layer.CutoffSolver.find_HE_mode_cutoff" title="Link to this definition">#</a></dt>
+<dd><p>Find a higher-order HE-mode cutoff by bracketing Bessel roots.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mode</strong> (<a class="reference internal" href="fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.mode.Mode"><em>Mode</em></a>) – Hybrid electric mode.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Cutoff V-number, or zero if no root is found.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="PyFiberModes.solver.two_layer.EffectiveIndexSolver">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">EffectiveIndexSolver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fiber</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wavelength</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/solver/two_layer/effective_index.html#EffectiveIndexSolver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.two_layer.EffectiveIndexSolver" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSolver</span></code></p>
+<p>Solve effective indices and fields for a two-layer fiber.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fiber</strong> (<a class="reference internal" href="fibers.html#PyFiberModes.fiber.Fiber" title="PyFiberModes.fiber.Fiber"><em>Fiber</em></a>) – Standard step-index fiber.</p></li>
+<li><p><strong>wavelength</strong> (<em>float</em>) – Vacuum wavelength in meters.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_mode_with_lower_neff">
+<span class="sig-name descname"><span class="pre">get_mode_with_lower_neff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.mode.Mode"><span class="pre">Mode</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.mode.Mode"><span class="pre">Mode</span></a></span></span><a class="reference internal" href="../_modules/PyFiberModes/solver/two_layer/effective_index.html#EffectiveIndexSolver.get_mode_with_lower_neff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_mode_with_lower_neff" title="Link to this definition">#</a></dt>
+<dd><p>Select a neighboring mode used as a lower solution boundary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mode</strong> (<a class="reference internal" href="fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.mode.Mode"><em>Mode</em></a>) – Mode being solved.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Related LP mode expected to have a lower effective index.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.mode.Mode">Mode</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_clad_index_from_V0">
+<span class="sig-name descname"><span class="pre">get_clad_index_from_V0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">V0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/solver/two_layer/effective_index.html#EffectiveIndexSolver.get_clad_index_from_V0"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_clad_index_from_V0" title="Link to this definition">#</a></dt>
+<dd><p>Gets a clad index value associated to a certain V0 parameter for the same exact fiber.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>V0</strong> (<em>float</em>) – The V number</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The clad index</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_low_neff_boundary">
+<span class="sig-name descname"><span class="pre">get_low_neff_boundary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.mode.Mode"><span class="pre">Mode</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/solver/two_layer/effective_index.html#EffectiveIndexSolver.get_low_neff_boundary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_low_neff_boundary" title="Link to this definition">#</a></dt>
+<dd><p>Gets the lower neff boundary using a lower neff mode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mode</strong> (<a class="reference internal" href="fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.mode.Mode"><em>Mode</em></a>) – The current mode</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The low neff boundary.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_ceq_function">
+<span class="sig-name descname"><span class="pre">get_ceq_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.mode.Mode"><span class="pre">Mode</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">object</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/solver/two_layer/effective_index.html#EffectiveIndexSolver.get_ceq_function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_ceq_function" title="Link to this definition">#</a></dt>
+<dd><p>Gets the adequat phase matching mode equation function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mode</strong> (<a class="reference internal" href="fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.mode.Mode"><em>Mode</em></a>) – The mode</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The ceq function.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.solver.two_layer.EffectiveIndexSolver.solve">
+<span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.mode.Mode"><span class="pre">Mode</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_neff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iteration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1e-14</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/solver/two_layer/effective_index.html#EffectiveIndexSolver.solve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.two_layer.EffectiveIndexSolver.solve" title="Link to this definition">#</a></dt>
+<dd><p>Solve and return the effective index (neff) for a given mode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mode</strong> (<a class="reference internal" href="fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.mode.Mode"><em>Mode</em></a>) – The mode</p></li>
+<li><p><strong>delta_neff</strong> (<em>float</em>) – The delta neff</p></li>
+<li><p><strong>max_iteration</strong> (<em>int</em>) – The maximum iteration, compute time heavily depend on it.</p></li>
+<li><p><strong>epsilon</strong> (<em>float</em>) – The epsilon</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The effective index of the mode</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_LP_field">
+<span class="sig-name descname"><span class="pre">get_LP_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/solver/two_layer/effective_index.html#EffectiveIndexSolver.get_LP_field"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_LP_field" title="Link to this definition">#</a></dt>
+<dd><p>Gets the LP field in the form of a tuple containing two numpy arrays.
+Tuple structure is [<span class="math notranslate nohighlight">\(E_{x}\)</span>, 0, 0], [0, <span class="math notranslate nohighlight">\(H_{y}\)</span>, 0].</p>
+<p>The field are computed with as:</p>
+<p>In the core:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}E_x &amp;= j_0\left( U * r \ r_{core} \right) / j_0(U) \\[10pt]
+H_y &amp;= n_{eff} * \sqrt{\epsilon_0 / \mu_0} * E_x \\[10pt]\end{split}\]</div>
+<p>In the clad:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}E_x &amp;= k_0\left( W * r \ r_{core} \right) / k_0(W) \\[10pt]
+H_y &amp;= n_{eff} * \sqrt{\epsilon_0 / \mu_0} * E_x \\[10pt]\end{split}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nu</strong> (<em>int</em>) – The nu parameter of the mode</p></li>
+<li><p><strong>neff</strong> (<em>float</em>) – The effective index</p></li>
+<li><p><strong>radius</strong> (<em>float</em>) – The radius</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The lp field.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_TE_field">
+<span class="sig-name descname"><span class="pre">get_TE_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/solver/two_layer/effective_index.html#EffectiveIndexSolver.get_TE_field"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_TE_field" title="Link to this definition">#</a></dt>
+<dd><p>Gets the TE field in the form of a tuple containing two numpy arrays.
+Tuple structure is [0, <span class="math notranslate nohighlight">\(E_{\phi}\)</span>, 0], [<span class="math notranslate nohighlight">\(H_{r}\)</span>, 0, <span class="math notranslate nohighlight">\(H_{z}\)</span>]</p>
+<p>The field are computed within the core and radius:</p>
+<p>In the core</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}H_z &amp;= \frac{\sqrt{\epsilon_0 / \mu_0} * U}{k_0 r_{core}} * \frac{j_0(U * r/r_{core})}{j_1(U)} \\[10pt]
+E_\phi &amp;= -j_1(U * r/r_{core}) / j_1(U) \\[10pt]
+H_r &amp;= n_{eff} * \sqrt{\epsilon_0 / \mu_0} * E_\phi \\[10pt]\end{split}\]</div>
+<p>In the clad</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}H_z &amp;= \frac{\sqrt{\epsilon_0 / \mu_0} * W}{k_0 r_{core}} * \frac{k_0(W * r/r_{core})}{k_1(U)} \\[10pt]
+E_\phi &amp;= -k_1(W * r/r_{core}) / k_1(W) \\[10pt]
+H_r &amp;= n_{eff} * \sqrt{\epsilon_0 / \mu_0} * E_\phi \\[10pt]\end{split}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nu</strong> (<em>int</em>) – The nu parameter of the mode</p></li>
+<li><p><strong>neff</strong> (<em>float</em>) – The effective index</p></li>
+<li><p><strong>radius</strong> (<em>float</em>) – The radius</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The TE field.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_TM_field">
+<span class="sig-name descname"><span class="pre">get_TM_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/solver/two_layer/effective_index.html#EffectiveIndexSolver.get_TM_field"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_TM_field" title="Link to this definition">#</a></dt>
+<dd><p>Gets the TM field in the form of a tuple containing two numpy arrays.
+Tuple structure is [<span class="math notranslate nohighlight">\(E_{r}\)</span>, 0, <span class="math notranslate nohighlight">\(E_{z}\)</span>], [0, <span class="math notranslate nohighlight">\(H_{\phi}\)</span>, 0]</p>
+<p>The field are computed within the core and radius:</p>
+<p>In the core</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}E_z &amp;= \frac{-U}{k_0 * n_{eff} * r_{core}} * \frac{j_0(U * r / r_{core})}{j_1(U)} \\[10pt]
+E_r &amp;= j_1(U * r/r_{core}) / j_1(U) \\[10pt]
+H_\phi &amp;= \sqrt{\epsilon_0 / \mu_0} * n_{core} / n_{eff} * E_r \\[10pt]\end{split}\]</div>
+<p>In the clad</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}E_z &amp;= \frac{n_{core}}{n_{clad}} \frac{W}{k_0 * n_{eff} * r_{core}} * \frac{k_0(W * r / r_{core})}{k_1(W)} \\[10pt]
+E_r &amp;= \frac{n_{core}}{n_{clad}} k_1(W * r/r_{core}) / k_1(W)\\[10pt]
+H_\phi &amp;= \sqrt{\epsilon_0 / \mu_0} * \frac{n_{core}}{n_{clad}} * k_1(W * r/r_{core}) / k_1(W) \\[10pt]\end{split}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nu</strong> (<em>int</em>) – The nu parameter of the mode</p></li>
+<li><p><strong>neff</strong> (<em>float</em>) – The effective index</p></li>
+<li><p><strong>radius</strong> (<em>float</em>) – The radius</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The LP field.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_HE_field">
+<span class="sig-name descname"><span class="pre">get_HE_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/solver/two_layer/effective_index.html#EffectiveIndexSolver.get_HE_field"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_HE_field" title="Link to this definition">#</a></dt>
+<dd><p>Gets the HE field in the form of a tuple containing two numpy arrays.
+Tuple structure is [<span class="math notranslate nohighlight">\(E_{r}\)</span>, <span class="math notranslate nohighlight">\(E_{\phi}\)</span>, <span class="math notranslate nohighlight">\(E_{z}\)</span>], [<span class="math notranslate nohighlight">\(H_{r}\)</span>, <span class="math notranslate nohighlight">\(H_{\phi}\)</span>, <span class="math notranslate nohighlight">\(H_{z}\)</span>]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nu</strong> (<em>int</em>) – The nu parameter of the mode</p></li>
+<li><p><strong>neff</strong> (<em>float</em>) – The effective index</p></li>
+<li><p><strong>radius</strong> (<em>float</em>) – The radius</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The HE field.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_EH_field">
+<span class="sig-name descname"><span class="pre">get_EH_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/solver/two_layer/effective_index.html#EffectiveIndexSolver.get_EH_field"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_EH_field" title="Link to this definition">#</a></dt>
+<dd><p>Gets the EH field in the form of a tuple containing two numpy arrays.
+Tuple structure is [<span class="math notranslate nohighlight">\(E_{r}\)</span>, <span class="math notranslate nohighlight">\(E_{\phi}\)</span>, <span class="math notranslate nohighlight">\(E_{z}\)</span>], [<span class="math notranslate nohighlight">\(H_{r}\)</span>, <span class="math notranslate nohighlight">\(H_{\phi}\)</span>, <span class="math notranslate nohighlight">\(H_{z}\)</span>]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>*args</strong> – Positional arguments forwarded to <a class="reference internal" href="#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_HE_field" title="PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_HE_field"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_HE_field()</span></code></a>.</p></li>
+<li><p><strong>**kwargs</strong> – Keyword arguments forwarded to <a class="reference internal" href="#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_HE_field" title="PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_HE_field"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_HE_field()</span></code></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The LP field.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_U_W_V_parameter">
+<span class="sig-name descname"><span class="pre">get_U_W_V_parameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">neff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/solver/two_layer/effective_index.html#EffectiveIndexSolver.get_U_W_V_parameter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_U_W_V_parameter" title="Link to this definition">#</a></dt>
+<dd><p>Gets the U, W parameter of the fiber. Those are computed as:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>neff</strong> (<em>float</em>) – The effective index</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The U and W parameter.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_LP_equation">
+<span class="sig-name descname"><span class="pre">get_LP_equation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">neff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/solver/two_layer/effective_index.html#EffectiveIndexSolver.get_LP_equation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_LP_equation" title="Link to this definition">#</a></dt>
+<dd><p>Return the value of the phase matching equation for LP mode.</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[U * j_{\]</div>
+</div></blockquote>
+<p>u -1}(U) * k_{
+u}(W) + W * j_{
+u}(U) * k_{
+u - 1}(W)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>neff</strong> (<em>float</em>) – The effective index</p></li>
+<li><p><strong>nu</strong> (<em>int</em>) – The nu parameter of the mode</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dont know</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_TE_equation">
+<span class="sig-name descname"><span class="pre">get_TE_equation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">neff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/solver/two_layer/effective_index.html#EffectiveIndexSolver.get_TE_equation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_TE_equation" title="Link to this definition">#</a></dt>
+<dd><p>Return the value of the phase matching equation for TE mode.</p>
+<div class="math notranslate nohighlight">
+\[U * j_0(U) * k_1(W) + W * j_1(U) * k_0(W)\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>neff</strong> (<em>float</em>) – The effective index</p></li>
+<li><p><strong>nu</strong> (<em>int</em>) – The nu parameter of the mode</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dont know</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_TM_equation">
+<span class="sig-name descname"><span class="pre">get_TM_equation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">neff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/solver/two_layer/effective_index.html#EffectiveIndexSolver.get_TM_equation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_TM_equation" title="Link to this definition">#</a></dt>
+<dd><p>Return the value of the phase matching equation for TM mode.</p>
+<div class="math notranslate nohighlight">
+\[U * j_0(U) * k_1(W) * n_{clad}^2 + W * j_1(U) * k_0(W) * n_{core}^2\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>neff</strong> (<em>float</em>) – The effective index</p></li>
+<li><p><strong>nu</strong> (<em>int</em>) – The nu parameter of the mode</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dont know</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_HE_EH_terms">
+<span class="sig-name descname"><span class="pre">get_HE_EH_terms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">neff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/solver/two_layer/effective_index.html#EffectiveIndexSolver.get_HE_EH_terms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_HE_EH_terms" title="Link to this definition">#</a></dt>
+<dd><p>Return the value of the terms for the equation for HE or EH mode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>neff</strong> (<em>float</em>) – The effective index</p></li>
+<li><p><strong>nu</strong> (<em>int</em>) – The nu parameter of the mode</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dont know</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_HE_equation">
+<span class="sig-name descname"><span class="pre">get_HE_equation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">neff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/solver/two_layer/effective_index.html#EffectiveIndexSolver.get_HE_equation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_HE_equation" title="Link to this definition">#</a></dt>
+<dd><p>Return the value of the phase matching equation for HE mode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>neff</strong> (<em>float</em>) – The effective index</p></li>
+<li><p><strong>nu</strong> (<em>int</em>) – The nu parameter of the mode</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dont know</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_EH_equation">
+<span class="sig-name descname"><span class="pre">get_EH_equation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">neff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/solver/two_layer/effective_index.html#EffectiveIndexSolver.get_EH_equation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_EH_equation" title="Link to this definition">#</a></dt>
+<dd><p>Return the value of the phase matching equation for EH mode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>neff</strong> (<em>float</em>) – The effective index</p></li>
+<li><p><strong>nu</strong> (<em>int</em>) – The nu parameter of the mode</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dont know</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<p id="module-PyFiberModes.solver.three_layer">Three-layer step-index fiber solvers.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="PyFiberModes.solver.three_layer.CutoffSolver">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">CutoffSolver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fiber</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wavelength</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/solver/three_layer/cutoff.html#CutoffSolver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.three_layer.CutoffSolver" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSolver</span></code></p>
+<p>Solve normalized cutoffs for a three-layer step-index fiber.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fiber</strong> (<a class="reference internal" href="fibers.html#PyFiberModes.fiber.Fiber" title="PyFiberModes.fiber.Fiber"><em>Fiber</em></a>) – Three-layer fiber to solve.</p></li>
+<li><p><strong>wavelength</strong> (<em>float</em>) – Reference vacuum wavelength in meters.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.solver.three_layer.CutoffSolver.get_lower_neff_mode">
+<span class="sig-name descname"><span class="pre">get_lower_neff_mode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.mode.Mode"><span class="pre">Mode</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.mode.Mode"><span class="pre">Mode</span></a></span></span><a class="reference internal" href="../_modules/PyFiberModes/solver/three_layer/cutoff.html#CutoffSolver.get_lower_neff_mode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.three_layer.CutoffSolver.get_lower_neff_mode" title="Link to this definition">#</a></dt>
+<dd><p>Choose the preceding mode that bounds a cutoff search.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mode</strong> (<a class="reference internal" href="fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.mode.Mode"><em>Mode</em></a>) – Mode whose cutoff is requested.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Neighboring lower-order mode.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.mode.Mode">Mode</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.solver.three_layer.CutoffSolver.solve">
+<span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.mode.Mode"><span class="pre">Mode</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/solver/three_layer/cutoff.html#CutoffSolver.solve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.three_layer.CutoffSolver.solve" title="Link to this definition">#</a></dt>
+<dd><p>Calculate the normalized cutoff frequency of a mode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mode</strong> (<a class="reference internal" href="fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.mode.Mode"><em>Mode</em></a>) – Mode whose cutoff is requested.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Cutoff V-number, or <code class="docutils literal notranslate"><span class="pre">numpy.nan</span></code> when no root is found.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.solver.three_layer.CutoffSolver.get_parameters">
+<span class="sig-name descname"><span class="pre">get_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">V0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/solver/three_layer/cutoff.html#CutoffSolver.get_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.three_layer.CutoffSolver.get_parameters" title="Link to this definition">#</a></dt>
+<dd><p>Compute layer and normalized-frequency parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>V0</strong> (<em>float</em>) – The V0 parameter</p></li>
+<li><p><strong>nu</strong> (<em>int</em>) – Azimuthal mode order.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The computed parameters</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<p id="module-PyFiberModes.solver.multilayer">Multilayer step-index fiber solvers.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="PyFiberModes.solver.multilayer.EffectiveIndexSolver">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">EffectiveIndexSolver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fiber</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wavelength</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/solver/multilayer/effective_index.html#EffectiveIndexSolver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.multilayer.EffectiveIndexSolver" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSolver</span></code></p>
+<p>Solve effective indices for arbitrary multilayer step-index fibers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fiber</strong> (<a class="reference internal" href="fibers.html#PyFiberModes.fiber.Fiber" title="PyFiberModes.fiber.Fiber"><em>Fiber</em></a>) – Multilayer fiber to solve.</p></li>
+<li><p><strong>wavelength</strong> (<em>float</em>) – Vacuum wavelength in meters.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_neff_lower_boundary">
+<span class="sig-name descname"><span class="pre">get_neff_lower_boundary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.mode.Mode"><span class="pre">Mode</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_neff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1e-06</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/solver/multilayer/effective_index.html#EffectiveIndexSolver.get_neff_lower_boundary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_neff_lower_boundary" title="Link to this definition">#</a></dt>
+<dd><p>Gets the lower boundary for neff value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mode</strong> (<a class="reference internal" href="fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.mode.Mode"><em>Mode</em></a>) – The mode to evaluate</p></li>
+<li><p><strong>delta_neff</strong> (<em>float</em>) – The delta neff</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The neff lower boundary.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.solver.multilayer.EffectiveIndexSolver.solve">
+<span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.mode.Mode"><span class="pre">Mode</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_neff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/solver/multilayer/effective_index.html#EffectiveIndexSolver.solve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.multilayer.EffectiveIndexSolver.solve" title="Link to this definition">#</a></dt>
+<dd><p>Find an effective-index root for a mode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mode</strong> (<a class="reference internal" href="fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.mode.Mode"><em>Mode</em></a>) – Mode whose effective index is requested.</p></li>
+<li><p><strong>delta_neff</strong> (<em>float</em>) – Maximum effective-index search step.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Effective index, or <code class="docutils literal notranslate"><span class="pre">numpy.nan</span></code> when no valid interval exists.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_LP_field">
+<span class="sig-name descname"><span class="pre">get_LP_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/PyFiberModes/solver/multilayer/effective_index.html#EffectiveIndexSolver.get_LP_field"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_LP_field" title="Link to this definition">#</a></dt>
+<dd><p>Gets the <span class="math notranslate nohighlight">\(LP_{
+u, m}\)</span> mode field.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nu</strong> (<em>int</em>) – The nu parameter of the LP mode</p></li>
+<li><p><strong>neff</strong> (<em>float</em>) – The effective index</p></li>
+<li><p><strong>radius</strong> (<em>float</em>) – The radius for evaluation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The LP electric and magnetic field in a tuple.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple[float, float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_LP_field_from_parameters">
+<span class="sig-name descname"><span class="pre">get_LP_field_from_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eval_layer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/PyFiberModes/solver/multilayer/effective_index.html#EffectiveIndexSolver.get_LP_field_from_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_LP_field_from_parameters" title="Link to this definition">#</a></dt>
+<dd><p>Gets the LP field evaluation from parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>eval_layer</strong> (<em>object</em>) – The layer at which the field is evaluated</p></li>
+<li><p><strong>radius</strong> (<em>float</em>) – The radius for evaluation</p></li>
+<li><p><strong>neff</strong> (<em>float</em>) – The effective index</p></li>
+<li><p><strong>nu</strong> (<em>int</em>) – The nu parameter of the LP mode</p></li>
+<li><p><strong>C</strong> (<em>tuple</em>) – Constants</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The LP field.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple[float, float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_TE_field">
+<span class="sig-name descname"><span class="pre">get_TE_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wavelength</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/PyFiberModes/solver/multilayer/effective_index.html#EffectiveIndexSolver.get_TE_field"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_TE_field" title="Link to this definition">#</a></dt>
+<dd><p>Gets the transverse electric TE field.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>wavelength</strong> (<em>float</em>) – Vacuum wavelength in meters.</p></li>
+<li><p><strong>nu</strong> (<em>int</em>) – The radial parameter of the mode</p></li>
+<li><p><strong>neff</strong> (<em>float</em>) – The effective index of the mode</p></li>
+<li><p><strong>radius</strong> (<em>float</em>) – The radius at which field is evaluated</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The TE field.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple[float, float]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – Method not yet implemented</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_TM_field">
+<span class="sig-name descname"><span class="pre">get_TM_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wavelength</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/PyFiberModes/solver/multilayer/effective_index.html#EffectiveIndexSolver.get_TM_field"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_TM_field" title="Link to this definition">#</a></dt>
+<dd><p>Gets the transverse magnetic TM field.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>wavelength</strong> (<em>float</em>) – Vacuum wavelength in meters.</p></li>
+<li><p><strong>nu</strong> (<em>int</em>) – The radial parameter of the mode</p></li>
+<li><p><strong>neff</strong> (<em>float</em>) – The effective index of the mode</p></li>
+<li><p><strong>radius</strong> (<em>float</em>) – The radius at which field is evaluated</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The TM field.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple[float, float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_EH_field">
+<span class="sig-name descname"><span class="pre">get_EH_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/PyFiberModes/solver/multilayer/effective_index.html#EffectiveIndexSolver.get_EH_field"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_EH_field" title="Link to this definition">#</a></dt>
+<dd><p>Gets the hybrid EH field.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nu</strong> (<em>int</em>) – The radial parameter of the mode</p></li>
+<li><p><strong>neff</strong> (<em>float</em>) – The effective index of the mode</p></li>
+<li><p><strong>radius</strong> (<em>float</em>) – The radius at which field is evaluated</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The EH field.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple[float, float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_HE_field">
+<span class="sig-name descname"><span class="pre">get_HE_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/PyFiberModes/solver/multilayer/effective_index.html#EffectiveIndexSolver.get_HE_field"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_HE_field" title="Link to this definition">#</a></dt>
+<dd><p>Gets the hybrid HE field.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nu</strong> (<em>int</em>) – The radial parameter of the mode</p></li>
+<li><p><strong>neff</strong> (<em>float</em>) – The effective index of the mode</p></li>
+<li><p><strong>radius</strong> (<em>float</em>) – The radius at which field is evaluated</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The HE field.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple[float, float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_LP_equation">
+<span class="sig-name descname"><span class="pre">get_LP_equation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">neff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/PyFiberModes/solver/multilayer/effective_index.html#EffectiveIndexSolver.get_LP_equation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_LP_equation" title="Link to this definition">#</a></dt>
+<dd><p>Evaluate the multilayer LP characteristic equation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>neff</strong> (<em>float</em>) – Trial effective index.</p></li>
+<li><p><strong>nu</strong> (<em>int</em>) – Azimuthal order.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Characteristic-equation residual.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_TE_equation">
+<span class="sig-name descname"><span class="pre">get_TE_equation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">neff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/PyFiberModes/solver/multilayer/effective_index.html#EffectiveIndexSolver.get_TE_equation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_TE_equation" title="Link to this definition">#</a></dt>
+<dd><p>Evaluate the multilayer TE characteristic equation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>neff</strong> (<em>float</em>) – Trial effective index.</p></li>
+<li><p><strong>nu</strong> (<em>int</em>) – Azimuthal order.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Characteristic-equation residual.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_TM_equation">
+<span class="sig-name descname"><span class="pre">get_TM_equation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">neff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/PyFiberModes/solver/multilayer/effective_index.html#EffectiveIndexSolver.get_TM_equation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_TM_equation" title="Link to this definition">#</a></dt>
+<dd><p>Evaluate the multilayer TM characteristic equation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>neff</strong> (<em>float</em>) – Trial effective index.</p></li>
+<li><p><strong>nu</strong> (<em>int</em>) – Azimuthal order.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Characteristic-equation residual.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_HE_equation">
+<span class="sig-name descname"><span class="pre">get_HE_equation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">neff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/solver/multilayer/effective_index.html#EffectiveIndexSolver.get_HE_equation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_HE_equation" title="Link to this definition">#</a></dt>
+<dd><p>Evaluate the multilayer hybrid-mode characteristic equation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>neff</strong> (<em>float</em>) – Trial effective index.</p></li>
+<li><p><strong>nu</strong> (<em>int</em>) – Azimuthal order.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Determinant residual for the hybrid boundary conditions.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_EH_equation">
+<span class="sig-name descname"><span class="pre">get_EH_equation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">neff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/solver/multilayer/effective_index.html#EffectiveIndexSolver.get_EH_equation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_EH_equation" title="Link to this definition">#</a></dt>
+<dd><p>Evaluate the EH equation through the shared hybrid determinant.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>neff</strong> (<em>float</em>) – Trial effective index.</p></li>
+<li><p><strong>nu</strong> (<em>int</em>) – Azimuthal order.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Hybrid characteristic-equation residual.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
 
@@ -1326,6 +2155,55 @@ maximum material indices.</p>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.protocols.RadialFieldSolver"><code class="docutils literal notranslate"><span class="pre">RadialFieldSolver</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.protocols.RadialFieldSolver.get_LP_field"><code class="docutils literal notranslate"><span class="pre">RadialFieldSolver.get_LP_field()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.two_layer.CutoffSolver"><code class="docutils literal notranslate"><span class="pre">CutoffSolver</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.two_layer.CutoffSolver.logger"><code class="docutils literal notranslate"><span class="pre">CutoffSolver.logger</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.two_layer.CutoffSolver.solve"><code class="docutils literal notranslate"><span class="pre">CutoffSolver.solve()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.two_layer.CutoffSolver.get_mode_cutoff_HE"><code class="docutils literal notranslate"><span class="pre">CutoffSolver.get_mode_cutoff_HE()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.two_layer.CutoffSolver.find_HE_mode_cutoff"><code class="docutils literal notranslate"><span class="pre">CutoffSolver.find_HE_mode_cutoff()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.two_layer.EffectiveIndexSolver"><code class="docutils literal notranslate"><span class="pre">EffectiveIndexSolver</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_mode_with_lower_neff"><code class="docutils literal notranslate"><span class="pre">EffectiveIndexSolver.get_mode_with_lower_neff()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_clad_index_from_V0"><code class="docutils literal notranslate"><span class="pre">EffectiveIndexSolver.get_clad_index_from_V0()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_low_neff_boundary"><code class="docutils literal notranslate"><span class="pre">EffectiveIndexSolver.get_low_neff_boundary()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_ceq_function"><code class="docutils literal notranslate"><span class="pre">EffectiveIndexSolver.get_ceq_function()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.two_layer.EffectiveIndexSolver.solve"><code class="docutils literal notranslate"><span class="pre">EffectiveIndexSolver.solve()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_LP_field"><code class="docutils literal notranslate"><span class="pre">EffectiveIndexSolver.get_LP_field()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_TE_field"><code class="docutils literal notranslate"><span class="pre">EffectiveIndexSolver.get_TE_field()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_TM_field"><code class="docutils literal notranslate"><span class="pre">EffectiveIndexSolver.get_TM_field()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_HE_field"><code class="docutils literal notranslate"><span class="pre">EffectiveIndexSolver.get_HE_field()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_EH_field"><code class="docutils literal notranslate"><span class="pre">EffectiveIndexSolver.get_EH_field()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_U_W_V_parameter"><code class="docutils literal notranslate"><span class="pre">EffectiveIndexSolver.get_U_W_V_parameter()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_LP_equation"><code class="docutils literal notranslate"><span class="pre">EffectiveIndexSolver.get_LP_equation()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_TE_equation"><code class="docutils literal notranslate"><span class="pre">EffectiveIndexSolver.get_TE_equation()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_TM_equation"><code class="docutils literal notranslate"><span class="pre">EffectiveIndexSolver.get_TM_equation()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_HE_EH_terms"><code class="docutils literal notranslate"><span class="pre">EffectiveIndexSolver.get_HE_EH_terms()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_HE_equation"><code class="docutils literal notranslate"><span class="pre">EffectiveIndexSolver.get_HE_equation()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.two_layer.EffectiveIndexSolver.get_EH_equation"><code class="docutils literal notranslate"><span class="pre">EffectiveIndexSolver.get_EH_equation()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.three_layer.CutoffSolver"><code class="docutils literal notranslate"><span class="pre">CutoffSolver</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.three_layer.CutoffSolver.get_lower_neff_mode"><code class="docutils literal notranslate"><span class="pre">CutoffSolver.get_lower_neff_mode()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.three_layer.CutoffSolver.solve"><code class="docutils literal notranslate"><span class="pre">CutoffSolver.solve()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.three_layer.CutoffSolver.get_parameters"><code class="docutils literal notranslate"><span class="pre">CutoffSolver.get_parameters()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.multilayer.EffectiveIndexSolver"><code class="docutils literal notranslate"><span class="pre">EffectiveIndexSolver</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_neff_lower_boundary"><code class="docutils literal notranslate"><span class="pre">EffectiveIndexSolver.get_neff_lower_boundary()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.multilayer.EffectiveIndexSolver.solve"><code class="docutils literal notranslate"><span class="pre">EffectiveIndexSolver.solve()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_LP_field"><code class="docutils literal notranslate"><span class="pre">EffectiveIndexSolver.get_LP_field()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_LP_field_from_parameters"><code class="docutils literal notranslate"><span class="pre">EffectiveIndexSolver.get_LP_field_from_parameters()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_TE_field"><code class="docutils literal notranslate"><span class="pre">EffectiveIndexSolver.get_TE_field()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_TM_field"><code class="docutils literal notranslate"><span class="pre">EffectiveIndexSolver.get_TM_field()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_EH_field"><code class="docutils literal notranslate"><span class="pre">EffectiveIndexSolver.get_EH_field()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_HE_field"><code class="docutils literal notranslate"><span class="pre">EffectiveIndexSolver.get_HE_field()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_LP_equation"><code class="docutils literal notranslate"><span class="pre">EffectiveIndexSolver.get_LP_equation()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_TE_equation"><code class="docutils literal notranslate"><span class="pre">EffectiveIndexSolver.get_TE_equation()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_TM_equation"><code class="docutils literal notranslate"><span class="pre">EffectiveIndexSolver.get_TM_equation()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_HE_equation"><code class="docutils literal notranslate"><span class="pre">EffectiveIndexSolver.get_HE_equation()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_EH_equation"><code class="docutils literal notranslate"><span class="pre">EffectiveIndexSolver.get_EH_equation()</span></code></a></li>
 </ul>
 </li>
 </ul>

@@ -22,6 +22,23 @@ Runtime varies by machine; trends are more meaningful than absolute values.
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="Compare separate field-component requests with the batched API that shares radial and angular intermediates.">
+
+.. only:: html
+
+  .. image:: /gallery/benchmarks/images/thumb/sphx_glr_plot_component_batching_speedup_thumb.png
+    :alt:
+
+  :doc:`/gallery/benchmarks/plot_component_batching_speedup`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Component batching</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="Measure the cost of evaluating three vector components on increasing grids.">
 
 .. only:: html
@@ -37,6 +54,23 @@ Runtime varies by machine; trends are more meaningful than absolute values.
     </div>
 
 
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Compare the first effective-index solution with a repeated lookup served by the geometry-aware modal cache.">
+
+.. only:: html
+
+  .. image:: /gallery/benchmarks/images/thumb/sphx_glr_plot_modal_cache_speedup_thumb.png
+    :alt:
+
+  :doc:`/gallery/benchmarks/plot_modal_cache_speedup`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Modal-cache speedup</div>
+    </div>
+
+
 .. thumbnail-parent-div-close
 
 .. raw:: html
@@ -47,7 +81,9 @@ Runtime varies by machine; trends are more meaningful than absolute values.
 .. toctree::
    :hidden:
 
+   /gallery/benchmarks/plot_component_batching_speedup
    /gallery/benchmarks/plot_field_grid_scaling
+   /gallery/benchmarks/plot_modal_cache_speedup
 
 
 

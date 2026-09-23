@@ -1,0 +1,1283 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PyFiberModes.solver.multilayer.effective_index &#8212; PyFiberModes  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/docs/source/_static/default.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/default.css?v=94474078" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../../_static/sg-tags.js?v=d80f6fa4"></script>
+    <script src="../../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/PyFiberModes/solver/multilayer/effective_index';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.17.1';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/MartinPdeS/PyFiberModes/documentation_page/version_switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'v0.13.2';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="icon" href="../../../../_static/favicon.png"/>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.13.2" />
+  
+    
+    <script src="../../../../_static/searchtools.js"></script>
+    <script src="../../../../_static/language_data.js"></script>
+    <script src="../../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../../_static/thumbnail.png" class="logo__image only-light" alt=""/>
+    <img src="../../../../_static/thumbnail.png" class="logo__image only-dark pst-js-only" alt=""/>
+  
+  
+    <p class="title logo__title">PyFiberModes</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../getting_started.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../theory.html">
+    Theory and conventions
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../architecture.html">
+    Architecture
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../workflows.html">
+    Workflows
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../performance.html">
+    Performance
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../../troubleshooting.html">
+    Troubleshooting
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../../examples.html">
+    Example galleries
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../../code.html">
+    API reference
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../../references.html">
+    References
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/MartinPdeS/PyFiberModes" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/PyFiberModes/" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-solid fa-box fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">PyPI</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://anaconda.org/MartinPdeS/PyFiberModes" title="Anaconda" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-python fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Anaconda</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../getting_started.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../theory.html">
+    Theory and conventions
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../architecture.html">
+    Architecture
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../workflows.html">
+    Workflows
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../performance.html">
+    Performance
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../troubleshooting.html">
+    Troubleshooting
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../examples.html">
+    Example galleries
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../code.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../references.html">
+    References
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/MartinPdeS/PyFiberModes" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/PyFiberModes/" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-solid fa-box fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">PyPI</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://anaconda.org/MartinPdeS/PyFiberModes" title="Anaconda" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-python fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Anaconda</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">PyFiberModes.solver.multilayer.effective_index</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for PyFiberModes.solver.multilayer.effective_index</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Effective-index solver for multilayer step-index fibers."""</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.special</span><span class="w"> </span><span class="kn">import</span> <span class="n">kn</span><span class="p">,</span> <span class="n">kvp</span><span class="p">,</span> <span class="n">k0</span><span class="p">,</span> <span class="n">k1</span><span class="p">,</span> <span class="n">jn</span><span class="p">,</span> <span class="n">jvp</span><span class="p">,</span> <span class="n">yn</span><span class="p">,</span> <span class="n">yvp</span><span class="p">,</span> <span class="n">iv</span><span class="p">,</span> <span class="n">ivp</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">mu_0</span><span class="p">,</span> <span class="n">epsilon_0</span><span class="p">,</span> <span class="n">physical_constants</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes.solver.base_solver</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseSolver</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes.mode</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mode</span>
+
+<span class="n">eta0</span> <span class="o">=</span> <span class="n">physical_constants</span><span class="p">[</span><span class="s1">'characteristic impedance of vacuum'</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="EffectiveIndexSolver">
+<a class="viewcode-back" href="../../../../code/analysis.html#PyFiberModes.solver.multilayer.EffectiveIndexSolver">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">EffectiveIndexSolver</span><span class="p">(</span><span class="n">BaseSolver</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Solve effective indices for arbitrary multilayer step-index fibers.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fiber : Fiber</span>
+<span class="sd">        Multilayer fiber to solve.</span>
+<span class="sd">    wavelength : float</span>
+<span class="sd">        Vacuum wavelength in meters.</span>
+<span class="sd">    """</span>
+<div class="viewcode-block" id="EffectiveIndexSolver.get_neff_lower_boundary">
+<a class="viewcode-back" href="../../../../code/analysis.html#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_neff_lower_boundary">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_neff_lower_boundary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">,</span> <span class="n">delta_neff</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-6</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Gets the lower boundary for neff value.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mode : Mode</span>
+<span class="sd">            The mode to evaluate</span>
+<span class="sd">        delta_neff : float</span>
+<span class="sd">            The delta neff</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            The neff lower boundary.</span>
+<span class="sd">        """</span>
+        <span class="n">lower_order_mode</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">mode</span><span class="o">.</span><span class="n">family</span> <span class="o">==</span> <span class="s1">'HE'</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">mode</span><span class="o">.</span><span class="n">m</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">lower_order_mode</span> <span class="o">=</span> <span class="n">Mode</span><span class="p">(</span><span class="s1">'EH'</span><span class="p">,</span> <span class="n">mode</span><span class="o">.</span><span class="n">nu</span><span class="p">,</span> <span class="n">mode</span><span class="o">.</span><span class="n">m</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">mode</span><span class="o">.</span><span class="n">family</span> <span class="o">==</span> <span class="s1">'EH'</span><span class="p">:</span>
+            <span class="n">lower_order_mode</span> <span class="o">=</span> <span class="n">Mode</span><span class="p">(</span><span class="s1">'HE'</span><span class="p">,</span> <span class="n">mode</span><span class="o">.</span><span class="n">nu</span><span class="p">,</span> <span class="n">mode</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">mode</span><span class="o">.</span><span class="n">m</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">lower_order_mode</span> <span class="o">=</span> <span class="n">Mode</span><span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">family</span><span class="p">,</span> <span class="n">mode</span><span class="o">.</span><span class="n">nu</span><span class="p">,</span> <span class="n">mode</span><span class="o">.</span><span class="n">m</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">lower_order_mode</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">lower_neff_boundary</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">maximum_index</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">lower_neff_boundary</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">get_effective_index</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">lower_order_mode</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">numpy</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">lower_neff_boundary</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">lower_neff_boundary</span>
+
+        <span class="k">if</span> <span class="n">mode</span><span class="o">.</span><span class="n">family</span> <span class="o">==</span> <span class="s1">'LP'</span> <span class="ow">and</span> <span class="n">mode</span><span class="o">.</span><span class="n">nu</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">pm</span> <span class="o">=</span> <span class="n">Mode</span><span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">family</span><span class="p">,</span> <span class="n">mode</span><span class="o">.</span><span class="n">nu</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">mode</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+
+            <span class="n">lb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">get_effective_index</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">pm</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">numpy</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">lb</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">lb</span>
+
+            <span class="n">lower_neff_boundary</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">lower_neff_boundary</span><span class="p">,</span> <span class="n">lb</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">lower_neff_boundary</span></div>
+
+
+<div class="viewcode-block" id="EffectiveIndexSolver.solve">
+<a class="viewcode-back" href="../../../../code/analysis.html#PyFiberModes.solver.multilayer.EffectiveIndexSolver.solve">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">solve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">,</span> <span class="n">delta_neff</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Find an effective-index root for a mode.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mode : Mode</span>
+<span class="sd">            Mode whose effective index is requested.</span>
+<span class="sd">        delta_neff : float</span>
+<span class="sd">            Maximum effective-index search step.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            Effective index, or ``numpy.nan`` when no valid interval exists.</span>
+<span class="sd">        """</span>
+        <span class="n">higher_neff_boundary</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_neff_lower_boundary</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span>
+
+        <span class="n">lower_neff_boundary</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">last_layer</span><span class="o">.</span><span class="n">refractive_index</span>
+
+        <span class="k">match</span> <span class="n">mode</span><span class="o">.</span><span class="n">family</span><span class="p">:</span>
+            <span class="k">case</span> <span class="s1">'LP'</span><span class="p">:</span>
+                <span class="n">function</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_LP_equation</span>
+            <span class="k">case</span> <span class="s1">'TE'</span><span class="p">:</span>
+                <span class="n">function</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_TE_equation</span>
+            <span class="k">case</span> <span class="s1">'TM'</span><span class="p">:</span>
+                <span class="n">function</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_TM_equation</span>
+            <span class="k">case</span> <span class="s1">'HE'</span><span class="p">:</span>
+                <span class="n">function</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_HE_equation</span>
+            <span class="k">case</span> <span class="s1">'EH'</span><span class="p">:</span>
+                <span class="n">function</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_HE_equation</span>
+
+        <span class="k">if</span> <span class="n">higher_neff_boundary</span> <span class="o">&lt;=</span> <span class="n">lower_neff_boundary</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"Impossible bound"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">nan</span>
+
+        <span class="n">delta_boundary</span> <span class="o">=</span> <span class="p">(</span><span class="n">higher_neff_boundary</span> <span class="o">-</span> <span class="n">lower_neff_boundary</span><span class="p">)</span> <span class="o">/</span> <span class="mi">100</span>
+        <span class="n">delta_neff</span> <span class="o">=</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="n">delta_neff</span><span class="p">,</span> <span class="n">delta_boundary</span><span class="p">)</span>
+
+        <span class="n">extra</span> <span class="o">=</span> <span class="mf">1e-13</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_function_first_root</span><span class="p">(</span>
+                <span class="n">function</span><span class="o">=</span><span class="n">function</span><span class="p">,</span>
+                <span class="n">function_args</span><span class="o">=</span><span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">nu</span><span class="p">,),</span>
+                <span class="n">lowbound</span><span class="o">=</span><span class="n">higher_neff_boundary</span> <span class="o">-</span> <span class="n">extra</span><span class="p">,</span>
+                <span class="n">highbound</span><span class="o">=</span><span class="n">lower_neff_boundary</span> <span class="o">+</span> <span class="n">extra</span><span class="p">,</span>
+                <span class="n">delta</span><span class="o">=</span><span class="n">delta_neff</span>
+            <span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">nan</span>
+
+        <span class="k">return</span> <span class="n">value</span></div>
+
+
+<div class="viewcode-block" id="EffectiveIndexSolver.get_LP_field">
+<a class="viewcode-back" href="../../../../code/analysis.html#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_LP_field">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_LP_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nu</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">neff</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""        Gets the :math:`LP_{</span>
+<span class="sd">        u, m}` mode field.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        nu : int</span>
+<span class="sd">            The nu parameter of the LP mode</span>
+<span class="sd">        neff : float</span>
+<span class="sd">            The effective index</span>
+<span class="sd">        radius : float</span>
+<span class="sd">            The radius for evaluation</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        tuple[float, float]</span>
+<span class="sd">            The LP electric and magnetic field in a tuple.</span>
+<span class="sd">        """</span>
+        <span class="n">C</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">layer_in</span><span class="p">,</span> <span class="n">layer_out</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">iterate_interfaces</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">radius</span> <span class="o">&lt;</span> <span class="n">layer_in</span><span class="o">.</span><span class="n">radius_out</span><span class="p">:</span>
+                <span class="n">eval_layer</span> <span class="o">=</span> <span class="n">layer_in</span>
+                <span class="k">break</span>
+
+            <span class="n">A</span> <span class="o">=</span> <span class="n">layer_in</span><span class="o">.</span><span class="n">get_psi</span><span class="p">(</span>
+                <span class="n">radius</span><span class="o">=</span><span class="n">layer_in</span><span class="o">.</span><span class="n">radius_out</span><span class="p">,</span>
+                <span class="n">neff</span><span class="o">=</span><span class="n">neff</span><span class="p">,</span>
+                <span class="n">nu</span><span class="o">=</span><span class="n">nu</span><span class="p">,</span>
+                <span class="n">C</span><span class="o">=</span><span class="n">C</span>
+            <span class="p">)</span>
+
+            <span class="n">C</span> <span class="o">=</span> <span class="n">layer_out</span><span class="o">.</span><span class="n">get_LP_constants</span><span class="p">(</span>
+                <span class="n">radius</span><span class="o">=</span><span class="n">layer_in</span><span class="o">.</span><span class="n">radius_out</span><span class="p">,</span>
+                <span class="n">neff</span><span class="o">=</span><span class="n">neff</span><span class="p">,</span>
+                <span class="n">nu</span><span class="o">=</span><span class="n">nu</span><span class="p">,</span>
+                <span class="n">A</span><span class="o">=</span><span class="n">A</span>
+            <span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">eval_layer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">last_layer</span>
+
+            <span class="n">u</span> <span class="o">=</span> <span class="n">eval_layer</span><span class="o">.</span><span class="n">get_U_W_parameter</span><span class="p">(</span>
+                <span class="n">radius</span><span class="o">=</span><span class="n">eval_layer</span><span class="o">.</span><span class="n">radius_in</span><span class="p">,</span>
+                <span class="n">neff</span><span class="o">=</span><span class="n">neff</span>
+            <span class="p">)</span>
+
+            <span class="n">C</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">kn</span><span class="p">(</span><span class="n">nu</span><span class="p">,</span> <span class="n">u</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_LP_field_from_parameters</span><span class="p">(</span>
+            <span class="n">eval_layer</span><span class="o">=</span><span class="n">eval_layer</span><span class="p">,</span>
+            <span class="n">radius</span><span class="o">=</span><span class="n">radius</span><span class="p">,</span>
+            <span class="n">neff</span><span class="o">=</span><span class="n">neff</span><span class="p">,</span>
+            <span class="n">nu</span><span class="o">=</span><span class="n">nu</span><span class="p">,</span>
+            <span class="n">C</span><span class="o">=</span><span class="n">C</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="EffectiveIndexSolver.get_LP_field_from_parameters">
+<a class="viewcode-back" href="../../../../code/analysis.html#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_LP_field_from_parameters">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_LP_field_from_parameters</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">eval_layer</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span>
+            <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+            <span class="n">neff</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+            <span class="n">nu</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+            <span class="n">C</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Gets the LP field evaluation from parameters.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        eval_layer : object</span>
+<span class="sd">            The layer at which the field is evaluated</span>
+<span class="sd">        radius : float</span>
+<span class="sd">            The radius for evaluation</span>
+<span class="sd">        neff : float</span>
+<span class="sd">            The effective index</span>
+<span class="sd">        nu : int</span>
+<span class="sd">            The nu parameter of the LP mode</span>
+<span class="sd">        C : tuple</span>
+<span class="sd">            Constants</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        tuple[float, float]</span>
+<span class="sd">            The LP field.</span>
+<span class="sd">        """</span>
+        <span class="n">ex</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">eval_layer</span><span class="o">.</span><span class="n">get_psi</span><span class="p">(</span>
+            <span class="n">radius</span><span class="o">=</span><span class="n">radius</span><span class="p">,</span>
+            <span class="n">neff</span><span class="o">=</span><span class="n">neff</span><span class="p">,</span>
+            <span class="n">nu</span><span class="o">=</span><span class="n">nu</span><span class="p">,</span>
+            <span class="n">C</span><span class="o">=</span><span class="n">C</span>
+        <span class="p">)</span>
+
+        <span class="n">hy</span> <span class="o">=</span> <span class="n">neff</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">epsilon_0</span> <span class="o">/</span> <span class="n">mu_0</span><span class="p">)</span> <span class="o">*</span> <span class="n">ex</span>
+
+        <span class="n">e_field</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">ex</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="n">h_field</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="n">hy</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">e_field</span><span class="p">,</span> <span class="n">h_field</span></div>
+
+
+<div class="viewcode-block" id="EffectiveIndexSolver.get_TE_field">
+<a class="viewcode-back" href="../../../../code/analysis.html#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_TE_field">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_TE_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">nu</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">neff</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Gets the transverse electric TE field.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        wavelength : float</span>
+<span class="sd">            Vacuum wavelength in meters.</span>
+<span class="sd">        nu : int</span>
+<span class="sd">            The radial parameter of the mode</span>
+<span class="sd">        neff : float</span>
+<span class="sd">            The effective index of the mode</span>
+<span class="sd">        radius : float</span>
+<span class="sd">            The radius at which field is evaluated</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        tuple[float, float]</span>
+<span class="sd">            The TE field.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        NotImplementedError</span>
+<span class="sd">            Method not yet implemented</span>
+<span class="sd">        """</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="EffectiveIndexSolver.get_TM_field">
+<a class="viewcode-back" href="../../../../code/analysis.html#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_TM_field">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_TM_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">nu</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">neff</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Gets the transverse magnetic TM field.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        wavelength : float</span>
+<span class="sd">            Vacuum wavelength in meters.</span>
+<span class="sd">        nu : int</span>
+<span class="sd">            The radial parameter of the mode</span>
+<span class="sd">        neff : float</span>
+<span class="sd">            The effective index of the mode</span>
+<span class="sd">        radius : float</span>
+<span class="sd">            The radius at which field is evaluated</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        tuple[float, float]</span>
+<span class="sd">            The TM field.</span>
+<span class="sd">        """</span>
+        <span class="n">n_layer</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">layers</span><span class="p">)</span>
+        <span class="n">C</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="n">EH</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+        <span class="n">radius_in</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_layer</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">radius_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">get_outer_radius</span><span class="p">(</span><span class="n">layer_idx</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">layer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+            <span class="n">n</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">refractive_index</span>
+
+            <span class="n">u</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">get_U_W_parameter</span><span class="p">(</span><span class="n">radius</span><span class="o">=</span><span class="n">radius_out</span><span class="p">,</span> <span class="n">neff</span><span class="o">=</span><span class="n">neff</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">C</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">get_TE_TM_constants</span><span class="p">(</span>
+                    <span class="n">radius_in</span><span class="o">=</span><span class="n">radius_in</span><span class="p">,</span>
+                    <span class="n">radius_out</span><span class="o">=</span><span class="n">radius_out</span><span class="p">,</span>
+                    <span class="n">neff</span><span class="o">=</span><span class="n">neff</span><span class="p">,</span>
+                    <span class="n">EH</span><span class="o">=</span><span class="n">EH</span><span class="p">,</span>
+                    <span class="n">c</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">epsilon_0</span> <span class="o">/</span> <span class="n">mu_0</span><span class="p">)</span> <span class="o">*</span> <span class="n">n</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span>
+                    <span class="n">idx</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+                <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">radius</span> <span class="o">&lt;</span> <span class="n">radius_out</span><span class="p">:</span>
+                <span class="k">break</span>
+
+            <span class="k">if</span> <span class="n">neff</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">:</span>
+                <span class="n">c1</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span><span class="p">)</span> <span class="o">*</span> <span class="n">radius_out</span> <span class="o">/</span> <span class="n">u</span>
+                <span class="n">F3</span> <span class="o">=</span> <span class="n">jvp</span><span class="p">(</span><span class="n">nu</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span> <span class="o">/</span> <span class="n">jn</span><span class="p">(</span><span class="n">nu</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span>
+                <span class="n">F4</span> <span class="o">=</span> <span class="n">yvp</span><span class="p">(</span><span class="n">nu</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span> <span class="o">/</span> <span class="n">yn</span><span class="p">(</span><span class="n">nu</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">c1</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span><span class="p">)</span> <span class="o">*</span> <span class="n">radius_out</span> <span class="o">/</span> <span class="n">u</span>
+                <span class="n">F3</span> <span class="o">=</span> <span class="n">ivp</span><span class="p">(</span><span class="n">nu</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span> <span class="o">/</span> <span class="n">iv</span><span class="p">(</span><span class="n">nu</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span>
+                <span class="n">F4</span> <span class="o">=</span> <span class="n">kvp</span><span class="p">(</span><span class="n">nu</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span> <span class="o">/</span> <span class="n">kn</span><span class="p">(</span><span class="n">nu</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span>
+
+            <span class="n">c4</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">epsilon_0</span> <span class="o">/</span> <span class="n">mu_0</span><span class="p">)</span> <span class="o">*</span> <span class="n">n</span> <span class="o">*</span> <span class="n">n</span> <span class="o">*</span> <span class="n">c1</span>
+
+            <span class="n">EH</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">C</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">C</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">EH</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">c4</span> <span class="o">*</span> <span class="p">(</span><span class="n">F3</span> <span class="o">*</span> <span class="n">C</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">F4</span> <span class="o">*</span> <span class="n">C</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+            <span class="n">radius_in</span> <span class="o">=</span> <span class="n">radius_out</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">u</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">last_layer</span><span class="o">.</span><span class="n">get_U_W_parameter</span><span class="p">(</span><span class="n">radius</span><span class="o">=</span><span class="n">radius_out</span><span class="p">,</span> <span class="n">neff</span><span class="o">=</span><span class="n">neff</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="n">ephi</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">hr</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">hz</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="EffectiveIndexSolver.get_EH_field">
+<a class="viewcode-back" href="../../../../code/analysis.html#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_EH_field">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_EH_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nu</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">neff</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Gets the hybrid EH field.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        nu : int</span>
+<span class="sd">            The radial parameter of the mode</span>
+<span class="sd">        neff : float</span>
+<span class="sd">            The effective index of the mode</span>
+<span class="sd">        radius : float</span>
+<span class="sd">            The radius at which field is evaluated</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        tuple[float, float]</span>
+<span class="sd">            The EH field.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_HE_field</span><span class="p">(</span>
+            <span class="n">nu</span><span class="o">=</span><span class="n">nu</span><span class="p">,</span>
+            <span class="n">neff</span><span class="o">=</span><span class="n">neff</span><span class="p">,</span>
+            <span class="n">radius</span><span class="o">=</span><span class="n">radius</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="EffectiveIndexSolver.get_HE_field">
+<a class="viewcode-back" href="../../../../code/analysis.html#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_HE_field">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_HE_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nu</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">neff</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Gets the hybrid HE field.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        nu : int</span>
+<span class="sd">            The radial parameter of the mode</span>
+<span class="sd">        neff : float</span>
+<span class="sd">            The effective index of the mode</span>
+<span class="sd">        radius : float</span>
+<span class="sd">            The radius at which field is evaluated</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        tuple[float, float]</span>
+<span class="sd">            The HE field.</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_HE_equation</span><span class="p">(</span><span class="n">neff</span><span class="o">=</span><span class="n">neff</span><span class="p">,</span> <span class="n">nu</span><span class="o">=</span><span class="n">nu</span><span class="p">)</span>
+
+        <span class="n">layer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">get_layer_at_radius</span><span class="p">(</span><span class="n">radius</span><span class="p">)</span>
+
+        <span class="n">rho</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">radius_out</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">layer</span><span class="o">.</span><span class="n">is_last_layer</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">penultimate_layer</span><span class="o">.</span><span class="n">radius_out</span>
+
+        <span class="n">u</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">get_U_W_parameter</span><span class="p">(</span><span class="n">radius</span><span class="o">=</span><span class="n">rho</span><span class="p">,</span> <span class="n">neff</span><span class="o">=</span><span class="n">neff</span><span class="p">)</span>
+
+        <span class="n">urp</span> <span class="o">=</span> <span class="n">u</span> <span class="o">*</span> <span class="n">radius</span> <span class="o">/</span> <span class="n">rho</span>
+
+        <span class="n">c1</span> <span class="o">=</span> <span class="n">rho</span> <span class="o">/</span> <span class="n">u</span>
+        <span class="n">c2</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span><span class="p">)</span> <span class="o">*</span> <span class="n">c1</span>
+        <span class="n">c3</span> <span class="o">=</span> <span class="n">nu</span> <span class="o">*</span> <span class="n">c1</span> <span class="o">/</span> <span class="n">radius</span> <span class="k">if</span> <span class="n">radius</span> <span class="k">else</span> <span class="mi">0</span>  <span class="c1"># To avoid div by 0</span>
+        <span class="n">c6</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">epsilon_0</span> <span class="o">/</span> <span class="n">mu_0</span><span class="p">)</span> <span class="o">*</span> <span class="n">layer</span><span class="o">.</span><span class="n">refractive_index</span><span class="o">**</span><span class="mi">2</span>
+
+        <span class="k">if</span> <span class="n">neff</span> <span class="o">&lt;</span> <span class="n">layer</span><span class="o">.</span><span class="n">refractive_index</span><span class="p">:</span>
+            <span class="n">B1</span> <span class="o">=</span> <span class="n">jn</span><span class="p">(</span><span class="n">nu</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span>
+            <span class="n">B2</span> <span class="o">=</span> <span class="n">yn</span><span class="p">(</span><span class="n">nu</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span>
+            <span class="n">F1</span> <span class="o">=</span> <span class="n">jn</span><span class="p">(</span><span class="n">nu</span><span class="p">,</span> <span class="n">urp</span><span class="p">)</span> <span class="o">/</span> <span class="n">B1</span>
+            <span class="n">F2</span> <span class="o">=</span> <span class="n">yn</span><span class="p">(</span><span class="n">nu</span><span class="p">,</span> <span class="n">urp</span><span class="p">)</span> <span class="o">/</span> <span class="n">B2</span> <span class="k">if</span> <span class="n">layer</span><span class="o">.</span><span class="n">radius_in</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
+            <span class="n">F3</span> <span class="o">=</span> <span class="n">jvp</span><span class="p">(</span><span class="n">nu</span><span class="p">,</span> <span class="n">urp</span><span class="p">)</span> <span class="o">/</span> <span class="n">B1</span>
+            <span class="n">F4</span> <span class="o">=</span> <span class="n">yvp</span><span class="p">(</span><span class="n">nu</span><span class="p">,</span> <span class="n">urp</span><span class="p">)</span> <span class="o">/</span> <span class="n">B2</span> <span class="k">if</span> <span class="n">layer</span><span class="o">.</span><span class="n">radius_in</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">c2</span> <span class="o">=</span> <span class="o">-</span><span class="n">c2</span>
+            <span class="n">B1</span> <span class="o">=</span> <span class="n">iv</span><span class="p">(</span><span class="n">nu</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span>
+            <span class="n">B2</span> <span class="o">=</span> <span class="n">kn</span><span class="p">(</span><span class="n">nu</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span>
+            <span class="n">F1</span> <span class="o">=</span> <span class="n">iv</span><span class="p">(</span><span class="n">nu</span><span class="p">,</span> <span class="n">urp</span><span class="p">)</span> <span class="o">/</span> <span class="n">B1</span>
+            <span class="n">F2</span> <span class="o">=</span> <span class="n">kn</span><span class="p">(</span><span class="n">nu</span><span class="p">,</span> <span class="n">urp</span><span class="p">)</span> <span class="o">/</span> <span class="n">B2</span> <span class="k">if</span> <span class="n">layer</span><span class="o">.</span><span class="n">radius_in</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
+            <span class="n">F3</span> <span class="o">=</span> <span class="n">ivp</span><span class="p">(</span><span class="n">nu</span><span class="p">,</span> <span class="n">urp</span><span class="p">)</span> <span class="o">/</span> <span class="n">B1</span>
+            <span class="n">F4</span> <span class="o">=</span> <span class="n">kvp</span><span class="p">(</span><span class="n">nu</span><span class="p">,</span> <span class="n">urp</span><span class="p">)</span> <span class="o">/</span> <span class="n">B2</span> <span class="k">if</span> <span class="n">layer</span><span class="o">.</span><span class="n">radius_in</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
+
+        <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">Ap</span><span class="p">,</span> <span class="n">Bp</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">C</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">layer</span><span class="o">.</span><span class="n">C</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span>
+
+        <span class="n">Ez</span> <span class="o">=</span> <span class="n">A</span> <span class="o">*</span> <span class="n">F1</span> <span class="o">+</span> <span class="n">B</span> <span class="o">*</span> <span class="n">F2</span>
+        <span class="n">Ezp</span> <span class="o">=</span> <span class="n">A</span> <span class="o">*</span> <span class="n">F3</span> <span class="o">+</span> <span class="n">B</span> <span class="o">*</span> <span class="n">F4</span>
+        <span class="n">Hz</span> <span class="o">=</span> <span class="n">Ap</span> <span class="o">*</span> <span class="n">F1</span> <span class="o">+</span> <span class="n">Bp</span> <span class="o">*</span> <span class="n">F2</span>
+        <span class="n">Hzp</span> <span class="o">=</span> <span class="n">Ap</span> <span class="o">*</span> <span class="n">F3</span> <span class="o">+</span> <span class="n">Bp</span> <span class="o">*</span> <span class="n">F4</span>
+
+        <span class="k">if</span> <span class="n">radius</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">nu</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># Asymptotic expansion of Ez (or Hz):</span>
+            <span class="c1"># J1(ur/p)/r (r-&gt;0) = u/(2p)</span>
+            <span class="k">if</span> <span class="n">neff</span> <span class="o">&lt;</span> <span class="n">layer</span><span class="o">.</span><span class="n">refractive_index</span><span class="p">:</span>
+                <span class="n">f</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">jn</span><span class="p">(</span><span class="n">nu</span><span class="p">,</span> <span class="n">u</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">f</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">iv</span><span class="p">(</span><span class="n">nu</span><span class="p">,</span> <span class="n">u</span><span class="p">))</span>
+            <span class="n">c3ez</span> <span class="o">=</span> <span class="n">A</span> <span class="o">*</span> <span class="n">f</span>
+            <span class="n">c3hz</span> <span class="o">=</span> <span class="n">Ap</span> <span class="o">*</span> <span class="n">f</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">c3ez</span> <span class="o">=</span> <span class="n">c3</span> <span class="o">*</span> <span class="n">Ez</span>
+            <span class="n">c3hz</span> <span class="o">=</span> <span class="n">c3</span> <span class="o">*</span> <span class="n">Hz</span>
+
+        <span class="n">Er</span> <span class="o">=</span> <span class="n">c2</span> <span class="o">*</span> <span class="p">(</span><span class="n">neff</span> <span class="o">*</span> <span class="n">Ezp</span> <span class="o">-</span> <span class="n">eta0</span> <span class="o">*</span> <span class="n">c3hz</span><span class="p">)</span>
+        <span class="n">Ep</span> <span class="o">=</span> <span class="n">c2</span> <span class="o">*</span> <span class="p">(</span><span class="n">neff</span> <span class="o">*</span> <span class="n">c3ez</span> <span class="o">-</span> <span class="n">eta0</span> <span class="o">*</span> <span class="n">Hzp</span><span class="p">)</span>
+
+        <span class="n">Hr</span> <span class="o">=</span> <span class="n">c2</span> <span class="o">*</span> <span class="p">(</span><span class="n">neff</span> <span class="o">*</span> <span class="n">Hzp</span> <span class="o">-</span> <span class="n">c6</span> <span class="o">*</span> <span class="n">c3ez</span><span class="p">)</span>
+        <span class="n">Hp</span> <span class="o">=</span> <span class="n">c2</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="n">neff</span> <span class="o">*</span> <span class="n">c3hz</span> <span class="o">+</span> <span class="n">c6</span> <span class="o">*</span> <span class="n">Ezp</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">Er</span><span class="p">,</span> <span class="n">Ep</span><span class="p">,</span> <span class="n">Ez</span><span class="p">)),</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">Hr</span><span class="p">,</span> <span class="n">Hp</span><span class="p">,</span> <span class="n">Hz</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="EffectiveIndexSolver.get_LP_equation">
+<a class="viewcode-back" href="../../../../code/analysis.html#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_LP_equation">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_LP_equation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">neff</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">nu</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Evaluate the multilayer LP characteristic equation.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        neff : float</span>
+<span class="sd">            Trial effective index.</span>
+<span class="sd">        nu : int</span>
+<span class="sd">            Azimuthal order.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            Characteristic-equation residual.</span>
+<span class="sd">        """</span>
+        <span class="n">C</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">n_interface</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">C</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="k">for</span> <span class="n">layer_in</span><span class="p">,</span> <span class="n">layer_out</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">iterate_interfaces</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">layer_out</span><span class="o">.</span><span class="n">is_last_layer</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="n">A</span> <span class="o">=</span> <span class="n">layer_in</span><span class="o">.</span><span class="n">get_psi</span><span class="p">(</span>
+                <span class="n">radius</span><span class="o">=</span><span class="n">layer_out</span><span class="o">.</span><span class="n">radius_in</span><span class="p">,</span>
+                <span class="n">neff</span><span class="o">=</span><span class="n">neff</span><span class="p">,</span>
+                <span class="n">nu</span><span class="o">=</span><span class="n">nu</span><span class="p">,</span>
+                <span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">[</span><span class="n">layer_in</span><span class="o">.</span><span class="n">position</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="p">)</span>
+
+            <span class="n">C</span><span class="p">[</span><span class="n">layer_out</span><span class="o">.</span><span class="n">position</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">layer_out</span><span class="o">.</span><span class="n">get_LP_constants</span><span class="p">(</span>
+                <span class="n">radius</span><span class="o">=</span><span class="n">layer_out</span><span class="o">.</span><span class="n">radius_in</span><span class="p">,</span>
+                <span class="n">neff</span><span class="o">=</span><span class="n">neff</span><span class="p">,</span>
+                <span class="n">nu</span><span class="o">=</span><span class="n">nu</span><span class="p">,</span>
+                <span class="n">A</span><span class="o">=</span><span class="n">A</span>
+            <span class="p">)</span>
+
+        <span class="n">A</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">penultimate_layer</span><span class="o">.</span><span class="n">get_psi</span><span class="p">(</span>
+            <span class="n">radius</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">last_layer</span><span class="o">.</span><span class="n">radius_in</span><span class="p">,</span>
+            <span class="n">neff</span><span class="o">=</span><span class="n">neff</span><span class="p">,</span>
+            <span class="n">nu</span><span class="o">=</span><span class="n">nu</span><span class="p">,</span>
+            <span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="p">)</span>
+
+        <span class="n">u</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">last_layer</span><span class="o">.</span><span class="n">get_U_W_parameter</span><span class="p">(</span>
+            <span class="n">radius</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">last_layer</span><span class="o">.</span><span class="n">radius_in</span><span class="p">,</span>
+            <span class="n">neff</span><span class="o">=</span><span class="n">neff</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">u</span> <span class="o">*</span> <span class="n">kvp</span><span class="p">(</span><span class="n">nu</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span> <span class="o">*</span> <span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">kn</span><span class="p">(</span><span class="n">nu</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span> <span class="o">*</span> <span class="n">A</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="EffectiveIndexSolver.get_TE_equation">
+<a class="viewcode-back" href="../../../../code/analysis.html#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_TE_equation">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_TE_equation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">neff</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">nu</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Evaluate the multilayer TE characteristic equation.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        neff : float</span>
+<span class="sd">            Trial effective index.</span>
+<span class="sd">        nu : int</span>
+<span class="sd">            Azimuthal order.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            Characteristic-equation residual.</span>
+<span class="sd">        """</span>
+        <span class="n">EH</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">layers</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="n">layer</span><span class="o">.</span><span class="n">EH_fields</span><span class="p">(</span>
+                <span class="n">radius_in</span><span class="o">=</span><span class="n">layer</span><span class="o">.</span><span class="n">radius_in</span><span class="p">,</span>
+                <span class="n">radius_out</span><span class="o">=</span><span class="n">layer</span><span class="o">.</span><span class="n">radius_out</span><span class="p">,</span>
+                <span class="n">nu</span><span class="o">=</span><span class="n">nu</span><span class="p">,</span>
+                <span class="n">neff</span><span class="o">=</span><span class="n">neff</span><span class="p">,</span>
+                <span class="n">EH</span><span class="o">=</span><span class="n">EH</span><span class="p">,</span>
+                <span class="n">TM</span><span class="o">=</span><span class="kc">False</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Last layer</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">Hz</span><span class="p">,</span> <span class="n">Ep</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">EH</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">last_layer</span><span class="o">.</span><span class="n">get_U_W_parameter</span><span class="p">(</span>
+            <span class="n">radius</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">last_layer</span><span class="o">.</span><span class="n">radius_in</span><span class="p">,</span>
+            <span class="n">neff</span><span class="o">=</span><span class="n">neff</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">F4</span> <span class="o">=</span> <span class="n">k1</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="o">/</span> <span class="n">k0</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Ep</span> <span class="o">+</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">last_layer</span><span class="o">.</span><span class="n">radius_in</span> <span class="o">/</span> <span class="n">u</span> <span class="o">*</span> <span class="n">eta0</span> <span class="o">*</span> <span class="n">Hz</span> <span class="o">*</span> <span class="n">F4</span></div>
+
+
+<div class="viewcode-block" id="EffectiveIndexSolver.get_TM_equation">
+<a class="viewcode-back" href="../../../../code/analysis.html#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_TM_equation">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_TM_equation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">neff</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">nu</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Evaluate the multilayer TM characteristic equation.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        neff : float</span>
+<span class="sd">            Trial effective index.</span>
+<span class="sd">        nu : int</span>
+<span class="sd">            Azimuthal order.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            Characteristic-equation residual.</span>
+<span class="sd">        """</span>
+        <span class="n">EH</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">layers</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="n">layer</span><span class="o">.</span><span class="n">EH_fields</span><span class="p">(</span>
+                <span class="n">radius_in</span><span class="o">=</span><span class="n">layer</span><span class="o">.</span><span class="n">radius_in</span><span class="p">,</span>
+                <span class="n">radius_out</span><span class="o">=</span><span class="n">layer</span><span class="o">.</span><span class="n">radius_out</span><span class="p">,</span>
+                <span class="n">nu</span><span class="o">=</span><span class="n">nu</span><span class="p">,</span>
+                <span class="n">neff</span><span class="o">=</span><span class="n">neff</span><span class="p">,</span>
+                <span class="n">EH</span><span class="o">=</span><span class="n">EH</span><span class="p">,</span>
+                <span class="n">TM</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+
+        <span class="c1"># At last layer the equation are differents.</span>
+        <span class="n">Ez</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">Hp</span> <span class="o">=</span> <span class="n">EH</span>
+
+        <span class="n">u</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">last_layer</span><span class="o">.</span><span class="n">get_U_W_parameter</span><span class="p">(</span>
+            <span class="n">radius</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">last_layer</span><span class="o">.</span><span class="n">radius_in</span><span class="p">,</span>
+            <span class="n">neff</span><span class="o">=</span><span class="n">neff</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">F4</span> <span class="o">=</span> <span class="n">k1</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="o">/</span> <span class="n">k0</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">Hp</span> <span class="o">-</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">last_layer</span><span class="o">.</span><span class="n">radius_in</span> <span class="o">/</span> <span class="n">u</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">epsilon_0</span> <span class="o">/</span> <span class="n">mu_0</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">last_layer</span><span class="o">.</span><span class="n">refractive_index</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">Ez</span> <span class="o">*</span> <span class="n">F4</span></div>
+
+
+<div class="viewcode-block" id="EffectiveIndexSolver.get_HE_equation">
+<a class="viewcode-back" href="../../../../code/analysis.html#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_HE_equation">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_HE_equation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">neff</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">nu</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Evaluate the multilayer hybrid-mode characteristic equation.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        neff : float</span>
+<span class="sd">            Trial effective index.</span>
+<span class="sd">        nu : int</span>
+<span class="sd">            Azimuthal order.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            Determinant residual for the hybrid boundary conditions.</span>
+<span class="sd">        """</span>
+        <span class="n">EH</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">layers</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="n">layer</span><span class="o">.</span><span class="n">EH_fields</span><span class="p">(</span>
+                <span class="n">radius_in</span><span class="o">=</span><span class="n">layer</span><span class="o">.</span><span class="n">radius_in</span><span class="p">,</span>
+                <span class="n">radius_out</span><span class="o">=</span><span class="n">layer</span><span class="o">.</span><span class="n">radius_out</span><span class="p">,</span>
+                <span class="n">nu</span><span class="o">=</span><span class="n">nu</span><span class="p">,</span>
+                <span class="n">neff</span><span class="o">=</span><span class="n">neff</span><span class="p">,</span>
+                <span class="n">EH</span><span class="o">=</span><span class="n">EH</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Last layer</span>
+        <span class="n">C</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">C</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">EH</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">C</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">EH</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
+
+        <span class="n">last_layer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">last_layer</span><span class="o">.</span><span class="n">C</span> <span class="o">=</span> <span class="n">C</span>
+
+        <span class="n">u</span> <span class="o">=</span> <span class="n">last_layer</span><span class="o">.</span><span class="n">get_U_W_parameter</span><span class="p">(</span>
+            <span class="n">radius</span><span class="o">=</span><span class="n">last_layer</span><span class="o">.</span><span class="n">radius_in</span><span class="p">,</span>
+            <span class="n">neff</span><span class="o">=</span><span class="n">neff</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">F4</span> <span class="o">=</span> <span class="n">kvp</span><span class="p">(</span><span class="n">nu</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span> <span class="o">/</span> <span class="n">kn</span><span class="p">(</span><span class="n">nu</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span>
+        <span class="n">c1</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span><span class="p">)</span> <span class="o">*</span> <span class="n">last_layer</span><span class="o">.</span><span class="n">radius_in</span> <span class="o">/</span> <span class="n">u</span>
+        <span class="n">c2</span> <span class="o">=</span> <span class="n">neff</span> <span class="o">*</span> <span class="n">nu</span> <span class="o">/</span> <span class="n">u</span> <span class="o">*</span> <span class="n">c1</span>
+        <span class="n">c3</span> <span class="o">=</span> <span class="n">eta0</span> <span class="o">*</span> <span class="n">c1</span>
+        <span class="n">c4</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">epsilon_0</span> <span class="o">/</span> <span class="n">mu_0</span><span class="p">)</span> <span class="o">*</span> <span class="n">last_layer</span><span class="o">.</span><span class="n">refractive_index</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">c1</span>
+
+        <span class="n">E</span> <span class="o">=</span> <span class="n">EH</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span> <span class="o">-</span> <span class="p">(</span><span class="n">c2</span> <span class="o">*</span> <span class="n">EH</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">c3</span> <span class="o">*</span> <span class="n">F4</span> <span class="o">*</span> <span class="n">EH</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:])</span>
+        <span class="n">H</span> <span class="o">=</span> <span class="n">EH</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="p">:]</span> <span class="o">-</span> <span class="p">(</span><span class="n">c4</span> <span class="o">*</span> <span class="n">F4</span> <span class="o">*</span> <span class="n">EH</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">c2</span> <span class="o">*</span> <span class="n">EH</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:])</span>
+
+        <span class="k">if</span> <span class="n">E</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="o">-</span><span class="n">E</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">E</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="o">-</span><span class="n">H</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">H</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">E</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">H</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">E</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">H</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="EffectiveIndexSolver.get_EH_equation">
+<a class="viewcode-back" href="../../../../code/analysis.html#PyFiberModes.solver.multilayer.EffectiveIndexSolver.get_EH_equation">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_EH_equation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">neff</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">nu</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Evaluate the EH equation through the shared hybrid determinant.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        neff : float</span>
+<span class="sd">            Trial effective index.</span>
+<span class="sd">        nu : int</span>
+<span class="sd">            Azimuthal order.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            Hybrid characteristic-equation residual.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_HE_equation</span><span class="p">(</span>
+            <span class="n">neff</span><span class="o">=</span><span class="n">neff</span><span class="p">,</span>
+            <span class="n">nu</span><span class="o">=</span><span class="n">nu</span>
+        <span class="p">)</span></div>
+</div>
+
+
+<span class="c1"># -</span>
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2024, Martin Poinsinet de Sivry-Houle.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.0.4.
+    <br/>
+  </p>
+</div>
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.17.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
