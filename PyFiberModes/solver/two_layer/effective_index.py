@@ -515,14 +515,12 @@ class EffectiveIndexSolver(BaseSolver):
         return U, W, V
 
     def get_LP_equation(self, neff: float, nu: int) -> float:
-        """        Return the value of the phase matching equation for LP mode.
+        r"""Return the LP-mode characteristic equation residual.
 
-                .. math::
-                    U * j_{
-        u -1}(U) * k_{
-        u}(W) + W * j_{
-        u}(U) * k_{
-        u - 1}(W)
+        .. math::
+
+           U J_{\nu-1}(U) K_{\nu}(W)
+           + W J_{\nu}(U) K_{\nu-1}(W)
 
         Parameters
         ----------
@@ -534,7 +532,8 @@ class EffectiveIndexSolver(BaseSolver):
         Returns
         -------
         float
-            Dont know
+            Characteristic-equation residual; a mode solution occurs at a
+            root.
         """
         u, w, _ = self.get_U_W_V_parameter(neff=neff)
 

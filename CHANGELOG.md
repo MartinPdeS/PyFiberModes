@@ -6,6 +6,16 @@ use [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Rebuilt the documentation around a connected user guide covering units and
+  conventions, fiber and material definitions, mode selection, field
+  convergence, parameter sweeps, inverse design, coupled-mode propagation,
+  validation, and reproducibility.
+- Expanded the getting-started and theory pages with installation variants,
+  numerical checks, normalized propagation quantities, and guidance near
+  cutoff.
+
 ## [0.14.1] - 2026-09-23
 
 ## [0.14.0] - 2026-09-23

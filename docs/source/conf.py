@@ -99,6 +99,10 @@ language = "en"
 highlight_language = "python3"
 html_theme = "pydata_sphinx_theme"
 
+# ``sphinx_gallery_conf`` intentionally contains the ``reset_mpl`` callback,
+# which cannot be pickled into Sphinx's environment cache.
+suppress_warnings = ["config.cache"]
+
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
