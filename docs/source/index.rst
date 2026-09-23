@@ -12,14 +12,14 @@
     :maxdepth: 2
     :hidden:
 
-    getting_started.rst
-    theory.rst
-    architecture.rst
-    api_policy.rst
-    migration_guide.rst
-    workflows.rst
-    performance.rst
-    troubleshooting.rst
-    examples.rst
-    code.rst
-    references.rst
+    Getting started <getting_started.rst>
+    Theory <theory.rst>
+    Architecture <architecture.rst>
+    API policy <api_policy.rst>
+    Migration <migration_guide.rst>
+    Workflows <workflows.rst>
+    Performance <performance.rst>
+    Troubleshooting <troubleshooting.rst>
+    Examples <examples.rst>
+    API reference <code.rst>
+    References <references.rst>
