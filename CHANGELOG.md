@@ -6,6 +6,22 @@ use [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Published the definitive 1.0 public API table with units, mutation rules,
+  failure semantics, compatibility names, and CI-enforced signatures/defaults.
+- Added ``UnsupportedGeometryError`` to distinguish valid but unsupported
+  calculations from invalid input and numerical non-convergence.
+
+### Changed
+
+- ``Mode`` accepts both strings and ``Family`` members, requires positive
+  radial order, and raises ``ValidationError`` instead of runtime assertions.
+- Standardized expected missing roots, unsupported geometry, invalid input,
+  derivative failures, and structured solver diagnostics across analysis APIs.
+- Completed two-layer and multilayer solver assumptions, characteristic
+  equation residual documentation, units, and primary-reference attribution.
+
 ## [0.14.3] - 2026-09-23
 
 ### Fixed

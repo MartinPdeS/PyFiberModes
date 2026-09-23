@@ -21,7 +21,7 @@ from PyFiberModes.fundamentals import (
 
 from PyFiberModes import loader
 from PyFiberModes.coordinates import CylindricalCoordinates
-from PyFiberModes.exceptions import ValidationError
+from PyFiberModes.exceptions import ConvergenceError, ValidationError
 from PyFiberModes.materials import DEFAULT_MATERIALS, MaterialRegistry
 from PyFiberModes.services import FieldAnalysis, ModalAnalysis
 
@@ -668,7 +668,10 @@ class Fiber(object):
             function_kwargs=dict(fiber=self, mode=mode)
         )
 
-        return derivative * constants.c
+        value = derivative * constants.c
+        if not numpy.isfinite(value):
+            raise ConvergenceError(f"group-index derivative failed for {mode}")
+        return value
 
     def get_group_velocity(self, mode: Mode) -> float:
         """Compute the correctly named modal group velocity.
@@ -712,6 +715,10 @@ class Fiber(object):
             function_kwargs=dict(fiber=self, mode=mode)
         )
 
+        if not numpy.isfinite(derivative):
+            raise ConvergenceError(
+                f"group-velocity-dispersion derivative failed for {mode}"
+            )
         return derivative
 
     def get_dispersion(self, mode: Mode) -> float:
@@ -777,6 +784,9 @@ class Fiber(object):
             delta=1e12,  # This value is critical for accurate computation
             function_kwargs=dict(fiber=self, mode=mode)
         )
+
+        if not numpy.isfinite(derivative):
+            raise ConvergenceError(f"dispersion-slope derivative failed for {mode}")
 
         factor = 2 * numpy.pi * constants.c / self.wavelength**2
 
@@ -965,7 +975,10 @@ class Fiber(object):
             print(first_line, "-" * len(first_line))
             for mode in mode_list:
                 data_type_string = f"get_{data_type.lower()}"
-                data = getattr(self, data_type_string)(mode=mode)
+                try:
+                    data = getattr(self, data_type_string)(mode=mode)
+                except ConvergenceError:
+                    data = numpy.nan
                 output_string = f"{mode = } \t {data_type}: {data}"
                 print(output_string)
 

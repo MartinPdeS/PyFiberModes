@@ -17,6 +17,7 @@
     Theory <theory.rst>
     Architecture <architecture.rst>
     API policy <api_policy.rst>
+    Public API contract <public_api_contract.rst>
     Migration <migration_guide.rst>
     Workflows <workflows.rst>
     Performance <performance.rst>

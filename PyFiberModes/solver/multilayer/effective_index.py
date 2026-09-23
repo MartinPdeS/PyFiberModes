@@ -1,4 +1,11 @@
-"""Effective-index solver for multilayer step-index fibers."""
+"""Transfer-matrix solver for isotropic concentric step-index fibers.
+
+Each homogeneous annulus is represented by cylindrical Bessel or modified
+Bessel solutions and tangential fields are matched at every interface. The
+model assumes circular symmetry, scalar real refractive indices, lossless
+materials, and a longitudinally invariant cross-section. See Snyder and Love,
+*Optical Waveguide Theory*, chapters 12 and 19.
+"""
 
 import numpy
 from scipy.special import kn, kvp, k0, k1, jn, jvp, yn, yvp, iv, ivp
@@ -20,6 +27,12 @@ class EffectiveIndexSolver(BaseSolver):
         Multilayer fiber to solve.
     wavelength : float
         Vacuum wavelength in meters.
+
+    Notes
+    -----
+    LP, TE, TM, HE, and EH families are supported. The solver does not model
+    anisotropy, material loss, stress birefringence, non-circular interfaces,
+    or longitudinal tapering within a solve.
     """
     def get_neff_lower_boundary(self, mode: Mode, delta_neff: float = 1e-6) -> float:
         """Gets the lower boundary for neff value.

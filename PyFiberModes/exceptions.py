@@ -15,3 +15,7 @@ class SolverError(PyFiberModesError, RuntimeError):
 
 class ConvergenceError(SolverError):
     """Indicate that a numerical solver did not converge to a valid root."""
+
+
+class UnsupportedGeometryError(SolverError):
+    """Indicate that a requested calculation does not support the fiber geometry."""

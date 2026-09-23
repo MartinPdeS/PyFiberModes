@@ -3,7 +3,15 @@
 from enum import Enum
 from dataclasses import dataclass
 
-Family = Enum('Family', 'LP HE EH TE TM', module=__name__)
+
+class Family(str, Enum):
+    """Supported scalar and vector mode families."""
+
+    LP = "LP"
+    HE = "HE"
+    EH = "EH"
+    TE = "TE"
+    TM = "TM"
 
 
 @dataclass(frozen=True, eq=True)
@@ -19,7 +27,7 @@ class Mode():
     m : int
         Non-negative radial order.
     """
-    family: str
+    family: str | Family
     """ Family of the mode """
     nu: int
     """ Parameter of the mode. It often corresponds to the parameter of the radial Bessel functions. """
@@ -31,14 +39,25 @@ class Mode():
 
         Raises
         ------
-        AssertionError
-            If the family is unknown or either modal order is negative.
+        ValidationError
+            If the family is unknown, ``nu`` is negative, or ``m`` is not a
+            positive integer.
         """
-        assert self.family in ['LP', 'HE', 'EH', 'TE', 'TM'], f'Unexpected mode family: {self.family}'
+        from PyFiberModes.exceptions import ValidationError
 
-        assert self.nu >= 0, 'Unexpected negative nu value'
+        try:
+            family = self.family if isinstance(self.family, Family) else Family(self.family)
+        except (TypeError, ValueError) as error:
+            choices = ", ".join(member.value for member in Family)
+            raise ValidationError(
+                f"unknown mode family {self.family!r}; expected one of {choices}"
+            ) from error
+        if not isinstance(self.nu, int) or isinstance(self.nu, bool) or self.nu < 0:
+            raise ValidationError("nu must be a non-negative integer")
+        if not isinstance(self.m, int) or isinstance(self.m, bool) or self.m < 1:
+            raise ValidationError("m must be a positive integer")
 
-        assert self.m >= 0, 'Unexpected negative m value'
+        object.__setattr__(self, "family", family.value)
 
     def __repr__(self) -> str:
         """Return the compact family-and-order representation.

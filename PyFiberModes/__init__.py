@@ -26,7 +26,12 @@ from PyFiberModes.factory import FiberFactory
 from PyFiberModes.fiber import Fiber, load_fiber
 from PyFiberModes.field import Field
 from PyFiberModes.coordinates import CartesianCoordinates, CylindricalCoordinates
-from PyFiberModes.exceptions import ConvergenceError, SolverError, ValidationError
+from PyFiberModes.exceptions import (
+    ConvergenceError,
+    SolverError,
+    UnsupportedGeometryError,
+    ValidationError,
+)
 from PyFiberModes.models import LayerSpec, SolverSettings
 from PyFiberModes.solver.results import SolverResult
 from PyFiberModes.analysis import ModeSweepResult, find_modes, sweep_modes
@@ -57,7 +62,7 @@ __all__ = [
     'Field',
     'CartesianCoordinates', 'CylindricalCoordinates',
     'LayerSpec', 'SolverSettings', 'SolverResult',
-    'ValidationError', 'SolverError', 'ConvergenceError',
+    'ValidationError', 'SolverError', 'ConvergenceError', 'UnsupportedGeometryError',
     'ModeSweepResult', 'find_modes', 'sweep_modes',
     'DesignParameter', 'DesignResult', 'optimize_fiber',
     'CoupledModeSystem', 'PropagationResult', 'coupling_matrix', 'overlap',

@@ -6,7 +6,7 @@ API reference
 The public API is grouped by task. NumPyDoc descriptions, signatures,
 inheritance, and source links are generated directly from the package.
 The supported import boundary and compatibility guarantees are defined in the
-:doc:`api_policy`; user-visible changes are collected in the
+:doc:`api_policy` and :doc:`public_api_contract`; user-visible changes are collected in the
 :doc:`migration_guide`.
 
 .. toctree::

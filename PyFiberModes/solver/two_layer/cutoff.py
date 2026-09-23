@@ -1,4 +1,9 @@
-"""Modal cutoff solver for two-layer step-index fibers."""
+"""Analytical cutoff solver for isotropic two-layer step-index fibers.
+
+Cutoffs are zeros of the appropriate cylindrical Bessel characteristic
+equation and are returned as dimensionless normalized frequencies. The
+formulation follows Snyder and Love, *Optical Waveguide Theory*, chapter 12.
+"""
 
 import numpy
 import logging
@@ -21,6 +26,11 @@ class CutoffSolver(BaseSolver):
         Standard step-index fiber.
     wavelength : float
         Reference vacuum wavelength in meters.
+
+    Notes
+    -----
+    The fiber must contain exactly one circular core and one homogeneous
+    exterior cladding. LP cutoffs use the weak-guidance approximation.
     """
     logger = logging.getLogger(__name__)
 

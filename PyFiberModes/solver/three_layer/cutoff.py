@@ -1,4 +1,9 @@
-"""Modal cutoff solver for three-layer step-index fibers."""
+"""Cutoff solver for isotropic three-layer step-index fibers.
+
+The solver matches cylindrical solutions across two concentric interfaces and
+returns dimensionless normalized cutoff frequencies. It assumes homogeneous,
+lossless, isotropic layers with scalar real refractive indices.
+"""
 
 from PyFiberModes.mode import Mode
 from PyFiberModes.mode_instances import HE11, LP01, LP11, TE01
@@ -35,6 +40,11 @@ class CutoffSolver(BaseSolver):
         Three-layer fiber to solve.
     wavelength : float
         Reference vacuum wavelength in meters.
+
+    Notes
+    -----
+    Only cutoff calculations are provided by this backend. Effective indices
+    and fields for the same geometry are handled by the multilayer solver.
     """
 
     def get_lower_neff_mode(self, mode: Mode) -> Mode:

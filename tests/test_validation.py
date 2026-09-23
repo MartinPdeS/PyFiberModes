@@ -3,9 +3,13 @@
 
 import numpy
 import pytest
+
+import PyFiberModes.fiber as fiber_module
+from PyFiberModes import HE11, TE01, TM01, HE21, EH11, HE31, HE12, LP01
+from PyFiberModes import ConvergenceError, UnsupportedGeometryError, ValidationError
+from PyFiberModes.fundamentals import get_U_parameter
 from PyFiberModes.fiber import get_fiber_from_delta_and_V0
 from PyFiberModes.fiber import load_fiber
-from PyFiberModes import HE11, TE01, TM01, HE21, EH11, HE31, HE12, LP01
 from tests.helpers import get_mode_beta
 
 
@@ -40,6 +44,26 @@ def test_two_and_three_layer_solver():
     discrepencies = numpy.isclose(beta_3L, beta_2L, atol=1e-4, equal_nan=True)
 
     assert discrepencies.all()
+
+
+def test_unsupported_geometry_raises_a_domain_error():
+    fiber = load_fiber("SMF28", wavelength=1550e-9, add_air_layer=True)
+    with pytest.raises(UnsupportedGeometryError, match="exactly two"):
+        get_U_parameter(fiber, fiber.wavelength, LP01)
+
+
+def test_invalid_mode_and_derivative_failure_are_not_silenced(monkeypatch):
+    fiber = load_fiber("SMF28", wavelength=1550e-9)
+    with pytest.raises(ValidationError, match="Mode instance"):
+        fiber.solve_effective_index("LP01")
+
+    monkeypatch.setattr(
+        fiber_module,
+        "get_function_derivative",
+        lambda **kwargs: numpy.nan,
+    )
+    with pytest.raises(ConvergenceError, match="group-index derivative"):
+        fiber.get_group_index(LP01)
 
 
 if __name__ == "__main__":

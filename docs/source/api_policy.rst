@@ -15,6 +15,11 @@ The public surface is stored in ``tests/api_snapshot.json`` and checked in CI.
 An intentional API change must update that snapshot, the changelog, and the
 :doc:`migration_guide` in the same pull request.
 
+The definitive object-by-object contract, including units, mutation, and
+failure behavior, is published in :doc:`public_api_contract`. CI freezes the
+parameter order and important defaults of the primary constructors, functions,
+and :class:`~PyFiberModes.fiber.Fiber` façade methods.
+
 Internal modules
 ----------------
 

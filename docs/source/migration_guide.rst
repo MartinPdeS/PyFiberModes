@@ -10,6 +10,21 @@ even though those modules are outside the stable public API.
 Unreleased
 ----------
 
+Mode validation and failure semantics
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``Mode`` now accepts either strings or ``Family`` members and normalizes the
+stored family to its string value. Radial order ``m`` must be at least one;
+invalid families and orders raise ``ValidationError`` instead of relying on
+Python assertions.
+
+Unsupported cutoff or normalized-parameter geometries raise
+``UnsupportedGeometryError``. Non-finite wavelength derivatives raise
+``ConvergenceError``. Structured solver methods continue to represent an
+unguided or unconverged mode with ``SolverResult(converged=False)``; scalar
+effective-index and cutoff conveniences continue to return ``NaN`` for that
+expected absence.
+
 Material loading
 ~~~~~~~~~~~~~~~~
 

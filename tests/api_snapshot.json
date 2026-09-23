@@ -1,5 +1,5 @@
 {
-  "policy_version": 1,
+  "policy_version": 2,
   "public_import": "PyFiberModes",
   "exports": [
     "CallableIndex",
@@ -43,6 +43,7 @@
     "SolverSettings",
     "TE01",
     "TM01",
+    "UnsupportedGeometryError",
     "ValidationError",
     "coupling_matrix",
     "find_modes",
@@ -50,5 +51,22 @@
     "optimize_fiber",
     "overlap",
     "sweep_modes"
-  ]
+  ],
+  "signatures": {
+    "Mode": {"parameters": ["family", "nu", "m"], "defaults": {}},
+    "Fiber": {"parameters": ["wavelength", "layer_names", "layer_radius", "layer_types", "index_list"], "defaults": {"layer_names": "<factory>", "layer_radius": "<factory>", "layer_types": "<factory>", "index_list": "<factory>"}},
+    "FiberFactory": {"parameters": ["wavelength"], "defaults": {}},
+    "Field": {"parameters": ["fiber", "mode", "limit", "n_point"], "defaults": {"n_point": 101}},
+    "LayerSpec": {"parameters": ["name", "radius", "refractive_index"], "defaults": {}},
+    "SolverSettings": {"parameters": ["tolerance", "max_iterations", "effective_index_step", "raise_on_failure"], "defaults": {"tolerance": 1e-08, "max_iterations": 100, "effective_index_step": 1e-06, "raise_on_failure": false}},
+    "load_fiber": {"parameters": ["fiber_name", "wavelength", "add_air_layer", "materials"], "defaults": {"wavelength": null, "add_air_layer": false, "materials": "<MaterialRegistry>"}},
+    "find_modes": {"parameters": ["fiber", "families", "max_nu", "max_m"], "defaults": {"families": ["LP"], "max_nu": 6, "max_m": 6}},
+    "sweep_modes": {"parameters": ["fiber", "parameters", "modes", "parameter_name", "setter", "metrics", "families", "max_nu", "max_m"], "defaults": {"modes": null, "parameter_name": "wavelength", "setter": null, "metrics": ["effective_index", "propagation_constant"], "families": ["LP"], "max_nu": 6, "max_m": 6}},
+    "optimize_fiber": {"parameters": ["fiber", "parameters", "objective", "constraints", "method", "penalty", "options"], "defaults": {"constraints": [], "method": "differential_evolution", "penalty": 1000000000000.0, "options": null}},
+    "overlap": {"parameters": ["field_a", "field_b", "normalized"], "defaults": {"normalized": true}},
+    "coupling_matrix": {"parameters": ["fields", "perturbation"], "defaults": {"perturbation": null}},
+    "Fiber.get_effective_index": {"parameters": ["self", "mode"], "defaults": {}},
+    "Fiber.solve_effective_index": {"parameters": ["self", "mode"], "defaults": {}},
+    "Fiber.get_mode_field": {"parameters": ["self", "mode", "limit", "n_point"], "defaults": {"limit": null, "n_point": 101}}
+  }
 }

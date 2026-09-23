@@ -3,7 +3,12 @@ from dataclasses import dataclass
 import numpy as np
 import pytest
 
-from PyFiberModes import Mode
+from PyFiberModes import (
+    ConvergenceError,
+    Family,
+    Mode,
+    ValidationError,
+)
 from PyFiberModes.analysis import candidate_modes, find_modes, sweep_modes
 from PyFiberModes.optimization import DesignParameter, optimize_fiber
 from PyFiberModes.propagation import CoupledModeSystem, coupling_matrix, overlap
@@ -55,16 +60,33 @@ def test_candidate_modes_obey_family_rules():
     assert {mode.nu for mode in modes if mode.family == "TE"} == {0}
 
 
+def test_mode_accepts_family_enum_and_validates_orders():
+    assert Mode(Family.LP, 0, 1) == Mode("LP", 0, 1)
+    with pytest.raises(ValidationError, match="unknown mode family"):
+        Mode("invalid", 0, 1)
+    with pytest.raises(ValidationError, match="nu must"):
+        Mode("LP", -1, 1)
+    with pytest.raises(ValidationError, match="m must"):
+        Mode("LP", 0, 0)
+
+
 def test_find_modes_filters_unguided_and_failed_candidates():
     fiber = FakeFiber()
 
     def effective_index(mode):
         if mode.m == 2:
-            raise ValueError("solver failed")
+            raise ConvergenceError("solver failed")
         return 1.2 if mode.nu == 0 else 0.9
 
     fiber.get_effective_index = effective_index
     assert find_modes(fiber, max_nu=1, max_m=2) == (Mode("LP", 0, 1),)
+
+
+def test_candidate_mode_bounds_are_validated():
+    with pytest.raises(ValidationError, match="max_nu"):
+        candidate_modes(max_nu=-1)
+    with pytest.raises(ValidationError, match="max_nu"):
+        candidate_modes(max_m=0)
 
 
 def test_sweep_validates_parameters_and_custom_setter_is_non_mutating():

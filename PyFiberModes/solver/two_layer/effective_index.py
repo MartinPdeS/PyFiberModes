@@ -1,4 +1,11 @@
-"""Effective-index and radial-field solver for two-layer fibers."""
+"""Exact scalar and vector solver for isotropic two-layer step-index fibers.
+
+The implementation matches cylindrical Bessel solutions across one circular
+core-cladding interface. LP equations use the weak-guidance approximation;
+TE, TM, HE, and EH equations retain the vector boundary conditions. Material
+indices are real, lossless, and evaluated at one vacuum wavelength. See
+Snyder and Love, *Optical Waveguide Theory*, chapters 11--12.
+"""
 
 import numpy
 import logging
@@ -22,6 +29,12 @@ class EffectiveIndexSolver(BaseSolver):
         Standard step-index fiber.
     wavelength : float
         Vacuum wavelength in meters.
+
+    Notes
+    -----
+    The solver requires exactly two concentric, homogeneous, isotropic layers
+    with a higher-index inner core. Characteristic functions are dimensionless;
+    their roots give the dimensionless effective index.
     """
 
     def get_mode_with_lower_neff(self, mode: Mode) -> Mode:
@@ -542,10 +555,11 @@ class EffectiveIndexSolver(BaseSolver):
         return value
 
     def get_TE_equation(self, neff: float, nu: int) -> float:
-        """Return the value of the phase matching equation for TE mode.
+        r"""Return the TE characteristic-equation residual.
 
         .. math::
-            U * j_0(U) * k_1(W) + W * j_1(U) * k_0(W)
+
+           U J_0(U) K_1(W) + W J_1(U) K_0(W)
 
         Parameters
         ----------
@@ -557,17 +571,20 @@ class EffectiveIndexSolver(BaseSolver):
         Returns
         -------
         float
-            Dont know
+            Dimensionless boundary-condition residual. A guided TE solution
+            occurs at a root.
         """
         U, W, _ = self.get_U_W_V_parameter(neff=neff)
 
         return U * j0(U) * k1(W) + W * j1(U) * k0(W)
 
     def get_TM_equation(self, neff: float, nu: int) -> float:
-        """Return the value of the phase matching equation for TM mode.
+        r"""Return the TM characteristic-equation residual.
 
         .. math::
-            U * j_0(U) * k_1(W) * n_{clad}^2 + W * j_1(U) * k_0(W) * n_{core}^2
+
+           U J_0(U) K_1(W)n_\mathrm{clad}^2
+           + W J_1(U) K_0(W)n_\mathrm{core}^2
 
         Parameters
         ----------
@@ -579,7 +596,8 @@ class EffectiveIndexSolver(BaseSolver):
         Returns
         -------
         float
-            Dont know
+            Dimensionless boundary-condition residual. A guided TM solution
+            occurs at a root.
         """
         core, clad = self.fiber.layers
 
@@ -591,8 +609,8 @@ class EffectiveIndexSolver(BaseSolver):
 
         return U * j0(U) * k1(W) * n_clad**2 + W * j1(U) * k0(W) * n_core**2
 
-    def get_HE_EH_terms(self, neff, nu: int) -> float:
-        """Return the value of the terms for the equation for HE or EH mode.
+    def get_HE_EH_terms(self, neff, nu: int) -> tuple[float, float]:
+        """Return the common and splitting terms of the hybrid equations.
 
         Parameters
         ----------
@@ -603,8 +621,10 @@ class EffectiveIndexSolver(BaseSolver):
 
         Returns
         -------
-        float
-            Dont know
+        tuple of float
+            Dimensionless common boundary term and non-negative hybrid
+            splitting term. Their sum and difference form the HE and EH
+            characteristic residuals, respectively.
         """
         core, clad = self.fiber.layers
 
@@ -628,7 +648,7 @@ class EffectiveIndexSolver(BaseSolver):
         return term_0, term_4
 
     def get_HE_equation(self, neff: float, nu: int) -> float:
-        """Return the value of the phase matching equation for HE mode.
+        """Return the dimensionless HE characteristic-equation residual.
 
         Parameters
         ----------
@@ -640,7 +660,8 @@ class EffectiveIndexSolver(BaseSolver):
         Returns
         -------
         float
-            Dont know
+            Boundary-condition residual; a guided HE solution occurs at a
+            root.
         """
         term_0, term_1 = self.get_HE_EH_terms(
             neff=neff,
@@ -652,7 +673,7 @@ class EffectiveIndexSolver(BaseSolver):
         return value
 
     def get_EH_equation(self, neff: float, nu: int) -> float:
-        """Return the value of the phase matching equation for EH mode.
+        """Return the dimensionless EH characteristic-equation residual.
 
         Parameters
         ----------
@@ -664,7 +685,8 @@ class EffectiveIndexSolver(BaseSolver):
         Returns
         -------
         float
-            Dont know
+            Boundary-condition residual; a guided EH solution occurs at a
+            root.
         """
         term_0, term_1 = self.get_HE_EH_terms(
             neff=neff,

@@ -2,7 +2,12 @@
 
 import numpy as np
 
-from PyFiberModes.exceptions import ConvergenceError
+from PyFiberModes.exceptions import (
+    ConvergenceError,
+    UnsupportedGeometryError,
+    ValidationError,
+)
+from PyFiberModes.mode import Mode
 from PyFiberModes.models import SolverSettings
 from PyFiberModes.solver.results import SolverResult
 
@@ -45,6 +50,8 @@ class ModalAnalysis:
         SolverResult[float]
             Cached value and convergence status.
         """
+        if not isinstance(mode, Mode):
+            raise ValidationError("mode must be a Mode instance")
         key = self._key("effective_index", mode)
         if key in self._cache:
             return self._cache[key]
@@ -58,6 +65,8 @@ class ModalAnalysis:
                 mode=mode,
                 delta_neff=self.settings.effective_index_step,
             )
+        except (ValidationError, UnsupportedGeometryError):
+            raise
         except (ArithmeticError, RuntimeError, ValueError) as error:
             result = SolverResult(value=None, converged=False, message=str(error))
 
@@ -100,7 +109,7 @@ class ModalAnalysis:
                     converged=converged,
                     message="converged" if converged else f"no cutoff solution for {mode}",
                 )
-            except (ArithmeticError, RuntimeError, ValueError) as error:
+            except (ArithmeticError, ValueError) as error:
                 self._cache[key] = SolverResult(
                     value=None, converged=False, message=str(error)
                 )
@@ -145,7 +154,7 @@ class FieldAnalysis:
         from PyFiberModes.field import Field
 
         if n_point < 2:
-            raise ValueError("n_point must be at least two")
+            raise ValidationError("n_point must be at least two")
         return Field(
             fiber=self.fiber,
             mode=mode,

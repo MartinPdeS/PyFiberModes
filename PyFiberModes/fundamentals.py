@@ -10,6 +10,7 @@ from PyFiberModes.mode_instances import HE11, LP01
 from scipy.constants import c
 
 from PyFiberModes.coordinates import CylindricalCoordinates
+from PyFiberModes.exceptions import ConvergenceError, UnsupportedGeometryError
 
 if TYPE_CHECKING:
     from PyFiberModes.solver.results import SolverResult
@@ -139,7 +140,10 @@ def get_U_parameter(
         The \(U\) parameter.
     """
     from PyFiberModes import solver
-    assert fiber.n_layer == 2, "U-parameter can only be calculated for two-layer fibers."
+    if fiber.n_layer != 2:
+        raise UnsupportedGeometryError(
+            "U-parameter calculations require exactly two fiber layers"
+        )
 
     effective_index_solver = solver.two_layer.EffectiveIndexSolver(
         fiber=fiber, wavelength=wavelength
@@ -253,7 +257,7 @@ def get_mode_cutoff_v0(
         case 3:
             cutoff_solver = solver.three_layer.CutoffSolver(fiber=fiber, wavelength=wavelength)
         case _:
-            raise NotImplementedError(
+            raise UnsupportedGeometryError(
                 "Cutoff calculations are currently available for two- and three-layer fibers"
             )
 
@@ -306,6 +310,8 @@ def get_radial_field(
         wavelength=fiber.wavelength,
         mode=mode
     )
+    if not numpy.isfinite(neff):
+        raise ConvergenceError(f"no guided effective-index solution for {mode}")
 
     kwargs = dict(
         nu=mode.nu,

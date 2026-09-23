@@ -6,6 +6,7 @@ from typing import Callable, Iterable, Sequence
 
 import numpy as np
 
+from PyFiberModes.exceptions import ConvergenceError, ValidationError
 from PyFiberModes.mode import Mode
 
 
@@ -100,6 +101,8 @@ def candidate_modes(
     tuple of Mode
         Candidates ordered by family, azimuthal order, and radial order.
     """
+    if max_nu < 0 or max_m < 1:
+        raise ValidationError("max_nu must be non-negative and max_m must be positive")
     modes = []
     for family in families:
         nus = (0,) if family in ("TE", "TM") else range(max_nu + 1)
@@ -141,7 +144,7 @@ def find_modes(fiber, families=("LP",), max_nu=6, max_m=6) -> tuple[Mode, ...]:
             )
             if np.isfinite(effective_index) and guided:
                 found.append(mode)
-        except (ArithmeticError, AssertionError, RuntimeError, ValueError):
+        except ConvergenceError:
             continue
     return tuple(found)
 
@@ -226,6 +229,6 @@ def sweep_modes(
                 try:
                     value = metric_function(mode)
                     values[metric][i, j] = value if np.isfinite(value) else np.nan
-                except (ArithmeticError, AssertionError, RuntimeError, ValueError):
+                except ConvergenceError:
                     pass
     return ModeSweepResult(parameter_name, parameters, modes, values)
