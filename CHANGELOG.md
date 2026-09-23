@@ -6,6 +6,12 @@ use [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- Build the noarch Conda package once instead of merging nine identically
+  named matrix artifacts, preventing corrupted archives during Anaconda
+  upload.
+
 ## [0.14.2] - 2026-09-23
 
 ### Changed
