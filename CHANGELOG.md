@@ -6,6 +6,8 @@ use [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.14.0] - 2026-09-23
+
 ### Added
 
 - Expanded the specialty-fiber, field, analysis, validation, and performance
@@ -99,7 +101,8 @@ use [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Established the current tagged baseline for subsequent documented releases.
 
-[Unreleased]: https://github.com/MartinPdeS/PyFiberModes/compare/v0.13.2...HEAD
+[Unreleased]: https://github.com/MartinPdeS/PyFiberModes/compare/v0.14.0...HEAD
+[0.14.0]: https://github.com/MartinPdeS/PyFiberModes/releases/tag/v0.14.0
 [0.13.2]: https://github.com/MartinPdeS/PyFiberModes/releases/tag/v0.13.2
 [0.13.1]: https://github.com/MartinPdeS/PyFiberModes/releases/tag/v0.13.1
 [0.13.0]: https://github.com/MartinPdeS/PyFiberModes/releases/tag/v0.13.0
