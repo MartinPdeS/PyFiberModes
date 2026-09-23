@@ -6,6 +6,8 @@ use [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.13.2] - 2026-09-23
+
 ### Changed
 
 - Raised the minimum supported Python version to 3.11 and aligned CI,
@@ -84,7 +86,8 @@ use [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Established the current tagged baseline for subsequent documented releases.
 
-[Unreleased]: https://github.com/MartinPdeS/PyFiberModes/compare/v0.13.1...HEAD
+[Unreleased]: https://github.com/MartinPdeS/PyFiberModes/compare/v0.13.2...HEAD
+[0.13.2]: https://github.com/MartinPdeS/PyFiberModes/releases/tag/v0.13.2
 [0.13.1]: https://github.com/MartinPdeS/PyFiberModes/releases/tag/v0.13.1
 [0.13.0]: https://github.com/MartinPdeS/PyFiberModes/releases/tag/v0.13.0
 [0.12.0]: https://github.com/MartinPdeS/PyFiberModes/releases/tag/v0.12.0
