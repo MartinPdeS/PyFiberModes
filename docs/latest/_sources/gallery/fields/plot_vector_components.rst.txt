@@ -60,7 +60,7 @@ Evaluate several components together so they share one radial solver pass.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.321 seconds)
+   **Total running time of the script:** (0 minutes 0.313 seconds)
 
 
 .. _sphx_glr_download_gallery_fields_plot_vector_components.py:

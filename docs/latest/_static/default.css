@@ -37,3 +37,10 @@ div.highlight a {
 .bd-content img[alt="PyFiberModes logo"] {
   filter: drop-shadow(0 0.7rem 1rem rgb(20 217 255 / 20%));
 }
+
+/* Keep desktop navigation labels compact and on a single line. */
+@media (min-width: 960px) {
+  .bd-header .navbar-nav .nav-link {
+    white-space: nowrap;
+  }
+}

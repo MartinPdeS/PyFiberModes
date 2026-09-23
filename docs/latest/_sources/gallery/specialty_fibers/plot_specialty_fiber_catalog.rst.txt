@@ -69,7 +69,7 @@ Compare the layer indices of several bundled dispersion-compensating fibers.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.056 seconds)
+   **Total running time of the script:** (0 minutes 0.057 seconds)
 
 
 .. _sphx_glr_download_gallery_specialty_fibers_plot_specialty_fiber_catalog.py:
