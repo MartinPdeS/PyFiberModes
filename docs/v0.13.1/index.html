@@ -534,7 +534,7 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <p><strong>Date</strong>: Sep 22, 2026, <strong>Version</strong>: 0.13.1</p>
+  <p><strong>Date</strong>: Sep 23, 2026, <strong>Version</strong>: 0.13.1</p>
 <a class="reference internal image-reference" href="_images/logo.png"><img alt="PyFiberModes logo" class="align-center" src="_images/logo.png" width="620" />
 </a>
 <div class="pst-scrollable-table-container"><table class="table">
@@ -607,9 +607,13 @@ solver protocols for extending numerical backends.</p></li>
 </section>
 <section id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h2>
-<p>PyFiberModes requires Python 3.10 or newer. Install the released package from
+<p>PyFiberModes requires Python 3.11 or newer. Install the released package from
 PyPI:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>PyFiberModes
+</pre></div>
+</div>
+<p>Matplotlib-based field visualizations are optional:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">"PyFiberModes[plotting]"</span>
 </pre></div>
 </div>
 <p>or from Anaconda:</p>
@@ -819,7 +823,7 @@ make<span class="w"> </span>release-check
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>check
 </pre></div>
 </div>
-<p>Tests run on Python 3.10 through 3.13 in GitHub Actions. Bug reports and
+<p>Tests run on Python 3.11 through 3.13 in GitHub Actions. Bug reports and
 feature proposals are welcome through the
 <a class="reference external" href="https://github.com/MartinPdeS/PyFiberModes/issues">issue tracker</a>.</p>
 </section>

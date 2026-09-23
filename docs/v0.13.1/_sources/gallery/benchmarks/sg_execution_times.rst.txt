@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:00.537** total execution time for 1 file **from gallery/benchmarks**:
+**00:00.479** total execution time for 1 file **from gallery/benchmarks**:
 
 .. container::
 
@@ -33,5 +33,5 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_gallery_benchmarks_plot_field_grid_scaling.py` (``plot_field_grid_scaling.py``)
-     - 00:00.537
+     - 00:00.479
      - 0.0

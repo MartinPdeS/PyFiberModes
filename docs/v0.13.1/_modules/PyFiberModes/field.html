@@ -559,22 +559,14 @@
 <span></span><span class="sd">"""Vectorized electric and magnetic field evaluation on Cartesian grids."""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">scipy</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes.mode_instances</span><span class="w"> </span><span class="kn">import</span> <span class="n">HE11</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes.mode</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mode</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.colors</span><span class="w"> </span><span class="kn">import</span> <span class="n">LinearSegmentedColormap</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes.coordinates</span><span class="w"> </span><span class="kn">import</span> <span class="n">CartesianCoordinates</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes.coordinates</span><span class="w"> </span><span class="kn">import</span> <span class="n">CylindricalCoordinates</span> <span class="k">as</span> <span class="n">CylindricalCoordinates</span>  <span class="c1"># noqa: F401</span>
-
-
-<span class="n">BLUE_BLACK_RED</span> <span class="o">=</span> <span class="n">LinearSegmentedColormap</span><span class="o">.</span><span class="n">from_list</span><span class="p">(</span>
-    <span class="s2">"blue_black_red"</span><span class="p">,</span>
-    <span class="p">(</span><span class="s2">"#2455a4"</span><span class="p">,</span> <span class="s2">"#000000"</span><span class="p">,</span> <span class="s2">"#d73027"</span><span class="p">),</span>
-<span class="p">)</span>
 
 
 <div class="viewcode-block" id="Field">
@@ -1816,10 +1808,12 @@
 <div class="viewcode-block" id="Field.plot">
 <a class="viewcode-back" href="../../code/fields.html#PyFiberModes.field.Field.plot">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">plot</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">plot_type</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">(),</span> <span class="n">show</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">save_filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">plt</span><span class="o">.</span><span class="n">Figure</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""</span>
-<span class="sd">        Plotting function.</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">plot_type</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
+        <span class="n">show</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">save_filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Plot selected field components using the optional plotting layer.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1833,32 +1827,22 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        plt.Figure</span>
+<span class="sd">        matplotlib.figure.Figure</span>
 <span class="sd">            The matplotlib Figure object created or used for the plot.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ImportError</span>
+<span class="sd">            If the optional plotting dependencies are not installed.</span>
 <span class="sd">        """</span>
-        <span class="k">with</span> <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">context</span><span class="p">(</span><span class="s2">"default"</span><span class="p">):</span>
-            <span class="n">figure</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">plot_type</span><span class="p">))</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes.plotting</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_field</span>
 
-        <span class="n">axes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">axes</span><span class="p">)</span>
-        <span class="n">fields</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_components</span><span class="p">(</span><span class="n">components</span><span class="o">=</span><span class="n">plot_type</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">field_string</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="p">,</span> <span class="n">plot_type</span><span class="p">):</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s2">"equal"</span><span class="p">)</span>
-            <span class="n">field</span> <span class="o">=</span> <span class="n">fields</span><span class="p">[</span><span class="n">field_string</span><span class="p">]</span>
-            <span class="n">field</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">real_if_close</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">numpy</span><span class="o">.</span><span class="n">iscomplexobj</span><span class="p">(</span><span class="n">field</span><span class="p">):</span>
-                <span class="n">field</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
-            <span class="n">max_abs</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">field</span><span class="o">.</span><span class="n">min</span><span class="p">()))</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="n">max_abs</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">max_abs</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">BLUE_BLACK_RED</span><span class="p">)</span>
-
-        <span class="n">figure</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-
-        <span class="k">if</span> <span class="n">save_filename</span><span class="p">:</span>
-            <span class="n">figure</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">save_filename</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-
-        <span class="k">return</span> <span class="n">figure</span></div>
+        <span class="k">return</span> <span class="n">plot_field</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">plot_type</span><span class="o">=</span><span class="n">plot_type</span><span class="p">,</span>
+            <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">,</span>
+            <span class="n">save_filename</span><span class="o">=</span><span class="n">save_filename</span><span class="p">,</span>
+        <span class="p">)</span></div>
 </div>
 
 
