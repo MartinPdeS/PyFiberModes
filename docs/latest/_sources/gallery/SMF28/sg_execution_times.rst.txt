@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:00.668** total execution time for 3 files **from gallery/SMF28**:
+**00:00.754** total execution time for 3 files **from gallery/SMF28**:
 
 .. container::
 
@@ -33,11 +33,11 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_gallery_SMF28_plot_smf28_dispersion_vs_wavelength.py` (``plot_smf28_dispersion_vs_wavelength.py``)
-     - 00:00.347
+     - 00:00.392
      - 0.0
    * - :ref:`sphx_glr_gallery_SMF28_plot_smf28_group_index_vs_wavelength.py` (``plot_smf28_group_index_vs_wavelength.py``)
-     - 00:00.304
+     - 00:00.341
      - 0.0
    * - :ref:`sphx_glr_gallery_SMF28_plot_smf28.py` (``plot_smf28.py``)
-     - 00:00.017
+     - 00:00.021
      - 0.0
