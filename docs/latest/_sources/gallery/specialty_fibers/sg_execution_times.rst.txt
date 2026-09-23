@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:00.869** total execution time for 3 files **from gallery/specialty_fibers**:
+**00:00.879** total execution time for 3 files **from gallery/specialty_fibers**:
 
 .. container::
 
@@ -33,7 +33,7 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_gallery_specialty_fibers_plot_specialty_mode_indices.py` (``plot_specialty_mode_indices.py``)
-     - 00:00.725
+     - 00:00.736
      - 0.0
    * - :ref:`sphx_glr_gallery_specialty_fibers_plot_specialty_fiber_catalog.py` (``plot_specialty_fiber_catalog.py``)
      - 00:00.079
