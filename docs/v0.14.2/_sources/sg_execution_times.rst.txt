@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:40.891** total execution time for 28 files **from all galleries**:
+**00:35.915** total execution time for 28 files **from all galleries**:
 
 .. container::
 
@@ -33,86 +33,86 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_gallery_basic_plot_comparison_solvers.py` (``../examples/basic/plot_comparison_solvers.py``)
-     - 00:32.388
+     - 00:28.013
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_U_vs_V.py` (``../examples/basic/plot_U_vs_V.py``)
-     - 00:01.779
+     - 00:01.685
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_dispersion.py` (``../examples/basic/plot_dispersion.py``)
-     - 00:00.765
+     - 00:00.714
      - 0.0
    * - :ref:`sphx_glr_gallery_specialty_fibers_plot_specialty_mode_indices.py` (``../examples/specialty_fibers/plot_specialty_mode_indices.py``)
-     - 00:00.731
+     - 00:00.649
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_group_index.py` (``../examples/basic/plot_group_index.py``)
-     - 00:00.639
+     - 00:00.607
      - 0.0
    * - :ref:`sphx_glr_gallery_benchmarks_plot_field_grid_scaling.py` (``../examples/benchmarks/plot_field_grid_scaling.py``)
-     - 00:00.533
+     - 00:00.485
      - 0.0
    * - :ref:`sphx_glr_gallery_fields_plot_vector_components.py` (``../examples/fields/plot_vector_components.py``)
-     - 00:00.434
-     - 0.0
-   * - :ref:`sphx_glr_gallery_fields_plot_polarization_rotation.py` (``../examples/fields/plot_polarization_rotation.py``)
-     - 00:00.352
+     - 00:00.406
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_mode_field.py` (``../examples/basic/plot_mode_field.py``)
-     - 00:00.352
+     - 00:00.323
+     - 0.0
+   * - :ref:`sphx_glr_gallery_fields_plot_polarization_rotation.py` (``../examples/fields/plot_polarization_rotation.py``)
+     - 00:00.314
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_fiber_LP_modes.py` (``../examples/basic/plot_fiber_LP_modes.py``)
-     - 00:00.287
+     - 00:00.275
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_mode_field_1.py` (``../examples/basic/plot_mode_field_1.py``)
-     - 00:00.278
+     - 00:00.263
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_mode_field_2.py` (``../examples/basic/plot_mode_field_2.py``)
-     - 00:00.256
+     - 00:00.236
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_effective_index.py` (``../examples/basic/plot_effective_index.py``)
-     - 00:00.249
+     - 00:00.233
      - 0.0
    * - :ref:`sphx_glr_gallery_SMF28_plot_smf28_dispersion_vs_wavelength.py` (``../examples/SMF28/plot_smf28_dispersion_vs_wavelength.py``)
-     - 00:00.222
+     - 00:00.208
      - 0.0
    * - :ref:`sphx_glr_gallery_fields_plot_confinement_by_radius.py` (``../examples/fields/plot_confinement_by_radius.py``)
-     - 00:00.217
+     - 00:00.200
      - 0.0
    * - :ref:`sphx_glr_gallery_analysis_plot_structured_wavelength_sweep.py` (``../examples/analysis/plot_structured_wavelength_sweep.py``)
-     - 00:00.195
-     - 0.0
-   * - :ref:`sphx_glr_gallery_validation_plot_field_area_convergence.py` (``../examples/validation/plot_field_area_convergence.py``)
-     - 00:00.192
-     - 0.0
-   * - :ref:`sphx_glr_gallery_benchmarks_plot_component_batching_speedup.py` (``../examples/benchmarks/plot_component_batching_speedup.py``)
      - 00:00.177
      - 0.0
+   * - :ref:`sphx_glr_gallery_validation_plot_field_area_convergence.py` (``../examples/validation/plot_field_area_convergence.py``)
+     - 00:00.175
+     - 0.0
+   * - :ref:`sphx_glr_gallery_benchmarks_plot_component_batching_speedup.py` (``../examples/benchmarks/plot_component_batching_speedup.py``)
+     - 00:00.162
+     - 0.0
    * - :ref:`sphx_glr_gallery_SMF28_plot_smf28_group_index_vs_wavelength.py` (``../examples/SMF28/plot_smf28_group_index_vs_wavelength.py``)
-     - 00:00.172
+     - 00:00.160
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_neff_tapered_fiber.py` (``../examples/basic/plot_neff_tapered_fiber.py``)
-     - 00:00.134
+     - 00:00.126
      - 0.0
    * - :ref:`sphx_glr_gallery_validation_plot_effective_index_bounds.py` (``../examples/validation/plot_effective_index_bounds.py``)
-     - 00:00.110
+     - 00:00.102
      - 0.0
    * - :ref:`sphx_glr_gallery_validation_plot_normalized_effective_index.py` (``../examples/validation/plot_normalized_effective_index.py``)
-     - 00:00.087
+     - 00:00.083
      - 0.0
    * - :ref:`sphx_glr_gallery_specialty_fibers_plot_specialty_fiber_catalog.py` (``../examples/specialty_fibers/plot_specialty_fiber_catalog.py``)
-     - 00:00.079
-     - 0.0
-   * - :ref:`sphx_glr_gallery_analysis_plot_coupled_mode_exchange.py` (``../examples/analysis/plot_coupled_mode_exchange.py``)
      - 00:00.075
      - 0.0
+   * - :ref:`sphx_glr_gallery_analysis_plot_coupled_mode_exchange.py` (``../examples/analysis/plot_coupled_mode_exchange.py``)
+     - 00:00.070
+     - 0.0
    * - :ref:`sphx_glr_gallery_specialty_fibers_plot_refractive_index_profile.py` (``../examples/specialty_fibers/plot_refractive_index_profile.py``)
-     - 00:00.063
+     - 00:00.061
      - 0.0
    * - :ref:`sphx_glr_gallery_analysis_plot_guided_mode_discovery.py` (``../examples/analysis/plot_guided_mode_discovery.py``)
-     - 00:00.054
+     - 00:00.050
      - 0.0
    * - :ref:`sphx_glr_gallery_benchmarks_plot_modal_cache_speedup.py` (``../examples/benchmarks/plot_modal_cache_speedup.py``)
-     - 00:00.052
+     - 00:00.049
      - 0.0
    * - :ref:`sphx_glr_gallery_SMF28_plot_smf28.py` (``../examples/SMF28/plot_smf28.py``)
-     - 00:00.017
+     - 00:00.015
      - 0.0

@@ -58,7 +58,7 @@ indices at one wavelength.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.054 seconds)
+   **Total running time of the script:** (0 minutes 0.050 seconds)
 
 
 .. _sphx_glr_download_gallery_analysis_plot_guided_mode_discovery.py:
