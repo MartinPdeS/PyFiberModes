@@ -100,4 +100,4 @@ select = ["E", "F"]
 ignore = ["E501"]
 
 [tool.ruff.lint.per-file-ignores]
-"PyFiberModes/solver/mlsif/neff.py" = ["F821", "F841"]
+"PyFiberModes/solver/multilayer/effective_index.py" = ["F821", "F841"]

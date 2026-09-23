@@ -4,6 +4,7 @@ import sys
 
 import PyFiberModes
 from PyFiberModes import directories
+from PyFiberModes import solver
 
 import tomllib
 
@@ -57,3 +58,27 @@ assert "PyFiberModes.plotting" not in sys.modules
         cwd=directories.PROJECT_PATH,
         check=True,
     )
+
+
+def test_solver_names_describe_supported_geometries():
+    """Expose geometry names instead of historical initialisms."""
+    assert hasattr(solver, "two_layer")
+    assert hasattr(solver, "three_layer")
+    assert hasattr(solver, "multilayer")
+    assert not any(hasattr(solver, name) for name in ("ssif", "tlsif", "mlsif"))
+
+
+def test_each_documentation_gallery_has_multiple_examples():
+    """Prevent example galleries from regressing to a single page."""
+    galleries = (
+        "basic",
+        "SMF28",
+        "specialty_fibers",
+        "fields",
+        "analysis",
+        "validation",
+        "benchmarks",
+    )
+    for gallery in galleries:
+        examples = tuple((directories.EXAMPLES_PATH / gallery).glob("*.py"))
+        assert len(examples) >= 2, f"{gallery} needs at least two examples"

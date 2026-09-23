@@ -14,7 +14,7 @@ Python source and a notebook.
 
    /gallery/basic/index
    /gallery/SMF28/index
-   /gallery/DCF/index
+   /gallery/specialty_fibers/index
    /gallery/fields/index
    /gallery/analysis/index
    /gallery/validation/index
@@ -38,7 +38,7 @@ Python source and a notebook.
       A complete workflow using a familiar telecom fiber.
 
    .. grid-item-card:: Specialty fibers
-      :link: /gallery/DCF/index
+      :link: /gallery/specialty_fibers/index
       :link-type: doc
       :text-align: center
 

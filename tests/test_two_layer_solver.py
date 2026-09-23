@@ -8,7 +8,7 @@ from PyFiberModes import HE11, TE01, TM01, EH11, LP01
 from tests.helpers import get_mode_beta
 
 
-def test_solver():
+def test_two_layer_solver():
     fiber = load_fiber(fiber_name='SMF28', wavelength=1550e-9, add_air_layer=False)
 
     itr_list = numpy.linspace(1.0, 0.3, 10)

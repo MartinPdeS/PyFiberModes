@@ -21,7 +21,7 @@ def test_validation_cutoff_wavelength():
         assert numpy.isclose(cutoff_V0, val, atol=1e-3), f"Mode {mode} cutoff V0 do not match validation data."
 
 
-def test_2_3_layer_solver():
+def test_two_and_three_layer_solver():
     kwargs = dict(fiber_name='SMF28', wavelength=1550e-9)
 
     fiber_2L = load_fiber(**kwargs, add_air_layer=False)

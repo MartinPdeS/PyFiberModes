@@ -1,4 +1,4 @@
-"""Modal cutoff solver for standard step-index fibers."""
+"""Modal cutoff solver for two-layer step-index fibers."""
 
 import numpy
 import logging
@@ -11,11 +11,6 @@ from scipy.special import jn, jn_zeros
 from scipy.constants import mu_0, epsilon_0, physical_constants
 eta0 = physical_constants['characteristic impedance of vacuum'][0]
 Y0 = numpy.sqrt(epsilon_0 / mu_0)
-
-"""
-Solver for standard layer step-index solver: SSIF
-"""
-
 
 class CutoffSolver(BaseSolver):
     """Solve normalized modal cutoffs for a two-layer step-index fiber.

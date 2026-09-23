@@ -11,12 +11,7 @@ from scipy.special import j1, y1, i1, k1
 from scipy.special import jn, yn, iv, kn
 from scipy.special import jvp, ivp
 
-"""
-Solver for three layer step-index solver: TLSIF
-"""
-
-
-class NameSpace():
+class ComputationState:
     """Store solver intermediates as dynamically named attributes.
 
     Parameters
@@ -164,7 +159,7 @@ class CutoffSolver(BaseSolver):
         s1, s2, s3 = numpy.sign(Usq)
         u1, u2, u3 = numpy.sqrt(numpy.abs(Usq))
 
-        data_structure = NameSpace(
+        data_structure = ComputationState(
             nu=nu,
             u1r1=u1 * r1,
             u2r1=u2 * r1,
@@ -179,12 +174,12 @@ class CutoffSolver(BaseSolver):
 
         return data_structure
 
-    def _get_delta_(self, p: NameSpace) -> float:
+    def _get_delta_(self, p: ComputationState) -> float:
         """Gets the delta. s3 is sign of Delta
 
         Parameters
         ----------
-        p : NameSpace
+        p : ComputationState
             { parameter_description }
 
         Returns
@@ -375,12 +370,12 @@ class CutoffSolver(BaseSolver):
 
             return self._function_2_(p=p)
 
-    def _function_1_(self, p: NameSpace) -> float:
+    def _function_1_(self, p: ComputationState) -> float:
         """Evaluate the first three-layer cutoff equation branch.
 
         Parameters
         ----------
-        p : NameSpace
+        p : ComputationState
             Precomputed refractive-index and Bessel-function parameters.
 
         Returns
@@ -415,12 +410,12 @@ class CutoffSolver(BaseSolver):
             delta = self._get_delta_(p=p)
         return f1 + f2 * delta
 
-    def _function_2_(self, p: NameSpace) -> float:
+    def _function_2_(self, p: ComputationState) -> float:
         """Evaluate the second three-layer cutoff equation branch.
 
         Parameters
         ----------
-        p : NameSpace
+        p : ComputationState
             Precomputed refractive-index and Bessel-function parameters.
 
         Returns
@@ -462,12 +457,12 @@ class CutoffSolver(BaseSolver):
                 f2 = b22 * g1 - b21 * g2
             return f1 + n0sq * f2
 
-    def _function_3_(self, p: NameSpace) -> float:
+    def _function_3_(self, p: ComputationState) -> float:
         """Evaluate the third three-layer cutoff equation branch.
 
         Parameters
         ----------
-        p : NameSpace
+        p : ComputationState
             Precomputed refractive-index and Bessel-function parameters.
 
         Returns

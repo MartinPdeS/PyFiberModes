@@ -10,7 +10,7 @@ from PyFiberModes.mode import Mode
 eta0 = physical_constants['characteristic impedance of vacuum'][0]
 
 
-class NeffSolver(BaseSolver):
+class EffectiveIndexSolver(BaseSolver):
     """Solve effective indices for arbitrary multilayer step-index fibers.
 
     Parameters

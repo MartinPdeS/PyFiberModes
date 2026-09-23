@@ -58,7 +58,7 @@ def reset_mpl(gallery_conf, fname):
 examples_files = [
     "basic",
     "SMF28",
-    "DCF",
+    "specialty_fibers",
     "fields",
     "analysis",
     "validation",

@@ -6,6 +6,17 @@ use [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Expanded the specialty-fiber, field, analysis, validation, and performance
+  galleries so every documentation series contains multiple examples.
+
+### Changed
+
+- Replaced the opaque `ssif`, `tlsif`, `mlsif`, and `NeffSolver` names with
+  descriptive two-layer, three-layer, multilayer, and effective-index solver
+  namespaces and class names.
+
 ## [0.13.2] - 2026-09-23
 
 ### Changed

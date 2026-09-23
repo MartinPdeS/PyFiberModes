@@ -1,4 +1,4 @@
-"""Effective-index and radial-field solver for standard step-index fibers."""
+"""Effective-index and radial-field solver for two-layer fibers."""
 
 import numpy
 import logging
@@ -12,12 +12,7 @@ from scipy.constants import mu_0, epsilon_0, physical_constants
 eta0 = physical_constants['characteristic impedance of vacuum'][0]
 Y0 = numpy.sqrt(epsilon_0 / mu_0)
 
-"""
-Solver for standard layer step-index solver: SSIF
-"""
-
-
-class NeffSolver(BaseSolver):
+class EffectiveIndexSolver(BaseSolver):
     """Solve effective indices and fields for a two-layer fiber.
 
     Parameters

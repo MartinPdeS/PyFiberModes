@@ -55,10 +55,6 @@ class FiberFactory:
     ----------
     layers_list : list[ProxyLayer]
         List of ProxyLayer objects representing the layers of the fiber.
-    neff_solver : None
-        Placeholder for a solver object (if required).
-    cutoff_solver : None
-        Placeholder for a cutoff solver object (if required).
     wavelength : float
         Wavelength used in simulations.
     """
@@ -72,8 +68,6 @@ class FiberFactory:
             Vacuum wavelength in meters for generated fibers.
         """
         self.layers_list = []
-        self.neff_solver = None
-        self.cutoff_solver = None
         self.wavelength = wavelength
 
     def add_layer(self, index: float, name: str = "", radius: float = 0.0):

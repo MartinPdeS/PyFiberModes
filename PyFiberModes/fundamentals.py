@@ -95,11 +95,14 @@ def get_propagation_constant_from_omega(
 
     from PyFiberModes import solver
 
-    neff_solver = solver.ssif.NeffSolver(fiber=fiber, wavelength=wavelength) if fiber.n_layer == 2 \
-        else solver.mlsif.NeffSolver(fiber=fiber, wavelength=wavelength)
+    effective_index_solver = (
+        solver.two_layer.EffectiveIndexSolver(fiber=fiber, wavelength=wavelength)
+        if fiber.n_layer == 2
+        else solver.multilayer.EffectiveIndexSolver(fiber=fiber, wavelength=wavelength)
+    )
 
-    neff = neff_solver.solve(mode=mode, delta_neff=delta_neff)
-    return neff * (2 * numpy.pi / wavelength)
+    effective_index = effective_index_solver.solve(mode=mode, delta_neff=delta_neff)
+    return effective_index * (2 * numpy.pi / wavelength)
 
 
 def get_U_parameter(
@@ -132,9 +135,11 @@ def get_U_parameter(
     from PyFiberModes import solver
     assert fiber.n_layer == 2, "U-parameter can only be calculated for two-layer fibers."
 
-    neff_solver = solver.ssif.NeffSolver(fiber=fiber, wavelength=wavelength)
-    neff = neff_solver.solve(mode=mode, delta_neff=delta_neff)
-    U, _, _ = neff_solver.get_U_W_V_parameter(neff=neff)
+    effective_index_solver = solver.two_layer.EffectiveIndexSolver(
+        fiber=fiber, wavelength=wavelength
+    )
+    effective_index = effective_index_solver.solve(mode=mode, delta_neff=delta_neff)
+    U, _, _ = effective_index_solver.get_U_W_V_parameter(neff=effective_index)
     return U
 
 
@@ -165,11 +170,15 @@ def get_effective_index(
     from PyFiberModes import solver
 
     if fiber.n_layer == 2:
-        neff_solver = solver.ssif.NeffSolver(fiber=fiber, wavelength=wavelength)
+        effective_index_solver = solver.two_layer.EffectiveIndexSolver(
+            fiber=fiber, wavelength=wavelength
+        )
     else:
-        neff_solver = solver.mlsif.NeffSolver(fiber=fiber, wavelength=wavelength)
+        effective_index_solver = solver.multilayer.EffectiveIndexSolver(
+            fiber=fiber, wavelength=wavelength
+        )
 
-    return neff_solver.solve(mode=mode, delta_neff=delta_neff)
+    return effective_index_solver.solve(mode=mode, delta_neff=delta_neff)
 
 
 def get_mode_cutoff_v0(
@@ -199,12 +208,14 @@ def get_mode_cutoff_v0(
         return 0
 
     match fiber.n_layer:
-        case 2:  # Standard Step-Index Fiber [SSIF|
-            cutoff_solver = solver.ssif.CutoffSolver(fiber=fiber, wavelength=wavelength)
-        case 3:  # Three-Layer Step-Index Fiber [TLSIF]
-            cutoff_solver = solver.tlsif.CutoffSolver(fiber=fiber, wavelength=wavelength)
-        case _:  # Multi-Layer Step-Index Fiber [MLSIF]
-            cutoff_solver = solver.solver.FiberSolver(fiber=fiber, wavelength=wavelength)
+        case 2:
+            cutoff_solver = solver.two_layer.CutoffSolver(fiber=fiber, wavelength=wavelength)
+        case 3:
+            cutoff_solver = solver.three_layer.CutoffSolver(fiber=fiber, wavelength=wavelength)
+        case _:
+            raise NotImplementedError(
+                "Cutoff calculations are currently available for two- and three-layer fibers"
+            )
 
     cutoff = cutoff_solver.solve(mode=mode)
 
@@ -241,10 +252,14 @@ def get_radial_field(
     """
     from PyFiberModes import solver
 
-    if fiber.n_layer == 2:  # Standard Step-Index Fiber [SSIF]
-        neff_solver = solver.ssif.NeffSolver(fiber=fiber, wavelength=wavelength)
-    else:  # Multi-Layer Step-Index Fiber [MLSIF]
-        neff_solver = solver.mlsif.NeffSolver(fiber=fiber, wavelength=wavelength)
+    if fiber.n_layer == 2:
+        effective_index_solver = solver.two_layer.EffectiveIndexSolver(
+            fiber=fiber, wavelength=wavelength
+        )
+    else:
+        effective_index_solver = solver.multilayer.EffectiveIndexSolver(
+            fiber=fiber, wavelength=wavelength
+        )
 
     neff = get_effective_index(
         fiber=fiber,
@@ -260,15 +275,15 @@ def get_radial_field(
 
     match mode.family:
         case 'LP':
-            (er, ephi, ez), (hr, hphi, hz) = neff_solver.get_LP_field(**kwargs)
+            (er, ephi, ez), (hr, hphi, hz) = effective_index_solver.get_LP_field(**kwargs)
         case 'TE':
-            (er, ephi, ez), (hr, hphi, hz) = neff_solver.get_TE_field(**kwargs)
+            (er, ephi, ez), (hr, hphi, hz) = effective_index_solver.get_TE_field(**kwargs)
         case 'TM':
-            (er, ephi, ez), (hr, hphi, hz) = neff_solver.get_TM_field(**kwargs)
+            (er, ephi, ez), (hr, hphi, hz) = effective_index_solver.get_TM_field(**kwargs)
         case 'EH':
-            (er, ephi, ez), (hr, hphi, hz) = neff_solver.get_EH_field(**kwargs)
+            (er, ephi, ez), (hr, hphi, hz) = effective_index_solver.get_EH_field(**kwargs)
         case 'HE':
-            (er, ephi, ez), (hr, hphi, hz) = neff_solver.get_HE_field(**kwargs)
+            (er, ephi, ez), (hr, hphi, hz) = effective_index_solver.get_HE_field(**kwargs)
 
     e_field = CylindricalCoordinates(rho=er, phi=ephi, z=ez)
     h_field = CylindricalCoordinates(rho=hr, phi=hphi, z=hz)
