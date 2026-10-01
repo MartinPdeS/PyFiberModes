@@ -79,7 +79,7 @@ benchmarking = [
 
 documentation = [
     "matplotlib>=3.8",
-    "numpydoc ==1.10.0",
+    "numpydoc ==1.11.0",
     "sphinx >=5.1.1",
     "sphinx-gallery ==0.21.0",
     "sphinx-design >=0.6,<1",
