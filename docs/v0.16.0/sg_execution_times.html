@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 
@@ -27,8 +26,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=64cc4de3f052d77215f0" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=64cc4de3f052d77215f0" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/docs/source/_static/default.css" />
@@ -40,10 +39,10 @@
     <link rel="stylesheet" type="text/css" href="_static/default.css?v=a5ae2a23" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <script defer src="_static/scripts/fontawesome.js?digest=64cc4de3f052d77215f0"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
     <script src="_static/documentation_options.js?v=5929fcd5"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
@@ -52,7 +51,7 @@
     <script src="_static/design-tabs.js?v=f930bc37"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'sg_execution_times';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.17.1';
+        DOCUMENTATION_OPTIONS.theme_version = '0.22.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/MartinPdeS/PyFiberModes/documentation_page/version_switcher.json';
         DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'v0.16.0';
         DOCUMENTATION_OPTIONS.show_version_warning_banner =
@@ -112,7 +111,7 @@
   
     <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
   </button>
   
@@ -265,7 +264,7 @@
         <div class="navbar-item navbar-persistent--container">
           
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
  <i class="fa-solid fa-magnifying-glass"></i>
  <span class="search-button__default-text">Search</span>
  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -295,11 +294,18 @@
       
         <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
       
         <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -312,8 +318,7 @@
           
           
           
-          <a href="https://github.com/MartinPdeS/PyFiberModes" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
+          <a href="https://github.com/MartinPdeS/PyFiberModes" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
         </li>
         <li class="nav-item">
           
@@ -324,8 +329,7 @@
           
           
           
-          <a href="https://pypi.org/project/PyFiberModes/" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-solid fa-box fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">PyPI</span></a>
+          <a href="https://pypi.org/project/PyFiberModes/" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-solid fa-box fa-lg" aria-hidden="true"></i><span class="visually-hidden">PyPI</span></a>
         </li>
         <li class="nav-item">
           
@@ -336,8 +340,7 @@
           
           
           
-          <a href="https://anaconda.org/MartinPdeS/PyFiberModes" title="Anaconda" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-python fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">Anaconda</span></a>
+          <a href="https://anaconda.org/MartinPdeS/PyFiberModes" title="Anaconda" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-python fa-lg" aria-hidden="true"></i><span class="visually-hidden">Anaconda</span></a>
         </li>
 </ul></div>
       
@@ -348,7 +351,7 @@
   
     <div class="navbar-persistent--mobile">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
  <i class="fa-solid fa-magnifying-glass"></i>
  <span class="search-button__default-text">Search</span>
  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -357,7 +360,7 @@
   
 
   
-    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
       <span class="fa-solid fa-outdent"></span>
     </button>
   
@@ -511,11 +514,18 @@
         
           <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
         
           <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -528,8 +538,7 @@
           
           
           
-          <a href="https://github.com/MartinPdeS/PyFiberModes" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
+          <a href="https://github.com/MartinPdeS/PyFiberModes" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
         </li>
         <li class="nav-item">
           
@@ -540,8 +549,7 @@
           
           
           
-          <a href="https://pypi.org/project/PyFiberModes/" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-solid fa-box fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">PyPI</span></a>
+          <a href="https://pypi.org/project/PyFiberModes/" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-solid fa-box fa-lg" aria-hidden="true"></i><span class="visually-hidden">PyPI</span></a>
         </li>
         <li class="nav-item">
           
@@ -552,8 +560,7 @@
           
           
           
-          <a href="https://anaconda.org/MartinPdeS/PyFiberModes" title="Anaconda" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-python fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">Anaconda</span></a>
+          <a href="https://anaconda.org/MartinPdeS/PyFiberModes" title="Anaconda" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-python fa-lg" aria-hidden="true"></i><span class="visually-hidden">Anaconda</span></a>
         </li>
 </ul></div>
         
@@ -615,7 +622,7 @@
                   
   <section id="computation-times">
 <span id="sphx-glr-sg-execution-times"></span><h1>Computation times<a class="headerlink" href="#computation-times" title="Link to this heading">#</a></h1>
-<p><strong>00:22.455</strong> total execution time for 28 files <strong>from all galleries</strong>:</p>
+<p><strong>00:40.098</strong> total execution time for 28 files <strong>from all galleries</strong>:</p>
 <div class="docutils container">
 <style scoped>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
@@ -637,115 +644,115 @@ $(document).ready( function () {
 </thead>
 <tbody>
 <tr class="row-even"><td><p><a class="reference internal" href="gallery/basic/plot_comparison_solvers.html#sphx-glr-gallery-basic-plot-comparison-solvers-py"><span class="std std-ref">Comparing two and three layers</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/basic/plot_comparison_solvers.py</span></code>)</p></td>
-<td><p>00:17.179</p></td>
+<td><p>00:31.491</p></td>
 <td><p>0.0</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="gallery/basic/plot_U_vs_V.html#sphx-glr-gallery-basic-plot-u-vs-v-py"><span class="std std-ref">Figure 3.13 of Jacques Bures</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/basic/plot_U_vs_V.py</span></code>)</p></td>
-<td><p>00:01.044</p></td>
+<td><p>00:01.785</p></td>
 <td><p>0.0</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="gallery/basic/plot_dispersion.html#sphx-glr-gallery-basic-plot-dispersion-py"><span class="std std-ref">Dispersion VS core index</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/basic/plot_dispersion.py</span></code>)</p></td>
-<td><p>00:00.489</p></td>
+<td><p>00:00.774</p></td>
 <td><p>0.0</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="gallery/specialty_fibers/plot_specialty_mode_indices.html#sphx-glr-gallery-specialty-fibers-plot-specialty-mode-indices-py"><span class="std std-ref">Specialty-fiber mode indices</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/specialty_fibers/plot_specialty_mode_indices.py</span></code>)</p></td>
-<td><p>00:00.393</p></td>
+<td><p>00:00.730</p></td>
 <td><p>0.0</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="gallery/basic/plot_mode_field_1.html#sphx-glr-gallery-basic-plot-mode-field-1-py"><span class="std std-ref">Mode fields</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/basic/plot_mode_field_1.py</span></code>)</p></td>
-<td><p>00:00.375</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="gallery/basic/plot_group_index.html#sphx-glr-gallery-basic-plot-group-index-py"><span class="std std-ref">Group index vs core index</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/basic/plot_group_index.py</span></code>)</p></td>
+<td><p>00:00.654</p></td>
 <td><p>0.0</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="gallery/basic/plot_group_index.html#sphx-glr-gallery-basic-plot-group-index-py"><span class="std std-ref">Group index vs core index</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/basic/plot_group_index.py</span></code>)</p></td>
-<td><p>00:00.368</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="gallery/benchmarks/plot_field_grid_scaling.html#sphx-glr-gallery-benchmarks-plot-field-grid-scaling-py"><span class="std std-ref">Field-grid scaling</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/benchmarks/plot_field_grid_scaling.py</span></code>)</p></td>
+<td><p>00:00.541</p></td>
 <td><p>0.0</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="gallery/benchmarks/plot_field_grid_scaling.html#sphx-glr-gallery-benchmarks-plot-field-grid-scaling-py"><span class="std std-ref">Field-grid scaling</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/benchmarks/plot_field_grid_scaling.py</span></code>)</p></td>
-<td><p>00:00.299</p></td>
-<td><p>0.0</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="gallery/fields/plot_vector_components.html#sphx-glr-gallery-fields-plot-vector-components-py"><span class="std std-ref">Vector field components</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/fields/plot_vector_components.py</span></code>)</p></td>
-<td><p>00:00.278</p></td>
-<td><p>0.0</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="gallery/fields/plot_polarization_rotation.html#sphx-glr-gallery-fields-plot-polarization-rotation-py"><span class="std std-ref">Polarization rotation</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/fields/plot_polarization_rotation.py</span></code>)</p></td>
-<td><p>00:00.210</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="gallery/fields/plot_vector_components.html#sphx-glr-gallery-fields-plot-vector-components-py"><span class="std std-ref">Vector field components</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/fields/plot_vector_components.py</span></code>)</p></td>
+<td><p>00:00.443</p></td>
 <td><p>0.0</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="gallery/basic/plot_mode_field.html#sphx-glr-gallery-basic-plot-mode-field-py"><span class="std std-ref">Mode fields</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/basic/plot_mode_field.py</span></code>)</p></td>
-<td><p>00:00.205</p></td>
+<td><p>00:00.359</p></td>
+<td><p>0.0</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="gallery/fields/plot_polarization_rotation.html#sphx-glr-gallery-fields-plot-polarization-rotation-py"><span class="std std-ref">Polarization rotation</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/fields/plot_polarization_rotation.py</span></code>)</p></td>
+<td><p>00:00.341</p></td>
+<td><p>0.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="gallery/basic/plot_mode_field_1.html#sphx-glr-gallery-basic-plot-mode-field-1-py"><span class="std std-ref">Mode fields</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/basic/plot_mode_field_1.py</span></code>)</p></td>
+<td><p>00:00.297</p></td>
 <td><p>0.0</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="gallery/basic/plot_fiber_LP_modes.html#sphx-glr-gallery-basic-plot-fiber-lp-modes-py"><span class="std std-ref">Group index vs core index</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/basic/plot_fiber_LP_modes.py</span></code>)</p></td>
-<td><p>00:00.172</p></td>
+<td><p>00:00.292</p></td>
 <td><p>0.0</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="gallery/basic/plot_effective_index.html#sphx-glr-gallery-basic-plot-effective-index-py"><span class="std std-ref">Effective index VS core index</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/basic/plot_effective_index.py</span></code>)</p></td>
-<td><p>00:00.170</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="gallery/basic/plot_mode_field_2.html#sphx-glr-gallery-basic-plot-mode-field-2-py"><span class="std std-ref">Mode fields</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/basic/plot_mode_field_2.py</span></code>)</p></td>
+<td><p>00:00.263</p></td>
 <td><p>0.0</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="gallery/basic/plot_mode_field_2.html#sphx-glr-gallery-basic-plot-mode-field-2-py"><span class="std std-ref">Mode fields</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/basic/plot_mode_field_2.py</span></code>)</p></td>
-<td><p>00:00.152</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="gallery/basic/plot_effective_index.html#sphx-glr-gallery-basic-plot-effective-index-py"><span class="std std-ref">Effective index VS core index</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/basic/plot_effective_index.py</span></code>)</p></td>
+<td><p>00:00.252</p></td>
 <td><p>0.0</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="gallery/SMF28/plot_smf28_dispersion_vs_wavelength.html#sphx-glr-gallery-smf28-plot-smf28-dispersion-vs-wavelength-py"><span class="std std-ref">Modal dispersion VS core index</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/SMF28/plot_smf28_dispersion_vs_wavelength.py</span></code>)</p></td>
-<td><p>00:00.133</p></td>
+<td><p>00:00.224</p></td>
 <td><p>0.0</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="gallery/fields/plot_confinement_by_radius.html#sphx-glr-gallery-fields-plot-confinement-by-radius-py"><span class="std std-ref">Confinement by radius</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/fields/plot_confinement_by_radius.py</span></code>)</p></td>
-<td><p>00:00.131</p></td>
+<td><p>00:00.221</p></td>
 <td><p>0.0</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="gallery/analysis/plot_structured_wavelength_sweep.html#sphx-glr-gallery-analysis-plot-structured-wavelength-sweep-py"><span class="std std-ref">Structured wavelength sweep</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/analysis/plot_structured_wavelength_sweep.py</span></code>)</p></td>
-<td><p>00:00.114</p></td>
+<td><p>00:00.200</p></td>
 <td><p>0.0</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="gallery/validation/plot_field_area_convergence.html#sphx-glr-gallery-validation-plot-field-area-convergence-py"><span class="std std-ref">Effective-area convergence</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/validation/plot_field_area_convergence.py</span></code>)</p></td>
-<td><p>00:00.112</p></td>
+<td><p>00:00.193</p></td>
 <td><p>0.0</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="gallery/benchmarks/plot_component_batching_speedup.html#sphx-glr-gallery-benchmarks-plot-component-batching-speedup-py"><span class="std std-ref">Component batching</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/benchmarks/plot_component_batching_speedup.py</span></code>)</p></td>
-<td><p>00:00.105</p></td>
+<td><p>00:00.180</p></td>
 <td><p>0.0</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="gallery/SMF28/plot_smf28_group_index_vs_wavelength.html#sphx-glr-gallery-smf28-plot-smf28-group-index-vs-wavelength-py"><span class="std std-ref">Modal dispersion VS core index</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/SMF28/plot_smf28_group_index_vs_wavelength.py</span></code>)</p></td>
-<td><p>00:00.103</p></td>
+<td><p>00:00.173</p></td>
 <td><p>0.0</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="gallery/basic/plot_neff_tapered_fiber.html#sphx-glr-gallery-basic-plot-neff-tapered-fiber-py"><span class="std std-ref">Effective index for tapered multi-mode fiber</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/basic/plot_neff_tapered_fiber.py</span></code>)</p></td>
-<td><p>00:00.083</p></td>
+<td><p>00:00.137</p></td>
 <td><p>0.0</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="gallery/validation/plot_effective_index_bounds.html#sphx-glr-gallery-validation-plot-effective-index-bounds-py"><span class="std std-ref">Effective-index bounds</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/validation/plot_effective_index_bounds.py</span></code>)</p></td>
-<td><p>00:00.069</p></td>
+<td><p>00:00.112</p></td>
 <td><p>0.0</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="gallery/validation/plot_normalized_effective_index.html#sphx-glr-gallery-validation-plot-normalized-effective-index-py"><span class="std std-ref">Normalized effective index</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/validation/plot_normalized_effective_index.py</span></code>)</p></td>
-<td><p>00:00.055</p></td>
+<td><p>00:00.092</p></td>
 <td><p>0.0</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="gallery/specialty_fibers/plot_specialty_fiber_catalog.html#sphx-glr-gallery-specialty-fibers-plot-specialty-fiber-catalog-py"><span class="std std-ref">Specialty-fiber catalog</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/specialty_fibers/plot_specialty_fiber_catalog.py</span></code>)</p></td>
-<td><p>00:00.051</p></td>
+<td><p>00:00.081</p></td>
 <td><p>0.0</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="gallery/analysis/plot_coupled_mode_exchange.html#sphx-glr-gallery-analysis-plot-coupled-mode-exchange-py"><span class="std std-ref">Coupled-mode power exchange</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/analysis/plot_coupled_mode_exchange.py</span></code>)</p></td>
-<td><p>00:00.048</p></td>
+<td><p>00:00.078</p></td>
 <td><p>0.0</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="gallery/specialty_fibers/plot_refractive_index_profile.html#sphx-glr-gallery-specialty-fibers-plot-refractive-index-profile-py"><span class="std std-ref">Refractive-index profile</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/specialty_fibers/plot_refractive_index_profile.py</span></code>)</p></td>
-<td><p>00:00.041</p></td>
+<td><p>00:00.065</p></td>
 <td><p>0.0</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="gallery/analysis/plot_guided_mode_discovery.html#sphx-glr-gallery-analysis-plot-guided-mode-discovery-py"><span class="std std-ref">Guided-mode discovery</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/analysis/plot_guided_mode_discovery.py</span></code>)</p></td>
-<td><p>00:00.035</p></td>
+<td><p>00:00.054</p></td>
 <td><p>0.0</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="gallery/benchmarks/plot_modal_cache_speedup.html#sphx-glr-gallery-benchmarks-plot-modal-cache-speedup-py"><span class="std std-ref">Modal-cache speedup</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/benchmarks/plot_modal_cache_speedup.py</span></code>)</p></td>
-<td><p>00:00.032</p></td>
+<td><p>00:00.051</p></td>
 <td><p>0.0</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="gallery/SMF28/plot_smf28.html#sphx-glr-gallery-smf28-plot-smf28-py"><span class="std std-ref">Modal dispersion VS core index</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/SMF28/plot_smf28.py</span></code>)</p></td>
-<td><p>00:00.010</p></td>
+<td><p>00:00.017</p></td>
 <td><p>0.0</p></td>
 </tr>
 </tbody>
@@ -791,8 +798,8 @@ $(document).ready( function () {
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
-<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+  <script defer src="_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -819,14 +826,13 @@ $(document).ready( function () {
 
   <p class="sphinx-version">
     Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.0.4.
-    <br/>
   </p>
 </div>
       
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.17.1.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.22.0.
 </p></div>
       
     </div>
