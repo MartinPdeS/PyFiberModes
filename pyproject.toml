@@ -81,7 +81,7 @@ documentation = [
     "matplotlib>=3.8",
     "numpydoc ==1.10.0",
     "sphinx >=5.1.1",
-    "sphinx-gallery ==0.21.0",
+    "sphinx-gallery ==0.22.1",
     "sphinx-design >=0.6,<1",
     "sphinx-rtd-theme ==3.1.0",
     "pydata-sphinx-theme ==0.17.1",
