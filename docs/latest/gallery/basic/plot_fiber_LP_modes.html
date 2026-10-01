@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/docs/source/_static/default.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=c83e6b79" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -695,51 +695,48 @@ to download the full example code.</p>
 <span id="sphx-glr-gallery-basic-plot-fiber-lp-modes-py"></span><h1>Group index vs core index<a class="headerlink" href="#group-index-vs-core-index" title="Link to this heading">#</a></h1>
 <section id="imports">
 <h2>Imports<a class="headerlink" href="#imports" title="Link to this heading">#</a></h2>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConvergenceError</span><span class="p">,</span> <span class="n">FiberFactory</span><span class="p">,</span> <span class="n">HE11</span><span class="p">,</span> <span class="n">HE12</span><span class="p">,</span> <span class="n">HE22</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes</span><span class="w"> </span><span class="kn">import</span> <a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-exception reference internal" href="../../code/fundamentals.html#PyFiberModes.exceptions.ConvergenceError" title="PyFiberModes.ConvergenceError"><span class="n">ConvergenceError</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-class reference internal" href="../../code/fibers.html#PyFiberModes.factory.FiberFactory" title="PyFiberModes.FiberFactory"><span class="n">FiberFactory</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../code/fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.Mode"><span class="n">HE11</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../code/fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.Mode"><span class="n">HE12</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../code/fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.Mode"><span class="n">HE22</span></a><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span><span class="nn">.</span><span class="nn">pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w">
+</span></pre></div></div>
 </section>
 <section id="generating-the-fiber-structures">
 <h2>Generating the fiber structures<a class="headerlink" href="#generating-the-fiber-structures" title="Link to this heading">#</a></h2>
 <p>Here we create the different fiber  design that we want to explore</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">core_indexes</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">1.454</span><span class="p">,</span> <span class="mf">1.494</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
-<span class="n">factory</span> <span class="o">=</span> <span class="n">FiberFactory</span><span class="p">(</span><span class="n">wavelength</span><span class="o">=</span><span class="mf">1550e-9</span><span class="p">)</span>
-<span class="n">factory</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"core"</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">7e-6</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">core_indexes</span><span class="p">)</span>
-<span class="n">factory</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"cladding"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mf">1.4444</span><span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="n">core_indexes</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">1.454</span><span class="p">,</span> <span class="mf">1.494</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../code/fibers.html#PyFiberModes.factory.FiberFactory" title="PyFiberModes.FiberFactory"><span class="n">factory</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-class reference internal" href="../../code/fibers.html#PyFiberModes.factory.FiberFactory" title="PyFiberModes.FiberFactory"><span class="n">FiberFactory</span></a><span class="p">(</span><span class="n">wavelength</span><span class="o">=</span><span class="mf">1550e-9</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-method reference internal" href="../../code/fibers.html#PyFiberModes.factory.FiberFactory.add_layer" title="PyFiberModes.FiberFactory.add_layer"><span class="n">factory</span><span class="o">.</span><span class="n">add_layer</span></a><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;</span><span class="s2">core</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">7e-6</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">core_indexes</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-method reference internal" href="../../code/fibers.html#PyFiberModes.factory.FiberFactory.add_layer" title="PyFiberModes.FiberFactory.add_layer"><span class="n">factory</span><span class="o">.</span><span class="n">add_layer</span></a><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;</span><span class="s2">cladding</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mf">1.4444</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <p>Preparing the figure</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">figure</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-
-<span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
-    <span class="n">title</span><span class="o">=</span><span class="s1">'Group index vs core index'</span><span class="p">,</span>
-    <span class="n">xlabel</span><span class="o">=</span><span class="s1">'Core refractive index'</span><span class="p">,</span>
-    <span class="n">ylabel</span><span class="o">=</span><span class="s1">'Group index'</span>
-<span class="p">)</span>
-
-<span class="k">for</span> <span class="n">mode</span> <span class="ow">in</span> <span class="p">[</span><span class="n">HE11</span><span class="p">,</span> <span class="n">HE12</span><span class="p">,</span> <span class="n">HE22</span><span class="p">]:</span>
-    <span class="n">neff</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">fiber</span> <span class="ow">in</span> <span class="n">factory</span><span class="p">:</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">effective_index</span> <span class="o">=</span> <span class="n">fiber</span><span class="o">.</span><span class="n">get_group_index</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span>
-        <span class="k">except</span> <span class="n">ConvergenceError</span><span class="p">:</span>
-            <span class="c1"># Higher-order modes can be unguided below cutoff. Use NaN so the</span>
-            <span class="c1"># plot shows a gap without obscuring other guided solutions.</span>
-            <span class="n">effective_index</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">nan</span>
-        <span class="n">neff</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">effective_index</span><span class="p">)</span>
-
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">core_indexes</span><span class="p">,</span> <span class="n">neff</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">mode</span><span class="p">))</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-
-
-<span class="c1"># -</span>
-</pre></div>
-</div>
-<img src="../../_images/sphx_glr_plot_fiber_LP_modes_001.png" srcset="../../_images/sphx_glr_plot_fiber_LP_modes_001.png" alt="Group index vs core index" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.293 seconds)</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="n">figure</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="w">
+</span>    <span class="n">title</span><span class="o">=</span><span class="s1">'</span><span class="s1">Group index vs core index</span><span class="s1">'</span><span class="p">,</span><span class="w">
+</span>    <span class="n">xlabel</span><span class="o">=</span><span class="s1">'</span><span class="s1">Core refractive index</span><span class="s1">'</span><span class="p">,</span><span class="w">
+</span>    <span class="n">ylabel</span><span class="o">=</span><span class="s1">'</span><span class="s1">Group index</span><span class="s1">'</span><span class="w">
+</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="k">for</span> <a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../code/fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.Mode"><span class="n">mode</span></a> <span class="ow">in</span> <span class="p">[</span><a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../code/fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.Mode"><span class="n">HE11</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../code/fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.Mode"><span class="n">HE12</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../code/fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.Mode"><span class="n">HE22</span></a><span class="p">]</span><span class="p">:</span><span class="w">
+</span>    <span class="n">neff</span> <span class="o">=</span> <span class="p">[</span><span class="p">]</span><span class="w">
+</span>    <span class="k">for</span> <a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../code/fibers.html#PyFiberModes.fiber.Fiber" title="PyFiberModes.Fiber"><span class="n">fiber</span></a> <span class="ow">in</span> <a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../code/fibers.html#PyFiberModes.factory.FiberFactory" title="PyFiberModes.FiberFactory"><span class="n">factory</span></a><span class="p">:</span><span class="w">
+</span>        <span class="k">try</span><span class="p">:</span><span class="w">
+</span>            <span class="n">effective_index</span> <span class="o">=</span> <a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-method reference internal" href="../../code/fibers.html#PyFiberModes.fiber.Fiber.get_group_index" title="PyFiberModes.Fiber.get_group_index"><span class="n">fiber</span><span class="o">.</span><span class="n">get_group_index</span></a><span class="p">(</span><a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../code/fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.Mode"><span class="n">mode</span></a><span class="p">)</span><span class="w">
+</span>        <span class="k">except</span> <a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-exception reference internal" href="../../code/fundamentals.html#PyFiberModes.exceptions.ConvergenceError" title="PyFiberModes.ConvergenceError"><span class="n">ConvergenceError</span></a><span class="p">:</span><span class="w">
+</span>            <span class="c1"># Higher-order modes can be unguided below cutoff. Use NaN so the</span><span class="w">
+</span>            <span class="c1"># plot shows a gap without obscuring other guided solutions.</span><span class="w">
+</span>            <span class="n">effective_index</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">nan</span><span class="w">
+</span>        <span class="n">neff</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">effective_index</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span>    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">core_indexes</span><span class="p">,</span> <span class="n">neff</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../code/fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.Mode"><span class="n">mode</span></a><span class="p">)</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="p">)</span><span class="w">
+</span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># -</span><span class="w">
+</span></pre></div></div>
+<img src="../../_images/sphx_glr_plot_fiber_LP_modes_001.png" srcset="../../_images/sphx_glr_plot_fiber_LP_modes_001.png" alt="Group index vs core index" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.172 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-gallery-basic-plot-fiber-lp-modes-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/5ddcee5ea245ea9d2b44b63b10138e8e/plot_fiber_LP_modes.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_fiber_LP_modes.ipynb</span></code></a></p>

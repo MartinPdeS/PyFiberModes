@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/docs/source/_static/default.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=c83e6b79" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -695,38 +695,36 @@ to download the full example code.</p>
 <span id="sphx-glr-gallery-basic-plot-mode-field-1-py"></span><h1>Mode fields<a class="headerlink" href="#mode-fields" title="Link to this heading">#</a></h1>
 <section id="imports">
 <h2>Imports<a class="headerlink" href="#imports" title="Link to this heading">#</a></h2>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes</span><span class="w"> </span><span class="kn">import</span> <span class="n">FiberFactory</span><span class="p">,</span> <span class="n">LP02</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes.field</span><span class="w"> </span><span class="kn">import</span> <span class="n">Field</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes</span><span class="w"> </span><span class="kn">import</span> <a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-class reference internal" href="../../code/fibers.html#PyFiberModes.factory.FiberFactory" title="PyFiberModes.FiberFactory"><span class="n">FiberFactory</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../code/fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.Mode"><span class="n">LP02</span></a><span class="w">
+</span><span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes</span><span class="nn">.</span><a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../code/fields.html#PyFiberModes.field.Field" title="PyFiberModes.Field"><span class="nn">field</span></a><span class="w"> </span><span class="kn">import</span> <a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-class reference internal" href="../../code/fields.html#PyFiberModes.field.Field" title="PyFiberModes.Field"><span class="n">Field</span></a><span class="w">
+</span></pre></div></div>
 </section>
 <section id="generating-the-fiber-structures">
 <h2>Generating the fiber structures<a class="headerlink" href="#generating-the-fiber-structures" title="Link to this heading">#</a></h2>
 <p>Here we create the different fiber design that we want to explore</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">core_indexes</span> <span class="o">=</span> <span class="mf">1.54</span>
-<span class="n">factory</span> <span class="o">=</span> <span class="n">FiberFactory</span><span class="p">(</span><span class="n">wavelength</span><span class="o">=</span><span class="mf">1550e-9</span><span class="p">)</span>
-<span class="n">factory</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"core"</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">4e-6</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">core_indexes</span><span class="p">)</span>
-<span class="n">factory</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"cladding"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mf">1.4444</span><span class="p">)</span>
-
-<span class="n">mode</span> <span class="o">=</span> <span class="n">LP02</span>
-
-<span class="n">fiber</span> <span class="o">=</span> <span class="n">factory</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
-<span class="n">field</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
-    <span class="n">fiber</span><span class="o">=</span><span class="n">fiber</span><span class="p">,</span>
-    <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
-    <span class="n">limit</span><span class="o">=</span><span class="mf">10e-6</span><span class="p">,</span>
-    <span class="n">n_point</span><span class="o">=</span><span class="mi">201</span>
-<span class="p">)</span>
-
-<span class="n">figure</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">plot_type</span><span class="o">=</span><span class="p">[</span><span class="s1">'Ex'</span><span class="p">,</span> <span class="s1">'Ey'</span><span class="p">])</span>
-<span class="c1"># figure = field.plot(plot_type=['Ex', 'Ey', 'Ez', 'Er', 'Ephi'])</span>
-
-
-<span class="c1"># -</span>
-</pre></div>
-</div>
-<img src="../../_images/sphx_glr_plot_mode_field_1_001.png" srcset="../../_images/sphx_glr_plot_mode_field_1_001.png" alt="plot mode field 1" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.282 seconds)</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="n">core_indexes</span> <span class="o">=</span> <span class="mf">1.54</span><span class="w">
+</span><a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../code/fibers.html#PyFiberModes.factory.FiberFactory" title="PyFiberModes.FiberFactory"><span class="n">factory</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-class reference internal" href="../../code/fibers.html#PyFiberModes.factory.FiberFactory" title="PyFiberModes.FiberFactory"><span class="n">FiberFactory</span></a><span class="p">(</span><span class="n">wavelength</span><span class="o">=</span><span class="mf">1550e-9</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-method reference internal" href="../../code/fibers.html#PyFiberModes.factory.FiberFactory.add_layer" title="PyFiberModes.FiberFactory.add_layer"><span class="n">factory</span><span class="o">.</span><span class="n">add_layer</span></a><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;</span><span class="s2">core</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">4e-6</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">core_indexes</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-method reference internal" href="../../code/fibers.html#PyFiberModes.factory.FiberFactory.add_layer" title="PyFiberModes.FiberFactory.add_layer"><span class="n">factory</span><span class="o">.</span><span class="n">add_layer</span></a><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;</span><span class="s2">cladding</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mf">1.4444</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../code/fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.Mode"><span class="n">mode</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../code/fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.Mode"><span class="n">LP02</span></a><span class="w">
+</span><span class="w">
+</span><a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../code/fibers.html#PyFiberModes.fiber.Fiber" title="PyFiberModes.Fiber"><span class="n">fiber</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../code/fibers.html#PyFiberModes.factory.FiberFactory" title="PyFiberModes.FiberFactory"><span class="n">factory</span></a><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w">
+</span><span class="w">
+</span><a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../code/fields.html#PyFiberModes.field.Field" title="PyFiberModes.Field"><span class="n">field</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-class reference internal" href="../../code/fields.html#PyFiberModes.field.Field" title="PyFiberModes.Field"><span class="n">Field</span></a><span class="p">(</span><span class="w">
+</span>    <a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../code/fibers.html#PyFiberModes.fiber.Fiber" title="PyFiberModes.Fiber"><span class="n">fiber</span></a><span class="o">=</span><a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../code/fibers.html#PyFiberModes.fiber.Fiber" title="PyFiberModes.Fiber"><span class="n">fiber</span></a><span class="p">,</span><span class="w">
+</span>    <a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../code/fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.Mode"><span class="n">mode</span></a><span class="o">=</span><a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../code/fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.Mode"><span class="n">mode</span></a><span class="p">,</span><span class="w">
+</span>    <span class="n">limit</span><span class="o">=</span><span class="mf">10e-6</span><span class="p">,</span><span class="w">
+</span>    <span class="n">n_point</span><span class="o">=</span><span class="mi">201</span><span class="w">
+</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="n">figure</span> <span class="o">=</span> <a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-method reference internal" href="../../code/fields.html#PyFiberModes.field.Field.plot" title="PyFiberModes.Field.plot"><span class="n">field</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><span class="n">plot_type</span><span class="o">=</span><span class="p">[</span><span class="s1">'</span><span class="s1">Ex</span><span class="s1">'</span><span class="p">,</span> <span class="s1">'</span><span class="s1">Ey</span><span class="s1">'</span><span class="p">]</span><span class="p">)</span><span class="w">
+</span><span class="c1"># figure = field.plot(plot_type=['Ex', 'Ey', 'Ez', 'Er', 'Ephi'])</span><span class="w">
+</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># -</span><span class="w">
+</span></pre></div></div>
+<img src="../../_images/sphx_glr_plot_mode_field_1_001.png" srcset="../../_images/sphx_glr_plot_mode_field_1_001.png" alt="plot mode field 1" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.375 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-gallery-basic-plot-mode-field-1-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/11004aeb72c216a486a69a57c0b85cab/plot_mode_field_1.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_mode_field_1.ipynb</span></code></a></p>
