@@ -11,12 +11,12 @@ jobs:
   validate-release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
+      - name: Set up Python for release validation
+        uses: MartinPdeS/MPSActions/actions/setup-python@0f5927acf88b25b5d253421e508387897096a2cc
         with:
           python-version: "3.11"
+          install-command: "true"
+          fetch-depth: 0
       - run: python tools/check_release.py --version "${GITHUB_REF_NAME}"
 
   publish:
