@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:00.542** total execution time for 3 files **from gallery/fields**:
+**00:01.025** total execution time for 3 files **from gallery/fields**:
 
 .. container::
 
@@ -33,11 +33,11 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_gallery_fields_plot_vector_components.py` (``plot_vector_components.py``)
-     - 00:00.242
+     - 00:00.451
      - 0.0
    * - :ref:`sphx_glr_gallery_fields_plot_polarization_rotation.py` (``plot_polarization_rotation.py``)
-     - 00:00.183
+     - 00:00.348
      - 0.0
    * - :ref:`sphx_glr_gallery_fields_plot_confinement_by_radius.py` (``plot_confinement_by_radius.py``)
-     - 00:00.116
+     - 00:00.227
      - 0.0
