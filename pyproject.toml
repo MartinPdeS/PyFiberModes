@@ -17,6 +17,7 @@ classifiers = [
     'Programming Language :: Python :: 3.11',
     'Programming Language :: Python :: 3.12',
     'Programming Language :: Python :: 3.13',
+    'Programming Language :: Python :: 3.14',
     'Programming Language :: Python :: Implementation :: CPython',
     'Development Status :: 4 - Beta',
     'Topic :: Scientific/Engineering :: Physics',
@@ -110,3 +111,7 @@ files = [
     "PyFiberModes/solver/protocols.py",
     "PyFiberModes/solver/results.py",
 ]
+
+# Include runtime resources when building wheels from a source archive without Git.
+[tool.setuptools.package-data]
+PyFiberModes = ["fiber_files/*.yaml"]

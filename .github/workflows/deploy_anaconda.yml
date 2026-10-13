@@ -21,12 +21,13 @@ jobs:
 
   publish:
     needs: validate-release
-    uses: MartinPdeS/MPSActions/.github/workflows/publish_compiled_package_to_anaconda.yml@v5
+    uses: MartinPdeS/MPSActions/.github/workflows/publish_compiled_package_to_anaconda.yml@v6
     with:
       # The recipe is ``noarch: python``. Building it in a platform/version
       # matrix creates several artifacts with the same archive path, which
       # collide when the reusable workflow merges them before upload.
-      python_versions: '["3.11"]'
+      # One noarch archive supports all declared Python versions; test it on 3.14.
+      python_versions: '["3.14"]'
       os_list: '["ubuntu-latest"]'
       package_name: pyfibermodes
       recipe_path: conda.recipe

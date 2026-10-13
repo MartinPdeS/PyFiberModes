@@ -321,7 +321,7 @@ Or run the complete local check target:
 
    make check
 
-Tests run on Python 3.11 through 3.13 in GitHub Actions. Bug reports and
+Tests run on Python 3.11 through 3.14 in GitHub Actions. Bug reports and
 feature proposals are welcome through the
 `issue tracker <https://github.com/MartinPdeS/PyFiberModes/issues>`_.
 
