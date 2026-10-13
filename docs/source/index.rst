@@ -12,19 +12,11 @@
     :maxdepth: 2
     :hidden:
 
-    Getting started <getting_started.rst>
-    User guide <user_guide/index.rst>
-    Theory <theory.rst>
-    Architecture <architecture.rst>
-    API policy <api_policy.rst>
-    Public API contract <public_api_contract.rst>
-    Migration <migration_guide.rst>
-    Workflows <workflows.rst>
-    Performance <performance.rst>
-    Troubleshooting <troubleshooting.rst>
+    Start <getting_started.rst>
+    Guide <guide.rst>
     Examples <examples.rst>
-    API reference <code.rst>
-    References <references.rst>
+    API <code.rst>
+    Resources <resources.rst>
 
 Choose your path
 ----------------
