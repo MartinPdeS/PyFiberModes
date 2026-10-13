@@ -71,11 +71,13 @@ def test_compatibility_documents_are_published_in_navigation():
     """Keep the policy and migration guide visible in built documentation."""
     documentation = PROJECT_ROOT / "docs" / "source"
     navigation = (documentation / "index.rst").read_text(encoding="utf-8")
+    resources = (documentation / "resources.rst").read_text(encoding="utf-8")
     policy = (documentation / "api_policy.rst").read_text(encoding="utf-8")
     migration = (documentation / "migration_guide.rst").read_text(encoding="utf-8")
 
-    assert "api_policy.rst" in navigation
-    assert "public_api_contract.rst" in navigation
-    assert "migration_guide.rst" in navigation
+    assert "Resources <resources.rst>" in navigation
+    assert ":link: api_policy" in resources
+    assert ":link: public_api_contract" in resources
+    assert ":link: migration_guide" in resources
     assert "at least two minor releases and six months" in policy
     assert "Unreleased" in migration
