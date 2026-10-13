@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:37.180** total execution time for 10 files **from gallery/basic**:
+**00:37.841** total execution time for 10 files **from gallery/basic**:
 
 .. container::
 
@@ -33,25 +33,25 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_gallery_basic_plot_comparison_solvers.py` (``plot_comparison_solvers.py``)
-     - 00:32.082
+     - 00:32.955
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_U_vs_V.py` (``plot_U_vs_V.py``)
-     - 00:01.842
+     - 00:01.835
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_dispersion.py` (``plot_dispersion.py``)
-     - 00:00.770
+     - 00:00.782
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_group_index.py` (``plot_group_index.py``)
-     - 00:00.647
-     - 0.0
-   * - :ref:`sphx_glr_gallery_basic_plot_mode_field_1.py` (``plot_mode_field_1.py``)
-     - 00:00.521
+     - 00:00.658
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_mode_field.py` (``plot_mode_field.py``)
-     - 00:00.359
+     - 00:00.366
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_fiber_LP_modes.py` (``plot_fiber_LP_modes.py``)
      - 00:00.297
+     - 0.0
+   * - :ref:`sphx_glr_gallery_basic_plot_mode_field_1.py` (``plot_mode_field_1.py``)
+     - 00:00.286
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_mode_field_2.py` (``plot_mode_field_2.py``)
      - 00:00.268
