@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:00.787** total execution time for 3 files **from gallery/benchmarks**:
+**00:00.550** total execution time for 3 files **from gallery/benchmarks**:
 
 .. container::
 
@@ -33,11 +33,11 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_gallery_benchmarks_plot_field_grid_scaling.py` (``plot_field_grid_scaling.py``)
-     - 00:00.550
+     - 00:00.377
      - 0.0
    * - :ref:`sphx_glr_gallery_benchmarks_plot_component_batching_speedup.py` (``plot_component_batching_speedup.py``)
-     - 00:00.183
+     - 00:00.129
      - 0.0
    * - :ref:`sphx_glr_gallery_benchmarks_plot_modal_cache_speedup.py` (``plot_modal_cache_speedup.py``)
-     - 00:00.054
+     - 00:00.044
      - 0.0
