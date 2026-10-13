@@ -6,6 +6,13 @@ use [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.17.1] - 2026-10-13
+
+### Changed
+
+- Reorganized the documentation navigation into Start, Guide, Examples, API,
+  and Resources sections.
+
 ## [0.17.0] - 2026-10-13
 
 ## [0.16.0] - 2026-09-23
@@ -151,7 +158,8 @@ use [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Established the current tagged baseline for subsequent documented releases.
 
-[Unreleased]: https://github.com/MartinPdeS/PyFiberModes/compare/v0.17.0...HEAD
+[Unreleased]: https://github.com/MartinPdeS/PyFiberModes/compare/v0.17.1...HEAD
+[0.17.1]: https://github.com/MartinPdeS/PyFiberModes/releases/tag/v0.17.1
 [0.17.0]: https://github.com/MartinPdeS/PyFiberModes/releases/tag/v0.17.0
 [0.16.0]: https://github.com/MartinPdeS/PyFiberModes/releases/tag/v0.16.0
 [0.15.0]: https://github.com/MartinPdeS/PyFiberModes/releases/tag/v0.15.0
