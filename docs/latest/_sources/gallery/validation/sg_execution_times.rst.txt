@@ -33,10 +33,10 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_gallery_validation_plot_field_area_convergence.py` (``plot_field_area_convergence.py``)
-     - 00:00.194
+     - 00:00.195
      - 0.0
    * - :ref:`sphx_glr_gallery_validation_plot_effective_index_bounds.py` (``plot_effective_index_bounds.py``)
-     - 00:00.114
+     - 00:00.113
      - 0.0
    * - :ref:`sphx_glr_gallery_validation_plot_normalized_effective_index.py` (``plot_normalized_effective_index.py``)
      - 00:00.092
