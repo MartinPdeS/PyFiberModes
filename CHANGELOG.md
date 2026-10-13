@@ -6,6 +6,13 @@ use [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.17.2] - 2026-10-13
+
+### Fixed
+
+- Updated the documentation navigation regression test for the new Resources
+  grouping.
+
 ## [0.17.1] - 2026-10-13
 
 ### Changed
@@ -158,7 +165,8 @@ use [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Established the current tagged baseline for subsequent documented releases.
 
-[Unreleased]: https://github.com/MartinPdeS/PyFiberModes/compare/v0.17.1...HEAD
+[Unreleased]: https://github.com/MartinPdeS/PyFiberModes/compare/v0.17.2...HEAD
+[0.17.2]: https://github.com/MartinPdeS/PyFiberModes/releases/tag/v0.17.2
 [0.17.1]: https://github.com/MartinPdeS/PyFiberModes/releases/tag/v0.17.1
 [0.17.0]: https://github.com/MartinPdeS/PyFiberModes/releases/tag/v0.17.0
 [0.16.0]: https://github.com/MartinPdeS/PyFiberModes/releases/tag/v0.16.0
