@@ -17,3 +17,24 @@ jobs:
       python-version: "3.11"
       package-name: PyFiberModes
       apt-package: xvfb jq
+
+  maintain_documentation:
+    needs: documentation
+    if: ${{ github.event_name == 'push' && (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v')) }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install documentation landing page
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: documentation_page
+          fetch-depth: 0
+      - run: |
+          set -Eeuo pipefail
+          git show "${GITHUB_SHA}:docs/redirect.html" > index.html
+          test -s docs/latest/index.html
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Update documentation landing page [skip ci]"
+          git push origin HEAD:documentation_page
