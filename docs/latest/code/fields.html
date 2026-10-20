@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="../" >
+<html lang="en" data-content_root="../" data-theme="dark">
 
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Fields and coordinates &#8212; PyFiberModes  documentation</title>
+    <title>Fields and coordinates &#8212; PyFiberModes 0.17.3 documentation</title>
   
   
   
   <script data-cfasync="false">
-    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
-    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "dark";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "dark";
   </script>
   <!--
     this give us a css class that will be invisible only if js is disabled
@@ -26,26 +26,25 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=64cc4de3f052d77215f0" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=64cc4de3f052d77215f0" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/docs/source/_static/default.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=c83e6b79" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../_static/default.css?v=a5ae2a23" />
-    <link rel="stylesheet" type="text/css" href="../_static/layout.css?v=dc96f8db" />
+    <link rel="stylesheet" type="text/css" href="../_static/default.css?v=8b59af14" />
+    <link rel="stylesheet" type="text/css" href="../_static/martinpdes_layout.css?v=a8cc01cd" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../_static/scripts/fontawesome.js?digest=64cc4de3f052d77215f0"></script>
+  <script defer src="../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/documentation_options.js?v=bbfb6319"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/sg-tags.js?v=d80f6fa4"></script>
@@ -53,9 +52,9 @@
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'code/fields';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.22.0';
+        DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/MartinPdeS/PyFiberModes/documentation_page/version_switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'v0.17.3';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
         DOCUMENTATION_OPTIONS.show_version_warning_banner =
             true;
         </script>
@@ -66,6 +65,7 @@
     <link rel="next" title="Analysis, design, and propagation" href="analysis.html" />
     <link rel="prev" title="Fibers and layers" href="fibers.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.17.3" />
   
@@ -75,7 +75,7 @@
     <script src="../searchindex.js"></script>
   
   </head>
-  <body data-default-mode="">
+  <body data-default-mode="dark">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
@@ -136,14 +136,10 @@
   
     
     
-      
     
-    
-    <img src="../_static/logo.svg" class="logo__image only-light" alt=""/>
-    <img src="../_static/logo.svg" class="logo__image only-dark pst-js-only" alt=""/>
+    <img src="../_static/logo.svg" class="logo__image only-dark" alt="PyFiberModes 0.17.3 documentation - Home"/>
+    <img src="../_static/logo.svg" class="logo__image only-light pst-js-only" alt="PyFiberModes 0.17.3 documentation - Home"/>
   
-  
-    <p class="title logo__title">PyFiberModes</p>
   
 </a></div>
     
@@ -228,21 +224,6 @@
     role="listbox" aria-labelledby="pst-version-switcher-button-2">
     <!-- dropdown will be populated by javascript on page load -->
   </div>
-</div></div>
-      
-        <div class="navbar-item">
-
-<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
-  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
-    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
-  </button>
-  <ul class="dropdown-menu dropdown-menu-end">
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
-  </ul>
 </div></div>
       
         <div class="navbar-item"><ul class="navbar-icon-links"
@@ -392,21 +373,6 @@
   </div>
 </div></div>
         
-          <div class="navbar-item">
-
-<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
-  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
-    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
-  </button>
-  <ul class="dropdown-menu dropdown-menu-end">
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
-  </ul>
-</div></div>
-        
           <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
         <li class="nav-item">
@@ -531,7 +497,7 @@
 <p>Vectorized electric and magnetic field evaluation on Cartesian grids.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fiber</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.mode.Mode"><span class="pre">Mode</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_point</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">101</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fiber</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">101</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A class representing the electric and magnetic field components in a fiber.</p>
 <dl class="field-list simple">
@@ -588,7 +554,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.initialize_array">
-<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">initialize_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.initialize_array"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.initialize_array" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">initialize_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shape</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.initialize_array"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.initialize_array" title="Link to this definition">#</a></dt>
 <dd><p>Initialize a floating-point array of zeros.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -605,7 +571,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.get_azimuthal_dependency">
-<span class="sig-name descname"><span class="pre">get_azimuthal_dependency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dependency_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.get_azimuthal_dependency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_azimuthal_dependency" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_azimuthal_dependency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dependency_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.get_azimuthal_dependency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_azimuthal_dependency" title="Link to this definition">#</a></dt>
 <dd><p>Compute the azimuthal dependency for the field based on the given type.</p>
 <p>The azimuthal dependencies are defined as:</p>
 <div class="math notranslate nohighlight">
@@ -640,7 +606,7 @@ of field azimuthal behavior in optical fibers.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.get_components">
-<span class="sig-name descname"><span class="pre">get_components</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">components</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('Ex',</span> <span class="pre">'Ey',</span> <span class="pre">'Ez',</span> <span class="pre">'Hx',</span> <span class="pre">'Hy',</span> <span class="pre">'Hz')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.get_components"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_components" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_components</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">components</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('Ex',</span> <span class="pre">'Ey',</span> <span class="pre">'Ez',</span> <span class="pre">'Hx',</span> <span class="pre">'Hy',</span> <span class="pre">'Hz')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.get_components"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_components" title="Link to this definition">#</a></dt>
 <dd><p>Evaluate and cache several field components together.</p>
 <p>All requested components share the same radial solve, interpolated maps,
 and azimuthal factors. This is the preferred entry point when more than
@@ -664,7 +630,7 @@ one component is needed.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.get_index_iterator">
-<span class="sig-name descname"><span class="pre">get_index_iterator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.get_index_iterator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_index_iterator" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_index_iterator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.get_index_iterator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_index_iterator" title="Link to this definition">#</a></dt>
 <dd><p>Generate an iterator for multi-dimensional array indices.</p>
 <p>This method provides a way to iterate through all indices of a
 multi-dimensional NumPy array in a memory-efficient manner.</p>
@@ -680,7 +646,7 @@ multi-dimensional NumPy array in a memory-efficient manner.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.wrapper_get_field">
-<span class="sig-name descname"><span class="pre">wrapper_get_field</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.wrapper_get_field"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.wrapper_get_field" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">wrapper_get_field</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.wrapper_get_field"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.wrapper_get_field" title="Link to this definition">#</a></dt>
 <dd><p>Decorator for wrapping field computation methods.</p>
 <p>This decorator can be used to add pre- or post-processing steps
 to field computation methods in the <cite>Field</cite> class.</p>
@@ -699,7 +665,7 @@ to field computation methods in the <cite>Field</cite> class.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.Ex">
-<span class="sig-name descname"><span class="pre">Ex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Ex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Ex" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">Ex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Ex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Ex" title="Link to this definition">#</a></dt>
 <dd><p>Compute the x-component of the electric field, <span class="math notranslate nohighlight">\(E_x\)</span>.</p>
 <p>The x-component of the electric field is calculated based on the field’s mode family.
 For LP (linearly polarized) modes, it uses the radial electric field and the azimuthal
@@ -743,7 +709,7 @@ E_T \cdot \cos(\theta_{\text{pol}}) &amp; \text{otherwise}
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.Ey">
-<span class="sig-name descname"><span class="pre">Ey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Ey"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Ey" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">Ey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Ey"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Ey" title="Link to this definition">#</a></dt>
 <dd><p>Compute the y-component of the electric field, <span class="math notranslate nohighlight">\(E_y\)</span>.</p>
 <p>The y-component of the electric field is calculated based on the field’s mode family.
 For LP (linearly polarized) modes, it uses the azimuthal dependency <span class="math notranslate nohighlight">\(f_\nu(\phi)\)</span>
@@ -787,7 +753,7 @@ E_T \cdot \sin(\theta_{\text{pol}}) &amp; \text{otherwise}
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.Ez">
-<span class="sig-name descname"><span class="pre">Ez</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Ez"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Ez" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">Ez</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Ez"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Ez" title="Link to this definition">#</a></dt>
 <dd><p>Compute the z-component of the electric field, <span class="math notranslate nohighlight">\(E_z\)</span>.</p>
 <p>The z-component of the electric field is calculated using the azimuthal dependency
 <span class="math notranslate nohighlight">\(f_\nu(\phi)\)</span> and the longitudinal electric field component <span class="math notranslate nohighlight">\(E_z\)</span>.</p>
@@ -823,7 +789,7 @@ E_T \cdot \sin(\theta_{\text{pol}}) &amp; \text{otherwise}
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.Er">
-<span class="sig-name descname"><span class="pre">Er</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Er"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Er" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">Er</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Er"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Er" title="Link to this definition">#</a></dt>
 <dd><p>Compute the radial component of the electric field, <span class="math notranslate nohighlight">\(E_r\)</span>.</p>
 <p>The radial component of the electric field is calculated differently based on the field’s
 mode family. For LP (linearly polarized) modes, it uses the transverse electric field and
@@ -867,7 +833,7 @@ E_\rho \cdot f_\nu(\phi) &amp; \text{otherwise}
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.Ephi">
-<span class="sig-name descname"><span class="pre">Ephi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Ephi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Ephi" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">Ephi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Ephi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Ephi" title="Link to this definition">#</a></dt>
 <dd><p>Compute the azimuthal component of the electric field, <span class="math notranslate nohighlight">\(E_\phi\)</span>.</p>
 <p>The azimuthal component of the electric field is calculated based on the field’s mode family.
 For LP (linearly polarized) modes, it uses the transverse electric field and its polarization.
@@ -911,7 +877,7 @@ E_\phi \cdot g_\nu(\phi) &amp; \text{otherwise}
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.Et">
-<span class="sig-name descname"><span class="pre">Et</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Et"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Et" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">Et</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Et"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Et" title="Link to this definition">#</a></dt>
 <dd><p>Compute the transverse component of the electric field, <span class="math notranslate nohighlight">\(E_T\)</span>.</p>
 <p>The transverse electric field is computed as the magnitude of the
 components perpendicular to the z-axis. For LP (linearly polarized)
@@ -948,7 +914,7 @@ is computed using the radial and azimuthal components.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.Epol">
-<span class="sig-name descname"><span class="pre">Epol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Epol"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Epol" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">Epol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Epol"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Epol" title="Link to this definition">#</a></dt>
 <dd><p>Compute the polarization angle of the transverse electric field, <span class="math notranslate nohighlight">\(\theta_{\text{pol}}\)</span>.</p>
 <p>The polarization angle is the direction of the transverse electric field vector
 in the plane perpendicular to the z-axis. For LP (linearly polarized) modes, it is
@@ -985,7 +951,7 @@ the radial and azimuthal components.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.Emod">
-<span class="sig-name descname"><span class="pre">Emod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Emod"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Emod" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">Emod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Emod"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Emod" title="Link to this definition">#</a></dt>
 <dd><p>Compute the modulus (magnitude) of the electric field vector, <span class="math notranslate nohighlight">\(|\vec{E}|\)</span>.</p>
 <p>The electric field modulus is the magnitude of the field vector, which
 includes all components (transverse and longitudinal). For LP (linearly
@@ -1022,7 +988,7 @@ uses the cylindrical components.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.Hx">
-<span class="sig-name descname"><span class="pre">Hx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Hx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Hx" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">Hx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Hx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Hx" title="Link to this definition">#</a></dt>
 <dd><p>Compute the x-component of the magnetic field <span class="math notranslate nohighlight">\(H_x\)</span>.</p>
 <p>For LP (linearly polarized) modes, this is computed using the radial
 component <span class="math notranslate nohighlight">\(H_r\)</span> and the azimuthal dependency <span class="math notranslate nohighlight">\(f_\nu(\phi)\)</span>:</p>
@@ -1052,7 +1018,7 @@ component <span class="math notranslate nohighlight">\(H_r\)</span> and the azim
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.Hy">
-<span class="sig-name descname"><span class="pre">Hy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Hy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Hy" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">Hy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Hy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Hy" title="Link to this definition">#</a></dt>
 <dd><p>Compute the y-component of the magnetic field <span class="math notranslate nohighlight">\(H_y\)</span>.</p>
 <p>For LP modes, this is computed using the azimuthal component <span class="math notranslate nohighlight">\(H_\phi\)</span>
 and the azimuthal dependency <span class="math notranslate nohighlight">\(f_\nu(\phi)\)</span>:</p>
@@ -1082,7 +1048,7 @@ and the azimuthal dependency <span class="math notranslate nohighlight">\(f_\nu(
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.Hz">
-<span class="sig-name descname"><span class="pre">Hz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Hz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Hz" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">Hz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Hz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Hz" title="Link to this definition">#</a></dt>
 <dd><p>Compute the z-component of the magnetic field <span class="math notranslate nohighlight">\(H_z\)</span>.</p>
 <p>The z-component is calculated for all modes using the longitudinal field
 <span class="math notranslate nohighlight">\(H_z\)</span> and the azimuthal dependency <span class="math notranslate nohighlight">\(f_\nu(\phi)\)</span>:</p>
@@ -1109,7 +1075,7 @@ and the azimuthal dependency <span class="math notranslate nohighlight">\(f_\nu(
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.Hr">
-<span class="sig-name descname"><span class="pre">Hr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Hr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Hr" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">Hr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Hr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Hr" title="Link to this definition">#</a></dt>
 <dd><p>Compute the radial component of the magnetic field <span class="math notranslate nohighlight">\(H_r\)</span>.</p>
 <p>For LP modes, this is computed using the transverse field <span class="math notranslate nohighlight">\(H_T\)</span> and
 the polarization angle <span class="math notranslate nohighlight">\(\theta_{\text{pol}}\)</span>:</p>
@@ -1136,7 +1102,7 @@ the polarization angle <span class="math notranslate nohighlight">\(\theta_{\tex
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.Hphi">
-<span class="sig-name descname"><span class="pre">Hphi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Hphi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Hphi" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">Hphi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Hphi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Hphi" title="Link to this definition">#</a></dt>
 <dd><p>Compute the azimuthal component of the magnetic field <span class="math notranslate nohighlight">\(H_\phi\)</span>.</p>
 <p>For LP modes, this is computed using the transverse field <span class="math notranslate nohighlight">\(H_T\)</span> and
 the polarization angle <span class="math notranslate nohighlight">\(\theta_{\text{pol}}\)</span>:</p>
@@ -1163,7 +1129,7 @@ the polarization angle <span class="math notranslate nohighlight">\(\theta_{\tex
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.Ht">
-<span class="sig-name descname"><span class="pre">Ht</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Ht"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Ht" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">Ht</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Ht"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Ht" title="Link to this definition">#</a></dt>
 <dd><p>Compute the transverse component of the magnetic field, <span class="math notranslate nohighlight">\(H_T\)</span>.</p>
 <p>The transverse magnetic field is calculated as the magnitude of the
 components perpendicular to the z-axis. For LP (linearly polarized) modes,
@@ -1193,7 +1159,7 @@ using the radial and azimuthal components.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.Hpol">
-<span class="sig-name descname"><span class="pre">Hpol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Hpol"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Hpol" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">Hpol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Hpol"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Hpol" title="Link to this definition">#</a></dt>
 <dd><p>Compute the polarization angle of the transverse magnetic field, <span class="math notranslate nohighlight">\(\theta_{\text{pol}}\)</span>.</p>
 <p>The polarization angle represents the direction of the transverse magnetic
 field vector in the plane perpendicular to the z-axis. For LP modes, it is
@@ -1223,7 +1189,7 @@ using the radial and azimuthal components.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.Hmod">
-<span class="sig-name descname"><span class="pre">Hmod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Hmod"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Hmod" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">Hmod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.Hmod"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.Hmod" title="Link to this definition">#</a></dt>
 <dd><p>Compute the modulus (magnitude) of the magnetic field vector, <span class="math notranslate nohighlight">\(|\vec{H}|\)</span>.</p>
 <p>The magnetic field modulus is the magnitude of the field vector, which
 includes all components (transverse and longitudinal). For LP (linearly
@@ -1260,7 +1226,7 @@ uses the cylindrical components.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.get_effective_area">
-<span class="sig-name descname"><span class="pre">get_effective_area</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.get_effective_area"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_effective_area" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_effective_area</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.get_effective_area"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_effective_area" title="Link to this definition">#</a></dt>
 <dd><p>Compute the effective area of the mode, <span class="math notranslate nohighlight">\(A_{\text{eff}}\)</span>.</p>
 <p>The effective area is defined as:</p>
 <div class="math notranslate nohighlight">
@@ -1284,7 +1250,7 @@ uses the cylindrical components.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.get_integrale_square">
-<span class="sig-name descname"><span class="pre">get_integrale_square</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.get_integrale_square"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_integrale_square" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_integrale_square</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.get_integrale_square"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_integrale_square" title="Link to this definition">#</a></dt>
 <dd><p>Compute the square of the integral of the given array.</p>
 <div class="math notranslate nohighlight">
 \[\left( \int |F(x, y)|^2 \, dx \, dy \right)\]</div>
@@ -1303,7 +1269,7 @@ uses the cylindrical components.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.get_intensity">
-<span class="sig-name descname"><span class="pre">get_intensity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.get_intensity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_intensity" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_intensity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.get_intensity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_intensity" title="Link to this definition">#</a></dt>
 <dd><p>Compute the intensity of the mode, <span class="math notranslate nohighlight">\(I\)</span>.</p>
 <p>The intensity is defined as:</p>
 <div class="math notranslate nohighlight">
@@ -1328,7 +1294,7 @@ uses the cylindrical components.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.get_normalization_constant">
-<span class="sig-name descname"><span class="pre">get_normalization_constant</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.get_normalization_constant"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_normalization_constant" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_normalization_constant</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.get_normalization_constant"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_normalization_constant" title="Link to this definition">#</a></dt>
 <dd><p>Compute the normalization constant, <span class="math notranslate nohighlight">\(N\)</span>.</p>
 <p>The normalization constant is defined as:</p>
 <div class="math notranslate nohighlight">
@@ -1354,7 +1320,7 @@ uses the cylindrical components.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.get_poynting_vector">
-<span class="sig-name descname"><span class="pre">get_poynting_vector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.get_poynting_vector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_poynting_vector" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_poynting_vector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.get_poynting_vector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_poynting_vector" title="Link to this definition">#</a></dt>
 <dd><p>Return the time-averaged Cartesian Poynting-vector components.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1374,7 +1340,7 @@ uses the cylindrical components.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.get_power">
-<span class="sig-name descname"><span class="pre">get_power</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.get_power"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_power" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_power</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.get_power"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_power" title="Link to this definition">#</a></dt>
 <dd><p>Integrate the longitudinal time-averaged power over the grid.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1394,7 +1360,7 @@ uses the cylindrical components.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.get_confinement_factor">
-<span class="sig-name descname"><span class="pre">get_confinement_factor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.get_confinement_factor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_confinement_factor" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_confinement_factor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.get_confinement_factor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_confinement_factor" title="Link to this definition">#</a></dt>
 <dd><p>Return the fraction of electric energy inside a radius.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1411,7 +1377,7 @@ uses the cylindrical components.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.overlap">
-<span class="sig-name descname"><span class="pre">overlap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">complex</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.overlap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.overlap" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">overlap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.overlap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.overlap" title="Link to this definition">#</a></dt>
 <dd><p>Return the normalized vector-field overlap with another field.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1428,7 +1394,7 @@ uses the cylindrical components.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.field.Field.plot">
-<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plot_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.plot" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plot_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.plot" title="Link to this definition">#</a></dt>
 <dd><p>Plot selected field components using the optional plotting layer.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1456,7 +1422,7 @@ or returned. Default is True.</p></li>
 <p id="module-PyFiberModes.coordinates">Cartesian and cylindrical sampling-grid definitions.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="PyFiberModes.coordinates.CylindricalCoordinates">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">CylindricalCoordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rho</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/coordinates.html#CylindricalCoordinates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.coordinates.CylindricalCoordinates" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">CylindricalCoordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rho</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/coordinates.html#CylindricalCoordinates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.coordinates.CylindricalCoordinates" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Represents a set of points in cylindrical coordinates.</p>
 <dl class="field-list simple">
@@ -1485,7 +1451,7 @@ or returned. Default is True.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.coordinates.CylindricalCoordinates.to_cartesian">
-<span class="sig-name descname"><span class="pre">to_cartesian</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFiberModes.coordinates.CartesianCoordinates" title="PyFiberModes.coordinates.CartesianCoordinates"><span class="pre">CartesianCoordinates</span></a></span></span><a class="reference internal" href="../_modules/PyFiberModes/coordinates.html#CylindricalCoordinates.to_cartesian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.coordinates.CylindricalCoordinates.to_cartesian" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">to_cartesian</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/coordinates.html#CylindricalCoordinates.to_cartesian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.coordinates.CylindricalCoordinates.to_cartesian" title="Link to this definition">#</a></dt>
 <dd><p>Converts cylindrical coordinates to cartesian coordinates.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -1515,7 +1481,7 @@ or returned. Default is True.</p></li>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="PyFiberModes.coordinates.CartesianCoordinates">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">CartesianCoordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_structured</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_3D</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/coordinates.html#CartesianCoordinates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">CartesianCoordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_structured</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_3D</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/coordinates.html#CartesianCoordinates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Represents a set of points in cartesian coordinates.</p>
 <dl class="field-list simple">
@@ -1618,7 +1584,7 @@ or returned. Default is True.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.coordinates.CartesianCoordinates.generate_from_boundaries">
-<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">generate_from_boundaries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_limits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_limits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_limits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_points</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFiberModes.coordinates.CartesianCoordinates" title="PyFiberModes.coordinates.CartesianCoordinates"><span class="pre">CartesianCoordinates</span></a></span></span><a class="reference internal" href="../_modules/PyFiberModes/coordinates.html#CartesianCoordinates.generate_from_boundaries"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates.generate_from_boundaries" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">generate_from_boundaries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_limits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_limits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_limits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_points</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/coordinates.html#CartesianCoordinates.generate_from_boundaries"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates.generate_from_boundaries" title="Link to this definition">#</a></dt>
 <dd><p>Generates a structured cartesian coordinate system from boundaries.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1642,7 +1608,7 @@ or returned. Default is True.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.coordinates.CartesianCoordinates.generate_from_square">
-<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">generate_from_square</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(0.0,</span> <span class="pre">0.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_points</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFiberModes.coordinates.CartesianCoordinates" title="PyFiberModes.coordinates.CartesianCoordinates"><span class="pre">CartesianCoordinates</span></a></span></span><a class="reference internal" href="../_modules/PyFiberModes/coordinates.html#CartesianCoordinates.generate_from_square"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates.generate_from_square" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">generate_from_square</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0.0,</span> <span class="pre">0.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_points</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/coordinates.html#CartesianCoordinates.generate_from_square"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates.generate_from_square" title="Link to this definition">#</a></dt>
 <dd><p>Generates a structured 2D square coordinate system.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1663,7 +1629,7 @@ or returned. Default is True.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.coordinates.CartesianCoordinates.centering">
-<span class="sig-name descname"><span class="pre">centering</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/coordinates.html#CartesianCoordinates.centering"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates.centering" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">centering</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/coordinates.html#CartesianCoordinates.centering"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates.centering" title="Link to this definition">#</a></dt>
 <dd><p>Recenters the coordinates so that their mean is zero along each axis.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -1677,7 +1643,7 @@ or returned. Default is True.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.coordinates.CartesianCoordinates.to_cylindrical">
-<span class="sig-name descname"><span class="pre">to_cylindrical</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFiberModes.coordinates.CylindricalCoordinates" title="PyFiberModes.coordinates.CylindricalCoordinates"><span class="pre">CylindricalCoordinates</span></a></span></span><a class="reference internal" href="../_modules/PyFiberModes/coordinates.html#CartesianCoordinates.to_cylindrical"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates.to_cylindrical" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">to_cylindrical</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/coordinates.html#CartesianCoordinates.to_cylindrical"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates.to_cylindrical" title="Link to this definition">#</a></dt>
 <dd><p>Converts cartesian coordinates to cylindrical coordinates.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -1691,7 +1657,7 @@ or returned. Default is True.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.coordinates.CartesianCoordinates.shift_coordinates">
-<span class="sig-name descname"><span class="pre">shift_coordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shift</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/coordinates.html#CartesianCoordinates.shift_coordinates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates.shift_coordinates" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">shift_coordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shift</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/coordinates.html#CartesianCoordinates.shift_coordinates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates.shift_coordinates" title="Link to this definition">#</a></dt>
 <dd><p>Shifts the coordinates by specified amounts.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1708,7 +1674,7 @@ or returned. Default is True.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PyFiberModes.coordinates.CartesianCoordinates.scale_coordinates">
-<span class="sig-name descname"><span class="pre">scale_coordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/PyFiberModes/coordinates.html#CartesianCoordinates.scale_coordinates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates.scale_coordinates" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">scale_coordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scale</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/coordinates.html#CartesianCoordinates.scale_coordinates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates.scale_coordinates" title="Link to this definition">#</a></dt>
 <dd><p>Scales the coordinates by specified factors.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1750,7 +1716,7 @@ or returned. Default is True.</p></li>
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field"><code class="docutils literal notranslate"><span class="pre">Field</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field"><code class="docutils literal notranslate"><span class="pre">Field</span></code></a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.cartesian_coordinates"><code class="docutils literal notranslate"><span class="pre">Field.cartesian_coordinates</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.cylindrical_coordinates"><code class="docutils literal notranslate"><span class="pre">Field.cylindrical_coordinates</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.fiber"><code class="docutils literal notranslate"><span class="pre">Field.fiber</span></code></a></li>
@@ -1789,7 +1755,7 @@ or returned. Default is True.</p></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.plot"><code class="docutils literal notranslate"><span class="pre">Field.plot()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CylindricalCoordinates"><code class="docutils literal notranslate"><span class="pre">CylindricalCoordinates</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CylindricalCoordinates"><code class="docutils literal notranslate"><span class="pre">CylindricalCoordinates</span></code></a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CylindricalCoordinates.rho"><code class="docutils literal notranslate"><span class="pre">CylindricalCoordinates.rho</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CylindricalCoordinates.phi"><code class="docutils literal notranslate"><span class="pre">CylindricalCoordinates.phi</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CylindricalCoordinates.z"><code class="docutils literal notranslate"><span class="pre">CylindricalCoordinates.z</span></code></a></li>
@@ -1797,7 +1763,7 @@ or returned. Default is True.</p></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CylindricalCoordinates.to_cylindrical"><code class="docutils literal notranslate"><span class="pre">CylindricalCoordinates.to_cylindrical()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CartesianCoordinates"><code class="docutils literal notranslate"><span class="pre">CartesianCoordinates</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CartesianCoordinates"><code class="docutils literal notranslate"><span class="pre">CartesianCoordinates</span></code></a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CartesianCoordinates.x"><code class="docutils literal notranslate"><span class="pre">CartesianCoordinates.x</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CartesianCoordinates.y"><code class="docutils literal notranslate"><span class="pre">CartesianCoordinates.y</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CartesianCoordinates.z"><code class="docutils literal notranslate"><span class="pre">CartesianCoordinates.z</span></code></a></li>
@@ -1817,6 +1783,22 @@ or returned. Default is True.</p></li>
 </li>
 </ul>
   </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  
+  <div class="tocsection editthispage">
+    <a href="https://github.com/MartinPdeS/PyFiberModes/edit/master/docs/source/code/fields.rst">
+      <i class="fa-solid fa-pencil"></i>
+      
+      
+        
+          Edit on GitHub
+        
+      
+    </a>
+  </div>
+</div>
 
   <div class="sidebar-secondary-item">
 
@@ -1840,8 +1822,8 @@ or returned. Default is True.</p></li>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1852,7 +1834,7 @@ or returned. Default is True.</p></li>
 
   <p class="copyright">
     
-      © Copyright 2024, Martin Poinsinet de Sivry-Houle.
+      © Copyright Martin Poinsinet de Sivry-Houle.
       <br/>
     
   </p>
@@ -1874,7 +1856,7 @@ or returned. Default is True.</p></li>
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.22.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
 </p></div>
       
     </div>

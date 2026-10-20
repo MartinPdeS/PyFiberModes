@@ -29,18 +29,6 @@ div.highlight a {
   box-shadow: 0 0.8rem 1.8rem rgb(14 34 90 / 16%);
 }
 
-.navbar-brand img,
-.bd-header .navbar-brand img {
-  max-height: 3rem;
-}
-
 .bd-content img[alt="PyFiberModes logo"] {
   filter: drop-shadow(0 0.7rem 1rem rgb(20 217 255 / 20%));
-}
-
-/* Keep desktop navigation labels compact and on a single line. */
-@media (min-width: 960px) {
-  .bd-header .navbar-nav .nav-link {
-    white-space: nowrap;
-  }
 }
