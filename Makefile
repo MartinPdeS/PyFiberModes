@@ -1,14 +1,18 @@
 .DEFAULT_GOAL := help
 
 PYTHON ?= python3
+SPHINXOPTS ?=
+DOCS_BUILD_DIR ?= docs/build
 TAG_VERSION ?= $(or $(VERSION),$(filter v%,$(MAKECMDGOALS)))
 RELEASE_KIND := $(filter major minor patch,$(MAKECMDGOALS))
 
-.PHONY: help test quality check release-check tag release major minor patch
+.PHONY: help docs docs-install test quality check release-check tag release major minor patch
 
 help:
 	@echo "PyFiberModes development commands"
 	@echo ""
+	@echo "  make docs                  Build documentation and execute gallery examples"
+	@echo "  make docs-install          Install the documentation dependencies"
 	@echo "  make test                  Run the test suite"
 	@echo "  make quality               Run static quality checks"
 	@echo "  make check                 Run tests, quality, and release checks"
@@ -25,6 +29,12 @@ $(TAG_VERSION):
 	@:
 endif
 endif
+
+docs-install:
+	$(PYTHON) -m pip install -e ".[documentation]"
+
+docs:
+	MPLBACKEND=Agg $(PYTHON) -m sphinx -M html docs/source "$(DOCS_BUILD_DIR)" $(SPHINXOPTS)
 
 test:
 	MPLBACKEND=Agg $(PYTHON) -m pytest
