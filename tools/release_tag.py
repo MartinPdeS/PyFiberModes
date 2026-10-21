@@ -82,7 +82,17 @@ def update_changelog(version: str) -> None:
 def generate_version_file(version: str) -> None:
     environment = os.environ.copy()
     environment["SETUPTOOLS_SCM_PRETEND_VERSION"] = version
-    run(sys.executable, "-m", "vcs_versioning", "--force-write-version-files", env=environment)
+    run(
+        sys.executable,
+        "-c",
+        (
+            "import setuptools_scm; "
+            f"setuptools_scm.get_version(root={str(ROOT)!r}, "
+            f"write_to={str(VERSION_FILE.relative_to(ROOT))!r}, "
+            "version_scheme='only-version', local_scheme='no-local-version')"
+        ),
+        env=environment,
+    )
 
 
 def create_release(tag: str, version: str) -> None:
