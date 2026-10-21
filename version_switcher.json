@@ -5,6 +5,11 @@
     "url": "https://martinpdes.github.io/PyFiberModes/docs/latest"
   },
   {
+    "name": "v0.17.6",
+    "version": "v0.17.6",
+    "url": "https://martinpdes.github.io/PyFiberModes/docs/v0.17.6"
+  },
+  {
     "name": "v0.17.4",
     "version": "v0.17.4",
     "url": "https://martinpdes.github.io/PyFiberModes/docs/v0.17.4"
@@ -23,10 +28,5 @@
     "name": "v0.17.1",
     "version": "v0.17.1",
     "url": "https://martinpdes.github.io/PyFiberModes/docs/v0.17.1"
-  },
-  {
-    "name": "v0.17.0",
-    "version": "v0.17.0",
-    "url": "https://martinpdes.github.io/PyFiberModes/docs/v0.17.0"
   }
 ]
