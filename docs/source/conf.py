@@ -31,15 +31,10 @@ globals().update(
         gallery_sections=gallery_sections,
         gallery_default_thumb="_static/favicon.png",
         gallery_options={"abort_on_example_error": True},
-        html_theme_options={
-            "logo": {"text": "", "image": "_static/logo.svg"},
-        },
+        logo_text="",
+        autodoc_default_options={"members": True},
     )
 )
-
-autodoc_default_options["members"] = True
-html_context["doc_path"] = "docs/source"
-html_context["default_mode"] = "dark"
 
 # Keep page substitutions independent of importing the numerical package.
 metadata = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
