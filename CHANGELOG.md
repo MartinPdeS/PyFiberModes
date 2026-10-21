@@ -6,6 +6,8 @@ use [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.17.6] - 2026-10-22
+
 ## [0.17.5] - 2026-10-22
 
 ## [0.17.4] - 2026-10-20
@@ -171,7 +173,8 @@ use [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Established the current tagged baseline for subsequent documented releases.
 
-[Unreleased]: https://github.com/MartinPdeS/PyFiberModes/compare/v0.17.5...HEAD
+[Unreleased]: https://github.com/MartinPdeS/PyFiberModes/compare/v0.17.6...HEAD
+[0.17.6]: https://github.com/MartinPdeS/PyFiberModes/releases/tag/v0.17.6
 [0.17.5]: https://github.com/MartinPdeS/PyFiberModes/releases/tag/v0.17.5
 [0.17.4]: https://github.com/MartinPdeS/PyFiberModes/releases/tag/v0.17.4
 [0.17.3]: https://github.com/MartinPdeS/PyFiberModes/releases/tag/v0.17.3
