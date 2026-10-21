@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:00.336** total execution time for 3 files **from gallery/analysis**:
+**00:00.332** total execution time for 3 files **from gallery/analysis**:
 
 .. container::
 
@@ -36,8 +36,8 @@ Computation times
      - 00:00.200
      - 0.0
    * - :ref:`sphx_glr_gallery_analysis_plot_coupled_mode_exchange.py` (``plot_coupled_mode_exchange.py``)
-     - 00:00.081
+     - 00:00.078
      - 0.0
    * - :ref:`sphx_glr_gallery_analysis_plot_guided_mode_discovery.py` (``plot_guided_mode_discovery.py``)
-     - 00:00.055
+     - 00:00.054
      - 0.0
