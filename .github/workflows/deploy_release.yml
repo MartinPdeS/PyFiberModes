@@ -8,39 +8,18 @@ permissions:
   contents: read
 
 jobs:
-  validate-release:
-    name: Validate release
-    runs-on: ubuntu-latest
-    steps:
-      - name: Set up Python for release validation
-        uses: MartinPdeS/MPSActions/actions/setup-python@v7
-        with:
-          python-version: "3.11"
-          install-command: "true"
-          fetch-depth: 0
-      - run: python tools/check_release.py --version "${GITHUB_REF_NAME}"
-
-  pypi:
-    name: Publish to PyPI
-    needs: validate-release
-    uses: MartinPdeS/MPSActions/.github/workflows/publish_pure_package_to_PyPi.yml@v7
+  release:
+    uses: MartinPdeS/MPSActions/.github/workflows/publish_release.yml@v9
     with:
-      python-version: "3.11"
-      test-command: python -c "import PyFiberModes"
+      pypi_package_type: pure
+      pypi_python_version: "3.11"
+      pypi_test_command: 'python -c "import PyFiberModes"'
+      release_validation_command: 'python tools/check_release.py --version "${GITHUB_REF_NAME}"'
+      conda_python_versions: '["3.14"]'
+      conda_os_list: '["ubuntu-latest"]'
+      conda_package_name: pyfibermodes
+      conda_recipe_path: conda.recipe
+      conda_test_import: PyFiberModes
     secrets:
       PYPI_API_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
-
-  conda:
-    name: Publish Conda package
-    needs: validate-release
-    uses: MartinPdeS/MPSActions/.github/workflows/publish_compiled_package_to_anaconda.yml@v7
-    with:
-      # The recipe is noarch: python, so one archive is sufficient for all
-      # supported Python versions and avoids duplicate artifact paths.
-      python_versions: '["3.14"]'
-      os_list: '["ubuntu-latest"]'
-      package_name: pyfibermodes
-      recipe_path: conda.recipe
-      test_import: PyFiberModes
-    secrets:
       ANACONDA_API_TOKEN: ${{ secrets.ANACONDA_API_TOKEN }}
