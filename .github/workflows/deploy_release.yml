@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set up Python for release validation
-        uses: MartinPdeS/MPSActions/actions/setup-python@a01969bc5af90666281f9d37acffdf6a4629763a
+        uses: MartinPdeS/MPSActions/actions/setup-python@v7
         with:
           python-version: "3.11"
           install-command: "true"
@@ -23,7 +23,7 @@ jobs:
   pypi:
     name: Publish to PyPI
     needs: validate-release
-    uses: MartinPdeS/MPSActions/.github/workflows/publish_pure_package_to_PyPi.yml@a01969bc5af90666281f9d37acffdf6a4629763a
+    uses: MartinPdeS/MPSActions/.github/workflows/publish_pure_package_to_PyPi.yml@v7
     with:
       python-version: "3.11"
       test-command: python -c "import PyFiberModes"
@@ -33,7 +33,7 @@ jobs:
   conda:
     name: Publish Conda package
     needs: validate-release
-    uses: MartinPdeS/MPSActions/.github/workflows/publish_compiled_package_to_anaconda.yml@a01969bc5af90666281f9d37acffdf6a4629763a
+    uses: MartinPdeS/MPSActions/.github/workflows/publish_compiled_package_to_anaconda.yml@v7
     with:
       # The recipe is noarch: python, so one archive is sufficient for all
       # supported Python versions and avoids duplicate artifact paths.
