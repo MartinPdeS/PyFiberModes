@@ -1,6 +1,5 @@
 """PyFiberModes documentation, using the shared MartinPdeS-docs theme."""
 
-import os
 from pathlib import Path
 import sys
 import tomllib
@@ -12,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[2]
 # Gallery examples and autodoc must describe this checkout.
 sys.path.insert(0, str(ROOT))
 
-examples_sections = [
+gallery_sections = [
     "basic",
     "SMF28",
     "specialty_fibers",
@@ -29,23 +28,15 @@ globals().update(
         repository="MartinPdeS/PyFiberModes",
         logo="_static/logo.svg",
         favicon="_static/favicon.svg",
-        version=os.getenv("tag", "latest"),
+        gallery_sections=gallery_sections,
+        gallery_default_thumb="_static/favicon.png",
+        gallery_options={"abort_on_example_error": True},
         html_theme_options={
             "logo": {"text": "", "image": "_static/logo.svg"},
-        },
-        sphinx_gallery_conf={
-            "examples_dirs": [f"../examples/{name}" for name in examples_sections],
-            "gallery_dirs": [f"gallery/{name}" for name in examples_sections],
-            "default_thumb_file": str(
-                Path(__file__).resolve().parent / "_static" / "favicon.png"
-            ),
-            "within_subsection_order": "FileNameSortKey",
-            "abort_on_example_error": True,
         },
     )
 )
 
-extensions += ["sphinx.ext.mathjax", "sphinx.ext.autosectionlabel"]
 autodoc_default_options["members"] = True
 html_context["doc_path"] = "docs/source"
 html_context["default_mode"] = "dark"
