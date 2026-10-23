@@ -32,3 +32,12 @@ div.highlight a {
 .bd-content img[alt="PyFiberModes logo"] {
   filter: drop-shadow(0 0.7rem 1rem rgb(20 217 255 / 20%));
 }
+
+.bd-header .navbar-brand img.logo__image {
+  filter: none !important;
+  width: 15rem !important;
+  max-width: 100% !important;
+  height: auto !important;
+  max-height: 5.5rem !important;
+  object-fit: contain;
+}

@@ -1,4 +1,4 @@
-.. image:: https://raw.githubusercontent.com/MartinPdeS/PyFiberModes/master/docs/source/_static/logo.svg
+.. image:: https://raw.githubusercontent.com/MartinPdeS/PyFiberModes/master/docs/source/_static/logo.png
    :width: 620
    :align: center
    :alt: PyFiberModes logo
