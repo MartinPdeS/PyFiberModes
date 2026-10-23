@@ -1,6 +1,6 @@
 **Date**: |today|, **Version**: |version|
 
-.. image:: _static/logo.svg
+.. image:: _static/logo.png
    :width: 620
    :align: center
    :alt: PyFiberModes logo

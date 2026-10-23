@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:37.760** total execution time for 10 files **from gallery/basic**:
+**00:18.006** total execution time for 10 files **from gallery/basic**:
 
 .. container::
 
@@ -33,32 +33,32 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_gallery_basic_plot_comparison_solvers.py` (``plot_comparison_solvers.py``)
-     - 00:32.920
+     - 00:15.570
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_U_vs_V.py` (``plot_U_vs_V.py``)
-     - 00:01.821
+     - 00:00.912
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_dispersion.py` (``plot_dispersion.py``)
-     - 00:00.775
+     - 00:00.388
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_group_index.py` (``plot_group_index.py``)
-     - 00:00.652
+     - 00:00.330
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_mode_field.py` (``plot_mode_field.py``)
-     - 00:00.358
+     - 00:00.177
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_fiber_LP_modes.py` (``plot_fiber_LP_modes.py``)
-     - 00:00.293
+     - 00:00.149
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_mode_field_1.py` (``plot_mode_field_1.py``)
-     - 00:00.285
+     - 00:00.149
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_mode_field_2.py` (``plot_mode_field_2.py``)
-     - 00:00.265
+     - 00:00.131
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_effective_index.py` (``plot_effective_index.py``)
-     - 00:00.253
+     - 00:00.129
      - 0.0
    * - :ref:`sphx_glr_gallery_basic_plot_neff_tapered_fiber.py` (``plot_neff_tapered_fiber.py``)
-     - 00:00.137
+     - 00:00.070
      - 0.0
