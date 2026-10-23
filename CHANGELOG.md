@@ -6,6 +6,8 @@ use [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-10-23
+
 - Require TypedUnit/Pint quantities for physical inputs and return unit-bearing fiber, field, sweep, material, design and propagation results. Numerical solvers continue to operate in SI internally.
 
 ## [0.17.7] - 2026-10-23
@@ -177,7 +179,8 @@ use [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Established the current tagged baseline for subsequent documented releases.
 
-[Unreleased]: https://github.com/MartinPdeS/PyFiberModes/compare/v0.17.7...HEAD
+[Unreleased]: https://github.com/MartinPdeS/PyFiberModes/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/MartinPdeS/PyFiberModes/releases/tag/v1.0.0
 [0.17.7]: https://github.com/MartinPdeS/PyFiberModes/releases/tag/v0.17.7
 [0.17.6]: https://github.com/MartinPdeS/PyFiberModes/releases/tag/v0.17.6
 [0.17.5]: https://github.com/MartinPdeS/PyFiberModes/releases/tag/v0.17.5
