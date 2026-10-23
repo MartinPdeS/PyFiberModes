@@ -21,12 +21,26 @@
 Mode fields
 ===========
 
-.. GENERATED FROM PYTHON SOURCE LINES 8-10
+.. GENERATED FROM PYTHON SOURCE LINES 5-8
+
+.. code-block:: Python
+
+    from PyFiberModes.units import ureg
+
+
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 9-11
 
 Imports
 ~~~~~~~
 
-.. GENERATED FROM PYTHON SOURCE LINES 10-15
+.. GENERATED FROM PYTHON SOURCE LINES 11-16
 
 .. code-block:: Python
 
@@ -42,17 +56,17 @@ Imports
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 16-19
+.. GENERATED FROM PYTHON SOURCE LINES 17-20
 
 Generating the fiber structures
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Here we create the different fiber design that we want to explore
 
-.. GENERATED FROM PYTHON SOURCE LINES 19-21
+.. GENERATED FROM PYTHON SOURCE LINES 20-22
 
 .. code-block:: Python
 
-    fiber = load_fiber('SMF28', wavelength=1310e-9)
+    fiber = load_fiber('SMF28', wavelength=1310e-9 * ureg.meter)
 
 
 
@@ -61,11 +75,11 @@ Here we create the different fiber design that we want to explore
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 22-23
+.. GENERATED FROM PYTHON SOURCE LINES 23-24
 
 Preparing the figure
 
-.. GENERATED FROM PYTHON SOURCE LINES 23-48
+.. GENERATED FROM PYTHON SOURCE LINES 24-49
 
 .. code-block:: Python
 
@@ -82,11 +96,11 @@ Preparing the figure
         field = Field(
             fiber=fiber,
             mode=mode,
-            limit=10e-6,
+            limit=10e-6 * ureg.meter,
             n_point=101
         )
 
-        Ex = field.Ex()
+        Ex = field.Ex().to("volt / meter").magnitude
         max_abs = abs(max(Ex.max(), Ex.min()))
         ax.pcolormesh(Ex, vmin=-max_abs, vmax=max_abs)
 
@@ -109,7 +123,7 @@ Preparing the figure
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.177 seconds)
+   **Total running time of the script:** (0 minutes 0.214 seconds)
 
 
 .. _sphx_glr_download_gallery_basic_plot_mode_field.py:

@@ -21,12 +21,26 @@
 Group index vs core index
 =========================
 
-.. GENERATED FROM PYTHON SOURCE LINES 8-10
+.. GENERATED FROM PYTHON SOURCE LINES 5-8
+
+.. code-block:: Python
+
+    from PyFiberModes.units import ureg
+
+
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 9-11
 
 Imports
 ~~~~~~~
 
-.. GENERATED FROM PYTHON SOURCE LINES 10-14
+.. GENERATED FROM PYTHON SOURCE LINES 11-15
 
 .. code-block:: Python
 
@@ -41,20 +55,20 @@ Imports
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 15-18
+.. GENERATED FROM PYTHON SOURCE LINES 16-19
 
 Generating the fiber structures
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Here we create the different fiber  design that we want to explore
 
-.. GENERATED FROM PYTHON SOURCE LINES 18-24
+.. GENERATED FROM PYTHON SOURCE LINES 19-25
 
 .. code-block:: Python
 
     core_indexes = numpy.linspace(1.454, 1.494, 30)
-    factory = FiberFactory(wavelength=1550e-9)
-    factory.add_layer(name="core", radius=7e-6, index=core_indexes)
-    factory.add_layer(name="cladding", index=1.4444)
+    factory = FiberFactory(wavelength=1550e-9 * ureg.meter)
+    factory.add_layer(name="core", radius=7e-6 * ureg.meter, index=(core_indexes) * ureg.dimensionless)
+    factory.add_layer(name="cladding", index=1.4444 * ureg.dimensionless)
 
 
 
@@ -64,11 +78,11 @@ Here we create the different fiber  design that we want to explore
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 25-26
+.. GENERATED FROM PYTHON SOURCE LINES 26-27
 
 Preparing the figure
 
-.. GENERATED FROM PYTHON SOURCE LINES 26-52
+.. GENERATED FROM PYTHON SOURCE LINES 27-53
 
 .. code-block:: Python
 
@@ -113,7 +127,7 @@ Preparing the figure
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.149 seconds)
+   **Total running time of the script:** (0 minutes 0.174 seconds)
 
 
 .. _sphx_glr_download_gallery_basic_plot_fiber_LP_modes.py:

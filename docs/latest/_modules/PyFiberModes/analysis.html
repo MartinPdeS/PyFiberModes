@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PyFiberModes.analysis &#8212; PyFiberModes 0.17.7 documentation</title>
+    <title>PyFiberModes.analysis &#8212; PyFiberModes 1.0.0 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../../_static/documentation_options.js?v=7369b842"></script>
+    <script src="../../_static/documentation_options.js?v=4ebf8126"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/sg-tags.js?v=d80f6fa4"></script>
@@ -52,7 +52,7 @@
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/MartinPdeS/PyFiberModes/documentation_page/version_switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'v0.17.7';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'v1.0.0';
         DOCUMENTATION_OPTIONS.show_version_warning_banner =
             true;
         </script>
@@ -63,7 +63,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.17.7" />
+  <meta name="docsearch:version" content="1.0.0" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -133,8 +133,8 @@
     
     
     
-    <img src="../../_static/logo.png" class="logo__image only-dark" alt="PyFiberModes 0.17.7 documentation - Home"/>
-    <img src="../../_static/logo.png" class="logo__image only-light pst-js-only" alt="PyFiberModes 0.17.7 documentation - Home"/>
+    <img src="../../_static/logo.png" class="logo__image only-dark" alt="PyFiberModes 1.0.0 documentation - Home"/>
+    <img src="../../_static/logo.png" class="logo__image only-light pst-js-only" alt="PyFiberModes 1.0.0 documentation - Home"/>
   
   
 </a></div>
@@ -474,6 +474,7 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConvergenceError</span><span class="p">,</span> <span class="n">ValidationError</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes.mode</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mode</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes.units</span><span class="w"> </span><span class="kn">import</span> <span class="n">MODAL_UNITS</span><span class="p">,</span> <span class="n">Quantity</span><span class="p">,</span> <span class="n">magnitude</span><span class="p">,</span> <span class="n">quantity</span>
 
 
 <div class="viewcode-block" id="ModeSweepResult">
@@ -498,9 +499,9 @@
 <span class="sd">    """</span>
 
     <span class="n">parameter_name</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">parameters</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="n">parameters</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">Quantity</span>
     <span class="n">modes</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Mode</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
-    <span class="n">values</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span>
+    <span class="n">values</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">Quantity</span><span class="p">]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metric</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">"""Return the array associated with a metric name.</span>
@@ -547,9 +548,11 @@
 <span class="sd">            One record for every parameter and mode combination.</span>
 <span class="sd">        """</span>
         <span class="k">return</span> <span class="p">[</span>
-            <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">parameter_name</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">parameter</span><span class="p">),</span> <span class="s2">"mode"</span><span class="p">:</span> <span class="n">mode</span><span class="p">,</span> <span class="o">**</span><span class="p">{</span>
-                <span class="n">name</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">array</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
-            <span class="p">}}</span>
+            <span class="p">{</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">parameter_name</span><span class="p">:</span> <span class="n">parameter</span><span class="p">,</span>
+                <span class="s2">"mode"</span><span class="p">:</span> <span class="n">mode</span><span class="p">,</span>
+                <span class="o">**</span><span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">array</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span>
+            <span class="p">}</span>
             <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">parameter</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">mode</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">modes</span><span class="p">)</span>
         <span class="p">]</span></div>
@@ -617,11 +620,7 @@
     <span class="k">for</span> <span class="n">mode</span> <span class="ow">in</span> <span class="n">candidate_modes</span><span class="p">(</span><span class="n">families</span><span class="p">,</span> <span class="n">max_nu</span><span class="p">,</span> <span class="n">max_m</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">effective_index</span> <span class="o">=</span> <span class="n">fiber</span><span class="o">.</span><span class="n">get_effective_index</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span>
-            <span class="n">guided</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">fiber</span><span class="o">.</span><span class="n">last_layer</span><span class="o">.</span><span class="n">refractive_index</span>
-                <span class="o">&lt;</span> <span class="n">effective_index</span>
-                <span class="o">&lt;=</span> <span class="n">fiber</span><span class="o">.</span><span class="n">maximum_index</span>
-            <span class="p">)</span>
+            <span class="n">guided</span> <span class="o">=</span> <span class="n">fiber</span><span class="o">.</span><span class="n">last_layer</span><span class="o">.</span><span class="n">refractive_index</span> <span class="o">&lt;</span> <span class="n">effective_index</span> <span class="o">&lt;=</span> <span class="n">fiber</span><span class="o">.</span><span class="n">maximum_index</span>
             <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">effective_index</span><span class="p">)</span> <span class="ow">and</span> <span class="n">guided</span><span class="p">:</span>
                 <span class="n">found</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span>
         <span class="k">except</span> <span class="n">ConvergenceError</span><span class="p">:</span>
@@ -650,8 +649,8 @@
 <span class="sd">    ----------</span>
 <span class="sd">    fiber : Fiber</span>
 <span class="sd">        Fiber used as the immutable sweep template.</span>
-<span class="sd">    parameters : iterable of float</span>
-<span class="sd">        Ordered parameter values.</span>
+<span class="sd">    parameters : pint.Quantity or iterable of pint.Quantity</span>
+<span class="sd">        Ordered parameter values with explicit units for public fibers.</span>
 <span class="sd">    modes : sequence of Mode, optional</span>
 <span class="sd">        Modes to evaluate. When omitted, modes are discovered automatically.</span>
 <span class="sd">    parameter_name : str, optional</span>
@@ -678,7 +677,26 @@
 <span class="sd">        If ``parameters`` is empty or not one-dimensional, or when a custom</span>
 <span class="sd">        parameter is requested without a setter.</span>
 <span class="sd">    """</span>
-    <span class="n">parameters</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">parameters</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">unit_aware</span> <span class="o">=</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">fiber</span><span class="p">,</span> <span class="s2">"_si"</span><span class="p">)</span>
+    <span class="n">parameter_unit</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">unit_aware</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="n">Quantity</span><span class="p">):</span>
+            <span class="n">parameter_unit</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">units</span>
+            <span class="k">if</span> <span class="n">setter</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">magnitude</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="s2">"meter"</span><span class="p">,</span> <span class="s2">"parameters"</span><span class="p">)</span>
+            <span class="n">parameters</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">magnitude</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">items</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">items</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"parameters must be a non-empty one-dimensional sequence"</span><span class="p">)</span>
+            <span class="n">parameter_unit</span> <span class="o">=</span> <span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">units</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Quantity</span><span class="p">)</span> <span class="k">else</span> <span class="s2">"meter"</span>
+            <span class="n">parameters</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">magnitude</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">parameter_unit</span><span class="p">,</span> <span class="s2">"parameters"</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">setter</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">quantity</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="n">parameter_unit</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">"meter"</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">parameters</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">parameters</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">parameters</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"parameters must be a non-empty one-dimensional sequence"</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">setter</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -688,11 +706,14 @@
         <span class="k">def</span><span class="w"> </span><span class="nf">setter</span><span class="p">(</span><span class="n">current_fiber</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">"""Update wavelength for the default sweep behavior."""</span>
             <span class="n">current_fiber</span><span class="o">.</span><span class="n">update_wavelength</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
     <span class="k">if</span> <span class="n">modes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">discovered</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">parameter</span> <span class="ow">in</span> <span class="n">parameters</span><span class="p">:</span>
             <span class="n">parameter_fiber</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">fiber</span><span class="p">)</span>
-            <span class="n">setter</span><span class="p">(</span><span class="n">parameter_fiber</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">parameter</span><span class="p">))</span>
+            <span class="n">setter</span><span class="p">(</span>
+                <span class="n">parameter_fiber</span><span class="p">,</span> <span class="n">quantity</span><span class="p">(</span><span class="n">parameter</span><span class="p">,</span> <span class="n">parameter_unit</span><span class="p">)</span> <span class="k">if</span> <span class="n">unit_aware</span> <span class="k">else</span> <span class="n">parameter</span>
+            <span class="p">)</span>
             <span class="k">for</span> <span class="n">mode</span> <span class="ow">in</span> <span class="n">find_modes</span><span class="p">(</span><span class="n">parameter_fiber</span><span class="p">,</span> <span class="n">families</span><span class="p">,</span> <span class="n">max_nu</span><span class="p">,</span> <span class="n">max_m</span><span class="p">):</span>
                 <span class="k">if</span> <span class="n">mode</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">discovered</span><span class="p">:</span>
                     <span class="n">discovered</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span>
@@ -701,19 +722,24 @@
     <span class="n">values</span> <span class="o">=</span> <span class="p">{</span><span class="n">metric</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">parameters</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">modes</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span> <span class="k">for</span> <span class="n">metric</span> <span class="ow">in</span> <span class="n">metrics</span><span class="p">}</span>
     <span class="n">parameter_fibers</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">fiber</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">parameters</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">parameter_fiber</span><span class="p">,</span> <span class="n">parameter</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">parameter_fibers</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="n">setter</span><span class="p">(</span><span class="n">parameter_fiber</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">parameter</span><span class="p">))</span>
+        <span class="n">setter</span><span class="p">(</span><span class="n">parameter_fiber</span><span class="p">,</span> <span class="n">quantity</span><span class="p">(</span><span class="n">parameter</span><span class="p">,</span> <span class="n">parameter_unit</span><span class="p">)</span> <span class="k">if</span> <span class="n">unit_aware</span> <span class="k">else</span> <span class="n">parameter</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">parameter_fiber</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">parameter_fibers</span><span class="p">):</span>
-        <span class="n">metric_functions</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="n">metric</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">parameter_fiber</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"get_</span><span class="si">{</span><span class="n">metric</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span> <span class="k">for</span> <span class="n">metric</span> <span class="ow">in</span> <span class="n">metrics</span>
-        <span class="p">}</span>
+        <span class="n">metric_functions</span> <span class="o">=</span> <span class="p">{</span><span class="n">metric</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">parameter_fiber</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"get_</span><span class="si">{</span><span class="n">metric</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span> <span class="k">for</span> <span class="n">metric</span> <span class="ow">in</span> <span class="n">metrics</span><span class="p">}</span>
         <span class="k">for</span> <span class="n">metric</span><span class="p">,</span> <span class="n">metric_function</span> <span class="ow">in</span> <span class="n">metric_functions</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">mode</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">modes</span><span class="p">):</span>
                 <span class="k">try</span><span class="p">:</span>
                     <span class="n">value</span> <span class="o">=</span> <span class="n">metric_function</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span>
-                    <span class="n">values</span><span class="p">[</span><span class="n">metric</span><span class="p">][</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span> <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+                    <span class="n">values</span><span class="p">[</span><span class="n">metric</span><span class="p">][</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">MODAL_UNITS</span><span class="p">[</span><span class="n">metric</span><span class="p">])</span><span class="o">.</span><span class="n">magnitude</span> <span class="k">if</span> <span class="n">unit_aware</span> <span class="k">else</span> <span class="n">value</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                        <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+                    <span class="p">)</span>
                 <span class="k">except</span> <span class="n">ConvergenceError</span><span class="p">:</span>
                     <span class="k">pass</span>
+    <span class="k">if</span> <span class="n">unit_aware</span><span class="p">:</span>
+        <span class="n">parameters</span> <span class="o">=</span> <span class="n">quantity</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="n">parameter_unit</span><span class="p">)</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="p">{</span><span class="n">metric</span><span class="p">:</span> <span class="n">quantity</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">MODAL_UNITS</span><span class="p">[</span><span class="n">metric</span><span class="p">])</span> <span class="k">for</span> <span class="n">metric</span><span class="p">,</span> <span class="n">array</span> <span class="ow">in</span> <span class="n">values</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
     <span class="k">return</span> <span class="n">ModeSweepResult</span><span class="p">(</span><span class="n">parameter_name</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">modes</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span></div>
 
 </pre></div>

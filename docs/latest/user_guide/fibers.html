@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Defining fibers and materials &#8212; PyFiberModes 0.17.7 documentation</title>
+    <title>Defining fibers and materials &#8212; PyFiberModes 1.0.0 documentation</title>
   
   
   
@@ -44,7 +44,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../_static/documentation_options.js?v=7369b842"></script>
+    <script src="../_static/documentation_options.js?v=4ebf8126"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/sg-tags.js?v=d80f6fa4"></script>
@@ -53,7 +53,7 @@
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/MartinPdeS/PyFiberModes/documentation_page/version_switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'v0.17.7';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'v1.0.0';
         DOCUMENTATION_OPTIONS.show_version_warning_banner =
             true;
         </script>
@@ -66,7 +66,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.17.7" />
+  <meta name="docsearch:version" content="1.0.0" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -136,8 +136,8 @@
     
     
     
-    <img src="../_static/logo.png" class="logo__image only-dark" alt="PyFiberModes 0.17.7 documentation - Home"/>
-    <img src="../_static/logo.png" class="logo__image only-light pst-js-only" alt="PyFiberModes 0.17.7 documentation - Home"/>
+    <img src="../_static/logo.png" class="logo__image only-dark" alt="PyFiberModes 1.0.0 documentation - Home"/>
+    <img src="../_static/logo.png" class="logo__image only-light pst-js-only" alt="PyFiberModes 1.0.0 documentation - Home"/>
   
   
 </a></div>
@@ -508,9 +508,11 @@
 <p>The simplest route is <a class="reference internal" href="../code/fibers.html#PyFiberModes.fiber.load_fiber" title="PyFiberModes.fiber.load_fiber"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_fiber()</span></code></a>. Pass a bundled
 YAML filename without its extension and always provide the wavelength when a
 layer uses a dispersive material:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_fiber</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes.units</span><span class="w"> </span><span class="kn">import</span> <span class="n">ureg</span>
 
-<span class="n">fiber</span> <span class="o">=</span> <span class="n">load_fiber</span><span class="p">(</span><span class="s2">"SMF28"</span><span class="p">,</span> <span class="n">wavelength</span><span class="o">=</span><span class="mf">1.55e-6</span><span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_fiber</span>
+
+<span class="n">fiber</span> <span class="o">=</span> <span class="n">load_fiber</span><span class="p">(</span><span class="s2">"SMF28"</span><span class="p">,</span> <span class="n">wavelength</span><span class="o">=</span><span class="mf">1.55e-6</span> <span class="o">*</span> <span class="n">ureg</span><span class="o">.</span><span class="n">meter</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">fiber</span><span class="o">.</span><span class="n">layers</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">layer</span><span class="o">.</span><span class="n">radius_in</span><span class="p">,</span> <span class="n">layer</span><span class="o">.</span><span class="n">radius_out</span><span class="p">,</span> <span class="n">layer</span><span class="o">.</span><span class="n">refractive_index</span><span class="p">)</span>
 </pre></div>
@@ -535,13 +537,15 @@ relative to the adjacent outer layer. A compact two-layer definition is:</p>
 <h2>Custom material models<a class="headerlink" href="#custom-material-models" title="Link to this heading">#</a></h2>
 <p>Use <code class="xref py py-class docutils literal notranslate"><span class="pre">MaterialRegistry</span></code> when a definition names a
 material that is not built in. A model can be any callable receiving wavelength
-in metres and returning refractive index:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes</span><span class="w"> </span><span class="kn">import</span> <span class="n">MaterialRegistry</span><span class="p">,</span> <span class="n">load_fiber</span>
+as a length quantity and returning a dimensionless index quantity:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes.units</span><span class="w"> </span><span class="kn">import</span> <span class="n">ureg</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes</span><span class="w"> </span><span class="kn">import</span> <span class="n">MaterialRegistry</span><span class="p">,</span> <span class="n">load_fiber</span>
 
 <span class="n">materials</span> <span class="o">=</span> <span class="n">MaterialRegistry</span><span class="p">({</span>
-    <span class="s2">"my_glass"</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">wavelength</span><span class="p">:</span> <span class="mf">1.46</span> <span class="o">-</span> <span class="mf">0.003</span> <span class="o">*</span> <span class="p">(</span><span class="n">wavelength</span> <span class="o">/</span> <span class="mf">1e-6</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">),</span>
+    <span class="s2">"my_glass"</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">wavelength</span><span class="p">:</span> <span class="p">(</span><span class="mf">1.46</span> <span class="o">-</span> <span class="mf">0.003</span> <span class="o">*</span> <span class="p">(</span><span class="n">wavelength</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">"micrometer"</span><span class="p">)</span><span class="o">.</span><span class="n">magnitude</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">))</span> <span class="o">*</span> <span class="n">ureg</span><span class="o">.</span><span class="n">dimensionless</span><span class="p">,</span>
 <span class="p">})</span>
-<span class="n">fiber</span> <span class="o">=</span> <span class="n">load_fiber</span><span class="p">(</span><span class="s2">"my_fiber"</span><span class="p">,</span> <span class="n">wavelength</span><span class="o">=</span><span class="mf">1.55e-6</span><span class="p">,</span> <span class="n">materials</span><span class="o">=</span><span class="n">materials</span><span class="p">)</span>
+<span class="n">fiber</span> <span class="o">=</span> <span class="n">load_fiber</span><span class="p">(</span><span class="s2">"my_fiber"</span><span class="p">,</span> <span class="n">wavelength</span><span class="o">=</span><span class="mf">1.55e-6</span> <span class="o">*</span> <span class="n">ureg</span><span class="o">.</span><span class="n">meter</span><span class="p">,</span> <span class="n">materials</span><span class="o">=</span><span class="n">materials</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -549,11 +553,13 @@ in metres and returning refractive index:</p>
 <h2>Programmatic construction<a class="headerlink" href="#programmatic-construction" title="Link to this heading">#</a></h2>
 <p>For a single structure, create a <a class="reference internal" href="../code/fibers.html#PyFiberModes.fiber.Fiber" title="PyFiberModes.fiber.Fiber"><code class="xref py py-class docutils literal notranslate"><span class="pre">Fiber</span></code></a>, add layers
 from the center outward, and initialize it once all interfaces are defined:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes</span><span class="w"> </span><span class="kn">import</span> <span class="n">Fiber</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes.units</span><span class="w"> </span><span class="kn">import</span> <span class="n">ureg</span>
 
-<span class="n">fiber</span> <span class="o">=</span> <span class="n">Fiber</span><span class="p">(</span><span class="n">wavelength</span><span class="o">=</span><span class="mf">1.55e-6</span><span class="p">)</span>
-<span class="n">fiber</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"core"</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">4.1e-6</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mf">1.450</span><span class="p">)</span>
-<span class="n">fiber</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"cladding"</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">62.5e-6</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mf">1.444</span><span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes</span><span class="w"> </span><span class="kn">import</span> <span class="n">Fiber</span>
+
+<span class="n">fiber</span> <span class="o">=</span> <span class="n">Fiber</span><span class="p">(</span><span class="n">wavelength</span><span class="o">=</span><span class="mf">1.55e-6</span> <span class="o">*</span> <span class="n">ureg</span><span class="o">.</span><span class="n">meter</span><span class="p">)</span>
+<span class="n">fiber</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"core"</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">4.1e-6</span> <span class="o">*</span> <span class="n">ureg</span><span class="o">.</span><span class="n">meter</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mf">1.450</span> <span class="o">*</span> <span class="n">ureg</span><span class="o">.</span><span class="n">dimensionless</span><span class="p">)</span>
+<span class="n">fiber</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"cladding"</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">62.5e-6</span> <span class="o">*</span> <span class="n">ureg</span><span class="o">.</span><span class="n">meter</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mf">1.444</span> <span class="o">*</span> <span class="n">ureg</span><span class="o">.</span><span class="n">dimensionless</span><span class="p">)</span>
 <span class="n">fiber</span><span class="o">.</span><span class="n">initialize_layers</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -564,8 +570,7 @@ iterables and you want the Cartesian product of several designs.</p>
 <h2>Mutation and caches<a class="headerlink" href="#mutation-and-caches" title="Link to this heading">#</a></h2>
 <p>Call <a class="reference internal" href="../code/fibers.html#PyFiberModes.fiber.Fiber.update_wavelength" title="PyFiberModes.fiber.Fiber.update_wavelength"><code class="xref py py-meth docutils literal notranslate"><span class="pre">update_wavelength()</span></code></a> when changing
 wavelength; it updates dependent state and clears cached modal and radial-field
-solutions. After directly changing a layer radius or refractive index, call
-<a class="reference internal" href="../code/fibers.html#PyFiberModes.fiber.Fiber.clear_caches" title="PyFiberModes.fiber.Fiber.clear_caches"><code class="xref py py-meth docutils literal notranslate"><span class="pre">clear_caches()</span></code></a>. Prefer
+solutions. Layer radius and refractive-index assignments also validate units and clear caches. Prefer
 <a class="reference internal" href="../code/fibers.html#PyFiberModes.fiber.Fiber.sweep" title="PyFiberModes.fiber.Fiber.sweep"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sweep()</span></code></a> or the optimization helpers for repeated
 calculations because they work on copies and keep the input fiber unchanged.</p>
 </section>
@@ -605,7 +610,7 @@ calculations because they work on copies and keep the input fiber unchanged.</p>
 
   
   <div class="tocsection editthispage">
-    <a href="https://github.com/MartinPdeS/PyFiberModes/edit/v0.17.7/docs/source/user_guide/fibers.rst">
+    <a href="https://github.com/MartinPdeS/PyFiberModes/edit/v1.0.0/docs/source/user_guide/fibers.rst">
       <i class="fa-solid fa-pencil"></i>
       
       

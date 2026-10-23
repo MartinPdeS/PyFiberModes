@@ -9,11 +9,13 @@ correspond to parameter values and columns to modes:
 
 .. code-block:: python
 
+   from PyFiberModes.units import ureg
+
    import numpy as np
    from PyFiberModes import LP01, LP11, load_fiber
 
-   fiber = load_fiber("SMF28", wavelength=1.55e-6)
-   wavelengths = np.linspace(1.30e-6, 1.65e-6, 71)
+   fiber = load_fiber("SMF28", wavelength=1.55e-6 * ureg.meter)
+   wavelengths = np.linspace(1.30e-6, 1.65e-6, 71) * ureg.meter
    result = fiber.sweep(
        wavelengths,
        modes=(LP01, LP11),
@@ -36,12 +38,14 @@ on each copied fiber:
 
 .. code-block:: python
 
+   from PyFiberModes.units import ureg
+
    def set_core_radius(candidate, radius):
        candidate.layers[0].radius_out = radius
        candidate.layers[1].radius_in = radius
        candidate.clear_caches()
 
-   radii = np.linspace(3.5e-6, 5.0e-6, 31)
+   radii = np.linspace(3.5e-6, 5.0e-6, 31) * ureg.meter
    result = fiber.sweep(
        radii,
        parameter_name="core_radius",
@@ -59,13 +63,15 @@ return value is non-negative:
 
 .. code-block:: python
 
+   from PyFiberModes.units import ureg
+
    from PyFiberModes import DesignParameter, optimize_fiber
 
-   radius = DesignParameter.layer_radius(0, bounds=(3.5e-6, 5.0e-6))
+   radius = DesignParameter.layer_radius(0, bounds=(3.5e-6 * ureg.meter, 5.0e-6 * ureg.meter))
    design = optimize_fiber(
        fiber,
        parameters=(radius,),
-       objective=lambda candidate: abs(candidate.get_dispersion(LP01)),
+       objective=lambda candidate: abs(candidate.get_dispersion(LP01).to("ps / nm / km").magnitude),
        constraints=(
            lambda candidate: candidate.get_effective_index(LP01)
            - candidate.last_layer.refractive_index,
@@ -86,14 +92,16 @@ constant reduces rapid common phase rotation without changing modal powers:
 
 .. code-block:: python
 
+   from PyFiberModes.units import ureg
+
    from PyFiberModes import CoupledModeSystem
 
-   betas = np.array([fiber.get_propagation_constant(LP01),
-                     fiber.get_propagation_constant(LP11)])
+   betas = ureg.Quantity.from_list([fiber.get_propagation_constant(LP01),
+                                      fiber.get_propagation_constant(LP11)])
    relative_betas = betas - betas[0]
-   coupling = np.array([[0.0, 0.25], [0.25, 0.0]])
+   coupling = np.array([[0.0, 0.25], [0.25, 0.0]]) / ureg.meter
    system = CoupledModeSystem(relative_betas, coupling)
-   z = np.linspace(0.0, 20.0, 501)
+   z = np.linspace(0.0, 20.0, 501) * ureg.meter
    result = system.propagate([1.0, 0.0], z)
 
 ``coupling`` may be a constant matrix or a callable ``coupling(z)``. Use a

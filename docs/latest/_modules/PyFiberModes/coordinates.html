@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PyFiberModes.coordinates &#8212; PyFiberModes 0.17.7 documentation</title>
+    <title>PyFiberModes.coordinates &#8212; PyFiberModes 1.0.0 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../../_static/documentation_options.js?v=7369b842"></script>
+    <script src="../../_static/documentation_options.js?v=4ebf8126"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/sg-tags.js?v=d80f6fa4"></script>
@@ -52,7 +52,7 @@
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/MartinPdeS/PyFiberModes/documentation_page/version_switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'v0.17.7';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'v1.0.0';
         DOCUMENTATION_OPTIONS.show_version_warning_banner =
             true;
         </script>
@@ -63,7 +63,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.17.7" />
+  <meta name="docsearch:version" content="1.0.0" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -133,8 +133,8 @@
     
     
     
-    <img src="../../_static/logo.png" class="logo__image only-dark" alt="PyFiberModes 0.17.7 documentation - Home"/>
-    <img src="../../_static/logo.png" class="logo__image only-light pst-js-only" alt="PyFiberModes 0.17.7 documentation - Home"/>
+    <img src="../../_static/logo.png" class="logo__image only-dark" alt="PyFiberModes 1.0.0 documentation - Home"/>
+    <img src="../../_static/logo.png" class="logo__image only-light pst-js-only" alt="PyFiberModes 1.0.0 documentation - Home"/>
   
   
 </a></div>
@@ -464,60 +464,46 @@
                 <article class="bd-article">
                   
   <h1>Source code for PyFiberModes.coordinates</h1><div class="highlight"><pre>
-<span></span><span class="sd">"""Cartesian and cylindrical sampling-grid definitions."""</span>
+<span></span><span class="sd">"""Length-valued Cartesian and cylindrical coordinate grids."""</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tuple</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes</span><span class="w"> </span><span class="kn">import</span> <span class="n">_coordinates</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes.units</span><span class="w"> </span><span class="kn">import</span> <span class="n">Angle</span><span class="p">,</span> <span class="n">Length</span><span class="p">,</span> <span class="n">magnitude</span><span class="p">,</span> <span class="n">quantity</span>
 
 
 <div class="viewcode-block" id="CylindricalCoordinates">
 <a class="viewcode-back" href="../../code/fields.html#PyFiberModes.coordinates.CylindricalCoordinates">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">CylindricalCoordinates</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">"""</span>
-<span class="sd">    Represents a set of points in cylindrical coordinates.</span>
+<span class="w">    </span><span class="sd">"""Cylindrical positions with length-valued rho/z and angle-valued phi."""</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    rho : np.ndarray</span>
-<span class="sd">        Radial distance from the z-axis.</span>
-<span class="sd">    phi : np.ndarray</span>
-<span class="sd">        Azimuthal angle in radians.</span>
-<span class="sd">    z : np.ndarray</span>
-<span class="sd">        Height along the z-axis.</span>
-<span class="sd">    """</span>
-    <span class="n">rho</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
-    <span class="n">phi</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
-    <span class="n">z</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="n">rho</span><span class="p">:</span> <span class="n">Length</span>
+    <span class="n">phi</span><span class="p">:</span> <span class="n">Angle</span>
+    <span class="n">z</span><span class="p">:</span> <span class="n">Length</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Validate and normalize coordinate quantities."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rho</span> <span class="o">=</span> <span class="n">quantity</span><span class="p">(</span><span class="n">magnitude</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rho</span><span class="p">,</span> <span class="s2">"meter"</span><span class="p">,</span> <span class="s2">"rho"</span><span class="p">),</span> <span class="s2">"meter"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phi</span> <span class="o">=</span> <span class="n">quantity</span><span class="p">(</span><span class="n">magnitude</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">,</span> <span class="s2">"radian"</span><span class="p">,</span> <span class="s2">"phi"</span><span class="p">),</span> <span class="s2">"radian"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">quantity</span><span class="p">(</span><span class="n">magnitude</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> <span class="s2">"meter"</span><span class="p">,</span> <span class="s2">"z"</span><span class="p">),</span> <span class="s2">"meter"</span><span class="p">)</span>
 
 <div class="viewcode-block" id="CylindricalCoordinates.to_cartesian">
 <a class="viewcode-back" href="../../code/fields.html#PyFiberModes.coordinates.CylindricalCoordinates.to_cartesian">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">to_cartesian</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">'CartesianCoordinates'</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""</span>
-<span class="sd">        Converts cylindrical coordinates to cartesian coordinates.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        CartesianCoordinates</span>
-<span class="sd">            Corresponding cartesian coordinates.</span>
-<span class="sd">        """</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">)</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">CartesianCoordinates</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">)</span></div>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_cartesian</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Convert cylindrical positions to Cartesian positions."""</span>
+        <span class="k">return</span> <span class="n">CartesianCoordinates</span><span class="p">(</span>
+            <span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">),</span>
+            <span class="n">y</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">),</span>
+            <span class="n">z</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="CylindricalCoordinates.to_cylindrical">
 <a class="viewcode-back" href="../../code/fields.html#PyFiberModes.coordinates.CylindricalCoordinates.to_cylindrical">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">to_cylindrical</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">"""</span>
-<span class="sd">        Returns self in cylindrical format (no conversion needed).</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        Self</span>
-<span class="sd">            The current instance in cylindrical format.</span>
-<span class="sd">        """</span>
+<span class="w">        </span><span class="sd">"""Return these cylindrical positions."""</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 </div>
 
@@ -527,253 +513,138 @@
 <a class="viewcode-back" href="../../code/fields.html#PyFiberModes.coordinates.CartesianCoordinates">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">CartesianCoordinates</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">"""</span>
-<span class="sd">    Represents a set of points in cartesian coordinates.</span>
+<span class="w">    </span><span class="sd">"""Cartesian positions with explicit length units on every axis."""</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    x : np.ndarray</span>
-<span class="sd">        x-coordinates (must be a 1D array).</span>
-<span class="sd">    y : np.ndarray</span>
-<span class="sd">        y-coordinates (must be a 1D array).</span>
-<span class="sd">    z : np.ndarray</span>
-<span class="sd">        z-coordinates (must be a 1D array).</span>
-<span class="sd">    is_structured : bool</span>
-<span class="sd">        Indicates if the mesh is structured. Default is False.</span>
-<span class="sd">    is_3D : bool</span>
-<span class="sd">        Indicates if the data represents 3D coordinates. Default is False.</span>
-<span class="sd">    """</span>
-    <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
-    <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
-    <span class="n">z</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="n">x</span><span class="p">:</span> <span class="n">Length</span>
+    <span class="n">y</span><span class="p">:</span> <span class="n">Length</span>
+    <span class="n">z</span><span class="p">:</span> <span class="n">Length</span>
     <span class="n">is_structured</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="n">is_3D</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""Convert all coordinate arrays to floating-point arrays."""</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Validate lengths and normalize numerical coordinate arrays to meters."""</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"x"</span><span class="p">,</span> <span class="s2">"y"</span><span class="p">,</span> <span class="s2">"z"</span><span class="p">):</span>
+            <span class="nb">setattr</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span>
+                <span class="n">name</span><span class="p">,</span>
+                <span class="n">quantity</span><span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">magnitude</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">),</span> <span class="s2">"meter"</span><span class="p">,</span> <span class="n">name</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span> <span class="s2">"meter"</span>
+                <span class="p">),</span>
+            <span class="p">)</span>
 
-    <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">x_boundaries</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">"""</span>
-<span class="sd">        Calculates the minimum and maximum x-values.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        Tuple[float, float]</span>
-<span class="sd">            Minimum and maximum x-values.</span>
-<span class="sd">        """</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">y_boundaries</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">"""</span>
-<span class="sd">        Calculates the minimum and maximum y-values.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        Tuple[float, float]</span>
-<span class="sd">            Minimum and maximum y-values.</span>
-<span class="sd">        """</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">dx</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""</span>
-<span class="sd">        Calculates the grid spacing in the x-direction.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        float</span>
-<span class="sd">            Grid spacing in the x-direction.</span>
-
-<span class="sd">        Raises</span>
-<span class="sd">        ------</span>
-<span class="sd">        ValueError</span>
-<span class="sd">            If the mesh is unstructured.</span>
-<span class="sd">        """</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_structured</span><span class="p">:</span>
-            <span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_boundaries</span>
-            <span class="n">unique_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
-            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">unique_x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">unique_x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"dx value cannot be inferred from an unstructured mesh."</span><span class="p">)</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">dy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""</span>
-<span class="sd">        Calculates the grid spacing in the x-direction.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        float</span>
-<span class="sd">            Grid spacing in the x-direction.</span>
-
-<span class="sd">        Raises</span>
-<span class="sd">        ------</span>
-<span class="sd">        ValueError</span>
-<span class="sd">            If the mesh is unstructured.</span>
-<span class="sd">        """</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_structured</span><span class="p">:</span>
-            <span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_boundaries</span>
-            <span class="n">unique_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
-            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">unique_y</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">unique_y</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"dx value cannot be inferred from an unstructured mesh."</span><span class="p">)</span>
-
-<div class="viewcode-block" id="CartesianCoordinates.generate_from_boundaries">
-<a class="viewcode-back" href="../../code/fields.html#PyFiberModes.coordinates.CartesianCoordinates.generate_from_boundaries">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">generate_from_boundaries</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">x_limits</span><span class="p">,</span> <span class="n">y_limits</span><span class="p">,</span> <span class="n">z_limits</span><span class="p">,</span> <span class="n">x_points</span><span class="p">,</span> <span class="n">y_points</span><span class="p">,</span> <span class="n">z_points</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">'CartesianCoordinates'</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""</span>
-<span class="sd">        Generates a structured cartesian coordinate system from boundaries.</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_from_si</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">coordinates</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Attach length units to a numerical coordinate grid."""</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">x</span><span class="o">=</span><span class="n">quantity</span><span class="p">(</span><span class="n">coordinates</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="s2">"meter"</span><span class="p">),</span>
+            <span class="n">y</span><span class="o">=</span><span class="n">quantity</span><span class="p">(</span><span class="n">coordinates</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="s2">"meter"</span><span class="p">),</span>
+            <span class="n">z</span><span class="o">=</span><span class="n">quantity</span><span class="p">(</span><span class="n">coordinates</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> <span class="s2">"meter"</span><span class="p">),</span>
+            <span class="n">is_structured</span><span class="o">=</span><span class="n">coordinates</span><span class="o">.</span><span class="n">is_structured</span><span class="p">,</span>
+            <span class="n">is_3D</span><span class="o">=</span><span class="n">coordinates</span><span class="o">.</span><span class="n">is_3D</span><span class="p">,</span>
+        <span class="p">)</span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        x_limits : list</span>
-<span class="sd">            Limits of x-axis [min, max].</span>
-<span class="sd">        y_limits : list</span>
-<span class="sd">            Limits of y-axis [min, max].</span>
-<span class="sd">        z_limits : list</span>
-<span class="sd">            Limits of z-axis [min, max].</span>
-<span class="sd">        x_points : int</span>
-<span class="sd">            Number of points along x-axis.</span>
-<span class="sd">        y_points : int</span>
-<span class="sd">            Number of points along y-axis.</span>
-<span class="sd">        z_points : int</span>
-<span class="sd">            Number of points along z-axis.</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">x_boundaries</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Minimum and maximum x positions."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
 
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        CartesianCoordinates</span>
-<span class="sd">            Structured cartesian coordinate system.</span>
-<span class="sd">        """</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">*</span><span class="n">x_limits</span><span class="p">,</span> <span class="n">x_points</span><span class="p">)</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">*</span><span class="n">y_limits</span><span class="p">,</span> <span class="n">y_points</span><span class="p">)</span>
-        <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">*</span><span class="n">z_limits</span><span class="p">,</span> <span class="n">z_points</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="n">z</span><span class="p">,</span> <span class="n">is_structured</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">is_3D</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">y_boundaries</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Minimum and maximum y positions."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
 
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">dx</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Structured grid spacing along x."""</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_structured</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"dx value cannot be inferred from an unstructured mesh"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">quantity</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">magnitude</span><span class="p">))[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">units</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">dy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Structured grid spacing along y."""</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_structured</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"dy value cannot be inferred from an unstructured mesh"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">quantity</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">magnitude</span><span class="p">))[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">units</span><span class="p">)</span>
 
 <div class="viewcode-block" id="CartesianCoordinates.generate_from_square">
 <a class="viewcode-back" href="../../code/fields.html#PyFiberModes.coordinates.CartesianCoordinates.generate_from_square">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">generate_from_square</span><span class="p">(</span>
-        <span class="bp">cls</span><span class="p">,</span>
-        <span class="n">length</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-        <span class="n">center</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
-        <span class="n">n_points</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">'CartesianCoordinates'</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""</span>
-<span class="sd">        Generates a structured 2D square coordinate system.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        length : float</span>
-<span class="sd">            The length of the square's side.</span>
-<span class="sd">        center : Tuple[float, float], optional</span>
-<span class="sd">            The coordinates of the square's center (x0, y0). Default is (0.0, 0.0).</span>
-<span class="sd">        n_points : int, optional</span>
-<span class="sd">            The number of points along each dimension (x, y). Default is 100.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        CartesianCoordinates</span>
-<span class="sd">            Cartesian coordinate system with x, y mesh grids and z set to 0.</span>
-
-<span class="sd">        """</span>
-        <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span> <span class="o">=</span> <span class="n">center</span>
-
-        <span class="c1"># Generate x and y ranges centered at `center` with the specified length</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">length</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">length</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">n_points</span><span class="p">)</span> <span class="o">+</span> <span class="n">x0</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">length</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">length</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">n_points</span><span class="p">)</span> <span class="o">+</span> <span class="n">y0</span>
-
-        <span class="c1"># Generate mesh grids</span>
-        <span class="n">x_mesh</span><span class="p">,</span> <span class="n">y_mesh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-
-        <span class="c1"># Create and return a CartesianCoordinates instance</span>
-        <span class="n">instance</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span>
-            <span class="n">x</span><span class="o">=</span><span class="n">x_mesh</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
-            <span class="n">y</span><span class="o">=</span><span class="n">y_mesh</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
-            <span class="n">z</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">x_mesh</span><span class="o">.</span><span class="n">T</span><span class="p">),</span>
-            <span class="n">is_structured</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-            <span class="n">is_3D</span><span class="o">=</span><span class="kc">False</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_from_square</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">length</span><span class="p">:</span> <span class="n">Length</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_points</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Generate a square grid with a length-valued side and center."""</span>
+        <span class="n">center_si</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">center</span> <span class="ow">is</span> <span class="kc">None</span>
+            <span class="k">else</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">magnitude</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s2">"meter"</span><span class="p">,</span> <span class="s2">"center"</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">center</span><span class="p">)</span>
         <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_from_si</span><span class="p">(</span>
+            <span class="n">_coordinates</span><span class="o">.</span><span class="n">CartesianCoordinates</span><span class="o">.</span><span class="n">generate_from_square</span><span class="p">(</span>
+                <span class="n">length</span><span class="o">=</span><span class="n">magnitude</span><span class="p">(</span><span class="n">length</span><span class="p">,</span> <span class="s2">"meter"</span><span class="p">,</span> <span class="s2">"length"</span><span class="p">),</span>
+                <span class="n">center</span><span class="o">=</span><span class="n">center_si</span><span class="p">,</span>
+                <span class="n">n_points</span><span class="o">=</span><span class="n">n_points</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span></div>
 
-        <span class="k">return</span> <span class="n">instance</span></div>
+
+<div class="viewcode-block" id="CartesianCoordinates.generate_from_boundaries">
+<a class="viewcode-back" href="../../code/fields.html#PyFiberModes.coordinates.CartesianCoordinates.generate_from_boundaries">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_from_boundaries</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">x_limits</span><span class="p">,</span> <span class="n">y_limits</span><span class="p">,</span> <span class="n">z_limits</span><span class="p">,</span> <span class="n">x_points</span><span class="p">,</span> <span class="n">y_points</span><span class="p">,</span> <span class="n">z_points</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Generate a structured grid from length-valued axis limits."""</span>
+        <span class="n">limits</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="nb">tuple</span><span class="p">(</span><span class="n">magnitude</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s2">"meter"</span><span class="p">,</span> <span class="s2">"limits"</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">axis</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">axis</span> <span class="ow">in</span> <span class="p">(</span><span class="n">x_limits</span><span class="p">,</span> <span class="n">y_limits</span><span class="p">,</span> <span class="n">z_limits</span><span class="p">)</span>
+        <span class="p">]</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_from_si</span><span class="p">(</span>
+            <span class="n">_coordinates</span><span class="o">.</span><span class="n">CartesianCoordinates</span><span class="o">.</span><span class="n">generate_from_boundaries</span><span class="p">(</span>
+                <span class="n">x_limits</span><span class="o">=</span><span class="n">limits</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">y_limits</span><span class="o">=</span><span class="n">limits</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">z_limits</span><span class="o">=</span><span class="n">limits</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="n">x_points</span><span class="o">=</span><span class="n">x_points</span><span class="p">,</span>
+                <span class="n">y_points</span><span class="o">=</span><span class="n">y_points</span><span class="p">,</span>
+                <span class="n">z_points</span><span class="o">=</span><span class="n">z_points</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CartesianCoordinates.to_cylindrical">
+<a class="viewcode-back" href="../../code/fields.html#PyFiberModes.coordinates.CartesianCoordinates.to_cylindrical">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_cylindrical</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Convert positions to cylindrical coordinates."""</span>
+        <span class="k">return</span> <span class="n">CylindricalCoordinates</span><span class="p">(</span>
+            <span class="n">rho</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">),</span>
+            <span class="n">phi</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">),</span>
+            <span class="n">z</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="CartesianCoordinates.centering">
 <a class="viewcode-back" href="../../code/fields.html#PyFiberModes.coordinates.CartesianCoordinates.centering">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">centering</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""</span>
-<span class="sd">        Recenters the coordinates so that their mean is zero along each axis.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        None</span>
-<span class="sd">            Modifies the CartesianCoordinates instance in place.</span>
-<span class="sd">        """</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">centering</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Center each axis in place."""</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="CartesianCoordinates.to_cylindrical">
-<a class="viewcode-back" href="../../code/fields.html#PyFiberModes.coordinates.CartesianCoordinates.to_cylindrical">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">to_cylindrical</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CylindricalCoordinates</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""</span>
-<span class="sd">        Converts cartesian coordinates to cylindrical coordinates.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        CylindricalCoordinates</span>
-<span class="sd">            Corresponding cylindrical coordinates.</span>
-<span class="sd">        """</span>
-        <span class="n">rho</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-        <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">CylindricalCoordinates</span><span class="p">(</span><span class="n">rho</span><span class="o">=</span><span class="n">rho</span><span class="p">,</span> <span class="n">phi</span><span class="o">=</span><span class="n">phi</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">)</span></div>
-
-
 <div class="viewcode-block" id="CartesianCoordinates.shift_coordinates">
 <a class="viewcode-back" href="../../code/fields.html#PyFiberModes.coordinates.CartesianCoordinates.shift_coordinates">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">shift_coordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shift</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]):</span>
-<span class="w">        </span><span class="sd">"""</span>
-<span class="sd">        Shifts the coordinates by specified amounts.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        shift : Tuple[float, float, float]</span>
-<span class="sd">            Amounts to shift along x, y, z.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        Self</span>
-<span class="sd">            Updated cartesian coordinates.</span>
-<span class="sd">        """</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+=</span> <span class="n">shift</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+=</span> <span class="n">shift</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">+=</span> <span class="n">shift</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span></div>
+    <span class="k">def</span><span class="w"> </span><span class="nf">shift_coordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shift</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Shift the grid by three length-valued displacements."""</span>
+        <span class="c1"># Validate all inputs before mutating the grid.</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">quantity</span><span class="p">(</span><span class="n">magnitude</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s2">"meter"</span><span class="p">,</span> <span class="s2">"shift"</span><span class="p">),</span> <span class="s2">"meter"</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">shift</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+=</span> <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+=</span> <span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">+=</span> <span class="n">values</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="CartesianCoordinates.scale_coordinates">
 <a class="viewcode-back" href="../../code/fields.html#PyFiberModes.coordinates.CartesianCoordinates.scale_coordinates">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">scale_coordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""</span>
-<span class="sd">        Scales the coordinates by specified factors.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        scale : Tuple[float, float, float]</span>
-<span class="sd">            Scaling factors for x, y, and z coordinates.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        None</span>
-<span class="sd">            Modifies the CartesianCoordinates instance in place.</span>
-<span class="sd">        """</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">*=</span> <span class="n">scale</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">*=</span> <span class="n">scale</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">*=</span> <span class="n">scale</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span></div>
+    <span class="k">def</span><span class="w"> </span><span class="nf">scale_coordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Scale axes by dimensionless factors."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">*=</span> <span class="nb">float</span><span class="p">(</span><span class="n">scale</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">*=</span> <span class="nb">float</span><span class="p">(</span><span class="n">scale</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">*=</span> <span class="nb">float</span><span class="p">(</span><span class="n">scale</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span></div>
 </div>
 
 </pre></div>

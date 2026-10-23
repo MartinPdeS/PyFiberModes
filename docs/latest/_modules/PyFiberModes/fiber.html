@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PyFiberModes.fiber &#8212; PyFiberModes 0.17.7 documentation</title>
+    <title>PyFiberModes.fiber &#8212; PyFiberModes 1.0.0 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../../_static/documentation_options.js?v=7369b842"></script>
+    <script src="../../_static/documentation_options.js?v=4ebf8126"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/sg-tags.js?v=d80f6fa4"></script>
@@ -52,7 +52,7 @@
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/MartinPdeS/PyFiberModes/documentation_page/version_switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'v0.17.7';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'v1.0.0';
         DOCUMENTATION_OPTIONS.show_version_warning_banner =
             true;
         </script>
@@ -63,7 +63,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.17.7" />
+  <meta name="docsearch:version" content="1.0.0" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -133,8 +133,8 @@
     
     
     
-    <img src="../../_static/logo.png" class="logo__image only-dark" alt="PyFiberModes 0.17.7 documentation - Home"/>
-    <img src="../../_static/logo.png" class="logo__image only-light pst-js-only" alt="PyFiberModes 0.17.7 documentation - Home"/>
+    <img src="../../_static/logo.png" class="logo__image only-dark" alt="PyFiberModes 1.0.0 documentation - Home"/>
+    <img src="../../_static/logo.png" class="logo__image only-light pst-js-only" alt="PyFiberModes 1.0.0 documentation - Home"/>
   
   
 </a></div>
@@ -464,1169 +464,543 @@
                 <article class="bd-article">
                   
   <h1>Source code for PyFiberModes.fiber</h1><div class="highlight"><pre>
-<span></span><span class="sd">"""Core fiber model and modal-property calculations."""</span>
+<span></span><span class="sd">"""Unit-checked public fiber model backed by numerical SI solvers."""</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Generator</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">cache</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">constants</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">itertools</span><span class="w"> </span><span class="kn">import</span> <span class="n">pairwise</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">c</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">replace</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes.stepindex</span><span class="w"> </span><span class="kn">import</span> <span class="n">StepIndex</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mode</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">PyFinitDiff.finite_difference_1D</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_function_derivative</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes.field</span><span class="w"> </span><span class="kn">import</span> <span class="n">Field</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes.fundamentals</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-    <span class="n">get_radial_field</span><span class="p">,</span>
-    <span class="n">get_propagation_constant_from_omega</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes</span><span class="w"> </span><span class="kn">import</span> <span class="n">_fiber</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes.materials</span><span class="w"> </span><span class="kn">import</span> <span class="n">DEFAULT_MATERIALS</span><span class="p">,</span> <span class="n">MaterialRegistry</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes.units</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Length</span><span class="p">,</span>
+    <span class="n">RefractiveIndex</span><span class="p">,</span>
+    <span class="n">Quantity</span><span class="p">,</span>
+    <span class="n">MODAL_UNITS</span><span class="p">,</span>
+    <span class="n">magnitude</span><span class="p">,</span>
+    <span class="n">quantity</span><span class="p">,</span>
+    <span class="n">scalar</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes</span><span class="w"> </span><span class="kn">import</span> <span class="n">loader</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes.coordinates</span><span class="w"> </span><span class="kn">import</span> <span class="n">CylindricalCoordinates</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConvergenceError</span><span class="p">,</span> <span class="n">ValidationError</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes.materials</span><span class="w"> </span><span class="kn">import</span> <span class="n">DEFAULT_MATERIALS</span><span class="p">,</span> <span class="n">MaterialRegistry</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes.services</span><span class="w"> </span><span class="kn">import</span> <span class="n">FieldAnalysis</span><span class="p">,</span> <span class="n">ModalAnalysis</span>
+
+<div class="viewcode-block" id="Layer">
+<a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.Layer">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Layer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Unit-aware view of a numerical step-index layer.</span>
+
+<span class="sd">    Radius and index assignments update the owning fiber and invalidate caches.</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fiber</span><span class="p">,</span> <span class="n">layer</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Retain the owning fiber and its numerical layer."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fiber</span> <span class="o">=</span> <span class="n">fiber</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_layer</span> <span class="o">=</span> <span class="n">layer</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Name assigned when the layer was added to the fiber."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fiber</span><span class="o">.</span><span class="n">layer_names</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_fiber</span><span class="o">.</span><span class="n">_si</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_layer</span><span class="p">)]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">position</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Zero-based radial order of this layer."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fiber</span><span class="o">.</span><span class="n">_si</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_layer</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">radius_in</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Length</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Inner radius as a length quantity."""</span>
+        <span class="k">return</span> <span class="n">quantity</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_layer</span><span class="o">.</span><span class="n">radius_in</span><span class="p">,</span> <span class="s2">"meter"</span><span class="p">)</span>
+
+    <span class="nd">@radius_in</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">radius_in</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Length</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Update the inner radius in meters."""</span>
+        <span class="n">radius</span> <span class="o">=</span> <span class="n">scalar</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s2">"meter"</span><span class="p">,</span> <span class="s2">"radius_in"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">math</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">radius</span><span class="p">)</span> <span class="ow">or</span> <span class="n">radius</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"radius_in must be non-negative and finite"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_layer</span><span class="o">.</span><span class="n">radius_in</span> <span class="o">=</span> <span class="n">radius</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fiber</span><span class="o">.</span><span class="n">clear_caches</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">radius_out</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Length</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Outer radius as a length quantity."""</span>
+        <span class="k">return</span> <span class="n">quantity</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_layer</span><span class="o">.</span><span class="n">radius_out</span><span class="p">,</span> <span class="s2">"meter"</span><span class="p">)</span>
+
+    <span class="nd">@radius_out</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">radius_out</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Length</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Update the outer radius in meters."""</span>
+        <span class="n">radius</span> <span class="o">=</span> <span class="n">scalar</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s2">"meter"</span><span class="p">,</span> <span class="s2">"radius_out"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">math</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">radius</span><span class="p">)</span> <span class="ow">or</span> <span class="n">radius</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"radius_out must be positive"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_layer</span><span class="o">.</span><span class="n">radius_out</span> <span class="o">=</span> <span class="n">radius</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fiber</span><span class="o">.</span><span class="n">clear_caches</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">refractive_index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RefractiveIndex</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Dimensionless refractive index."""</span>
+        <span class="k">return</span> <span class="n">quantity</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_layer</span><span class="o">.</span><span class="n">refractive_index</span><span class="p">,</span> <span class="s2">"dimensionless"</span><span class="p">)</span>
+
+    <span class="nd">@refractive_index</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">refractive_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">RefractiveIndex</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Update the refractive index."""</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+        <span class="n">index</span> <span class="o">=</span> <span class="n">scalar</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s2">"dimensionless"</span><span class="p">,</span> <span class="s2">"refractive_index"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">index</span><span class="p">)</span> <span class="ow">or</span> <span class="n">index</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"refractive index must be positive and finite"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_layer</span><span class="o">.</span><span class="n">refractive_index</span> <span class="o">=</span> <span class="n">index</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fiber</span><span class="o">.</span><span class="n">clear_caches</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">wavelength</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Length</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Wavelength shared with the owning fiber."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fiber</span><span class="o">.</span><span class="n">wavelength</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_first_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Whether this is the innermost layer."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layer</span><span class="o">.</span><span class="n">is_first_layer</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_last_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Whether this is the unbounded outer layer."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layer</span><span class="o">.</span><span class="n">is_last_layer</span></div>
+
 
 
 <div class="viewcode-block" id="Fiber">
 <a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.Fiber">[docs]</a>
-<span class="nd">@dataclass</span>
-<span class="k">class</span><span class="w"> </span><span class="nc">Fiber</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">"""</span>
-<span class="sd">    A class to represent an optical fiber with multiple layers.</span>
-
-<span class="sd">    This class provides functionality to define and manipulate</span>
-<span class="sd">    the properties of optical fibers, including their layers,</span>
-<span class="sd">    refractive indices, and propagation characteristics.</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Fiber</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Multilayer fiber with explicit quantities for all physical parameters.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    wavelength : float</span>
-<span class="sd">        The wavelength of light used for fiber simulations.</span>
-<span class="sd">    layer_names : list of str</span>
-<span class="sd">        Names of the fiber layers.</span>
-<span class="sd">    layer_radius : list of float</span>
-<span class="sd">        Radii of the fiber layers in meters.</span>
-<span class="sd">    layer_types : list of str</span>
-<span class="sd">        Types of layers (e.g., core, cladding).</span>
-<span class="sd">    index_list : list of float</span>
-<span class="sd">        Refractive indices for each layer.</span>
+<span class="sd">    wavelength : TypedUnit.Length</span>
+<span class="sd">        Positive finite vacuum wavelength, for example ``1550 * ureg.nanometer``.</span>
 <span class="sd">    """</span>
-    <span class="n">wavelength</span><span class="p">:</span> <span class="nb">float</span>
-    <span class="n">layer_names</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
-    <span class="n">layer_radius</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
-    <span class="n">layer_types</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
-    <span class="n">index_list</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">"""Initialize mutable layer and solver state after construction."""</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">(</span>
-            <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span> <span class="o">&lt;=</span> <span class="mi">0</span>
-        <span class="p">):</span>
-            <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="s2">"wavelength must be positive and finite"</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">layers_parameters</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">radius_in</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">layers</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_analysis_service</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_field_service</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">:</span> <span class="n">Length</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Validate wavelength and initialize an empty numerical fiber."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_si</span> <span class="o">=</span> <span class="n">_fiber</span><span class="o">.</span><span class="n">Fiber</span><span class="p">(</span><span class="n">wavelength</span><span class="o">=</span><span class="n">scalar</span><span class="p">(</span><span class="n">wavelength</span><span class="p">,</span> <span class="s2">"meter"</span><span class="p">,</span> <span class="s2">"wavelength"</span><span class="p">))</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_from_si</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">fiber</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Wrap an existing SI fiber without reinterpreting numerical values."""</span>
+        <span class="n">instance</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">_si</span> <span class="o">=</span> <span class="n">fiber</span>
+        <span class="k">return</span> <span class="n">instance</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">geometry_signature</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""Return an immutable signature of all solver-relevant fiber state.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        tuple</span>
-<span class="sd">            Wavelength and ordered layer geometry/index values.</span>
-<span class="sd">        """</span>
-        <span class="n">layers</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
-            <span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">radius_in</span><span class="p">,</span> <span class="n">layer</span><span class="o">.</span><span class="n">radius_out</span><span class="p">,</span> <span class="n">layer</span><span class="o">.</span><span class="n">refractive_index</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span>
-        <span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span><span class="p">,</span> <span class="n">layers</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">analysis</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Return modal analysis with unit-aware results and solver settings."""</span>
+        <span class="k">return</span> <span class="n">ModalAnalysis</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">analysis</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ModalAnalysis</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""Return the focused modal-analysis service.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        ModalAnalysis</span>
-<span class="sd">            Geometry-aware cached analysis service.</span>
-<span class="sd">        """</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_analysis_service</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_analysis_service</span> <span class="o">=</span> <span class="n">ModalAnalysis</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_analysis_service</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fields</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Return a unit-aware field-construction service."""</span>
+        <span class="k">return</span> <span class="n">FieldAnalysis</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">fields</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FieldAnalysis</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""Return the focused field-construction service.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        FieldAnalysis</span>
-<span class="sd">            Field orchestration service.</span>
-<span class="sd">        """</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_field_service</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_field_service</span> <span class="o">=</span> <span class="n">FieldAnalysis</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_field_service</span>
-
-<div class="viewcode-block" id="Fiber.clear_caches">
-<a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.Fiber.clear_caches">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">clear_caches</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""Clear modal and radial-field caches after a physical mutation."""</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_analysis_service</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_analysis_service</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">get_radial_field</span><span class="o">.</span><span class="n">cache_clear</span><span class="p">()</span></div>
-
-
-<div class="viewcode-block" id="Fiber.scale">
-<a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.Fiber.scale">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factor</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""</span>
-<span class="sd">        Scale the fiber's geometry by a given factor.</span>
-
-<span class="sd">        This method scales all radii in the fiber by the specified factor.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        factor : float</span>
-<span class="sd">            Scaling factor to apply to the radii.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        Fiber</span>
-<span class="sd">            A scaled copy of the fiber.</span>
-
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-<span class="sd">        This operation does not modify the original fiber.</span>
-<span class="sd">        """</span>
-        <span class="n">scaled_fiber</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">scaled_fiber</span><span class="o">.</span><span class="n">layers</span><span class="p">:</span>
-            <span class="n">layer</span><span class="o">.</span><span class="n">radius_in</span> <span class="o">*=</span> <span class="n">factor</span>
-            <span class="n">layer</span><span class="o">.</span><span class="n">radius_out</span> <span class="o">*=</span> <span class="n">factor</span>
-
-        <span class="k">return</span> <span class="n">scaled_fiber</span></div>
-
+    <span class="k">def</span><span class="w"> </span><span class="nf">geometry_signature</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Return an immutable numerical signature used for cache diagnostics."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_si</span><span class="o">.</span><span class="n">geometry_signature</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">n_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""</span>
-<span class="sd">        Number of layers in the fiber.</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">wavelength</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Length</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Vacuum wavelength in meters."""</span>
+        <span class="k">return</span> <span class="n">quantity</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_si</span><span class="o">.</span><span class="n">wavelength</span><span class="p">,</span> <span class="s2">"meter"</span><span class="p">)</span>
 
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        int</span>
-<span class="sd">            The total number of layers.</span>
-<span class="sd">        """</span>
-        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">)</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">n_interface</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""</span>
-<span class="sd">        Number of interfaces in the fiber.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        int</span>
-<span class="sd">            The number of interfaces, calculated as `n_layer - 1`.</span>
-<span class="sd">        """</span>
-        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">last_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StepIndex</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""Returns the last layer</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        StepIndex</span>
-<span class="sd">            The last layer.</span>
-<span class="sd">        """</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">penultimate_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StepIndex</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""Returns the second to last layer</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        StepIndex</span>
-<span class="sd">            The second to last layer.</span>
-<span class="sd">        """</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">first_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StepIndex</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""Returns the first layer</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        StepIndex</span>
-<span class="sd">            The first layer.</span>
-<span class="sd">        """</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">"""Return a hash derived from the ordered fiber layers.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        int</span>
-<span class="sd">            Hash of the layer tuple.</span>
-<span class="sd">        """</span>
-        <span class="k">return</span> <span class="nb">hash</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">))</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StepIndex</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""Returns the nth layer.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        index : int</span>
-<span class="sd">            The index</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        StepIndex</span>
-<span class="sd">            The step index.</span>
-<span class="sd">        """</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
-
-<div class="viewcode-block" id="Fiber.iterate_interfaces">
-<a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.Fiber.iterate_interfaces">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">iterate_interfaces</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""Iterates through pair of layers that forms interfaces</span>
-
-<span class="sd">        Yields</span>
-<span class="sd">        ------</span>
-<span class="sd">        tuple[StepIndex, StepIndex]</span>
-<span class="sd">            The two layers that form the interfaces.</span>
-<span class="sd">        """</span>
-        <span class="k">for</span> <span class="n">layer_in</span><span class="p">,</span> <span class="n">layer_out</span> <span class="ow">in</span> <span class="n">pairwise</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">):</span>
-            <span class="k">yield</span> <span class="n">layer_in</span><span class="p">,</span> <span class="n">layer_out</span></div>
-
+    <span class="nd">@wavelength</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">wavelength</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Length</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Update wavelength consistently across all layers."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_wavelength</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Fiber.update_wavelength">
 <a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.Fiber.update_wavelength">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">update_wavelength</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""Update the wavelength of the fiber and all its layers</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_wavelength</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">:</span> <span class="n">Length</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Validate and update the wavelength, clearing numerical caches."""</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        wavelength : float</span>
-<span class="sd">            The wavelength</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        None</span>
-<span class="sd">            No return</span>
-<span class="sd">        """</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span> <span class="o">=</span> <span class="n">wavelength</span>
-        <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">:</span>
-            <span class="n">layer</span><span class="o">.</span><span class="n">wavelength</span> <span class="o">=</span> <span class="n">wavelength</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">clear_caches</span><span class="p">()</span></div>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">scalar</span><span class="p">(</span><span class="n">wavelength</span><span class="p">,</span> <span class="s2">"meter"</span><span class="p">,</span> <span class="s2">"wavelength"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">or</span> <span class="n">value</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"wavelength must be positive and finite"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_si</span><span class="o">.</span><span class="n">update_wavelength</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Fiber.add_layer">
 <a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.Fiber.add_layer">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">add_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""</span>
-<span class="sd">        Add a layer to the fiber.</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="n">Length</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">RefractiveIndex</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Add a layer with a length radius and a dimensionless index quantity."""</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        name : str</span>
-<span class="sd">            Name of the layer (e.g., "core", "cladding").</span>
-<span class="sd">        radius : float</span>
-<span class="sd">            Outer radius of the layer in meters.</span>
-<span class="sd">        index : float</span>
-<span class="sd">            Refractive index of the layer.</span>
-
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-<span class="sd">        Layers should be added in order, starting with the innermost layer (core).</span>
-<span class="sd">        """</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="s2">"layer name must not be empty"</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">index</span><span class="p">)</span> <span class="ow">or</span> <span class="n">index</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="s2">"refractive index must be positive and finite"</span><span class="p">)</span>
-        <span class="n">radius</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">radius</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">radius</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">radius</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">inf</span>
-        <span class="k">if</span> <span class="n">radius</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius_in</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="s2">"layer radii must be strictly increasing"</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">layer_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">index_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">layer_radius</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">radius</span><span class="p">)</span>
-
-        <span class="n">layer</span> <span class="o">=</span> <span class="n">StepIndex</span><span class="p">(</span>
-            <span class="n">radius_in</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">radius_in</span><span class="p">,</span>
-            <span class="n">radius_out</span><span class="o">=</span><span class="n">radius</span><span class="p">,</span>
-            <span class="n">index_list</span><span class="o">=</span><span class="p">[</span><span class="n">index</span><span class="p">],</span>
-        <span class="p">)</span>
-        <span class="n">layer</span><span class="o">.</span><span class="n">is_last_layer</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="n">layer</span><span class="o">.</span><span class="n">is_first_layer</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="n">layer</span><span class="o">.</span><span class="n">wavelength</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">layer</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">radius_in</span> <span class="o">=</span> <span class="n">radius</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">clear_caches</span><span class="p">()</span></div>
+        <span class="n">radius_si</span> <span class="o">=</span> <span class="n">scalar</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="s2">"meter"</span><span class="p">,</span> <span class="s2">"radius"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">radius_si</span><span class="p">)</span> <span class="ow">or</span> <span class="n">radius_si</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">"radius must be positive; use infinity * ureg.meter for the outer layer"</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_si</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">radius</span><span class="o">=</span><span class="n">radius_si</span><span class="p">,</span>
+            <span class="n">index</span><span class="o">=</span><span class="n">scalar</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="s2">"dimensionless"</span><span class="p">,</span> <span class="s2">"index"</span><span class="p">),</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Fiber.initialize_layers">
 <a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.Fiber.initialize_layers">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">initialize_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""Initializes the layers.</span>
+<span class="w">        </span><span class="sd">"""Mark inner and outer layers and finalize solver geometry."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_si</span><span class="o">.</span><span class="n">initialize_layers</span><span class="p">()</span></div>
 
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        None</span>
-<span class="sd">            No returns</span>
-<span class="sd">        """</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="s2">"a fiber must contain at least one layer"</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">is_last_layer</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">is_first_layer</span> <span class="o">=</span> <span class="kc">True</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">radius_out</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">inf</span>
+<div class="viewcode-block" id="Fiber.clear_caches">
+<a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.Fiber.clear_caches">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">clear_caches</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Invalidate cached numerical solutions."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_si</span><span class="o">.</span><span class="n">clear_caches</span><span class="p">()</span></div>
 
-        <span class="k">for</span> <span class="n">position</span><span class="p">,</span> <span class="n">layer</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">):</span>
-            <span class="n">layer</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">position</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">clear_caches</span><span class="p">()</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Ordered unit-aware views of the step-index layers."""</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">Layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer</span><span class="p">)</span> <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_si</span><span class="o">.</span><span class="n">layers</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Return a layer by its radial order."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">first_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Innermost fiber layer."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">last_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Unbounded outermost fiber layer."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">penultimate_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Layer immediately inside the outermost layer."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">n_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Number of layers."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_si</span><span class="o">.</span><span class="n">n_layer</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">n_interface</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Number of interfaces."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_si</span><span class="o">.</span><span class="n">n_interface</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">layer_names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Names of the fiber layers."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_si</span><span class="o">.</span><span class="n">layer_names</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">layer_radius</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Layer radii as a length array."""</span>
+        <span class="k">return</span> <span class="n">quantity</span><span class="p">([</span><span class="n">layer</span><span class="o">.</span><span class="n">radius_out</span> <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_si</span><span class="o">.</span><span class="n">layers</span><span class="p">],</span> <span class="s2">"meter"</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">index_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Layer refractive indices as a dimensionless array."""</span>
+        <span class="k">return</span> <span class="n">quantity</span><span class="p">([</span><span class="n">layer</span><span class="o">.</span><span class="n">refractive_index</span> <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_si</span><span class="o">.</span><span class="n">layers</span><span class="p">],</span> <span class="s2">"dimensionless"</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">radius</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Length</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Largest finite interface radius."""</span>
+        <span class="k">return</span> <span class="n">quantity</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_si</span><span class="o">.</span><span class="n">radius</span><span class="p">,</span> <span class="s2">"meter"</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">maximum_index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RefractiveIndex</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Largest material refractive index."""</span>
+        <span class="k">return</span> <span class="n">quantity</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_si</span><span class="o">.</span><span class="n">maximum_index</span><span class="p">,</span> <span class="s2">"dimensionless"</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">minimum_index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RefractiveIndex</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Smallest material refractive index."""</span>
+        <span class="k">return</span> <span class="n">quantity</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_si</span><span class="o">.</span><span class="n">minimum_index</span><span class="p">,</span> <span class="s2">"dimensionless"</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">V_number</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Dimensionless normalized frequency."""</span>
+        <span class="k">return</span> <span class="n">quantity</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_si</span><span class="o">.</span><span class="n">V_number</span><span class="p">,</span> <span class="s2">"dimensionless"</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">M_number</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Dimensionless approximate guided-mode count."""</span>
+        <span class="k">return</span> <span class="n">quantity</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_si</span><span class="o">.</span><span class="n">M_number</span><span class="p">,</span> <span class="s2">"dimensionless"</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Fiber.get_NA">
+<a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.Fiber.get_NA">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_NA</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Return the dimensionless numerical aperture."""</span>
+        <span class="k">return</span> <span class="n">quantity</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_si</span><span class="o">.</span><span class="n">get_NA</span><span class="p">(),</span> <span class="s2">"dimensionless"</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Fiber.scale">
+<a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.Fiber.scale">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factor</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Return an independent fiber scaled by a dimensionless factor."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_from_si</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_si</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">factor</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">factor</span><span class="p">)))</span></div>
+
+
+<div class="viewcode-block" id="Fiber.iterate_interfaces">
+<a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.Fiber.iterate_interfaces">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">iterate_interfaces</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Yield adjacent unit-aware layer pairs."""</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">itertools</span><span class="w"> </span><span class="kn">import</span> <span class="n">pairwise</span>
+
+        <span class="k">yield from</span> <span class="n">pairwise</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Fiber.get_layer_at_radius">
 <a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.Fiber.get_layer_at_radius">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_layer_at_radius</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StepIndex</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""Gets the layer that is associated to a given radius.</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_layer_at_radius</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="n">Length</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Find the layer containing a length-valued radial position."""</span>
+        <span class="n">layer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_si</span><span class="o">.</span><span class="n">get_layer_at_radius</span><span class="p">(</span><span class="n">scalar</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="s2">"meter"</span><span class="p">,</span> <span class="s2">"radius"</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">Layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer</span><span class="p">)</span></div>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        radius : float</span>
-<span class="sd">            The radius</span>
 
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        StepIndex</span>
-<span class="sd">            Layer whose radial interval contains ``radius``.</span>
-<span class="sd">        """</span>
-        <span class="n">radius</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">radius</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">layer</span><span class="o">.</span><span class="n">radius_in</span> <span class="o">&lt;=</span> <span class="n">radius</span> <span class="o">&lt;=</span> <span class="n">layer</span><span class="o">.</span><span class="n">radius_out</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">layer</span>
-        <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"radius </span><span class="si">{</span><span class="n">radius</span><span class="si">}</span><span class="s2"> lies outside the fiber geometry"</span><span class="p">)</span></div>
+<div class="viewcode-block" id="Fiber.get_index_at_radius">
+<a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.Fiber.get_index_at_radius">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_index_at_radius</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="n">Length</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Return the dimensionless refractive index at a radial position."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_layer_at_radius</span><span class="p">(</span><span class="n">radius</span><span class="p">)</span><span class="o">.</span><span class="n">refractive_index</span></div>
 
 
 <div class="viewcode-block" id="Fiber.get_index_profile">
 <a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.Fiber.get_index_profile">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_index_profile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radius</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""Evaluate the refractive-index profile for many radii at once.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        radius : array-like</span>
-<span class="sd">            Scalar or array of radial positions in meters.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        numpy.ndarray</span>
-<span class="sd">            Refractive indices with the same shape as ``radius``.</span>
-<span class="sd">        """</span>
-        <span class="n">radii</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">))</span>
-        <span class="n">boundaries</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">layer</span><span class="o">.</span><span class="n">radius_out</span> <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">])</span>
-        <span class="n">indices</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">layer</span><span class="o">.</span><span class="n">refractive_index</span> <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">])</span>
-        <span class="n">positions</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="n">boundaries</span><span class="p">,</span> <span class="n">radii</span><span class="p">,</span> <span class="n">side</span><span class="o">=</span><span class="s2">"left"</span><span class="p">)</span>
-        <span class="n">positions</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">positions</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">indices</span><span class="p">[</span><span class="n">positions</span><span class="p">]</span></div>
-
-
-    <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">radius</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""Gets the fiber total radius taking account for all layers.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        float</span>
-<span class="sd">            The fiber radius.</span>
-<span class="sd">        """</span>
-        <span class="n">layer_radius</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">layer</span><span class="o">.</span><span class="n">radius_out</span> <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="p">]</span>
-
-        <span class="n">largest_radius</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">layer_radius</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">largest_radius</span>
-
-<div class="viewcode-block" id="Fiber.get_index_at_radius">
-<a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.Fiber.get_index_at_radius">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_index_at_radius</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""Gets the refractive index at a given radius.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        radius : float</span>
-<span class="sd">            The radius</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        float</span>
-<span class="sd">            The refractive index at given radius.</span>
-<span class="sd">        """</span>
-        <span class="n">layer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_layer_at_radius</span><span class="p">(</span><span class="n">radius</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">layer</span><span class="o">.</span><span class="n">refractive_index</span></div>
-
-
-    <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">maximum_index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""Gets the maximum refractive index of the fiber.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        float</span>
-<span class="sd">            The minimum index.</span>
-<span class="sd">        """</span>
-        <span class="n">layers_maximum_index</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">layer</span><span class="o">.</span><span class="n">refractive_index</span> <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span>
-        <span class="p">]</span>
-
-        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">layers_maximum_index</span><span class="p">)</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">minimum_index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""Gets the minimum refractive index of the fiber.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        float</span>
-<span class="sd">            The minimum index.</span>
-<span class="sd">        """</span>
-        <span class="n">layers_maximum_index</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">layer</span><span class="o">.</span><span class="n">refractive_index</span> <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span>
-        <span class="p">]</span>
-
-        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">layers_maximum_index</span><span class="p">)</span>
-
-<div class="viewcode-block" id="Fiber.get_NA">
-<a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.Fiber.get_NA">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_NA</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
-<span class="sd">        Compute the numerical aperture (NA) of the fiber.</span>
-
-<span class="sd">        The numerical aperture is defined as:</span>
-
-<span class="sd">        .. math::</span>
-<span class="sd">            NA = \sqrt{n_{max}^2 - n_{min}^2}</span>
-
-<span class="sd">        where:</span>
-<span class="sd">            - :math:`n_{max}` is the maximum refractive index in the fiber.</span>
-<span class="sd">            - :math:`n_{min}` is the refractive index of the outermost layer.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        float</span>
-<span class="sd">            The numerical aperture of the fiber.</span>
-<span class="sd">        """</span>
-        <span class="n">n_max</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maximum_index</span>
-
-        <span class="n">last_layer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-
-        <span class="n">n_min</span> <span class="o">=</span> <span class="n">last_layer</span><span class="o">.</span><span class="n">refractive_index</span>
-
-        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">n_max</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">n_min</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span></div>
-
-
-    <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">M_number</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">"""Gets the m number representing an approximation of the number of existing mode</span>
-<span class="sd">        in the fiber. It's valide only for highly multimode fibers M number is defined as:</span>
-
-<span class="sd">        .. math::</span>
-<span class="sd">            M = \frac{V^2}{2}</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        float</span>
-<span class="sd">            The M number.</span>
-<span class="sd">        """</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">V_number</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="mi">2</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">V_number</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
-<span class="sd">        Compute the V-number (normalized frequency) of the fiber.</span>
-
-<span class="sd">        The V-number is given by:</span>
-
-<span class="sd">        .. math::</span>
-<span class="sd">            V = \frac{2 \pi a}{\lambda} \cdot NA</span>
-
-<span class="sd">        where:</span>
-<span class="sd">            - :math:`a` is the core radius.</span>
-<span class="sd">            - :math:`\lambda` is the wavelength.</span>
-<span class="sd">            - :math:`NA` is the numerical aperture.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        float</span>
-<span class="sd">            The V-number of the fiber.</span>
-
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-<span class="sd">        The V-number determines whether the fiber supports single-mode</span>
-<span class="sd">        or multimode operation.</span>
-<span class="sd">        """</span>
-        <span class="n">NA</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_NA</span><span class="p">()</span>
-
-        <span class="n">inner_radius</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_layer</span><span class="o">.</span><span class="n">radius_in</span>
-
-        <span class="n">V0</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span><span class="p">)</span> <span class="o">*</span> <span class="n">inner_radius</span> <span class="o">*</span> <span class="n">NA</span>
-
-        <span class="k">return</span> <span class="n">V0</span>
-
-<div class="viewcode-block" id="Fiber.get_mode_cutoff_v0">
-<a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.Fiber.get_mode_cutoff_v0">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_mode_cutoff_v0</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""Gets the cutoff wavelength of the fiber.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        mode : Mode</span>
-<span class="sd">            The mode to consider</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        float</span>
-<span class="sd">            The cutoff wavelength.</span>
-<span class="sd">        """</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">cutoff_result</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="n">value</span> <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">converged</span> <span class="k">else</span> <span class="n">numpy</span><span class="o">.</span><span class="n">nan</span></div>
-
-
-<div class="viewcode-block" id="Fiber.get_mode_cutoff_wavelength">
-<a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.Fiber.get_mode_cutoff_wavelength">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_mode_cutoff_wavelength</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""</span>
-<span class="sd">        Compute the cutoff wavelength for a given mode.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        mode : Mode</span>
-<span class="sd">            The optical mode for which to calculate the cutoff wavelength.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        float</span>
-<span class="sd">            The cutoff wavelength of the specified mode.</span>
-
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-<span class="sd">        A mode is no longer guided when the wavelength exceeds the cutoff.</span>
-<span class="sd">        """</span>
-        <span class="n">cutoff_V0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_mode_cutoff_v0</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">cutoff_V0</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">inf</span>
-
-        <span class="k">if</span> <span class="n">numpy</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">cutoff_V0</span><span class="p">):</span>
-            <span class="k">return</span> <span class="mi">0</span>
-
-        <span class="n">NA</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_NA</span><span class="p">()</span>
-
-        <span class="n">inner_radius</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_layer</span><span class="o">.</span><span class="n">radius_in</span>
-
-        <span class="n">cutoff_wavelength</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">cutoff_V0</span> <span class="o">*</span> <span class="n">inner_radius</span> <span class="o">*</span> <span class="n">NA</span>
-
-        <span class="k">return</span> <span class="n">cutoff_wavelength</span></div>
-
-
-<div class="viewcode-block" id="Fiber.get_effective_index">
-<a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.Fiber.get_effective_index">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_effective_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""Gets the effective index.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        mode : Mode</span>
-<span class="sd">            The mode to consider</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        float</span>
-<span class="sd">            The effective index.</span>
-<span class="sd">        """</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">effective_index</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span></div>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_index_profile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="n">Length</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Evaluate a dimensionless index profile at length-valued positions."""</span>
+        <span class="k">return</span> <span class="n">quantity</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_si</span><span class="o">.</span><span class="n">get_index_profile</span><span class="p">(</span><span class="n">magnitude</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="s2">"meter"</span><span class="p">,</span> <span class="s2">"radius"</span><span class="p">)),</span> <span class="s2">"dimensionless"</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Fiber.solve_effective_index">
 <a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.Fiber.solve_effective_index">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">solve_effective_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">"""Return a structured effective-index solver result.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        mode : Mode</span>
-<span class="sd">            Mode to solve.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        SolverResult[float]</span>
-<span class="sd">            Value and explicit convergence diagnostics.</span>
-<span class="sd">        """</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">effective_index_result</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="Fiber.get_normalized_beta">
-<a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.Fiber.get_normalized_beta">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_normalized_beta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""Gets the normalized propagation constant [beta].</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        mode : Mode</span>
-<span class="sd">            The mode to consider</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        float</span>
-<span class="sd">            The normalized propagation constant.</span>
-<span class="sd">        """</span>
-        <span class="n">neff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_effective_index</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span>
-
-        <span class="n">n_max</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maximum_index</span>
-
-        <span class="n">n_last_layer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_layer</span><span class="o">.</span><span class="n">refractive_index</span>
-
-        <span class="n">numerator</span> <span class="o">=</span> <span class="n">neff</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">n_last_layer</span><span class="o">**</span><span class="mi">2</span>
-
-        <span class="n">denominator</span> <span class="o">=</span> <span class="n">n_max</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">n_last_layer</span><span class="o">**</span><span class="mi">2</span>
-
-        <span class="k">return</span> <span class="n">numerator</span> <span class="o">/</span> <span class="n">denominator</span></div>
-
-
-<div class="viewcode-block" id="Fiber.get_propagation_constant">
-<a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.Fiber.get_propagation_constant">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_propagation_constant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">"""Gets the propagation constant [:math:`beta`].</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        mode : Mode</span>
-<span class="sd">            The mode to consider</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        float</span>
-<span class="sd">            The propagation constant [:math:`beta`].</span>
-<span class="sd">        """</span>
-        <span class="n">neff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_effective_index</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span>
-
-        <span class="n">beta</span> <span class="o">=</span> <span class="n">neff</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">beta</span></div>
-
-
-<div class="viewcode-block" id="Fiber.get_phase_velocity">
-<a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.Fiber.get_phase_velocity">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_phase_velocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
-<span class="sd">        Compute the phase velocity of a mode in the fiber.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        mode : Mode</span>
-<span class="sd">            The optical mode for which to compute the phase velocity.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        float</span>
-<span class="sd">            The phase velocity of the mode, in meters per second.</span>
-
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-<span class="sd">        Phase velocity is given by:</span>
-
-<span class="sd">        .. math::</span>
-<span class="sd">            v_p = \frac{c}{n_{eff}}</span>
-
-<span class="sd">        where :math:`n_{eff}` is the effective refractive index.</span>
-<span class="sd">        """</span>
-        <span class="n">n_eff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_effective_index</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">constants</span><span class="o">.</span><span class="n">c</span> <span class="o">/</span> <span class="n">n_eff</span></div>
-
-
-<div class="viewcode-block" id="Fiber.get_group_index">
-<a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.Fiber.get_group_index">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_group_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""Gets the group index.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        mode : Mode</span>
-<span class="sd">            The mode to consider</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        float</span>
-<span class="sd">            The group index.</span>
-<span class="sd">        """</span>
-        <span class="n">omega</span> <span class="o">=</span> <span class="n">c</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span>
-
-        <span class="n">derivative</span> <span class="o">=</span> <span class="n">get_function_derivative</span><span class="p">(</span>
-            <span class="n">function</span><span class="o">=</span><span class="n">get_propagation_constant_from_omega</span><span class="p">,</span>
-            <span class="n">x_eval</span><span class="o">=</span><span class="n">omega</span><span class="p">,</span>
-            <span class="n">derivative</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-            <span class="n">accuracy</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
-            <span class="n">delta</span><span class="o">=</span><span class="mf">1e12</span><span class="p">,</span>  <span class="c1"># This value is critical for accurate computation</span>
-            <span class="n">function_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">fiber</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span>
-        <span class="p">)</span>
-
-        <span class="n">value</span> <span class="o">=</span> <span class="n">derivative</span> <span class="o">*</span> <span class="n">constants</span><span class="o">.</span><span class="n">c</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="n">ConvergenceError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"group-index derivative failed for </span><span class="si">{</span><span class="n">mode</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">value</span></div>
-
-
-<div class="viewcode-block" id="Fiber.get_group_velocity">
-<a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.Fiber.get_group_velocity">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_group_velocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""Compute the correctly named modal group velocity.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        mode : Mode</span>
-<span class="sd">            Mode to evaluate.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        float</span>
-<span class="sd">            Group velocity in meters per second.</span>
-<span class="sd">        """</span>
-        <span class="k">return</span> <span class="n">constants</span><span class="o">.</span><span class="n">c</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_group_index</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="Fiber.get_group_velocity_dispersion">
-<a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.Fiber.get_group_velocity_dispersion">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_group_velocity_dispersion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">"""Gets the fiber group velocity dispersion defined as:</span>
-
-<span class="sd">        .. math::</span>
-<span class="sd">            \frac{\partial^2 \beta}{\partial \omega^2}</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        mode : Mode</span>
-<span class="sd">            The mode to consider</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        float</span>
-<span class="sd">            The group_velocity dispersion</span>
-<span class="sd">        """</span>
-        <span class="n">omega</span> <span class="o">=</span> <span class="n">c</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span>
-
-        <span class="n">derivative</span> <span class="o">=</span> <span class="n">get_function_derivative</span><span class="p">(</span>
-            <span class="n">function</span><span class="o">=</span><span class="n">get_propagation_constant_from_omega</span><span class="p">,</span>
-            <span class="n">x_eval</span><span class="o">=</span><span class="n">omega</span><span class="p">,</span>
-            <span class="n">derivative</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-            <span class="n">accuracy</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
-            <span class="n">delta</span><span class="o">=</span><span class="mf">1e12</span><span class="p">,</span>  <span class="c1"># This value is critical for accurate computation</span>
-            <span class="n">function_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">fiber</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span>
-        <span class="p">)</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">derivative</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="n">ConvergenceError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">"group-velocity-dispersion derivative failed for </span><span class="si">{</span><span class="n">mode</span><span class="si">}</span><span class="s2">"</span>
-            <span class="p">)</span>
-        <span class="k">return</span> <span class="n">derivative</span></div>
-
-
-<div class="viewcode-block" id="Fiber.get_dispersion">
-<a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.Fiber.get_dispersion">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_dispersion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
-<span class="sd">        Compute the modal dispersion in the fiber.</span>
-
-<span class="sd">        Dispersion is defined as:</span>
-
-<span class="sd">        .. math::</span>
-<span class="sd">            D = - \frac{2 \pi c}{\lambda^2} \cdot \frac{\partial^2 \beta}{\partial \omega^2}</span>
-
-<span class="sd">        where:</span>
-<span class="sd">            - :math:`c` is the speed of light.</span>
-<span class="sd">            - :math:`\lambda` is the wavelength.</span>
-<span class="sd">            - :math:`\beta` is the propagation constant.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        mode : Mode</span>
-<span class="sd">            The optical mode to consider.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        float</span>
-<span class="sd">            The dispersion in units of ps/nm/km.</span>
-
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-<span class="sd">        Dispersion affects pulse broadening in fiber optics, particularly for long-haul transmission.</span>
-<span class="sd">        """</span>
-        <span class="n">gvd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_group_velocity_dispersion</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span>
-
-        <span class="n">factor</span> <span class="o">=</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">constants</span><span class="o">.</span><span class="n">c</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span><span class="o">**</span><span class="mi">2</span>
-
-        <span class="k">return</span> <span class="mf">1e6</span> <span class="o">*</span> <span class="n">factor</span> <span class="o">*</span> <span class="n">gvd</span></div>
-
-
-<div class="viewcode-block" id="Fiber.get_S_parameter">
-<a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.Fiber.get_S_parameter">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_S_parameter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
-<span class="sd">        Compute the S-parameter (third-order dispersion).</span>
-
-<span class="sd">        The S-parameter is defined as:</span>
-
-<span class="sd">        .. math::</span>
-<span class="sd">            S = 10^{-3} \cdot \left( \frac{2 \pi c}{\lambda^2} \right)^2 \cdot \frac{\partial^3 \beta}{\partial \omega^3}</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        mode : Mode</span>
-<span class="sd">            The optical mode to consider.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        float</span>
-<span class="sd">            The S-parameter in appropriate units.</span>
-<span class="sd">        """</span>
-        <span class="n">omega</span> <span class="o">=</span> <span class="n">c</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span>
-
-        <span class="n">derivative</span> <span class="o">=</span> <span class="n">get_function_derivative</span><span class="p">(</span>
-            <span class="n">function</span><span class="o">=</span><span class="n">get_propagation_constant_from_omega</span><span class="p">,</span>
-            <span class="n">x_eval</span><span class="o">=</span><span class="n">omega</span><span class="p">,</span>
-            <span class="n">derivative</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-            <span class="n">accuracy</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
-            <span class="n">delta</span><span class="o">=</span><span class="mf">1e12</span><span class="p">,</span>  <span class="c1"># This value is critical for accurate computation</span>
-            <span class="n">function_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">fiber</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span>
-        <span class="p">)</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">derivative</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="n">ConvergenceError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"dispersion-slope derivative failed for </span><span class="si">{</span><span class="n">mode</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-
-        <span class="n">factor</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">constants</span><span class="o">.</span><span class="n">c</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span><span class="o">**</span><span class="mi">2</span>
-
-        <span class="k">return</span> <span class="mf">1e-3</span> <span class="o">*</span> <span class="n">derivative</span> <span class="o">*</span> <span class="n">factor</span><span class="o">**</span><span class="mi">2</span></div>
+    <span class="k">def</span><span class="w"> </span><span class="nf">solve_effective_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Return solver diagnostics with a quantity-valued effective index."""</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_si</span><span class="o">.</span><span class="n">solve_effective_index</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
+            <span class="n">result</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">None</span> <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">quantity</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="s2">"dimensionless"</span><span class="p">)</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Fiber.get_mode_field">
 <a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.Fiber.get_mode_field">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_mode_field</span><span class="p">(</span>
-            <span class="bp">self</span><span class="p">,</span>
-            <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">,</span>
-            <span class="n">limit</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="n">n_point</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">101</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Field</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""Get field class</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_mode_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="n">Length</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">n_point</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">101</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Sample a field on a grid with an optional length-valued half-width."""</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes.field</span><span class="w"> </span><span class="kn">import</span> <span class="n">Field</span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        mode : Mode</span>
-<span class="sd">            The mode to consider</span>
-<span class="sd">        limit : float</span>
-<span class="sd">            The limit boundary</span>
-<span class="sd">        n_point : int</span>
-<span class="sd">            The number of point for axis discreditization</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        Field</span>
-<span class="sd">            The field instance of the mode.</span>
-<span class="sd">        """</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">mode_field</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="n">limit</span><span class="p">,</span> <span class="n">n_point</span><span class="o">=</span><span class="n">n_point</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">Field</span><span class="p">(</span>
+            <span class="n">fiber</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
+            <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
+            <span class="n">limit</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">*</span> <span class="mf">5.5</span> <span class="k">if</span> <span class="n">limit</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">limit</span><span class="p">,</span>
+            <span class="n">n_point</span><span class="o">=</span><span class="n">n_point</span><span class="p">,</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Fiber.get_radial_field">
 <a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.Fiber.get_radial_field">[docs]</a>
-    <span class="nd">@cache</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_radial_field</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">CylindricalCoordinates</span><span class="p">,</span> <span class="n">CylindricalCoordinates</span><span class="p">]:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">"""Gets the mode field without the azimuthal component.</span>
-<span class="sd">        Tuple structure is [:math:`E_{r}`, :math:`E_{\phi}`, :math:`E_{z}`], [:math:`H_{r}`, :math:`H_{\phi}`, :math:`H_{z}`]</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_radial_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="n">Length</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Return electric (V/m) and magnetic (A/m) cylindrical components."""</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes.field</span><span class="w"> </span><span class="kn">import</span> <span class="n">radial_quantities</span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        mode : Mode</span>
-<span class="sd">            The mode to consider</span>
-<span class="sd">        radius : float</span>
-<span class="sd">            The radius</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        tuple[CylindricalCoordinates, CylindricalCoordinates]</span>
-<span class="sd">            Electric and magnetic radial fields.</span>
-<span class="sd">        """</span>
-        <span class="n">radial_field</span> <span class="o">=</span> <span class="n">get_radial_field</span><span class="p">(</span>
-            <span class="n">fiber</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
-            <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
-            <span class="n">wavelength</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span><span class="p">,</span>
-            <span class="n">radius</span><span class="o">=</span><span class="n">radius</span>
-        <span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">radial_field</span></div>
+        <span class="k">return</span> <span class="n">radial_quantities</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_si</span><span class="o">.</span><span class="n">get_radial_field</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="n">scalar</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="s2">"meter"</span><span class="p">,</span> <span class="s2">"radius"</span><span class="p">)))</span></div>
 
 
 <div class="viewcode-block" id="Fiber.get_radial_fields">
 <a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.Fiber.get_radial_fields">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_radial_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">,</span> <span class="n">radius</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">CylindricalCoordinates</span><span class="p">,</span> <span class="n">CylindricalCoordinates</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">"""Evaluate radial electric and magnetic fields over an array.</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_radial_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="n">Length</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Return electric and magnetic components over a length-valued array."""</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes.field</span><span class="w"> </span><span class="kn">import</span> <span class="n">radial_quantities</span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        mode : Mode</span>
-<span class="sd">            Mode to evaluate.</span>
-<span class="sd">        radius : array-like</span>
-<span class="sd">            Radial sampling positions.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        tuple[CylindricalCoordinates, CylindricalCoordinates]</span>
-<span class="sd">            Electric and magnetic cylindrical components as arrays.</span>
-<span class="sd">        """</span>
-        <span class="n">radii</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-        <span class="n">flat</span> <span class="o">=</span> <span class="n">radii</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
-        <span class="n">solved</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">get_radial_field</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">))</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">flat</span><span class="p">]</span>
-
-        <span class="k">def</span><span class="w"> </span><span class="nf">assemble</span><span class="p">(</span><span class="n">position</span><span class="p">):</span>
-<span class="w">            </span><span class="sd">"""Assemble one electric or magnetic coordinate container."""</span>
-            <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="n">position</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">solved</span><span class="p">]</span>
-            <span class="k">return</span> <span class="n">CylindricalCoordinates</span><span class="p">(</span><span class="o">*</span><span class="p">(</span>
-                <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="nb">getattr</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">values</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">radii</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"rho"</span><span class="p">,</span> <span class="s2">"phi"</span><span class="p">,</span> <span class="s2">"z"</span><span class="p">)</span>
-            <span class="p">))</span>
-
-        <span class="k">return</span> <span class="n">assemble</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">assemble</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">radial_quantities</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_si</span><span class="o">.</span><span class="n">get_radial_fields</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="n">magnitude</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="s2">"meter"</span><span class="p">,</span> <span class="s2">"radius"</span><span class="p">))</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Fiber.get_radial_field_norm">
 <a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.Fiber.get_radial_field_norm">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_radial_field_norm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">"""Gets the norm of the mode field without the azimuthal component.</span>
-<span class="sd">        Tuple structure is [:math:`E_{r}`, :math:`E_{\phi}`, :math:`E_{z}`], [:math:`H_{r}`, :math:`H_{\phi}`, :math:`H_{z}`]</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        mode : Mode</span>
-<span class="sd">            The mode to consider</span>
-<span class="sd">        radius : float</span>
-<span class="sd">            The radius</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        float</span>
-<span class="sd">            The radial field.</span>
-<span class="sd">        """</span>
-        <span class="n">e_field</span><span class="p">,</span> <span class="n">h_field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_radial_field</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">radius</span><span class="p">)</span>
-
-        <span class="n">norm</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">e_field</span><span class="o">.</span><span class="n">rho</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">e_field</span><span class="o">.</span><span class="n">phi</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">e_field</span><span class="o">.</span><span class="n">z</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">norm</span></div>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_radial_field_norm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="n">Length</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Return the electric-field norm in volts per meter."""</span>
+        <span class="k">return</span> <span class="n">quantity</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_si</span><span class="o">.</span><span class="n">get_radial_field_norm</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="n">scalar</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="s2">"meter"</span><span class="p">,</span> <span class="s2">"radius"</span><span class="p">)),</span> <span class="s2">"volt / meter"</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Fiber.does_mode_exist">
 <a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.Fiber.does_mode_exist">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">does_mode_exist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">mode_list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""Test whether effective-index solutions exist for several modes.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        *mode_list : Mode</span>
-<span class="sd">            Modes to evaluate.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        list of bool</span>
-<span class="sd">            Existence flag for each supplied mode.</span>
-<span class="sd">        """</span>
-        <span class="n">mode_exist</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">mode</span> <span class="ow">in</span> <span class="n">mode_list</span><span class="p">:</span>
-            <span class="n">neff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_effective_index</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">neff</span><span class="p">):</span>
-                <span class="n">mode_exist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">mode_exist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">mode_exist</span></div>
+    <span class="k">def</span><span class="w"> </span><span class="nf">does_mode_exist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">mode_list</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Return existence flags for the supplied modes."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_si</span><span class="o">.</span><span class="n">does_mode_exist</span><span class="p">(</span><span class="o">*</span><span class="n">mode_list</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Fiber.find_modes">
 <a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.Fiber.find_modes">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">find_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">families</span><span class="o">=</span><span class="p">(</span><span class="s2">"LP"</span><span class="p">,),</span> <span class="n">max_nu</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span> <span class="n">max_m</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">6</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">"""Automatically discover guided modes at the current wavelength.</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">find_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">families</span><span class="o">=</span><span class="p">(</span><span class="s2">"LP"</span><span class="p">,),</span> <span class="n">max_nu</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">max_m</span><span class="o">=</span><span class="mi">6</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Discover guided modes within the requested search bounds."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_si</span><span class="o">.</span><span class="n">find_modes</span><span class="p">(</span><span class="n">families</span><span class="o">=</span><span class="n">families</span><span class="p">,</span> <span class="n">max_nu</span><span class="o">=</span><span class="n">max_nu</span><span class="p">,</span> <span class="n">max_m</span><span class="o">=</span><span class="n">max_m</span><span class="p">)</span></div>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        families : iterable of str, optional</span>
-<span class="sd">            Mode families to search.</span>
-<span class="sd">        max_nu : int, optional</span>
-<span class="sd">            Largest azimuthal order to inspect.</span>
-<span class="sd">        max_m : int, optional</span>
-<span class="sd">            Largest radial order to inspect.</span>
 
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        list of Mode</span>
-<span class="sd">            Guided modes found in the requested search range.</span>
-<span class="sd">        """</span>
-        <span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes.analysis</span><span class="w"> </span><span class="kn">import</span> <span class="n">find_modes</span>
-        <span class="k">return</span> <span class="n">find_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">families</span><span class="o">=</span><span class="n">families</span><span class="p">,</span> <span class="n">max_nu</span><span class="o">=</span><span class="n">max_nu</span><span class="p">,</span> <span class="n">max_m</span><span class="o">=</span><span class="n">max_m</span><span class="p">)</span></div>
+<div class="viewcode-block" id="Fiber.print_data">
+<a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.Fiber.print_data">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">print_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_type_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">mode_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Print modal quantities including their output units."""</span>
+        <span class="k">for</span> <span class="n">data_type</span> <span class="ow">in</span> <span class="n">data_type_list</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">data_type</span><span class="si">}</span><span class="s2"> @ wavelength: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">mode</span> <span class="ow">in</span> <span class="n">mode_list</span><span class="p">:</span>
+                <span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConvergenceError</span>
+
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">"get_"</span> <span class="o">+</span> <span class="n">data_type</span><span class="o">.</span><span class="n">lower</span><span class="p">())(</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span>
+                <span class="k">except</span> <span class="n">ConvergenceError</span><span class="p">:</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="n">quantity</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="s2">"nan"</span><span class="p">),</span> <span class="n">MODAL_UNITS</span><span class="p">[</span><span class="n">data_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()])</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">mode</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Fiber.sweep">
 <a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.Fiber.sweep">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">sweep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">"""Evaluate modal metrics over wavelength or a custom parameter.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        parameters : array-like or mapping</span>
-<span class="sd">            Parameter values passed to :func:`PyFiberModes.analysis.sweep_modes`.</span>
-<span class="sd">        **kwargs</span>
-<span class="sd">            Additional sweep configuration.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        ModeSweepResult</span>
-<span class="sd">            Computed modal quantities across the parameter grid.</span>
-<span class="sd">        """</span>
+<span class="w">        </span><span class="sd">"""Sweep length-valued wavelengths or a custom quantity parameter."""</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes.analysis</span><span class="w"> </span><span class="kn">import</span> <span class="n">sweep_modes</span>
+
         <span class="k">return</span> <span class="n">sweep_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="Fiber.print_data">
-<a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.Fiber.print_data">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">print_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_type_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">mode_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Mode</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""Prints the given data for the given modes.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        data_type_list : list[str]</span>
-<span class="sd">            The data type list</span>
-<span class="sd">        mode_list : list[Mode]</span>
-<span class="sd">            The mode list</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        None</span>
-<span class="sd">            No return</span>
-<span class="sd">        """</span>
-        <span class="k">for</span> <span class="n">data_type</span> <span class="ow">in</span> <span class="n">data_type_list</span><span class="p">:</span>
-            <span class="n">first_line</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">data_type</span><span class="si">}</span><span class="s2"> @ wavelength: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="s2">"</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">first_line</span><span class="p">,</span> <span class="s2">"-"</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">first_line</span><span class="p">))</span>
-            <span class="k">for</span> <span class="n">mode</span> <span class="ow">in</span> <span class="n">mode_list</span><span class="p">:</span>
-                <span class="n">data_type_string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"get_</span><span class="si">{</span><span class="n">data_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span>
-                <span class="k">try</span><span class="p">:</span>
-                    <span class="n">data</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_type_string</span><span class="p">)(</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span>
-                <span class="k">except</span> <span class="n">ConvergenceError</span><span class="p">:</span>
-                    <span class="n">data</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">nan</span>
-                <span class="n">output_string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">mode</span><span class="w"> </span><span class="si">= }</span><span class="s2"> </span><span class="se">\t</span><span class="s2"> </span><span class="si">{</span><span class="n">data_type</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">data</span><span class="si">}</span><span class="s2">"</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">output_string</span><span class="p">)</span>
-
-            <span class="nb">print</span><span class="p">(</span><span class="s1">'</span><span class="se">\n\n</span><span class="s1">'</span><span class="p">)</span></div>
 </div>
 
 
 
-<div class="viewcode-block" id="get_fiber_from_delta_and_V0">
-<a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.get_fiber_from_delta_and_V0">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">get_fiber_from_delta_and_V0</span><span class="p">(</span><span class="n">delta</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">V0</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Fiber</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">"""Construct an SMF28-like fiber from relative contrast and V-number.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_modal_method</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">unit</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Expose a numerical modal method with its physical output unit."""</span>
+    <span class="n">original</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">_fiber</span><span class="o">.</span><span class="n">Fiber</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"get_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    delta : float</span>
-<span class="sd">        Relative core-cladding refractive-index difference.</span>
-<span class="sd">    V0 : float</span>
-<span class="sd">        Target normalized frequency.</span>
-<span class="sd">    wavelength : float</span>
-<span class="sd">        Vacuum wavelength in meters.</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Quantity</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Calculate a modal quantity in its documented output units."""</span>
+        <span class="k">return</span> <span class="n">quantity</span><span class="p">(</span><span class="n">original</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_si</span><span class="p">,</span> <span class="n">mode</span><span class="p">),</span> <span class="n">unit</span><span class="p">)</span>
 
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    Fiber</span>
-<span class="sd">        Two-layer fiber adjusted to the requested contrast and V-number.</span>
-<span class="sd">    """</span>
-    <span class="n">fiber</span> <span class="o">=</span> <span class="n">load_fiber</span><span class="p">(</span><span class="n">fiber_name</span><span class="o">=</span><span class="s1">'SMF28'</span><span class="p">,</span> <span class="n">wavelength</span><span class="o">=</span><span class="n">wavelength</span><span class="p">)</span>
+    <span class="n">method</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="n">original</span><span class="o">.</span><span class="vm">__name__</span>
+    <span class="n">method</span><span class="o">.</span><span class="vm">__qualname__</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"Fiber.</span><span class="si">{</span><span class="n">original</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">"</span>
+    <span class="n">method</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">original</span><span class="o">.</span><span class="vm">__doc__</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"float</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"pint.Quantity</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">        Output unit: </span><span class="si">{</span><span class="n">unit</span><span class="si">}</span><span class="s2">.</span><span class="se">\n</span><span class="s2">"</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">method</span>
 
-    <span class="n">core</span><span class="p">,</span> <span class="n">clad</span> <span class="o">=</span> <span class="n">fiber</span><span class="o">.</span><span class="n">layers</span>
 
-    <span class="n">n_clad</span> <span class="o">=</span> <span class="n">clad</span><span class="o">.</span><span class="n">refractive_index</span>
-    <span class="n">n_core</span> <span class="o">=</span> <span class="n">n_clad</span> <span class="o">/</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">delta</span><span class="p">)</span>
-
-    <span class="n">r_core</span> <span class="o">=</span> <span class="n">V0</span> <span class="o">/</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">n_core</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">n_clad</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">wavelength</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
-
-    <span class="n">fiber</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">radius_out</span> <span class="o">=</span> <span class="n">r_core</span>
-    <span class="n">fiber</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">radius_in</span> <span class="o">=</span> <span class="n">r_core</span>
-    <span class="n">fiber</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">refractive_index</span> <span class="o">=</span> <span class="n">n_core</span>
-
-    <span class="k">return</span> <span class="n">fiber</span></div>
-
+<span class="k">for</span> <span class="n">_name</span><span class="p">,</span> <span class="n">_unit</span> <span class="ow">in</span> <span class="n">MODAL_UNITS</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">setattr</span><span class="p">(</span><span class="n">Fiber</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"get_</span><span class="si">{</span><span class="n">_name</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="n">_modal_method</span><span class="p">(</span><span class="n">_name</span><span class="p">,</span> <span class="n">_unit</span><span class="p">))</span>
 
 
 <div class="viewcode-block" id="load_fiber">
 <a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.load_fiber">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">load_fiber</span><span class="p">(</span>
     <span class="n">fiber_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">wavelength</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">wavelength</span><span class="p">:</span> <span class="n">Length</span><span class="p">,</span>
     <span class="n">add_air_layer</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">materials</span><span class="p">:</span> <span class="n">MaterialRegistry</span> <span class="o">=</span> <span class="n">DEFAULT_MATERIALS</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Fiber</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">"""Load a named YAML fiber definition.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    fiber_name : str</span>
-<span class="sd">        Configuration filename without the ``.yaml`` suffix.</span>
-<span class="sd">    wavelength : float, optional</span>
-<span class="sd">        Vacuum wavelength in meters used to evaluate material indices.</span>
-<span class="sd">    add_air_layer : bool, optional</span>
-<span class="sd">        Add an outer air layer when true.</span>
-<span class="sd">    materials : MaterialRegistry, optional</span>
-<span class="sd">        Registry used to resolve material names in the YAML definition.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    Fiber</span>
-<span class="sd">        Constructed fiber with initialized step-index layers.</span>
-<span class="sd">    """</span>
-    <span class="n">fiber_dict</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">load_fiber_as_dict</span><span class="p">(</span>
-        <span class="n">fiber_name</span><span class="o">=</span><span class="n">fiber_name</span><span class="p">,</span>
-        <span class="n">wavelength</span><span class="o">=</span><span class="n">wavelength</span><span class="p">,</span>
-        <span class="n">order</span><span class="o">=</span><span class="s1">'out-to-in'</span><span class="p">,</span>
-        <span class="n">materials</span><span class="o">=</span><span class="n">materials</span><span class="p">,</span>
-    <span class="p">)</span>
-
-    <span class="n">fiber</span> <span class="o">=</span> <span class="n">Fiber</span><span class="p">(</span><span class="n">wavelength</span><span class="o">=</span><span class="n">wavelength</span><span class="p">)</span>
-
-    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">fiber_dict</span><span class="p">[</span><span class="s1">'layers'</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="n">fiber</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span><span class="o">**</span><span class="n">layer</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">add_air_layer</span><span class="p">:</span>
-        <span class="n">fiber</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">'air'</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
-
-    <span class="n">fiber</span><span class="o">.</span><span class="n">initialize_layers</span><span class="p">()</span>
-
-    <span class="k">return</span> <span class="n">fiber</span></div>
+<span class="w">    </span><span class="sd">"""Load YAML geometry (stored in SI) at a length-valued vacuum wavelength."""</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">scalar</span><span class="p">(</span><span class="n">wavelength</span><span class="p">,</span> <span class="s2">"meter"</span><span class="p">,</span> <span class="s2">"wavelength"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Fiber</span><span class="o">.</span><span class="n">_from_si</span><span class="p">(</span>
+        <span class="n">_fiber</span><span class="o">.</span><span class="n">load_fiber</span><span class="p">(</span>
+            <span class="n">fiber_name</span><span class="o">=</span><span class="n">fiber_name</span><span class="p">,</span>
+            <span class="n">wavelength</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
+            <span class="n">add_air_layer</span><span class="o">=</span><span class="n">add_air_layer</span><span class="p">,</span>
+            <span class="n">materials</span><span class="o">=</span><span class="n">materials</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span></div>
 
 
-<span class="c1"># -</span>
+
+<div class="viewcode-block" id="get_fiber_from_delta_and_V0">
+<a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.get_fiber_from_delta_and_V0">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_fiber_from_delta_and_V0</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="n">V0</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">:</span> <span class="n">Length</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Fiber</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Construct a fiber from dimensionless contrast, V-number and wavelength."""</span>
+    <span class="k">return</span> <span class="n">Fiber</span><span class="o">.</span><span class="n">_from_si</span><span class="p">(</span>
+        <span class="n">_fiber</span><span class="o">.</span><span class="n">get_fiber_from_delta_and_V0</span><span class="p">(</span>
+            <span class="n">delta</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">delta</span><span class="p">),</span>
+            <span class="n">V0</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">V0</span><span class="p">),</span>
+            <span class="n">wavelength</span><span class="o">=</span><span class="n">scalar</span><span class="p">(</span><span class="n">wavelength</span><span class="p">,</span> <span class="s2">"meter"</span><span class="p">,</span> <span class="s2">"wavelength"</span><span class="p">),</span>
+        <span class="p">)</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ModalAnalysis">
+<a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.ModalAnalysis">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ModalAnalysis</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Unit-aware view of a fiber's cached numerical modal-analysis service."""</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fiber</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Retain the owning fiber."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span> <span class="o">=</span> <span class="n">fiber</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">settings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Numerical solver settings."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">_si</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">settings</span>
+
+    <span class="nd">@settings</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">settings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Update numerical solver settings and invalidate cached results."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">_si</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cache_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Number of cached modal results."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">_si</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">cache_size</span>
+
+<div class="viewcode-block" id="ModalAnalysis.clear">
+<a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.ModalAnalysis.clear">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Discard cached modal results."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">_si</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="ModalAnalysis.effective_index">
+<a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.ModalAnalysis.effective_index">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">effective_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Return a dimensionless effective-index quantity."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">get_effective_index</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ModalAnalysis.effective_index_result">
+<a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.ModalAnalysis.effective_index_result">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">effective_index_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Return unit-bearing effective-index solver diagnostics."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">solve_effective_index</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ModalAnalysis.cutoff_result">
+<a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.ModalAnalysis.cutoff_result">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cutoff_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Return unit-bearing normalized-cutoff solver diagnostics."""</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">_si</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">cutoff_result</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
+            <span class="n">result</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">None</span> <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">quantity</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="s2">"dimensionless"</span><span class="p">)</span>
+        <span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="FieldAnalysis">
+<a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.FieldAnalysis">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">FieldAnalysis</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Unit-aware field-construction service."""</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fiber</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Retain the owning fiber."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span> <span class="o">=</span> <span class="n">fiber</span>
+
+<div class="viewcode-block" id="FieldAnalysis.mode_field">
+<a class="viewcode-back" href="../../code/fibers.html#PyFiberModes.fiber.FieldAnalysis.mode_field">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">mode_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="n">Length</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">n_point</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">101</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Construct a field with a length-valued sampling limit."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">get_mode_field</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="n">limit</span><span class="p">,</span> <span class="n">n_point</span><span class="o">=</span><span class="n">n_point</span><span class="p">)</span></div>
+</div>
+
 </pre></div>
 
                 </article>

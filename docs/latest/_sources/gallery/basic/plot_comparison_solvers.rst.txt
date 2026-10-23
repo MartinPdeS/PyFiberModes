@@ -21,12 +21,26 @@
 Comparing two and three layers
 ==============================
 
-.. GENERATED FROM PYTHON SOURCE LINES 8-10
+.. GENERATED FROM PYTHON SOURCE LINES 5-8
+
+.. code-block:: Python
+
+    from PyFiberModes.units import ureg
+
+
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 9-11
 
 Imports
 ~~~~~~~
 
-.. GENERATED FROM PYTHON SOURCE LINES 10-55
+.. GENERATED FROM PYTHON SOURCE LINES 11-56
 
 .. code-block:: Python
 
@@ -38,13 +52,13 @@ Imports
 
     fiber_2L = load_fiber(
         fiber_name='SMF28',
-        wavelength=1550e-9,
+        wavelength=1550e-9 * ureg.meter,
         add_air_layer=False
     )
 
     fiber_3L = load_fiber(
         fiber_name='SMF28',
-        wavelength=1550e-9,
+        wavelength=1550e-9 * ureg.meter,
         add_air_layer=True
     )
 
@@ -90,7 +104,7 @@ Imports
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 15.570 seconds)
+   **Total running time of the script:** (0 minutes 17.292 seconds)
 
 
 .. _sphx_glr_download_gallery_basic_plot_comparison_solvers.py:

@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Component batching &#8212; PyFiberModes 0.17.7 documentation</title>
+    <title>Component batching &#8212; PyFiberModes 1.0.0 documentation</title>
   
   
   
@@ -44,7 +44,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../../_static/documentation_options.js?v=7369b842"></script>
+    <script src="../../_static/documentation_options.js?v=4ebf8126"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/sg-tags.js?v=d80f6fa4"></script>
@@ -53,7 +53,7 @@
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/MartinPdeS/PyFiberModes/documentation_page/version_switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'v0.17.7';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'v1.0.0';
         DOCUMENTATION_OPTIONS.show_version_warning_banner =
             true;
         </script>
@@ -66,7 +66,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.17.7" />
+  <meta name="docsearch:version" content="1.0.0" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -136,8 +136,8 @@
     
     
     
-    <img src="../../_static/logo.png" class="logo__image only-dark" alt="PyFiberModes 0.17.7 documentation - Home"/>
-    <img src="../../_static/logo.png" class="logo__image only-light pst-js-only" alt="PyFiberModes 0.17.7 documentation - Home"/>
+    <img src="../../_static/logo.png" class="logo__image only-dark" alt="PyFiberModes 1.0.0 documentation - Home"/>
+    <img src="../../_static/logo.png" class="logo__image only-light pst-js-only" alt="PyFiberModes 1.0.0 documentation - Home"/>
   
   
 </a></div>
@@ -548,23 +548,25 @@ to download the full example code.</p>
 <span id="sphx-glr-gallery-benchmarks-plot-component-batching-speedup-py"></span><h1>Component batching<a class="headerlink" href="#component-batching" title="Link to this heading">#</a></h1>
 <p>Compare separate field-component requests with the batched API that shares
 radial and angular intermediates.</p>
-<img src="../../_images/sphx_glr_plot_component_batching_speedup_001.png" srcset="../../_images/sphx_glr_plot_component_batching_speedup_001.png" alt="Three electric-field components" class = "sphx-glr-single-img"/><div class="highlight-Python notranslate"><div class="highlight"><pre><span class="kn">from</span><span class="w"> </span><span class="nn">time</span><span class="w"> </span><span class="kn">import</span> <span class="n">perf_counter</span><span class="w">
+<img src="../../_images/sphx_glr_plot_component_batching_speedup_001.png" srcset="../../_images/sphx_glr_plot_component_batching_speedup_001.png" alt="Three electric-field components" class = "sphx-glr-single-img"/><div class="highlight-Python notranslate"><div class="highlight"><pre><span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes</span><span class="nn">.</span><span class="nn">units</span><span class="w"> </span><span class="kn">import</span> <span class="n">ureg</span><span class="w">
+</span><span class="w">
+</span><span class="kn">from</span><span class="w"> </span><span class="nn">time</span><span class="w"> </span><span class="kn">import</span> <span class="n">perf_counter</span><span class="w">
 </span><span class="w">
 </span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span><span class="nn">.</span><span class="nn">pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span><span class="w">
 </span><span class="w">
 </span><span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes</span><span class="w"> </span><span class="kn">import</span> <a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../code/fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.Mode"><span class="n">HE11</span></a><span class="w">
 </span><span class="kn">from</span><span class="w"> </span><span class="nn">PyFiberModes</span><span class="nn">.</span><a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../code/fibers.html#PyFiberModes.fiber.Fiber" title="PyFiberModes.Fiber"><span class="nn">fiber</span></a><span class="w"> </span><span class="kn">import</span> <a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-function reference internal" href="../../code/fibers.html#PyFiberModes.fiber.load_fiber" title="PyFiberModes.load_fiber"><span class="n">load_fiber</span></a><span class="w">
 </span><span class="w">
-</span><a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../code/fibers.html#PyFiberModes.fiber.Fiber" title="PyFiberModes.Fiber"><span class="n">fiber</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-function reference internal" href="../../code/fibers.html#PyFiberModes.fiber.load_fiber" title="PyFiberModes.load_fiber"><span class="n">load_fiber</span></a><span class="p">(</span><span class="s2">&quot;</span><span class="s2">SMF28</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">wavelength</span><span class="o">=</span><span class="mf">1550e-9</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../code/fibers.html#PyFiberModes.fiber.Fiber" title="PyFiberModes.Fiber"><span class="n">fiber</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-function reference internal" href="../../code/fibers.html#PyFiberModes.fiber.load_fiber" title="PyFiberModes.load_fiber"><span class="n">load_fiber</span></a><span class="p">(</span><span class="s2">&quot;</span><span class="s2">SMF28</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">wavelength</span><span class="o">=</span><span class="mf">1550e-9</span> <span class="o">*</span> <span class="n">ureg</span><span class="o">.</span><span class="n">meter</span><span class="p">)</span><span class="w">
 </span><span class="n">components</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;</span><span class="s2">Ex</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="s2">Ey</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="s2">Ez</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
 </span><span class="w">
-</span><a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../code/fields.html#PyFiberModes.field.Field" title="PyFiberModes.Field"><span class="n">separate_field</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-method reference internal" href="../../code/fibers.html#PyFiberModes.fiber.Fiber.get_mode_field" title="PyFiberModes.Fiber.get_mode_field"><span class="n">fiber</span><span class="o">.</span><span class="n">get_mode_field</span></a><span class="p">(</span><a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../code/fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.Mode"><span class="n">HE11</span></a><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mf">12e-6</span><span class="p">,</span> <span class="n">n_point</span><span class="o">=</span><span class="mi">101</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../code/fields.html#PyFiberModes.field.Field" title="PyFiberModes.Field"><span class="n">separate_field</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-method reference internal" href="../../code/fibers.html#PyFiberModes.fiber.Fiber.get_mode_field" title="PyFiberModes.Fiber.get_mode_field"><span class="n">fiber</span><span class="o">.</span><span class="n">get_mode_field</span></a><span class="p">(</span><a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../code/fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.Mode"><span class="n">HE11</span></a><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mf">12e-6</span> <span class="o">*</span> <span class="n">ureg</span><span class="o">.</span><span class="n">meter</span><span class="p">,</span> <span class="n">n_point</span><span class="o">=</span><span class="mi">101</span><span class="p">)</span><span class="w">
 </span><span class="n">start</span> <span class="o">=</span> <span class="n">perf_counter</span><span class="p">(</span><span class="p">)</span><span class="w">
 </span><span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="n">components</span><span class="p">:</span><span class="w">
 </span>    <span class="nb">getattr</span><span class="p">(</span><a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../code/fields.html#PyFiberModes.field.Field" title="PyFiberModes.Field"><span class="n">separate_field</span></a><span class="p">,</span> <span class="n">component</span><span class="p">)</span><span class="p">(</span><span class="p">)</span><span class="w">
 </span><span class="n">separate_time</span> <span class="o">=</span> <span class="n">perf_counter</span><span class="p">(</span><span class="p">)</span> <span class="o">-</span> <span class="n">start</span><span class="w">
 </span><span class="w">
-</span><a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../code/fields.html#PyFiberModes.field.Field" title="PyFiberModes.Field"><span class="n">batched_field</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-method reference internal" href="../../code/fibers.html#PyFiberModes.fiber.Fiber.get_mode_field" title="PyFiberModes.Fiber.get_mode_field"><span class="n">fiber</span><span class="o">.</span><span class="n">get_mode_field</span></a><span class="p">(</span><a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../code/fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.Mode"><span class="n">HE11</span></a><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mf">12e-6</span><span class="p">,</span> <span class="n">n_point</span><span class="o">=</span><span class="mi">101</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../code/fields.html#PyFiberModes.field.Field" title="PyFiberModes.Field"><span class="n">batched_field</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-method reference internal" href="../../code/fibers.html#PyFiberModes.fiber.Fiber.get_mode_field" title="PyFiberModes.Fiber.get_mode_field"><span class="n">fiber</span><span class="o">.</span><span class="n">get_mode_field</span></a><span class="p">(</span><a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../code/fundamentals.html#PyFiberModes.mode.Mode" title="PyFiberModes.Mode"><span class="n">HE11</span></a><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mf">12e-6</span> <span class="o">*</span> <span class="n">ureg</span><span class="o">.</span><span class="n">meter</span><span class="p">,</span> <span class="n">n_point</span><span class="o">=</span><span class="mi">101</span><span class="p">)</span><span class="w">
 </span><span class="n">start</span> <span class="o">=</span> <span class="n">perf_counter</span><span class="p">(</span><span class="p">)</span><span class="w">
 </span><a class="sphx-glr-backref-module-PyFiberModes sphx-glr-backref-type-py-method reference internal" href="../../code/fields.html#PyFiberModes.field.Field.get_components" title="PyFiberModes.Field.get_components"><span class="n">batched_field</span><span class="o">.</span><span class="n">get_components</span></a><span class="p">(</span><span class="n">components</span><span class="p">)</span><span class="w">
 </span><span class="n">batched_time</span> <span class="o">=</span> <span class="n">perf_counter</span><span class="p">(</span><span class="p">)</span> <span class="o">-</span> <span class="n">start</span><span class="w">
@@ -574,7 +576,7 @@ radial and angular intermediates.</p>
 </span><span class="n">axis</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;</span><span class="s2">Elapsed time [s]</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;</span><span class="s2">Three electric-field components</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
 </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="p">)</span><span class="w">
 </span></pre></div></div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.093 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.102 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-gallery-benchmarks-plot-component-batching-speedup-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/10aa904b6c754276d986c607a58a69d5/plot_component_batching_speedup.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_component_batching_speedup.ipynb</span></code></a></p>
@@ -608,7 +610,7 @@ radial and angular intermediates.</p>
 
   
   <div class="tocsection editthispage">
-    <a href="https://github.com/MartinPdeS/PyFiberModes/edit/v0.17.7/docs/source/gallery/benchmarks/plot_component_batching_speedup.rst">
+    <a href="https://github.com/MartinPdeS/PyFiberModes/edit/v1.0.0/docs/source/gallery/benchmarks/plot_component_batching_speedup.rst">
       <i class="fa-solid fa-pencil"></i>
       
       

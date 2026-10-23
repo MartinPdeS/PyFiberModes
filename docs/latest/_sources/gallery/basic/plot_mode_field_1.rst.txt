@@ -21,12 +21,26 @@
 Mode fields
 ===========
 
-.. GENERATED FROM PYTHON SOURCE LINES 8-10
+.. GENERATED FROM PYTHON SOURCE LINES 5-8
+
+.. code-block:: Python
+
+    from PyFiberModes.units import ureg
+
+
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 9-11
 
 Imports
 ~~~~~~~
 
-.. GENERATED FROM PYTHON SOURCE LINES 10-13
+.. GENERATED FROM PYTHON SOURCE LINES 11-14
 
 .. code-block:: Python
 
@@ -40,20 +54,20 @@ Imports
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 14-17
+.. GENERATED FROM PYTHON SOURCE LINES 15-18
 
 Generating the fiber structures
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Here we create the different fiber design that we want to explore
 
-.. GENERATED FROM PYTHON SOURCE LINES 17-38
+.. GENERATED FROM PYTHON SOURCE LINES 18-39
 
 .. code-block:: Python
 
     core_indexes = 1.54
-    factory = FiberFactory(wavelength=1550e-9)
-    factory.add_layer(name="core", radius=4e-6, index=core_indexes)
-    factory.add_layer(name="cladding", index=1.4444)
+    factory = FiberFactory(wavelength=1550e-9 * ureg.meter)
+    factory.add_layer(name="core", radius=4e-6 * ureg.meter, index=(core_indexes) * ureg.dimensionless)
+    factory.add_layer(name="cladding", index=1.4444 * ureg.dimensionless)
 
     mode = LP02
 
@@ -62,7 +76,7 @@ Here we create the different fiber design that we want to explore
     field = Field(
         fiber=fiber,
         mode=mode,
-        limit=10e-6,
+        limit=10e-6 * ureg.meter,
         n_point=201
     )
 
@@ -86,7 +100,7 @@ Here we create the different fiber design that we want to explore
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.149 seconds)
+   **Total running time of the script:** (0 minutes 0.171 seconds)
 
 
 .. _sphx_glr_download_gallery_basic_plot_mode_field_1.py:

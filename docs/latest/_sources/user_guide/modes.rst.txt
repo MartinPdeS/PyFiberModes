@@ -14,6 +14,8 @@ common instances from the package root:
 
 .. code-block:: python
 
+   from PyFiberModes.units import ureg
+
    from PyFiberModes import HE11, LP01, Mode
 
    lp21 = Mode("LP", nu=2, m=1)
@@ -27,9 +29,11 @@ properties derive from it and its wavelength dependence:
 
 .. code-block:: python
 
+   from PyFiberModes.units import ureg
+
    from PyFiberModes import LP01, load_fiber
 
-   fiber = load_fiber("SMF28", wavelength=1.55e-6)
+   fiber = load_fiber("SMF28", wavelength=1.55e-6 * ureg.meter)
    values = {
        "effective index": fiber.get_effective_index(LP01),
        "propagation constant": fiber.get_propagation_constant(LP01),
@@ -49,6 +53,8 @@ Use :meth:`~PyFiberModes.fiber.Fiber.find_modes` when the supported set is not
 known in advance:
 
 .. code-block:: python
+
+   from PyFiberModes.units import ureg
 
    modes = fiber.find_modes(families=("LP",), max_nu=4, max_m=3)
    for mode in modes:

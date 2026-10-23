@@ -24,7 +24,7 @@ Effective-area convergence
 Repeat a derived field calculation on increasingly fine grids to check that
 the reported effective area has stabilized.
 
-.. GENERATED FROM PYTHON SOURCE LINES 8-27
+.. GENERATED FROM PYTHON SOURCE LINES 8-28
 
 
 
@@ -39,19 +39,20 @@ the reported effective area has stabilized.
 
 .. code-block:: Python
 
+    from PyFiberModes.units import ureg
 
     import matplotlib.pyplot as plt
 
     from PyFiberModes import HE11
     from PyFiberModes.fiber import load_fiber
 
-    fiber = load_fiber("SMF28", wavelength=1550e-9)
+    fiber = load_fiber("SMF28", wavelength=1550e-9 * ureg.meter)
     grid_sizes = (41, 61, 81, 101, 121)
     areas = []
 
     for grid_size in grid_sizes:
-        field = fiber.get_mode_field(HE11, limit=15e-6, n_point=grid_size)
-        areas.append(field.get_effective_area() * 1e12)
+        field = fiber.get_mode_field(HE11, limit=15e-6 * ureg.meter, n_point=grid_size)
+        areas.append(field.get_effective_area().to("micrometer ** 2").magnitude)
 
     figure, axis = plt.subplots()
     axis.plot(grid_sizes, areas, marker="o")
@@ -62,7 +63,7 @@ the reported effective area has stabilized.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.100 seconds)
+   **Total running time of the script:** (0 minutes 0.109 seconds)
 
 
 .. _sphx_glr_download_gallery_validation_plot_field_area_convergence.py:

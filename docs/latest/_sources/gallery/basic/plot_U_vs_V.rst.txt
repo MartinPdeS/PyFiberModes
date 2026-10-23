@@ -21,12 +21,26 @@
 Figure 3.13 of Jacques Bures
 ============================
 
-.. GENERATED FROM PYTHON SOURCE LINES 8-10
+.. GENERATED FROM PYTHON SOURCE LINES 5-8
+
+.. code-block:: Python
+
+    from PyFiberModes.units import ureg
+
+
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 9-11
 
 Imports
 ~~~~~~~
 
-.. GENERATED FROM PYTHON SOURCE LINES 10-49
+.. GENERATED FROM PYTHON SOURCE LINES 11-50
 
 .. code-block:: Python
 
@@ -53,7 +67,7 @@ Imports
             fiber = get_fiber_from_delta_and_V0(
                 delta=0.3,
                 V0=V0,
-                wavelength=1310e-9
+                wavelength=1310e-9 * ureg.meter
             )
 
             data = get_U_parameter(
@@ -84,7 +98,7 @@ Imports
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.912 seconds)
+   **Total running time of the script:** (0 minutes 1.141 seconds)
 
 
 .. _sphx_glr_download_gallery_basic_plot_U_vs_V.py:

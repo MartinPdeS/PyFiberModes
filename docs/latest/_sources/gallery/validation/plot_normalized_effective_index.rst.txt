@@ -24,7 +24,7 @@ Normalized effective index
 Verify that the normalized propagation parameter remains between zero and one
 for a guided fundamental mode.
 
-.. GENERATED FROM PYTHON SOURCE LINES 8-32
+.. GENERATED FROM PYTHON SOURCE LINES 8-33
 
 
 
@@ -34,11 +34,23 @@ for a guided fundamental mode.
    :class: sphx-glr-single-img
 
 
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    /opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/matplotlib/cbook.py:1408: UnitStrippedWarning: The unit of the quantity is stripped when downcasting to ndarray.
+      return np.asanyarray(x, float)
 
 
+
+
+
+
+|
 
 .. code-block:: Python
 
+    from PyFiberModes.units import ureg
 
     import matplotlib.pyplot as plt
     import numpy as np
@@ -46,7 +58,7 @@ for a guided fundamental mode.
     from PyFiberModes import LP01
     from PyFiberModes.fiber import load_fiber
 
-    wavelengths = np.linspace(1260e-9, 1650e-9, 60)
+    wavelengths = np.linspace(1260e-9, 1650e-9, 60) * ureg.meter
     fiber = load_fiber("SMF28", wavelength=wavelengths[0])
     result = fiber.sweep(wavelengths, modes=(LP01,), metrics=("effective_index",))
     effective_index = result["effective_index"][:, 0]
@@ -58,7 +70,7 @@ for a guided fundamental mode.
     )
 
     figure, axis = plt.subplots()
-    axis.plot(wavelengths * 1e9, normalized_index)
+    axis.plot(wavelengths.to("nanometer").magnitude, normalized_index)
     axis.axhspan(0, 1, alpha=0.12, label="guided interval")
     axis.set(xlabel="Wavelength [nm]", ylabel="Normalized effective index", ylim=(-0.05, 1.05))
     axis.legend()
@@ -67,7 +79,7 @@ for a guided fundamental mode.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.047 seconds)
+   **Total running time of the script:** (0 minutes 0.055 seconds)
 
 
 .. _sphx_glr_download_gallery_validation_plot_normalized_effective_index.py:

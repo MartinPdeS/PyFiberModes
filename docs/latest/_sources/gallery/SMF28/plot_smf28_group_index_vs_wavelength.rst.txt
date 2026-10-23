@@ -21,12 +21,26 @@
 Modal dispersion VS core index
 ==============================
 
-.. GENERATED FROM PYTHON SOURCE LINES 8-10
+.. GENERATED FROM PYTHON SOURCE LINES 5-8
+
+.. code-block:: Python
+
+    from PyFiberModes.units import ureg
+
+
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 9-11
 
 Imports
 ~~~~~~~
 
-.. GENERATED FROM PYTHON SOURCE LINES 10-15
+.. GENERATED FROM PYTHON SOURCE LINES 11-16
 
 .. code-block:: Python
 
@@ -42,20 +56,20 @@ Imports
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 16-19
+.. GENERATED FROM PYTHON SOURCE LINES 17-20
 
 Generating the fiber structures
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Here we create the different fiber design that we want to explore
 
-.. GENERATED FROM PYTHON SOURCE LINES 19-40
+.. GENERATED FROM PYTHON SOURCE LINES 20-41
 
 .. code-block:: Python
 
     wavelength_list = numpy.linspace(500e-9, 3000e-9, 100)
     data = []
     for wavelegnth in wavelength_list:
-        smf28 = load_fiber(fiber_name='SMF28', wavelength=wavelegnth)
+        smf28 = load_fiber(fiber_name='SMF28', wavelength=(wavelegnth) * ureg.meter)
         dispersion = smf28.get_effective_index(mode=LP01)
         data.append(dispersion)
 
@@ -88,7 +102,7 @@ Here we create the different fiber design that we want to explore
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.089 seconds)
+   **Total running time of the script:** (0 minutes 0.112 seconds)
 
 
 .. _sphx_glr_download_gallery_SMF28_plot_smf28_group_index_vs_wavelength.py:

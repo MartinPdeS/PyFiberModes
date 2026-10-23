@@ -2,6 +2,7 @@
 Mode fields
 ===========
 """
+from PyFiberModes.units import ureg
 
 
 # %%
@@ -17,7 +18,7 @@ import matplotlib.pyplot as plt
 # Generating the fiber structures
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Here we create the different fiber design that we want to explore
-fiber = load_fiber(fiber_name='SMF28', wavelength=1550e-9)
+fiber = load_fiber(fiber_name='SMF28', wavelength=1550e-9 * ureg.meter)
 fiber = fiber.scale(3.5)
 
 # %%
@@ -37,7 +38,7 @@ for mode in [LP01, LP02, LP03]:
     amplitudes = []
     for radius in radius_list:
         e_field, _ = fiber.get_radial_field(mode=mode, radius=radius)
-        amplitudes.append(e_field.rho)
+        amplitudes.append(e_field.rho.to("volt / meter").magnitude)
 
     amplitudes = numpy.asarray(amplitudes)
     amplitudes /= numpy.sign(amplitudes[0])

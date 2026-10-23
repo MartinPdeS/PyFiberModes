@@ -21,12 +21,26 @@
 Mode fields
 ===========
 
-.. GENERATED FROM PYTHON SOURCE LINES 8-10
+.. GENERATED FROM PYTHON SOURCE LINES 5-8
+
+.. code-block:: Python
+
+    from PyFiberModes.units import ureg
+
+
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 9-11
 
 Imports
 ~~~~~~~
 
-.. GENERATED FROM PYTHON SOURCE LINES 10-16
+.. GENERATED FROM PYTHON SOURCE LINES 11-17
 
 .. code-block:: Python
 
@@ -43,17 +57,17 @@ Imports
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 17-20
+.. GENERATED FROM PYTHON SOURCE LINES 18-21
 
 Generating the fiber structures
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Here we create the different fiber design that we want to explore
 
-.. GENERATED FROM PYTHON SOURCE LINES 20-23
+.. GENERATED FROM PYTHON SOURCE LINES 21-24
 
 .. code-block:: Python
 
-    fiber = load_fiber(fiber_name='SMF28', wavelength=1550e-9)
+    fiber = load_fiber(fiber_name='SMF28', wavelength=1550e-9 * ureg.meter)
     fiber = fiber.scale(3.5)
 
 
@@ -63,11 +77,11 @@ Here we create the different fiber design that we want to explore
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 24-25
+.. GENERATED FROM PYTHON SOURCE LINES 25-26
 
 Preparing the figure
 
-.. GENERATED FROM PYTHON SOURCE LINES 25-50
+.. GENERATED FROM PYTHON SOURCE LINES 26-51
 
 .. code-block:: Python
 
@@ -86,7 +100,7 @@ Preparing the figure
         amplitudes = []
         for radius in radius_list:
             e_field, _ = fiber.get_radial_field(mode=mode, radius=radius)
-            amplitudes.append(e_field.rho)
+            amplitudes.append(e_field.rho.to("volt / meter").magnitude)
 
         amplitudes = numpy.asarray(amplitudes)
         amplitudes /= numpy.sign(amplitudes[0])
@@ -105,13 +119,20 @@ Preparing the figure
    :class: sphx-glr-single-img
 
 
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    /opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/matplotlib/cbook.py:1408: UnitStrippedWarning: The unit of the quantity is stripped when downcasting to ndarray.
+      return np.asanyarray(x, float)
+
 
 
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.131 seconds)
+   **Total running time of the script:** (0 minutes 0.208 seconds)
 
 
 .. _sphx_glr_download_gallery_basic_plot_mode_field_2.py:

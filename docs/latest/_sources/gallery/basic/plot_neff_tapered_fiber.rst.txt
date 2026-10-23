@@ -21,12 +21,25 @@
 Effective index for tapered multi-mode fiber
 ============================================
 
-.. GENERATED FROM PYTHON SOURCE LINES 7-9
+.. GENERATED FROM PYTHON SOURCE LINES 5-7
+
+.. code-block:: Python
+
+    from PyFiberModes.units import ureg
+
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 8-10
 
 Imports
 ~~~~~~~
 
-.. GENERATED FROM PYTHON SOURCE LINES 9-15
+.. GENERATED FROM PYTHON SOURCE LINES 10-16
 
 .. code-block:: Python
 
@@ -43,11 +56,11 @@ Imports
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 16-17
+.. GENERATED FROM PYTHON SOURCE LINES 17-18
 
 Computing the analytical values using FiberModes solver.
 
-.. GENERATED FROM PYTHON SOURCE LINES 17-31
+.. GENERATED FROM PYTHON SOURCE LINES 18-32
 
 .. code-block:: Python
 
@@ -72,17 +85,17 @@ Computing the analytical values using FiberModes solver.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 32-33
+.. GENERATED FROM PYTHON SOURCE LINES 33-34
 
 Constructing fiber
 
-.. GENERATED FROM PYTHON SOURCE LINES 33-46
+.. GENERATED FROM PYTHON SOURCE LINES 34-47
 
 .. code-block:: Python
 
-    fiber = Fiber(wavelength=1550e-9)
-    fiber.add_layer(name='core', radius=20e-6, index=1.4494)
-    fiber.add_layer(name='clad', radius=62.5e-6, index=1.4444)
+    fiber = Fiber(wavelength=1550e-9 * ureg.meter)
+    fiber.add_layer(name='core', radius=20e-6 * ureg.meter, index=1.4494 * ureg.dimensionless)
+    fiber.add_layer(name='clad', radius=62.5e-6 * ureg.meter, index=1.4444 * ureg.dimensionless)
     fiber.initialize_layers()
 
     itr_list = numpy.linspace(1, 0.1, 50)
@@ -100,11 +113,11 @@ Constructing fiber
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 47-48
+.. GENERATED FROM PYTHON SOURCE LINES 48-49
 
 Preparing the figure
 
-.. GENERATED FROM PYTHON SOURCE LINES 48-68
+.. GENERATED FROM PYTHON SOURCE LINES 49-69
 
 .. code-block:: Python
 
@@ -143,7 +156,7 @@ Preparing the figure
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.070 seconds)
+   **Total running time of the script:** (0 minutes 0.082 seconds)
 
 
 .. _sphx_glr_download_gallery_basic_plot_neff_tapered_fiber.py:

@@ -23,7 +23,7 @@ Structured wavelength sweep
 
 Sweep a mode without mutating the original fiber state.
 
-.. GENERATED FROM PYTHON SOURCE LINES 7-28
+.. GENERATED FROM PYTHON SOURCE LINES 7-29
 
 
 
@@ -33,11 +33,23 @@ Sweep a mode without mutating the original fiber state.
    :class: sphx-glr-single-img
 
 
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    /opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/matplotlib/cbook.py:1408: UnitStrippedWarning: The unit of the quantity is stripped when downcasting to ndarray.
+      return np.asanyarray(x, float)
 
 
+
+
+
+
+|
 
 .. code-block:: Python
 
+    from PyFiberModes.units import ureg
 
     import matplotlib.pyplot as plt
     import numpy as np
@@ -45,8 +57,8 @@ Sweep a mode without mutating the original fiber state.
     from PyFiberModes import LP01
     from PyFiberModes.fiber import load_fiber
 
-    fiber = load_fiber("SMF28", wavelength=1310e-9)
-    wavelengths = np.linspace(1260e-9, 1650e-9, 80)
+    fiber = load_fiber("SMF28", wavelength=1310e-9 * ureg.meter)
+    wavelengths = np.linspace(1260e-9, 1650e-9, 80) * ureg.meter
     result = fiber.sweep(
         wavelengths,
         modes=(LP01,),
@@ -54,8 +66,8 @@ Sweep a mode without mutating the original fiber state.
     )
 
     figure, axis = plt.subplots()
-    axis.plot(wavelengths * 1e9, result["effective_index"][:, 0], label="effective index")
-    axis.plot(wavelengths * 1e9, result["group_index"][:, 0], label="group index")
+    axis.plot(wavelengths.to("nanometer").magnitude, result["effective_index"][:, 0], label="effective index")
+    axis.plot(wavelengths.to("nanometer").magnitude, result["group_index"][:, 0], label="group index")
     axis.set(xlabel="Wavelength [nm]", ylabel="Index", title="SMF-28 LP01 sweep")
     axis.legend()
     plt.show()
@@ -63,7 +75,7 @@ Sweep a mode without mutating the original fiber state.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.097 seconds)
+   **Total running time of the script:** (0 minutes 0.119 seconds)
 
 
 .. _sphx_glr_download_gallery_analysis_plot_structured_wavelength_sweep.py:

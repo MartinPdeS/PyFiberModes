@@ -21,12 +21,26 @@
 Dispersion VS core index
 ========================
 
-.. GENERATED FROM PYTHON SOURCE LINES 8-10
+.. GENERATED FROM PYTHON SOURCE LINES 5-8
+
+.. code-block:: Python
+
+    from PyFiberModes.units import ureg
+
+
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 9-11
 
 Imports
 ~~~~~~~
 
-.. GENERATED FROM PYTHON SOURCE LINES 10-14
+.. GENERATED FROM PYTHON SOURCE LINES 11-15
 
 .. code-block:: Python
 
@@ -41,20 +55,20 @@ Imports
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 15-18
+.. GENERATED FROM PYTHON SOURCE LINES 16-19
 
 Generating the fiber structures
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Here we create the different fiber design that we want to explore
 
-.. GENERATED FROM PYTHON SOURCE LINES 18-24
+.. GENERATED FROM PYTHON SOURCE LINES 19-25
 
 .. code-block:: Python
 
     core_indexes = numpy.linspace(1.464, 1.494, 100)
-    factory = FiberFactory(wavelength=1550e-9)
-    factory.add_layer(name="core", radius=4e-6, index=core_indexes)
-    factory.add_layer(name="cladding", index=1.4444)
+    factory = FiberFactory(wavelength=1550e-9 * ureg.meter)
+    factory.add_layer(name="core", radius=4e-6 * ureg.meter, index=(core_indexes) * ureg.dimensionless)
+    factory.add_layer(name="cladding", index=1.4444 * ureg.dimensionless)
 
 
 
@@ -64,11 +78,11 @@ Here we create the different fiber design that we want to explore
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 25-26
+.. GENERATED FROM PYTHON SOURCE LINES 26-27
 
 Preparing the figure
 
-.. GENERATED FROM PYTHON SOURCE LINES 26-51
+.. GENERATED FROM PYTHON SOURCE LINES 27-52
 
 .. code-block:: Python
 
@@ -77,14 +91,14 @@ Preparing the figure
     ax.set(
         title='Dispersion vs core index',
         xlabel='Core refractive index',
-        ylabel='Modal dispersion'
+        ylabel='Modal dispersion [ps/(nm km)]'
     )
 
     for mode in [HE11, HE12, HE22]:
         data = []
         for fiber in factory:
             try:
-                effective_index = fiber.get_dispersion(mode)
+                effective_index = fiber.get_dispersion(mode=mode).to("ps / nm / km").magnitude
             except ConvergenceError:
                 # Higher-order modes can be unguided below cutoff. Use NaN so the
                 # plot shows a gap without obscuring other guided solutions.
@@ -112,7 +126,7 @@ Preparing the figure
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.388 seconds)
+   **Total running time of the script:** (0 minutes 0.480 seconds)
 
 
 .. _sphx_glr_download_gallery_basic_plot_dispersion.py:

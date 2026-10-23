@@ -24,7 +24,7 @@ Refractive-index profile
 Inspect the concentric refractive-index steps of a specialty fiber before
 solving its modes.
 
-.. GENERATED FROM PYTHON SOURCE LINES 8-27
+.. GENERATED FROM PYTHON SOURCE LINES 8-28
 
 
 
@@ -34,23 +34,35 @@ solving its modes.
    :class: sphx-glr-single-img
 
 
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    /opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/matplotlib/cbook.py:1408: UnitStrippedWarning: The unit of the quantity is stripped when downcasting to ndarray.
+      return np.asanyarray(x, float)
 
 
+
+
+
+
+|
 
 .. code-block:: Python
 
+    from PyFiberModes.units import ureg
 
     import matplotlib.pyplot as plt
     import numpy as np
 
     from PyFiberModes.fiber import load_fiber
 
-    fiber = load_fiber("DCF1300S_20", wavelength=1550e-9)
-    radii = np.linspace(0, 70e-6, 600)
+    fiber = load_fiber("DCF1300S_20", wavelength=1550e-9 * ureg.meter)
+    radii = np.linspace(0, 70e-6, 600) * ureg.meter
     indices = fiber.get_index_profile(radii)
 
     figure, axis = plt.subplots()
-    axis.step(radii * 1e6, indices, where="post")
+    axis.step(radii.to("micrometer").magnitude, indices, where="post")
     axis.set(
         xlabel="Radius [µm]",
         ylabel="Refractive index",
@@ -62,7 +74,7 @@ solving its modes.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.034 seconds)
+   **Total running time of the script:** (0 minutes 0.047 seconds)
 
 
 .. _sphx_glr_download_gallery_specialty_fibers_plot_refractive_index_profile.py:

@@ -9,10 +9,12 @@ square Cartesian grid:
 
 .. code-block:: python
 
+   from PyFiberModes.units import ureg
+
    from PyFiberModes import LP01, load_fiber
 
-   fiber = load_fiber("SMF28", wavelength=1.55e-6)
-   field = fiber.get_mode_field(LP01, limit=20e-6, n_point=251)
+   fiber = load_fiber("SMF28", wavelength=1.55e-6 * ureg.meter)
+   field = fiber.get_mode_field(LP01, limit=20e-6 * ureg.meter, n_point=251)
    components = field.get_components(("Ex", "Ey", "Ez", "Hx", "Hy", "Hz"))
 
 Use an odd ``n_point`` to include the fiber axis. ``limit`` is the positive
@@ -25,8 +27,10 @@ Derived quantities
 
 .. code-block:: python
 
-   area_um2 = field.get_effective_area() * 1e12
-   core_fraction = field.get_confinement_factor(radius=4.1e-6)
+   from PyFiberModes.units import ureg
+
+   area_um2 = field.get_effective_area().to("micrometer ** 2")
+   core_fraction = field.get_confinement_factor(radius=4.1e-6 * ureg.meter)
    sx, sy, sz = field.get_poynting_vector()
    guided_power = field.get_power()
 
@@ -64,6 +68,8 @@ Plotting
 Install the ``plotting`` extra, then render one or more named components:
 
 .. code-block:: python
+
+   from PyFiberModes.units import ureg
 
    figure = field.plot(plot_type=["Ex", "Ey", "Emod"], show=False)
    figure.savefig("mode-field.png", dpi=200, bbox_inches="tight")

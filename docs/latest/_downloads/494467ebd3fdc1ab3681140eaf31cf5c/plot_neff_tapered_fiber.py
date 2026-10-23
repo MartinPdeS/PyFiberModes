@@ -2,6 +2,7 @@
 Effective index for tapered multi-mode fiber
 ============================================
 """
+from PyFiberModes.units import ureg
 
 # %%
 # Imports
@@ -30,9 +31,9 @@ def get_mode_beta(fiber, mode_list: list, itr_list: list) -> dict:
 
 # %%
 # Constructing fiber
-fiber = Fiber(wavelength=1550e-9)
-fiber.add_layer(name='core', radius=20e-6, index=1.4494)
-fiber.add_layer(name='clad', radius=62.5e-6, index=1.4444)
+fiber = Fiber(wavelength=1550e-9 * ureg.meter)
+fiber.add_layer(name='core', radius=20e-6 * ureg.meter, index=1.4494 * ureg.dimensionless)
+fiber.add_layer(name='clad', radius=62.5e-6 * ureg.meter, index=1.4444 * ureg.dimensionless)
 fiber.initialize_layers()
 
 itr_list = numpy.linspace(1, 0.1, 50)

@@ -23,7 +23,7 @@ Specialty-fiber mode indices
 
 Compare the effective indices of low-order modes in a multilayer fiber.
 
-.. GENERATED FROM PYTHON SOURCE LINES 7-26
+.. GENERATED FROM PYTHON SOURCE LINES 7-27
 
 
 
@@ -38,13 +38,14 @@ Compare the effective indices of low-order modes in a multilayer fiber.
 
 .. code-block:: Python
 
+    from PyFiberModes.units import ureg
 
     import matplotlib.pyplot as plt
 
     from PyFiberModes import LP01, LP11, LP21
     from PyFiberModes.fiber import load_fiber
 
-    fiber = load_fiber("DCF1300S_20", wavelength=1550e-9)
+    fiber = load_fiber("DCF1300S_20", wavelength=1550e-9 * ureg.meter)
     modes = (LP01, LP11, LP21)
     effective_indices = [fiber.get_effective_index(mode) for mode in modes]
 
@@ -61,7 +62,7 @@ Compare the effective indices of low-order modes in a multilayer fiber.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.362 seconds)
+   **Total running time of the script:** (0 minutes 0.397 seconds)
 
 
 .. _sphx_glr_download_gallery_specialty_fibers_plot_specialty_mode_indices.py:

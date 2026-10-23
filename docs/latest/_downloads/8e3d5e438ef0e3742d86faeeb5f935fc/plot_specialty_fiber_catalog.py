@@ -4,6 +4,7 @@ Specialty-fiber catalog
 
 Compare the layer indices of several bundled dispersion-compensating fibers.
 """
+from PyFiberModes.units import ureg
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -11,7 +12,7 @@ import numpy as np
 from PyFiberModes.fiber import load_fiber
 
 fiber_names = ("DCF1300S_20", "DCF1300S_26", "DCF1300S_33", "DCF1300S_42")
-fibers = [load_fiber(name, wavelength=1550e-9) for name in fiber_names]
+fibers = [load_fiber(name, wavelength=1550e-9 * ureg.meter) for name in fiber_names]
 layer_indices = np.asarray(
     [[layer.refractive_index for layer in fiber.layers] for fiber in fibers]
 )

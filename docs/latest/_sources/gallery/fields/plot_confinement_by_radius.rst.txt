@@ -24,7 +24,7 @@ Confinement by radius
 Measure how the sampled electric-field energy accumulates away from the fiber
 axis.
 
-.. GENERATED FROM PYTHON SOURCE LINES 8-29
+.. GENERATED FROM PYTHON SOURCE LINES 8-30
 
 
 
@@ -39,6 +39,7 @@ axis.
 
 .. code-block:: Python
 
+    from PyFiberModes.units import ureg
 
     import matplotlib.pyplot as plt
     import numpy as np
@@ -46,13 +47,13 @@ axis.
     from PyFiberModes import HE11
     from PyFiberModes.fiber import load_fiber
 
-    fiber = load_fiber("SMF28", wavelength=1550e-9)
-    field = fiber.get_mode_field(HE11, limit=15e-6, n_point=151)
-    radii = np.linspace(0.5e-6, 14e-6, 80)
+    fiber = load_fiber("SMF28", wavelength=1550e-9 * ureg.meter)
+    field = fiber.get_mode_field(HE11, limit=15e-6 * ureg.meter, n_point=151)
+    radii = np.linspace(0.5e-6, 14e-6, 80) * ureg.meter
     confinement = [field.get_confinement_factor(radius) for radius in radii]
 
     figure, axis = plt.subplots()
-    axis.plot(radii * 1e6, confinement)
+    axis.plot(radii.to("micrometer").magnitude, confinement)
     axis.set(
         xlabel="Integration radius [µm]",
         ylabel="Electric-energy fraction",
@@ -64,7 +65,7 @@ axis.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.110 seconds)
+   **Total running time of the script:** (0 minutes 0.125 seconds)
 
 
 .. _sphx_glr_download_gallery_fields_plot_confinement_by_radius.py:
