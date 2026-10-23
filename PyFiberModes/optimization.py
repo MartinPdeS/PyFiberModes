@@ -6,6 +6,7 @@ from copy import deepcopy
 
 import numpy as np
 from scipy.optimize import differential_evolution, minimize
+from PyFiberModes.units import Quantity, scalar, quantity
 
 
 @dataclass(frozen=True)
@@ -21,12 +22,13 @@ class DesignParameter:
     setter : callable
         Function accepting ``(fiber, value)`` and mutating a candidate fiber.
     """
+
     name: str
-    bounds: tuple[float, float]
+    bounds: tuple[float | Quantity, float | Quantity]
     setter: Callable[[object, float], None]
 
     @classmethod
-    def layer_radius(cls, layer: int, bounds: tuple[float, float]):
+    def layer_radius(cls, layer: int, bounds: tuple[float | Quantity, float | Quantity]):
         """Create a parameter controlling a layer interface radius.
 
         Parameters
@@ -34,21 +36,25 @@ class DesignParameter:
         layer : int
             Inner layer index whose outer radius is varied.
         bounds : tuple of float
-            Lower and upper radius bounds in meters.
+            Lower and upper radius bounds as length quantities.
 
         Returns
         -------
         DesignParameter
             Radius design variable that keeps adjacent interfaces continuous.
         """
+
         def set_radius(fiber, value):
             """Apply a shared interface radius to adjacent layers."""
             fiber.layers[layer].radius_out = value
             fiber.layers[layer + 1].radius_in = value
+
+        for bound in bounds:
+            scalar(bound, "meter", "bounds")
         return cls(f"layer_{layer}_radius", bounds, set_radius)
 
     @classmethod
-    def layer_index(cls, layer: int, bounds: tuple[float, float]):
+    def layer_index(cls, layer: int, bounds: tuple[float | Quantity, float | Quantity]):
         """Create a parameter controlling one layer refractive index.
 
         Parameters
@@ -56,15 +62,18 @@ class DesignParameter:
         layer : int
             Layer index to modify.
         bounds : tuple of float
-            Lower and upper refractive-index bounds.
+            Lower and upper bounds as dimensionless index quantities.
 
         Returns
         -------
         DesignParameter
             Refractive-index design variable.
         """
+        for bound in bounds:
+            scalar(bound, "dimensionless", "bounds")
         return cls(
-            f"layer_{layer}_index", bounds,
+            f"layer_{layer}_index",
+            bounds,
             lambda fiber, value: setattr(fiber.layers[layer], "refractive_index", value),
         )
 
@@ -88,8 +97,9 @@ class DesignResult:
     evaluations : int
         Number of objective evaluations.
     """
+
     fiber: object
-    parameters: dict[str, float]
+    parameters: dict[str, float | Quantity]
     objective: float
     success: bool
     message: str
@@ -148,7 +158,12 @@ def optimize_fiber(
         """Construct a candidate fiber from optimizer coordinates."""
         candidate = deepcopy(template)
         for parameter, value in zip(parameters, values):
-            parameter.setter(candidate, float(value))
+            parameter.setter(
+                candidate,
+                quantity(float(value), parameter.bounds[0].units)
+                if isinstance(parameter.bounds[0], Quantity)
+                else float(value),
+            )
         return candidate
 
     def loss(values):
@@ -158,7 +173,12 @@ def optimize_fiber(
         value = float(objective(candidate)) + penalty * violation
         return value if np.isfinite(value) else np.finfo(float).max
 
-    bounds = [parameter.bounds for parameter in parameters]
+    bounds = [
+        tuple(scalar(bound, parameter.bounds[0].units, "bounds") for bound in parameter.bounds)
+        if isinstance(parameter.bounds[0], Quantity)
+        else parameter.bounds
+        for parameter in parameters
+    ]
     options = dict(options or {})
     if method == "differential_evolution":
         raw = differential_evolution(loss, bounds=bounds, **options)
@@ -168,6 +188,14 @@ def optimize_fiber(
     best = build(raw.x)
     return DesignResult(
         best,
-        {parameter.name: float(value) for parameter, value in zip(parameters, raw.x)},
-        float(raw.fun), bool(raw.success), str(raw.message), int(raw.nfev),
+        {
+            parameter.name: quantity(float(value), parameter.bounds[0].units)
+            if isinstance(parameter.bounds[0], Quantity)
+            else float(value)
+            for parameter, value in zip(parameters, raw.x)
+        },
+        float(raw.fun),
+        bool(raw.success),
+        str(raw.message),
+        int(raw.nfev),
     )

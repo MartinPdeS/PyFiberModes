@@ -2,6 +2,7 @@
 Modal dispersion VS core index
 ==============================
 """
+from PyFiberModes.units import ureg
 
 
 # %%
@@ -19,7 +20,7 @@ import matplotlib.pyplot as plt
 wavelength_list = numpy.linspace(500e-9, 3000e-9, 100)
 data = []
 for wavelegnth in wavelength_list:
-    smf28 = load_fiber(fiber_name='SMF28', wavelength=wavelegnth)
+    smf28 = load_fiber(fiber_name='SMF28', wavelength=(wavelegnth) * ureg.meter)
     dispersion = smf28.get_effective_index(mode=LP01)
     data.append(dispersion)
 

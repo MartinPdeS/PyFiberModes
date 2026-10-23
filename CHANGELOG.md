@@ -6,6 +6,8 @@ use [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+- Require TypedUnit/Pint quantities for physical inputs and return unit-bearing fiber, field, sweep, material, design and propagation results. Numerical solvers continue to operate in SI internally.
+
 ## [0.17.7] - 2026-10-23
 
 ## [0.17.6] - 2026-10-22

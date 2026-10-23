@@ -1,1064 +1,447 @@
-"""Core fiber model and modal-property calculations."""
+"""Unit-checked public fiber model backed by numerical SI solvers."""
 
-import numpy
-from typing import Generator
-from functools import cache
-from dataclasses import dataclass, field
-from scipy import constants
-from copy import deepcopy
-from itertools import pairwise
-from scipy.constants import c
+import math
+from dataclasses import replace
 
-from PyFiberModes.stepindex import StepIndex
-from PyFiberModes import Mode
-from PyFinitDiff.finite_difference_1D import get_function_derivative
-from PyFiberModes.field import Field
-
-from PyFiberModes.fundamentals import (
-    get_radial_field,
-    get_propagation_constant_from_omega
+from PyFiberModes import _fiber
+from PyFiberModes.materials import DEFAULT_MATERIALS, MaterialRegistry
+from PyFiberModes.units import (
+    Length,
+    RefractiveIndex,
+    Quantity,
+    MODAL_UNITS,
+    magnitude,
+    quantity,
+    scalar,
 )
 
-from PyFiberModes import loader
-from PyFiberModes.coordinates import CylindricalCoordinates
-from PyFiberModes.exceptions import ConvergenceError, ValidationError
-from PyFiberModes.materials import DEFAULT_MATERIALS, MaterialRegistry
-from PyFiberModes.services import FieldAnalysis, ModalAnalysis
 
+class Layer:
+    """Unit-aware view of a numerical step-index layer.
 
-@dataclass
-class Fiber(object):
+    Radius and index assignments update the owning fiber and invalidate caches.
     """
-    A class to represent an optical fiber with multiple layers.
 
-    This class provides functionality to define and manipulate
-    the properties of optical fibers, including their layers,
-    refractive indices, and propagation characteristics.
+    def __init__(self, fiber, layer):
+        """Retain the owning fiber and its numerical layer."""
+        self._fiber = fiber
+        self._layer = layer
+
+    @property
+    def name(self):
+        """Name assigned when the layer was added to the fiber."""
+        return self._fiber.layer_names[self._fiber._si.layers.index(self._layer)]
+
+    @property
+    def position(self):
+        """Zero-based radial order of this layer."""
+        return self._fiber._si.layers.index(self._layer)
+
+    @property
+    def radius_in(self) -> Length:
+        """Inner radius as a length quantity."""
+        return quantity(self._layer.radius_in, "meter")
+
+    @radius_in.setter
+    def radius_in(self, value: Length):
+        """Update the inner radius in meters."""
+        radius = scalar(value, "meter", "radius_in")
+        if not math.isfinite(radius) or radius < 0:
+            raise ValueError("radius_in must be non-negative and finite")
+        self._layer.radius_in = radius
+        self._fiber.clear_caches()
+
+    @property
+    def radius_out(self) -> Length:
+        """Outer radius as a length quantity."""
+        return quantity(self._layer.radius_out, "meter")
+
+    @radius_out.setter
+    def radius_out(self, value: Length):
+        """Update the outer radius in meters."""
+        radius = scalar(value, "meter", "radius_out")
+        if math.isnan(radius) or radius <= 0:
+            raise ValueError("radius_out must be positive")
+        self._layer.radius_out = radius
+        self._fiber.clear_caches()
+
+    @property
+    def refractive_index(self) -> RefractiveIndex:
+        """Dimensionless refractive index."""
+        return quantity(self._layer.refractive_index, "dimensionless")
+
+    @refractive_index.setter
+    def refractive_index(self, value: RefractiveIndex):
+        """Update the refractive index."""
+        import numpy as np
+
+        index = scalar(value, "dimensionless", "refractive_index")
+        if not np.isfinite(index) or index <= 0:
+            raise ValueError("refractive index must be positive and finite")
+        self._layer.refractive_index = index
+        self._fiber.clear_caches()
+
+    @property
+    def wavelength(self) -> Length:
+        """Wavelength shared with the owning fiber."""
+        return self._fiber.wavelength
+
+    @property
+    def is_first_layer(self):
+        """Whether this is the innermost layer."""
+        return self._layer.is_first_layer
+
+    @property
+    def is_last_layer(self):
+        """Whether this is the unbounded outer layer."""
+        return self._layer.is_last_layer
+
+
+class Fiber:
+    """Multilayer fiber with explicit quantities for all physical parameters.
 
     Parameters
     ----------
-    wavelength : float
-        The wavelength of light used for fiber simulations.
-    layer_names : list of str
-        Names of the fiber layers.
-    layer_radius : list of float
-        Radii of the fiber layers in meters.
-    layer_types : list of str
-        Types of layers (e.g., core, cladding).
-    index_list : list of float
-        Refractive indices for each layer.
+    wavelength : TypedUnit.Length
+        Positive finite vacuum wavelength, for example ``1550 * ureg.nanometer``.
     """
-    wavelength: float
-    layer_names: list = field(default_factory=list)
-    layer_radius: list = field(default_factory=list)
-    layer_types: list = field(default_factory=list)
-    index_list: list = field(default_factory=list)
 
-    def __post_init__(self):
-        """Initialize mutable layer and solver state after construction."""
-        if self.wavelength is not None and (
-            not numpy.isfinite(self.wavelength) or self.wavelength <= 0
-        ):
-            raise ValidationError("wavelength must be positive and finite")
-        self.layers_parameters = []
-        self.radius_in = 0
-        self.layers = []
-        self._analysis_service = None
-        self._field_service = None
+    def __init__(self, wavelength: Length):
+        """Validate wavelength and initialize an empty numerical fiber."""
+        self._si = _fiber.Fiber(wavelength=scalar(wavelength, "meter", "wavelength"))
+
+    @classmethod
+    def _from_si(cls, fiber):
+        """Wrap an existing SI fiber without reinterpreting numerical values."""
+        instance = cls.__new__(cls)
+        instance._si = fiber
+        return instance
 
     @property
-    def geometry_signature(self) -> tuple:
-        """Return an immutable signature of all solver-relevant fiber state.
+    def analysis(self):
+        """Return modal analysis with unit-aware results and solver settings."""
+        return ModalAnalysis(self)
 
-        Returns
-        -------
-        tuple
-            Wavelength and ordered layer geometry/index values.
-        """
-        layers = tuple(
-            (layer.radius_in, layer.radius_out, layer.refractive_index)
-            for layer in self.layers
+    @property
+    def fields(self):
+        """Return a unit-aware field-construction service."""
+        return FieldAnalysis(self)
+
+    @property
+    def geometry_signature(self):
+        """Return an immutable numerical signature used for cache diagnostics."""
+        return self._si.geometry_signature
+
+    @property
+    def wavelength(self) -> Length:
+        """Vacuum wavelength in meters."""
+        return quantity(self._si.wavelength, "meter")
+
+    @wavelength.setter
+    def wavelength(self, value: Length):
+        """Update wavelength consistently across all layers."""
+        self.update_wavelength(value)
+
+    def update_wavelength(self, wavelength: Length) -> None:
+        """Validate and update the wavelength, clearing numerical caches."""
+        import numpy as np
+
+        value = scalar(wavelength, "meter", "wavelength")
+        if not np.isfinite(value) or value <= 0:
+            raise ValueError("wavelength must be positive and finite")
+        self._si.update_wavelength(value)
+
+    def add_layer(self, name: str, radius: Length, index: RefractiveIndex) -> None:
+        """Add a layer with a length radius and a dimensionless index quantity."""
+        import numpy as np
+
+        radius_si = scalar(radius, "meter", "radius")
+        if np.isnan(radius_si) or radius_si <= 0:
+            raise ValueError(
+                "radius must be positive; use infinity * ureg.meter for the outer layer"
+            )
+        self._si.add_layer(
+            name=name,
+            radius=radius_si,
+            index=scalar(index, "dimensionless", "index"),
         )
-        return self.wavelength, layers
-
-    @property
-    def analysis(self) -> ModalAnalysis:
-        """Return the focused modal-analysis service.
-
-        Returns
-        -------
-        ModalAnalysis
-            Geometry-aware cached analysis service.
-        """
-        if self._analysis_service is None:
-            self._analysis_service = ModalAnalysis(self)
-        return self._analysis_service
-
-    @property
-    def fields(self) -> FieldAnalysis:
-        """Return the focused field-construction service.
-
-        Returns
-        -------
-        FieldAnalysis
-            Field orchestration service.
-        """
-        if self._field_service is None:
-            self._field_service = FieldAnalysis(self)
-        return self._field_service
-
-    def clear_caches(self) -> None:
-        """Clear modal and radial-field caches after a physical mutation."""
-        if self._analysis_service is not None:
-            self._analysis_service.clear()
-        self.get_radial_field.cache_clear()
-
-    def scale(self, factor: float) -> None:
-        """
-        Scale the fiber's geometry by a given factor.
-
-        This method scales all radii in the fiber by the specified factor.
-
-        Parameters
-        ----------
-        factor : float
-            Scaling factor to apply to the radii.
-
-        Returns
-        -------
-        Fiber
-            A scaled copy of the fiber.
-
-        Notes
-        -----
-        This operation does not modify the original fiber.
-        """
-        scaled_fiber = deepcopy(self)
-        for layer in scaled_fiber.layers:
-            layer.radius_in *= factor
-            layer.radius_out *= factor
-
-        return scaled_fiber
-
-    @property
-    def n_layer(self) -> int:
-        """
-        Number of layers in the fiber.
-
-        Returns
-        -------
-        int
-            The total number of layers.
-        """
-        return len(self.layers)
-
-    @property
-    def n_interface(self) -> int:
-        """
-        Number of interfaces in the fiber.
-
-        Returns
-        -------
-        int
-            The number of interfaces, calculated as `n_layer - 1`.
-        """
-        return len(self.layers) - 1
-
-    @property
-    def last_layer(self) -> StepIndex:
-        """Returns the last layer
-
-        Returns
-        -------
-        StepIndex
-            The last layer.
-        """
-        return self.layers[-1]
-
-    @property
-    def penultimate_layer(self) -> StepIndex:
-        """Returns the second to last layer
-
-        Returns
-        -------
-        StepIndex
-            The second to last layer.
-        """
-        return self.layers[-2]
-
-    @property
-    def first_layer(self) -> StepIndex:
-        """Returns the first layer
-
-        Returns
-        -------
-        StepIndex
-            The first layer.
-        """
-        return self.layers[0]
-
-    def __hash__(self):
-        """Return a hash derived from the ordered fiber layers.
-
-        Returns
-        -------
-        int
-            Hash of the layer tuple.
-        """
-        return hash(tuple(self.layers))
-
-    def __getitem__(self, index: int) -> StepIndex:
-        """Returns the nth layer.
-
-        Parameters
-        ----------
-        index : int
-            The index
-
-        Returns
-        -------
-        StepIndex
-            The step index.
-        """
-        return self.layers[index]
-
-    def iterate_interfaces(self) -> Generator:
-        """Iterates through pair of layers that forms interfaces
-
-        Yields
-        ------
-        tuple[StepIndex, StepIndex]
-            The two layers that form the interfaces.
-        """
-        for layer_in, layer_out in pairwise(self.layers):
-            yield layer_in, layer_out
-
-    def update_wavelength(self, wavelength: float) -> None:
-        """Update the wavelength of the fiber and all its layers
-
-        Parameters
-        ----------
-        wavelength : float
-            The wavelength
-
-        Returns
-        -------
-        None
-            No return
-        """
-        self.wavelength = wavelength
-        for layer in self.layers:
-            layer.wavelength = wavelength
-        self.clear_caches()
-
-    def add_layer(self, name: str, radius: float, index: float) -> None:
-        """
-        Add a layer to the fiber.
-
-        Parameters
-        ----------
-        name : str
-            Name of the layer (e.g., "core", "cladding").
-        radius : float
-            Outer radius of the layer in meters.
-        index : float
-            Refractive index of the layer.
-
-        Notes
-        -----
-        Layers should be added in order, starting with the innermost layer (core).
-        """
-        if not name:
-            raise ValidationError("layer name must not be empty")
-        if not numpy.isfinite(index) or index <= 0:
-            raise ValidationError("refractive index must be positive and finite")
-        radius = float(radius)
-        if radius <= 0:
-            radius = numpy.inf
-        if radius <= self.radius_in:
-            raise ValidationError("layer radii must be strictly increasing")
-
-        self.layer_names.append(name)
-        self.index_list.append(index)
-
-        self.layer_radius.append(radius)
-
-        layer = StepIndex(
-            radius_in=self.radius_in,
-            radius_out=radius,
-            index_list=[index],
-        )
-        layer.is_last_layer = False
-        layer.is_first_layer = False
-        layer.wavelength = self.wavelength
-
-        self.layers.append(layer)
-
-        self.radius_in = radius
-        self.clear_caches()
 
     def initialize_layers(self) -> None:
-        """Initializes the layers.
+        """Mark inner and outer layers and finalize solver geometry."""
+        self._si.initialize_layers()
 
-        Returns
-        -------
-        None
-            No returns
-        """
-        if not self.layers:
-            raise ValidationError("a fiber must contain at least one layer")
-        self.layers[-1].is_last_layer = True
-        self.layers[0].is_first_layer = True
-
-        self.layers[-1].radius_out = numpy.inf
-
-        for position, layer in enumerate(self.layers):
-            layer.position = position
-        self.clear_caches()
-
-    def get_layer_at_radius(self, radius: float) -> StepIndex:
-        """Gets the layer that is associated to a given radius.
-
-        Parameters
-        ----------
-        radius : float
-            The radius
-
-        Returns
-        -------
-        StepIndex
-            Layer whose radial interval contains ``radius``.
-        """
-        radius = abs(radius)
-        for layer in self.layers:
-            if layer.radius_in <= radius <= layer.radius_out:
-                return layer
-        raise ValidationError(f"radius {radius} lies outside the fiber geometry")
-
-    def get_index_profile(self, radius) -> numpy.ndarray:
-        """Evaluate the refractive-index profile for many radii at once.
-
-        Parameters
-        ----------
-        radius : array-like
-            Scalar or array of radial positions in meters.
-
-        Returns
-        -------
-        numpy.ndarray
-            Refractive indices with the same shape as ``radius``.
-        """
-        radii = numpy.abs(numpy.asarray(radius, dtype=float))
-        boundaries = numpy.asarray([layer.radius_out for layer in self.layers])
-        indices = numpy.asarray([layer.refractive_index for layer in self.layers])
-        positions = numpy.searchsorted(boundaries, radii, side="left")
-        positions = numpy.clip(positions, 0, len(indices) - 1)
-        return indices[positions]
+    def clear_caches(self) -> None:
+        """Invalidate cached numerical solutions."""
+        self._si.clear_caches()
 
     @property
-    def radius(self) -> float:
-        """Gets the fiber total radius taking account for all layers.
+    def layers(self):
+        """Ordered unit-aware views of the step-index layers."""
+        return [Layer(self, layer) for layer in self._si.layers]
 
-        Returns
-        -------
-        float
-            The fiber radius.
-        """
-        layer_radius = [
-            layer.radius_out for layer in self.layers[:-1]
-        ]
-
-        largest_radius = numpy.max(layer_radius)
-
-        return largest_radius
-
-    def get_index_at_radius(self, radius: float) -> float:
-        """Gets the refractive index at a given radius.
-
-        Parameters
-        ----------
-        radius : float
-            The radius
-
-        Returns
-        -------
-        float
-            The refractive index at given radius.
-        """
-        layer = self.get_layer_at_radius(radius)
-
-        return layer.refractive_index
+    def __getitem__(self, index):
+        """Return a layer by its radial order."""
+        return self.layers[index]
 
     @property
-    def maximum_index(self) -> float:
-        """Gets the maximum refractive index of the fiber.
-
-        Returns
-        -------
-        float
-            The minimum index.
-        """
-        layers_maximum_index = [
-            layer.refractive_index for layer in self.layers
-        ]
-
-        return numpy.max(layers_maximum_index)
+    def first_layer(self):
+        """Innermost fiber layer."""
+        return self[0]
 
     @property
-    def minimum_index(self) -> float:
-        """Gets the minimum refractive index of the fiber.
-
-        Returns
-        -------
-        float
-            The minimum index.
-        """
-        layers_maximum_index = [
-            layer.refractive_index for layer in self.layers
-        ]
-
-        return numpy.min(layers_maximum_index)
-
-    def get_NA(self) -> float:
-        r"""
-        Compute the numerical aperture (NA) of the fiber.
-
-        The numerical aperture is defined as:
-
-        .. math::
-            NA = \sqrt{n_{max}^2 - n_{min}^2}
-
-        where:
-            - :math:`n_{max}` is the maximum refractive index in the fiber.
-            - :math:`n_{min}` is the refractive index of the outermost layer.
-
-        Returns
-        -------
-        float
-            The numerical aperture of the fiber.
-        """
-        n_max = self.maximum_index
-
-        last_layer = self.layers[-1]
-
-        n_min = last_layer.refractive_index
-
-        return numpy.sqrt(n_max**2 - n_min**2)
+    def last_layer(self):
+        """Unbounded outermost fiber layer."""
+        return self[-1]
 
     @property
-    def M_number(self) -> float:
-        r"""Gets the m number representing an approximation of the number of existing mode
-        in the fiber. It's valide only for highly multimode fibers M number is defined as:
-
-        .. math::
-            M = \frac{V^2}{2}
-
-        Returns
-        -------
-        float
-            The M number.
-        """
-        return self.V_number**2 / 2
+    def penultimate_layer(self):
+        """Layer immediately inside the outermost layer."""
+        return self[-2]
 
     @property
-    def V_number(self) -> float:
-        r"""
-        Compute the V-number (normalized frequency) of the fiber.
+    def n_layer(self):
+        """Number of layers."""
+        return self._si.n_layer
 
-        The V-number is given by:
+    @property
+    def n_interface(self):
+        """Number of interfaces."""
+        return self._si.n_interface
 
-        .. math::
-            V = \frac{2 \pi a}{\lambda} \cdot NA
+    @property
+    def layer_names(self):
+        """Names of the fiber layers."""
+        return self._si.layer_names
 
-        where:
-            - :math:`a` is the core radius.
-            - :math:`\lambda` is the wavelength.
-            - :math:`NA` is the numerical aperture.
+    @property
+    def layer_radius(self):
+        """Layer radii as a length array."""
+        return quantity([layer.radius_out for layer in self._si.layers], "meter")
 
-        Returns
-        -------
-        float
-            The V-number of the fiber.
+    @property
+    def index_list(self):
+        """Layer refractive indices as a dimensionless array."""
+        return quantity([layer.refractive_index for layer in self._si.layers], "dimensionless")
 
-        Notes
-        -----
-        The V-number determines whether the fiber supports single-mode
-        or multimode operation.
-        """
-        NA = self.get_NA()
+    @property
+    def radius(self) -> Length:
+        """Largest finite interface radius."""
+        return quantity(self._si.radius, "meter")
 
-        inner_radius = self.last_layer.radius_in
+    @property
+    def maximum_index(self) -> RefractiveIndex:
+        """Largest material refractive index."""
+        return quantity(self._si.maximum_index, "dimensionless")
 
-        V0 = (2 * numpy.pi / self.wavelength) * inner_radius * NA
+    @property
+    def minimum_index(self) -> RefractiveIndex:
+        """Smallest material refractive index."""
+        return quantity(self._si.minimum_index, "dimensionless")
 
-        return V0
+    @property
+    def V_number(self):
+        """Dimensionless normalized frequency."""
+        return quantity(self._si.V_number, "dimensionless")
 
-    def get_mode_cutoff_v0(self, mode: Mode) -> float:
-        """Gets the cutoff wavelength of the fiber.
+    @property
+    def M_number(self):
+        """Dimensionless approximate guided-mode count."""
+        return quantity(self._si.M_number, "dimensionless")
 
-        Parameters
-        ----------
-        mode : Mode
-            The mode to consider
+    def get_NA(self):
+        """Return the dimensionless numerical aperture."""
+        return quantity(self._si.get_NA(), "dimensionless")
 
-        Returns
-        -------
-        float
-            The cutoff wavelength.
-        """
-        result = self.analysis.cutoff_result(mode)
-        return result.value if result.converged else numpy.nan
+    def scale(self, factor: float):
+        """Return an independent fiber scaled by a dimensionless factor."""
+        return self._from_si(self._si.scale(factor=float(factor)))
 
-    def get_mode_cutoff_wavelength(self, mode: Mode) -> float:
-        """
-        Compute the cutoff wavelength for a given mode.
+    def iterate_interfaces(self):
+        """Yield adjacent unit-aware layer pairs."""
+        from itertools import pairwise
 
-        Parameters
-        ----------
-        mode : Mode
-            The optical mode for which to calculate the cutoff wavelength.
+        yield from pairwise(self.layers)
 
-        Returns
-        -------
-        float
-            The cutoff wavelength of the specified mode.
+    def get_layer_at_radius(self, radius: Length):
+        """Find the layer containing a length-valued radial position."""
+        layer = self._si.get_layer_at_radius(scalar(radius, "meter", "radius"))
+        return Layer(self, layer)
 
-        Notes
-        -----
-        A mode is no longer guided when the wavelength exceeds the cutoff.
-        """
-        cutoff_V0 = self.get_mode_cutoff_v0(mode=mode)
+    def get_index_at_radius(self, radius: Length):
+        """Return the dimensionless refractive index at a radial position."""
+        return self.get_layer_at_radius(radius).refractive_index
 
-        if cutoff_V0 == 0:
-            return numpy.inf
-
-        if numpy.isinf(cutoff_V0):
-            return 0
-
-        NA = self.get_NA()
-
-        inner_radius = self.last_layer.radius_in
-
-        cutoff_wavelength = 2 * numpy.pi / cutoff_V0 * inner_radius * NA
-
-        return cutoff_wavelength
-
-    def get_effective_index(self, mode: Mode) -> float:
-        """Gets the effective index.
-
-        Parameters
-        ----------
-        mode : Mode
-            The mode to consider
-
-        Returns
-        -------
-        float
-            The effective index.
-        """
-        return self.analysis.effective_index(mode)
-
-    def solve_effective_index(self, mode: Mode):
-        """Return a structured effective-index solver result.
-
-        Parameters
-        ----------
-        mode : Mode
-            Mode to solve.
-
-        Returns
-        -------
-        SolverResult[float]
-            Value and explicit convergence diagnostics.
-        """
-        return self.analysis.effective_index_result(mode)
-
-    def get_normalized_beta(self, mode: Mode) -> float:
-        """Gets the normalized propagation constant [beta].
-
-        Parameters
-        ----------
-        mode : Mode
-            The mode to consider
-
-        Returns
-        -------
-        float
-            The normalized propagation constant.
-        """
-        neff = self.get_effective_index(mode)
-
-        n_max = self.maximum_index
-
-        n_last_layer = self.last_layer.refractive_index
-
-        numerator = neff**2 - n_last_layer**2
-
-        denominator = n_max**2 - n_last_layer**2
-
-        return numerator / denominator
-
-    def get_propagation_constant(self, mode: Mode) -> float:
-        r"""Gets the propagation constant [:math:`beta`].
-
-        Parameters
-        ----------
-        mode : Mode
-            The mode to consider
-
-        Returns
-        -------
-        float
-            The propagation constant [:math:`beta`].
-        """
-        neff = self.get_effective_index(mode)
-
-        beta = neff * (2 * numpy.pi / self.wavelength)
-
-        return beta
-
-    def get_phase_velocity(self, mode: Mode) -> float:
-        r"""
-        Compute the phase velocity of a mode in the fiber.
-
-        Parameters
-        ----------
-        mode : Mode
-            The optical mode for which to compute the phase velocity.
-
-        Returns
-        -------
-        float
-            The phase velocity of the mode, in meters per second.
-
-        Notes
-        -----
-        Phase velocity is given by:
-
-        .. math::
-            v_p = \frac{c}{n_{eff}}
-
-        where :math:`n_{eff}` is the effective refractive index.
-        """
-        n_eff = self.get_effective_index(mode)
-
-        return constants.c / n_eff
-
-    def get_group_index(self, mode: Mode) -> float:
-        """Gets the group index.
-
-        Parameters
-        ----------
-        mode : Mode
-            The mode to consider
-
-        Returns
-        -------
-        float
-            The group index.
-        """
-        omega = c * 2 * numpy.pi / self.wavelength
-
-        derivative = get_function_derivative(
-            function=get_propagation_constant_from_omega,
-            x_eval=omega,
-            derivative=1,
-            accuracy=4,
-            delta=1e12,  # This value is critical for accurate computation
-            function_kwargs=dict(fiber=self, mode=mode)
+    def get_index_profile(self, radius: Length):
+        """Evaluate a dimensionless index profile at length-valued positions."""
+        return quantity(
+            self._si.get_index_profile(magnitude(radius, "meter", "radius")), "dimensionless"
         )
 
-        value = derivative * constants.c
-        if not numpy.isfinite(value):
-            raise ConvergenceError(f"group-index derivative failed for {mode}")
-        return value
-
-    def get_group_velocity(self, mode: Mode) -> float:
-        """Compute the correctly named modal group velocity.
-
-        Parameters
-        ----------
-        mode : Mode
-            Mode to evaluate.
-
-        Returns
-        -------
-        float
-            Group velocity in meters per second.
-        """
-        return constants.c / self.get_group_index(mode)
-
-    def get_group_velocity_dispersion(self, mode: Mode) -> float:
-        r"""Gets the fiber group velocity dispersion defined as:
-
-        .. math::
-            \frac{\partial^2 \beta}{\partial \omega^2}
-
-        Parameters
-        ----------
-        mode : Mode
-            The mode to consider
-
-        Returns
-        -------
-        float
-            The group_velocity dispersion
-        """
-        omega = c * 2 * numpy.pi / self.wavelength
-
-        derivative = get_function_derivative(
-            function=get_propagation_constant_from_omega,
-            x_eval=omega,
-            derivative=2,
-            accuracy=4,
-            delta=1e12,  # This value is critical for accurate computation
-            function_kwargs=dict(fiber=self, mode=mode)
+    def solve_effective_index(self, mode):
+        """Return solver diagnostics with a quantity-valued effective index."""
+        result = self._si.solve_effective_index(mode)
+        return replace(
+            result, value=None if result.value is None else quantity(result.value, "dimensionless")
         )
 
-        if not numpy.isfinite(derivative):
-            raise ConvergenceError(
-                f"group-velocity-dispersion derivative failed for {mode}"
-            )
-        return derivative
+    def get_mode_field(self, mode, limit: Length = None, n_point: int = 101):
+        """Sample a field on a grid with an optional length-valued half-width."""
+        from PyFiberModes.field import Field
 
-    def get_dispersion(self, mode: Mode) -> float:
-        r"""
-        Compute the modal dispersion in the fiber.
-
-        Dispersion is defined as:
-
-        .. math::
-            D = - \frac{2 \pi c}{\lambda^2} \cdot \frac{\partial^2 \beta}{\partial \omega^2}
-
-        where:
-            - :math:`c` is the speed of light.
-            - :math:`\lambda` is the wavelength.
-            - :math:`\beta` is the propagation constant.
-
-        Parameters
-        ----------
-        mode : Mode
-            The optical mode to consider.
-
-        Returns
-        -------
-        float
-            The dispersion in units of ps/nm/km.
-
-        Notes
-        -----
-        Dispersion affects pulse broadening in fiber optics, particularly for long-haul transmission.
-        """
-        gvd = self.get_group_velocity_dispersion(mode=mode)
-
-        factor = - 2 * numpy.pi * constants.c / self.wavelength**2
-
-        return 1e6 * factor * gvd
-
-    def get_S_parameter(self, mode: Mode) -> float:
-        r"""
-        Compute the S-parameter (third-order dispersion).
-
-        The S-parameter is defined as:
-
-        .. math::
-            S = 10^{-3} \cdot \left( \frac{2 \pi c}{\lambda^2} \right)^2 \cdot \frac{\partial^3 \beta}{\partial \omega^3}
-
-        Parameters
-        ----------
-        mode : Mode
-            The optical mode to consider.
-
-        Returns
-        -------
-        float
-            The S-parameter in appropriate units.
-        """
-        omega = c * 2 * numpy.pi / self.wavelength
-
-        derivative = get_function_derivative(
-            function=get_propagation_constant_from_omega,
-            x_eval=omega,
-            derivative=3,
-            accuracy=4,
-            delta=1e12,  # This value is critical for accurate computation
-            function_kwargs=dict(fiber=self, mode=mode)
-        )
-
-        if not numpy.isfinite(derivative):
-            raise ConvergenceError(f"dispersion-slope derivative failed for {mode}")
-
-        factor = 2 * numpy.pi * constants.c / self.wavelength**2
-
-        return 1e-3 * derivative * factor**2
-
-    def get_mode_field(
-            self,
-            mode: Mode,
-            limit: float = None,
-            n_point: int = 101) -> Field:
-        """Get field class
-
-        Parameters
-        ----------
-        mode : Mode
-            The mode to consider
-        limit : float
-            The limit boundary
-        n_point : int
-            The number of point for axis discreditization
-
-        Returns
-        -------
-        Field
-            The field instance of the mode.
-        """
-        return self.fields.mode_field(mode=mode, limit=limit, n_point=n_point)
-
-    @cache
-    def get_radial_field(
-        self, mode: Mode, radius: float
-    ) -> tuple[CylindricalCoordinates, CylindricalCoordinates]:
-        r"""Gets the mode field without the azimuthal component.
-        Tuple structure is [:math:`E_{r}`, :math:`E_{\phi}`, :math:`E_{z}`], [:math:`H_{r}`, :math:`H_{\phi}`, :math:`H_{z}`]
-
-        Parameters
-        ----------
-        mode : Mode
-            The mode to consider
-        radius : float
-            The radius
-
-        Returns
-        -------
-        tuple[CylindricalCoordinates, CylindricalCoordinates]
-            Electric and magnetic radial fields.
-        """
-        radial_field = get_radial_field(
+        return Field(
             fiber=self,
             mode=mode,
-            wavelength=self.wavelength,
-            radius=radius
+            limit=self.radius * 5.5 if limit is None else limit,
+            n_point=n_point,
         )
 
-        return radial_field
+    def get_radial_field(self, mode, radius: Length):
+        """Return electric (V/m) and magnetic (A/m) cylindrical components."""
+        from PyFiberModes.field import radial_quantities
 
-    def get_radial_fields(self, mode: Mode, radius) -> tuple[CylindricalCoordinates, CylindricalCoordinates]:
-        """Evaluate radial electric and magnetic fields over an array.
+        return radial_quantities(self._si.get_radial_field(mode, scalar(radius, "meter", "radius")))
 
-        Parameters
-        ----------
-        mode : Mode
-            Mode to evaluate.
-        radius : array-like
-            Radial sampling positions.
+    def get_radial_fields(self, mode, radius: Length):
+        """Return electric and magnetic components over a length-valued array."""
+        from PyFiberModes.field import radial_quantities
 
-        Returns
-        -------
-        tuple[CylindricalCoordinates, CylindricalCoordinates]
-            Electric and magnetic cylindrical components as arrays.
-        """
-        radii = numpy.asarray(radius, dtype=float)
-        flat = radii.ravel()
-        solved = [self.get_radial_field(mode, float(value)) for value in flat]
+        return radial_quantities(
+            self._si.get_radial_fields(mode, magnitude(radius, "meter", "radius"))
+        )
 
-        def assemble(position):
-            """Assemble one electric or magnetic coordinate container."""
-            values = [item[position] for item in solved]
-            return CylindricalCoordinates(*(
-                numpy.asarray([getattr(value, name) for value in values]).reshape(radii.shape)
-                for name in ("rho", "phi", "z")
-            ))
+    def get_radial_field_norm(self, mode, radius: Length):
+        """Return the electric-field norm in volts per meter."""
+        return quantity(
+            self._si.get_radial_field_norm(mode, scalar(radius, "meter", "radius")), "volt / meter"
+        )
 
-        return assemble(0), assemble(1)
+    def does_mode_exist(self, *mode_list):
+        """Return existence flags for the supplied modes."""
+        return self._si.does_mode_exist(*mode_list)
 
-    def get_radial_field_norm(self, mode: Mode, radius: float) -> float:
-        r"""Gets the norm of the mode field without the azimuthal component.
-        Tuple structure is [:math:`E_{r}`, :math:`E_{\phi}`, :math:`E_{z}`], [:math:`H_{r}`, :math:`H_{\phi}`, :math:`H_{z}`]
+    def find_modes(self, families=("LP",), max_nu=6, max_m=6):
+        """Discover guided modes within the requested search bounds."""
+        return self._si.find_modes(families=families, max_nu=max_nu, max_m=max_m)
 
-        Parameters
-        ----------
-        mode : Mode
-            The mode to consider
-        radius : float
-            The radius
+    def print_data(self, data_type_list: list[str], mode_list: list):
+        """Print modal quantities including their output units."""
+        for data_type in data_type_list:
+            print(f"{data_type} @ wavelength: {self.wavelength}")
+            for mode in mode_list:
+                from PyFiberModes.exceptions import ConvergenceError
 
-        Returns
-        -------
-        float
-            The radial field.
-        """
-        e_field, h_field = self.get_radial_field(mode=mode, radius=radius)
-
-        norm = numpy.sqrt(e_field.rho**2 + e_field.phi**2 + e_field.z**2)
-
-        return norm
-
-    def does_mode_exist(self, *mode_list) -> list:
-        """Test whether effective-index solutions exist for several modes.
-
-        Parameters
-        ----------
-        *mode_list : Mode
-            Modes to evaluate.
-
-        Returns
-        -------
-        list of bool
-            Existence flag for each supplied mode.
-        """
-        mode_exist = []
-        for mode in mode_list:
-            neff = self.get_effective_index(mode=mode)
-            if not numpy.isfinite(neff):
-                mode_exist.append(False)
-            else:
-                mode_exist.append(True)
-
-        return mode_exist
-
-    def find_modes(self, families=("LP",), max_nu: int = 6, max_m: int = 6):
-        """Automatically discover guided modes at the current wavelength.
-
-        Parameters
-        ----------
-        families : iterable of str, optional
-            Mode families to search.
-        max_nu : int, optional
-            Largest azimuthal order to inspect.
-        max_m : int, optional
-            Largest radial order to inspect.
-
-        Returns
-        -------
-        list of Mode
-            Guided modes found in the requested search range.
-        """
-        from PyFiberModes.analysis import find_modes
-        return find_modes(self, families=families, max_nu=max_nu, max_m=max_m)
+                try:
+                    value = getattr(self, "get_" + data_type.lower())(mode=mode)
+                except ConvergenceError:
+                    value = quantity(float("nan"), MODAL_UNITS[data_type.lower()])
+                print(f"{mode}: {value}")
 
     def sweep(self, parameters, **kwargs):
-        """Evaluate modal metrics over wavelength or a custom parameter.
-
-        Parameters
-        ----------
-        parameters : array-like or mapping
-            Parameter values passed to :func:`PyFiberModes.analysis.sweep_modes`.
-        **kwargs
-            Additional sweep configuration.
-
-        Returns
-        -------
-        ModeSweepResult
-            Computed modal quantities across the parameter grid.
-        """
+        """Sweep length-valued wavelengths or a custom quantity parameter."""
         from PyFiberModes.analysis import sweep_modes
+
         return sweep_modes(self, parameters, **kwargs)
 
-    def print_data(self, data_type_list: list[str], mode_list: list[Mode]) -> None:
-        """Prints the given data for the given modes.
 
-        Parameters
-        ----------
-        data_type_list : list[str]
-            The data type list
-        mode_list : list[Mode]
-            The mode list
+def _modal_method(name, unit):
+    """Expose a numerical modal method with its physical output unit."""
+    original = getattr(_fiber.Fiber, f"get_{name}")
 
-        Returns
-        -------
-        None
-            No return
-        """
-        for data_type in data_type_list:
-            first_line = f"{data_type} @ wavelength: {self.wavelength}:\n"
-            print(first_line, "-" * len(first_line))
-            for mode in mode_list:
-                data_type_string = f"get_{data_type.lower()}"
-                try:
-                    data = getattr(self, data_type_string)(mode=mode)
-                except ConvergenceError:
-                    data = numpy.nan
-                output_string = f"{mode = } \t {data_type}: {data}"
-                print(output_string)
+    def method(self, mode) -> Quantity:
+        """Calculate a modal quantity in its documented output units."""
+        return quantity(original(self._si, mode), unit)
 
-            print('\n\n')
+    method.__name__ = original.__name__
+    method.__qualname__ = f"Fiber.{original.__name__}"
+    method.__doc__ = (
+        original.__doc__.replace("float\n", "pint.Quantity\n") + f"\n        Output unit: {unit}.\n"
+    )
+    return method
 
 
-def get_fiber_from_delta_and_V0(delta: float, V0: float, wavelength: float) -> Fiber:
-    """Construct an SMF28-like fiber from relative contrast and V-number.
-
-    Parameters
-    ----------
-    delta : float
-        Relative core-cladding refractive-index difference.
-    V0 : float
-        Target normalized frequency.
-    wavelength : float
-        Vacuum wavelength in meters.
-
-    Returns
-    -------
-    Fiber
-        Two-layer fiber adjusted to the requested contrast and V-number.
-    """
-    fiber = load_fiber(fiber_name='SMF28', wavelength=wavelength)
-
-    core, clad = fiber.layers
-
-    n_clad = clad.refractive_index
-    n_core = n_clad / numpy.sqrt(1 - 2 * delta)
-
-    r_core = V0 / numpy.sqrt(n_core**2 - n_clad**2) * wavelength / (2 * numpy.pi)
-
-    fiber.layers[0].radius_out = r_core
-    fiber.layers[1].radius_in = r_core
-    fiber.layers[0].refractive_index = n_core
-
-    return fiber
+for _name, _unit in MODAL_UNITS.items():
+    setattr(Fiber, f"get_{_name}", _modal_method(_name, _unit))
 
 
 def load_fiber(
     fiber_name: str,
-    wavelength: float | None = None,
+    wavelength: Length,
     add_air_layer: bool = False,
     materials: MaterialRegistry = DEFAULT_MATERIALS,
 ) -> Fiber:
-    """Load a named YAML fiber definition.
-
-    Parameters
-    ----------
-    fiber_name : str
-        Configuration filename without the ``.yaml`` suffix.
-    wavelength : float, optional
-        Vacuum wavelength in meters used to evaluate material indices.
-    add_air_layer : bool, optional
-        Add an outer air layer when true.
-    materials : MaterialRegistry, optional
-        Registry used to resolve material names in the YAML definition.
-
-    Returns
-    -------
-    Fiber
-        Constructed fiber with initialized step-index layers.
-    """
-    fiber_dict = loader.load_fiber_as_dict(
-        fiber_name=fiber_name,
-        wavelength=wavelength,
-        order='out-to-in',
-        materials=materials,
+    """Load YAML geometry (stored in SI) at a length-valued vacuum wavelength."""
+    value = scalar(wavelength, "meter", "wavelength")
+    return Fiber._from_si(
+        _fiber.load_fiber(
+            fiber_name=fiber_name,
+            wavelength=value,
+            add_air_layer=add_air_layer,
+            materials=materials,
+        )
     )
 
-    fiber = Fiber(wavelength=wavelength)
 
-    for _, layer in fiber_dict['layers'].items():
-        fiber.add_layer(**layer)
+def get_fiber_from_delta_and_V0(delta, V0, wavelength: Length) -> Fiber:
+    """Construct a fiber from dimensionless contrast, V-number and wavelength."""
+    return Fiber._from_si(
+        _fiber.get_fiber_from_delta_and_V0(
+            delta=float(delta),
+            V0=float(V0),
+            wavelength=scalar(wavelength, "meter", "wavelength"),
+        )
+    )
 
-    if add_air_layer:
-        fiber.add_layer(name='air', radius=numpy.inf, index=1.0)
 
-    fiber.initialize_layers()
+class ModalAnalysis:
+    """Unit-aware view of a fiber's cached numerical modal-analysis service."""
 
-    return fiber
+    def __init__(self, fiber):
+        """Retain the owning fiber."""
+        self.fiber = fiber
 
-# -
+    @property
+    def settings(self):
+        """Numerical solver settings."""
+        return self.fiber._si.analysis.settings
+
+    @settings.setter
+    def settings(self, value):
+        """Update numerical solver settings and invalidate cached results."""
+        self.fiber._si.analysis.settings = value
+        self.clear()
+
+    @property
+    def cache_size(self):
+        """Number of cached modal results."""
+        return self.fiber._si.analysis.cache_size
+
+    def clear(self):
+        """Discard cached modal results."""
+        self.fiber._si.analysis.clear()
+
+    def effective_index(self, mode):
+        """Return a dimensionless effective-index quantity."""
+        return self.fiber.get_effective_index(mode)
+
+    def effective_index_result(self, mode):
+        """Return unit-bearing effective-index solver diagnostics."""
+        return self.fiber.solve_effective_index(mode)
+
+    def cutoff_result(self, mode):
+        """Return unit-bearing normalized-cutoff solver diagnostics."""
+        result = self.fiber._si.analysis.cutoff_result(mode)
+        return replace(
+            result, value=None if result.value is None else quantity(result.value, "dimensionless")
+        )
+
+
+class FieldAnalysis:
+    """Unit-aware field-construction service."""
+
+    def __init__(self, fiber):
+        """Retain the owning fiber."""
+        self.fiber = fiber
+
+    def mode_field(self, mode, limit: Length = None, n_point: int = 101):
+        """Construct a field with a length-valued sampling limit."""
+        return self.fiber.get_mode_field(mode=mode, limit=limit, n_point=n_point)

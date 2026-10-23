@@ -5,6 +5,7 @@ from typing import Any, TypeAlias
 
 import numpy as np
 import yaml
+from PyFiberModes.units import quantity, scalar
 
 from PyFiberModes.materials import DEFAULT_MATERIALS, MaterialRegistry
 
@@ -74,7 +75,7 @@ def calculate_layer_index(
         Computed refractive index for the layer.
     """
     if 'material' in layer and wavelength is not None:
-        return materials.refractive_index(str(layer['material']), wavelength)
+        return scalar(materials.refractive_index(str(layer['material']), quantity(wavelength, "meter")), "dimensionless", "refractive_index")
     elif 'NA' in layer and outer_layer:
         return np.sqrt(layer['NA']**2 + outer_layer['index']**2)
     index = layer.get('index')

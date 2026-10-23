@@ -1,1199 +1,181 @@
-"""Vectorized electric and magnetic field evaluation on Cartesian grids."""
+"""Unit-aware mode fields and integrated modal observables.
 
-import numpy
-from typing import Any, Callable
-import scipy
-import numpy as np
-from PyFiberModes.mode_instances import HE11
-from PyFiberModes.mode import Mode
-from dataclasses import dataclass
-from PyFiberModes.coordinates import CartesianCoordinates
-from PyFiberModes.coordinates import CylindricalCoordinates as CylindricalCoordinates  # noqa: F401
+Analytical fields have an arbitrary overall amplitude. Attaching V/m and A/m
+expresses the solver's electric/magnetic convention; absolute optical power
+requires choosing an amplitude normalization.
+"""
+
+import math
+from types import SimpleNamespace
+
+from PyFiberModes import _field
+from PyFiberModes.coordinates import CartesianCoordinates, CylindricalCoordinates  # noqa: F401
+from PyFiberModes.units import Angle, Length, quantity, scalar, ureg
 
 
-@dataclass
+def radial_quantities(vectors):
+    """Attach field units to cylindrical component containers (not positions)."""
+    return tuple(
+        SimpleNamespace(
+            **{name: quantity(getattr(vector, name), unit) for name in ("rho", "phi", "z")}
+        )
+        for vector, unit in zip(vectors, ("volt / meter", "ampere / meter"), strict=True)
+    )
+
+
 class Field:
-    """
-    A class representing the electric and magnetic field components in a fiber.
+    """Sample an optical mode over a grid with a length-valued half-width."""
 
-    Parameters
-    ----------
-    fiber : Fiber
-        The fiber associated with the mode.
-    mode : Mode
-        The mode to evaluate.
-    limit : float
-        The radius of the field to compute.
-    n_point : int, optional
-        The number of points for the computation grid (default is 101).
+    def __init__(self, fiber, mode, limit: Length, n_point: int = 101):
+        """Convert the sampling limit to SI and initialize numerical fields."""
+        if n_point < 2:
+            raise ValueError("n_point must be at least two")
+        limit_si = scalar(limit, "meter", "limit")
+        if not math.isfinite(limit_si) or limit_si <= 0:
+            raise ValueError("limit must be positive and finite")
+        self.fiber = fiber
+        self.mode = mode
+        self._si = _field.Field(fiber=fiber._si, mode=mode, limit=limit_si, n_point=n_point)
 
-    Attributes
-    ----------
-    cartesian_coordinates : CartesianCoordinates
-        Cartesian coordinates generated for the field computation.
-    cylindrical_coordinates : CylindricalCoordinates
-        Cylindrical coordinates corresponding to the cartesian grid.
-    """
+    @property
+    def limit(self):
+        """Grid half-width in meters."""
+        return quantity(self._si.limit, "meter")
 
-    fiber: object
-    mode: Mode
-    limit: float
-    n_point: int = 101
+    @property
+    def n_point(self):
+        """Number of grid points along each axis."""
+        return self._si.n_point
 
-    def __post_init__(self) -> None:
-        """
-        Generate the mesh coordinates that are used for field computation.
-        """
-        self.cartesian_coordinates = CartesianCoordinates.generate_from_square(
-            length=2 * self.limit, n_points=self.n_point
-        )
+    @property
+    def cartesian_coordinates(self):
+        """Sample positions as length-valued Cartesian coordinates."""
+        return CartesianCoordinates._from_si(self._si.cartesian_coordinates)
 
-        self.cylindrical_coordinates = self.cartesian_coordinates.to_cylindrical()
-        self._radial_cache = {}
-        self._radial_map_cache = {}
-        self._azimuthal_cache = {}
-        self._component_cache = {}
-        self._cache_wavelength = self.fiber.wavelength
-
-    def _ensure_cache_valid(self) -> None:
-        """Discard cached fields after a wavelength change."""
-        if self.fiber.wavelength != self._cache_wavelength:
-            self._radial_cache.clear()
-            self._radial_map_cache.clear()
-            self._azimuthal_cache.clear()
-            self._component_cache.clear()
-            self._cache_wavelength = self.fiber.wavelength
-
-    def _populate_radial_cache(self) -> None:
-        """Solve every radial field component in one shared radial pass."""
-        self._ensure_cache_valid()
-        if self._radial_cache:
-            return
-
-        count = max(257, 2 * self.n_point)
-        radii = np.linspace(0.0, np.sqrt(2.0) * self.limit, count)
-        electric, magnetic = self.fiber.get_radial_fields(
-            mode=self.mode, radius=radii
-        )
-        values = {
-            (field_name, component): np.asarray(getattr(vector, component), dtype=complex)
-            for field_name, vector in (("E", electric), ("H", magnetic))
-            for component in ("rho", "phi", "z")
-        }
-
-        self._radial_cache = {
-            key: (radii, component_values)
-            for key, component_values in values.items()
-        }
-
-    def _radial_component(self, field: str, component: str) -> np.ndarray:
-        """Evaluate one radial component and interpolate it over the 2-D grid.
-
-        Circular symmetry means the expensive analytical solver only needs to
-        run on a radial line. The resulting interpolation is fully vectorized.
-        """
-        self._populate_radial_cache()
-        key = (field, component)
-        if key in self._radial_map_cache:
-            return self._radial_map_cache[key]
-
-        radii, values = self._radial_cache[key]
-        rho = self.cylindrical_coordinates.rho
-        real = np.interp(rho, radii, values.real)
-        imaginary = np.interp(rho, radii, values.imag)
-        result = np.real_if_close(real + 1j * imaginary)
-        self._radial_map_cache[key] = result
-        return result
-
-    @staticmethod
-    def initialize_array(shape: tuple) -> np.ndarray:
-        """Initialize a floating-point array of zeros.
-
-        Parameters
-        ----------
-        shape : tuple of int
-            Dimensions of the requested array.
-
-        Returns
-        -------
-        numpy.ndarray
-            Zero-filled array with the requested shape.
-        """
-        return np.zeros(shape)
-
-    def get_azimuthal_dependency(self, phi: float, dependency_type: str) -> np.ndarray:
-        r"""
-        Compute the azimuthal dependency for the field based on the given type.
-
-        The azimuthal dependencies are defined as:
-
-        .. math::
-            f_\nu(\phi) = \cos(\nu \phi + \phi_0)
-
-        .. math::
-            g_\nu(\phi) = -\sin(\nu \phi + \phi_0)
-
-        where :math:`\nu` is the azimuthal mode number and :math:`\phi_0` is the
-        phase shift.
-
-        Parameters
-        ----------
-        phi : float
-            Phase shift of the field in radians.
-        dependency_type : {'f', 'g'}
-            The type of azimuthal dependency to compute:
-            - 'f' for cosine dependency.
-            - 'g' for sine dependency.
-
-        Returns
-        -------
-        numpy.ndarray
-            The azimuthal dependency values, computed over the cylindrical coordinates.
-
-        Raises
-        ------
-        ValueError
-            If `dependency_type` is not 'f' or 'g'.
-
-        Notes
-        -----
-        This method is referenced in Eq. 3.71 of Jaques Bures for the calculation
-        of field azimuthal behavior in optical fibers.
-        """
-        self._ensure_cache_valid()
-        key = (float(phi), dependency_type)
-        if key in self._azimuthal_cache:
-            return self._azimuthal_cache[key]
-
-        angle = self.mode.nu * self.cylindrical_coordinates.phi + phi
-        if dependency_type == "f":
-            dependency = np.cos(angle)
-        elif dependency_type == "g":
-            dependency = -np.sin(angle)
-        else:
-            raise ValueError("Invalid dependency type. Use 'f' for cosine or 'g' for sine.")
-
-        self._azimuthal_cache[key] = dependency
-        return dependency
+    @property
+    def cylindrical_coordinates(self):
+        """Sample positions in cylindrical coordinates."""
+        return self.cartesian_coordinates.to_cylindrical()
 
     def get_components(
         self,
         components=("Ex", "Ey", "Ez", "Hx", "Hy", "Hz"),
-        phi: float = 0,
-        theta: float = 0,
-    ) -> dict[str, np.ndarray]:
-        """Evaluate and cache several field components together.
-
-        All requested components share the same radial solve, interpolated maps,
-        and azimuthal factors. This is the preferred entry point when more than
-        one component is needed.
-
-        Parameters
-        ----------
-        components : iterable of str, optional
-            Cartesian or cylindrical component names to evaluate.
-        phi : float, optional
-            Azimuthal phase offset in radians.
-        theta : float, optional
-            Polarization rotation in radians.
-
-        Returns
-        -------
-        dict of str to numpy.ndarray
-            Component arrays keyed by their requested names.
-        """
-        self._ensure_cache_valid()
-        available = {"Ex", "Ey", "Ez", "Er", "Ephi", "Hx", "Hy", "Hz", "Hr", "Hphi"}
-        invalid = set(components) - available
-        if invalid:
-            names = ", ".join(sorted(invalid))
-            raise ValueError(f"Unknown field component(s): {names}")
-
-        result = {}
-        for component in components:
-            key = (component, float(phi), float(theta))
-            if key not in self._component_cache:
-                self._component_cache[key] = getattr(self, component)(phi, theta)
-            result[component] = self._component_cache[key]
-        return result
-
-    def get_index_iterator(self, array: np.ndarray):
-        """
-        Generate an iterator for multi-dimensional array indices.
-
-        This method provides a way to iterate through all indices of a
-        multi-dimensional NumPy array in a memory-efficient manner.
-
-        Parameters
-        ----------
-        array : numpy.ndarray
-            The array for which to generate the index iterator.
-
-        Yields
-        ------
-        tuple
-            Multi-dimensional index corresponding to the current element.
-
-        """
-        iterator = np.nditer(array, flags=["multi_index"])
-        for _ in iterator:
-            yield iterator.multi_index
-
-    def wrapper_get_field(function) -> Callable:
-        r"""
-        Decorator for wrapping field computation methods.
-
-        This decorator can be used to add pre- or post-processing steps
-        to field computation methods in the `Field` class.
-
-        Parameters
-        ----------
-        function : Callable
-            The function to be wrapped.
-
-        Returns
-        -------
-        callable
-            The wrapped function.
-
-        """
-
-        def wrapper(self, *args, **kwargs):
-            """Forward arguments to the wrapped field function."""
-            return function(self, *args, **kwargs)
-
-        return wrapper
-
-    def Ex(self, phi: float = 0, theta: float = 0) -> np.ndarray:
-        r"""
-        Compute the x-component of the electric field, :math:`E_x`.
-
-        The x-component of the electric field is calculated based on the field's mode family.
-        For LP (linearly polarized) modes, it uses the radial electric field and the azimuthal
-        dependency :math:`f_\nu(\phi)`. For other modes, the x-component is derived using the
-        transverse electric field and its polarization angle.
-
-        .. math::
-            E_x =
-            \begin{cases}
-            E_\rho \cdot f_\nu(\phi) & \text{if mode is LP} \\
-            E_T \cdot \cos(\theta_{\text{pol}}) & \text{otherwise}
-            \end{cases}
-
-        where:
-            - :math:`E_\rho` is the radial electric field.
-            - :math:`f_\nu(\phi) = \cos(\nu \phi + \phi_0)` is the azimuthal dependency.
-            - :math:`E_T` is the transverse electric field.
-            - :math:`\theta_{\text{pol}}` is the polarization angle.
-
-        Parameters
-        ----------
-        phi : float, optional
-            The phase of the field in radians (default is 0).
-        theta : float, optional
-            The orientation of the field in radians (default is 0).
-
-        Returns
-        -------
-        numpy.ndarray
-            The x-component of the electric field, :math:`E_x`, computed over the Cartesian grid.
-
-        Raises
-        ------
-        AttributeError
-            If `self.fiber` does not implement `get_radial_field`.
-
-        References
-        ----------
-        Jaques Bures, Optical Fiber Theory, Eq. 3.71.
-
-        """
-        if self.mode.family == "LP":
-            # Initialize array for the electric field component
-            azimuthal_dependency = self.get_azimuthal_dependency(phi=phi, dependency_type="f")
-            array = self._radial_component("E", "rho") * azimuthal_dependency
-        else:
-            # For non-LP modes, calculate using transverse field and polarization
-            polarization = self.Epol(phi, theta)
-            array = self.Et(phi, theta) * np.cos(polarization)
-
-        return array
-
-    def Ey(self, phi: float = 0, theta: float = 0) -> np.ndarray:
-        r"""
-        Compute the y-component of the electric field, :math:`E_y`.
-
-        The y-component of the electric field is calculated based on the field's mode family.
-        For LP (linearly polarized) modes, it uses the azimuthal dependency :math:`f_\nu(\phi)`
-        and the azimuthal electric field. For other modes, it is derived using the transverse
-        electric field and its polarization angle.
-
-        .. math::
-            E_y =
-            \begin{cases}
-            E_\phi \cdot f_\nu(\phi) & \text{if mode is LP} \\
-            E_T \cdot \sin(\theta_{\text{pol}}) & \text{otherwise}
-            \end{cases}
-
-        where:
-            - :math:`E_\phi` is the azimuthal electric field.
-            - :math:`f_\nu(\phi) = \cos(\nu \phi + \phi_0)` is the azimuthal dependency.
-            - :math:`E_T` is the transverse electric field.
-            - :math:`\theta_{\text{pol}}` is the polarization angle.
-
-        Parameters
-        ----------
-        phi : float, optional
-            The phase of the field in radians (default is 0).
-        theta : float, optional
-            The orientation of the field in radians (default is 0).
-
-        Returns
-        -------
-        numpy.ndarray
-            The y-component of the electric field, :math:`E_y`, computed over the Cartesian grid.
-
-        Raises
-        ------
-        AttributeError
-            If `self.fiber` does not implement `get_radial_field`.
-
-        References
-        ----------
-        Jaques Bures, Optical Fiber Theory, Eq. 3.71.
-        """
-        if self.mode.family == "LP":
-            # Initialize array for the electric field component
-            azimuthal_dependency = self.get_azimuthal_dependency(phi=phi, dependency_type="f")
-            array = self._radial_component("E", "phi") * azimuthal_dependency
-            return array
-        else:
-            # For non-LP modes, calculate using transverse field and polarization
-            polarization = self.Epol(phi, theta)
-            array = self.Et(phi, theta) * np.sin(polarization)
-
-        return array
-
-    def Ez(self, phi: float = 0, theta: float = 0) -> np.ndarray:
-        r"""
-        Compute the z-component of the electric field, :math:`E_z`.
-
-        The z-component of the electric field is calculated using the azimuthal dependency
-        :math:`f_\nu(\phi)` and the longitudinal electric field component :math:`E_z`.
-
-        .. math::
-            E_z = E_z \cdot f_\nu(\phi)
-
-        where:
-            - :math:`E_z` is the longitudinal electric field.
-            - :math:`f_\nu(\phi) = \cos(\nu \phi + \phi_0)` is the azimuthal dependency.
-
-        Parameters
-        ----------
-        phi : float, optional
-            The phase of the field in radians (default is 0).
-        theta : float, optional
-            Orientation of the field in radians (not used in this calculation, default is 0).
-
-        Returns
-        -------
-        numpy.ndarray
-            The z-component of the electric field, :math:`E_z`, computed over the Cartesian grid.
-
-        Raises
-        ------
-        AttributeError
-            If `self.fiber` does not implement `get_radial_field`.
-
-        References
-        ----------
-        Jaques Bures, Optical Fiber Theory, Eq. 3.71.
-        """
-        # Initialize the array for the z-component
-        # Compute azimuthal dependency
-        azimuthal_dependency = self.get_azimuthal_dependency(phi=phi, dependency_type="f")
-        array = self._radial_component("E", "z") * azimuthal_dependency
-
-        return array
-
-    def Er(self, phi: float = 0, theta: float = 0) -> np.ndarray:
-        r"""
-        Compute the radial component of the electric field, :math:`E_r`.
-
-        The radial component of the electric field is calculated differently based on the field's
-        mode family. For LP (linearly polarized) modes, it uses the transverse electric field and
-        its polarization. For other modes, it incorporates the azimuthal dependency
-        :math:`f_\nu(\phi)` and the radial electric field component :math:`E_\rho`.
-
-        .. math::
-            E_r =
-            \begin{cases}
-            E_T \cdot \cos(\theta_{\text{pol}} - \phi) & \text{if mode is LP} \\
-            E_\rho \cdot f_\nu(\phi) & \text{otherwise}
-            \end{cases}
-
-        where:
-            - :math:`E_T` is the transverse electric field.
-            - :math:`\theta_{\text{pol}}` is the polarization angle.
-            - :math:`E_\rho` is the radial electric field.
-            - :math:`f_\nu(\phi) = \cos(\nu \phi + \phi_0)` is the azimuthal dependency.
-
-        Parameters
-        ----------
-        phi : float, optional
-            The phase of the field in radians (default is 0).
-        theta : float, optional
-            The orientation of the field in radians (default is 0).
-
-        Returns
-        -------
-        numpy.ndarray
-            The radial component of the electric field, :math:`E_r`, computed over the Cartesian grid.
-
-        Raises
-        ------
-        AttributeError
-            If `self.fiber` does not implement `get_radial_field`.
-
-        References
-        ----------
-        Jaques Bures, Optical Fiber Theory, Eq. 3.71.
-        """
-        if self.mode.family == "LP":
-            # Compute for LP mode using transverse field and polarization
-            polarization = self.Epol(phi, theta) - self.cylindrical_coordinates.phi
-            array = self.Et(phi, theta) * np.cos(polarization)
-        else:
-            # Compute for non-LP mode using azimuthal dependency and radial field
-            azimuthal_dependency = self.get_azimuthal_dependency(phi=phi, dependency_type="f")
-            array = self._radial_component("E", "rho") * azimuthal_dependency
-
-        return array
-
-    def Ephi(self, phi: float = 0, theta: float = 0) -> np.ndarray:
-        r"""
-        Compute the azimuthal component of the electric field, :math:`E_\phi`.
-
-        The azimuthal component of the electric field is calculated based on the field's mode family.
-        For LP (linearly polarized) modes, it uses the transverse electric field and its polarization.
-        For other modes, it incorporates the azimuthal dependency :math:`g_\nu(\phi)` and the azimuthal
-        electric field component :math:`E_\phi`.
-
-        .. math::
-            E_\phi =
-            \begin{cases}
-            E_T \cdot \sin(\theta_{\text{pol}} - \phi) & \text{if mode is LP} \\
-            E_\phi \cdot g_\nu(\phi) & \text{otherwise}
-            \end{cases}
-
-        where:
-            - :math:`E_T` is the transverse electric field.
-            - :math:`\theta_{\text{pol}}` is the polarization angle.
-            - :math:`E_\phi` is the azimuthal electric field.
-            - :math:`g_\nu(\phi) = -\sin(\nu \phi + \phi_0)` is the azimuthal dependency.
-
-        Parameters
-        ----------
-        phi : float, optional
-            The phase of the field in radians (default is 0).
-        theta : float, optional
-            The orientation of the field in radians (default is 0).
-
-        Returns
-        -------
-        numpy.ndarray
-            The azimuthal component of the electric field, :math:`E_\phi`, computed over the Cartesian grid.
-
-        Raises
-        ------
-        AttributeError
-            If `self.fiber` does not implement `get_radial_field`.
-
-        References
-        ----------
-        Jaques Bures, Optical Fiber Theory, Eq. 3.71.
-        """
-        if self.mode.family == "LP":
-            # Compute for LP mode using transverse field and polarization
-            polarization = self.Epol(phi, theta) - self.cylindrical_coordinates.phi
-            array = self.Et(phi, theta) * np.sin(polarization)
-        else:
-            # Compute for non-LP mode using azimuthal dependency and azimuthal field
-            azimuthal_dependency = self.get_azimuthal_dependency(phi=phi, dependency_type="g")
-            array = self._radial_component("E", "phi") * azimuthal_dependency
-
-        return array
-
-    def Et(self, phi: float = 0, theta: float = 0) -> np.ndarray:
-        r"""
-        Compute the transverse component of the electric field, :math:`E_T`.
-
-        The transverse electric field is computed as the magnitude of the
-        components perpendicular to the z-axis. For LP (linearly polarized)
-        modes, it is derived from the x and y components. For other modes, it
-        is computed using the radial and azimuthal components.
-
-        .. math::
-            E_T =
-            \begin{cases}
-            \sqrt{E_x^2 + E_y^2} & \text{if mode is LP} \\
-            \sqrt{E_r^2 + E_\phi^2} & \text{otherwise}
-            \end{cases}
-
-        where:
-            - :math:`E_x, E_y` are the Cartesian components of the electric field.
-            - :math:`E_r, E_\phi` are the cylindrical components of the electric field.
-
-        Parameters
-        ----------
-        phi : float, optional
-            The phase of the field in radians (default is 0).
-        theta : float, optional
-            The orientation of the field in radians (default is 0).
-
-        Returns
-        -------
-        numpy.ndarray
-            The transverse electric field, :math:`E_T`, computed over the Cartesian grid.
-        """
-        if self.mode.family == "LP":
-            e_x = self.Ex(phi, theta)
-            e_y = self.Ey(phi, theta)
-            e_transverse = np.sqrt(np.square(e_x) + np.square(e_y))
-        else:
-            e_r = self.Er(phi, theta)
-            e_phi = self.Ephi(phi, theta)
-            e_transverse = np.sqrt(np.square(e_r) + np.square(e_phi))
-
-        return e_transverse
-
-    def Epol(self, phi: float = 0, theta: float = 0) -> np.ndarray:
-        r"""
-        Compute the polarization angle of the transverse electric field, :math:`\theta_{\text{pol}}`.
-
-        The polarization angle is the direction of the transverse electric field vector
-        in the plane perpendicular to the z-axis. For LP (linearly polarized) modes, it is
-        calculated using the x and y components. For other modes, it is calculated using
-        the radial and azimuthal components.
-
-        .. math::
-            \theta_{\text{pol}} =
-            \begin{cases}
-            \arctan2(E_y, E_x) & \text{if mode is LP} \\
-            \arctan2(E_\phi, E_r) + \phi & \text{otherwise}
-            \end{cases}
-
-        where:
-            - :math:`E_x, E_y` are the Cartesian components of the electric field.
-            - :math:`E_r, E_\phi` are the cylindrical components of the electric field.
-
-        Parameters
-        ----------
-        phi : float, optional
-            The phase of the field in radians (default is 0).
-        theta : float, optional
-            The orientation of the field in radians (default is 0).
-
-        Returns
-        -------
-        numpy.ndarray
-            The polarization angle of the transverse electric field in radians.
-        """
-        if self.mode.family == "LP":
-            e_y = self.Ey(phi, theta)
-            e_x = self.Ex(phi, theta)
-            e_polarization = np.arctan2(e_y, e_x)
-        else:
-            e_phi = self.Ephi(phi, theta)
-            e_r = self.Er(phi, theta)
-            e_polarization = np.arctan2(e_phi, e_r) + self.cylindrical_coordinates.phi
-
-        return e_polarization
-
-    def Emod(self, phi: float = 0, theta: float = 0) -> np.ndarray:
-        r"""
-        Compute the modulus (magnitude) of the electric field vector, :math:`|\vec{E}|`.
-
-        The electric field modulus is the magnitude of the field vector, which
-        includes all components (transverse and longitudinal). For LP (linearly
-        polarized) modes, it uses the Cartesian components. For other modes, it
-        uses the cylindrical components.
-
-        .. math::
-            |\vec{E}| =
-            \begin{cases}
-            \sqrt{E_x^2 + E_y^2 + E_z^2} & \text{if mode is LP} \\
-            \sqrt{E_r^2 + E_\phi^2 + E_z^2} & \text{otherwise}
-            \end{cases}
-
-        where:
-            - :math:`E_x, E_y, E_z` are the Cartesian components of the electric field.
-            - :math:`E_r, E_\phi, E_z` are the cylindrical components of the electric field.
-
-        Parameters
-        ----------
-        phi : float, optional
-            The phase of the field in radians (default is 0).
-        theta : float, optional
-            The orientation of the field in radians (default is 0).
-
-        Returns
-        -------
-        numpy.ndarray
-            The modulus of the electric field, :math:`|\vec{E}|`, computed over the Cartesian grid.
-        """
-        if self.mode.family == "LP":
-            e_x = self.Ex(phi, theta)
-            e_y = self.Ey(phi, theta)
-            e_z = self.Ez(phi, theta)
-            e_modulus = np.sqrt(np.square(e_x) + np.square(e_y) + np.square(e_z))
-        else:
-            e_r = self.Er(phi, theta)
-            e_phi = self.Ephi(phi, theta)
-            e_z = self.Ez(phi, theta)
-            e_modulus = np.sqrt(np.square(e_r) + np.square(e_phi) + np.square(e_z))
-
-        return e_modulus
-
-    def Hx(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
-        r"""
-        Compute the x-component of the magnetic field :math:`H_x`.
-
-        For LP (linearly polarized) modes, this is computed using the radial
-        component :math:`H_r` and the azimuthal dependency :math:`f_\nu(\phi)`:
-
-        .. math::
-            H_x = H_r \cdot f_\nu(\phi)
-
-        For other modes, the transverse magnetic field and polarization are used:
-
-        .. math::
-            H_x = H_T \cdot \cos(\theta_{\text{pol}})
-
-        Parameters
-        ----------
-        phi : float, optional
-            Phase of the field in radians (default is 0).
-        theta : float, optional
-            Orientation of the field in radians (default is 0).
-
-        Returns
-        -------
-        np.ndarray
-            The magnetic field in the x-direction over the Cartesian grid.
-
-        Raises
-        ------
-        AttributeError
-            If the fiber object does not implement `get_radial_field`.
-
-        """
-        if self.mode.family == "LP":
-            azimuthal_dependency_f = self.get_azimuthal_dependency(phi=phi, dependency_type="f")
-            array = self._radial_component("H", "rho") * azimuthal_dependency_f
-
-        else:
-            polarisation = self.Hpol(phi, theta)
-            array = self.Ht(phi, theta) * numpy.cos(polarisation)
-
-        return array
-
-    def Hy(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
-        r"""
-        Compute the y-component of the magnetic field :math:`H_y`.
-
-        For LP modes, this is computed using the azimuthal component :math:`H_\phi`
-        and the azimuthal dependency :math:`f_\nu(\phi)`:
-
-        .. math::
-            H_y = H_\phi \cdot f_\nu(\phi)
-
-        For other modes, the transverse magnetic field and polarization are used:
-
-        .. math::
-            H_y = H_T \cdot \sin(\theta_{\text{pol}})
-
-        Parameters
-        ----------
-        phi : float, optional
-            Phase of the field in radians (default is 0).
-        theta : float, optional
-            Orientation of the field in radians (default is 0).
-
-        Returns
-        -------
-        np.ndarray
-            The magnetic field in the y-direction over the Cartesian grid.
-
-        Raises
-        ------
-        AttributeError
-            If the fiber object does not implement `get_radial_field`.
-
-        """
-        if self.mode.family == "LP":
-            azimuthal_dependency_f = self.get_azimuthal_dependency(phi=phi, dependency_type="f")
-            array = self._radial_component("H", "phi") * azimuthal_dependency_f
-
-        else:
-            polarisation = self.Hpol(phi, theta)
-            array = self.Ht(phi, theta) * numpy.sin(polarisation)
-
-        return array
-
-    def Hz(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
-        r"""
-        Compute the z-component of the magnetic field :math:`H_z`.
-
-        The z-component is calculated for all modes using the longitudinal field
-        :math:`H_z` and the azimuthal dependency :math:`f_\nu(\phi)`:
-
-        .. math::
-            H_z = H_z \cdot f_\nu(\phi)
-
-        Parameters
-        ----------
-        phi : float, optional
-            Phase of the field in radians (default is 0).
-        theta : float, optional
-            Orientation of the field in radians (default is 0).
-
-        Returns
-        -------
-        np.ndarray
-            The magnetic field in the z-direction over the Cartesian grid.
-
-        Raises
-        ------
-        AttributeError
-            If the fiber object does not implement `get_radial_field`.
-
-        """
-        azimuthal_dependency_f = self.get_azimuthal_dependency(phi=phi, dependency_type="f")
-        array = self._radial_component("H", "z") * azimuthal_dependency_f
-        return array
-
-    def Hr(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
-        r"""
-        Compute the radial component of the magnetic field :math:`H_r`.
-
-        For LP modes, this is computed using the transverse field :math:`H_T` and
-        the polarization angle :math:`\theta_{\text{pol}}`:
-
-        .. math::
-            H_r = H_T \cdot \cos(\theta_{\text{pol}} - \phi)
-
-        For other modes, the radial field and azimuthal dependency :math:`f_\nu(\phi)` are used:
-
-        .. math::
-            H_r = H_r \cdot f_\nu(\phi)
-
-        Parameters
-        ----------
-        phi : float, optional
-            Phase of the field in radians (default is 0).
-        theta : float, optional
-            Orientation of the field in radians (default is 0).
-
-        Returns
-        -------
-        np.ndarray
-            The magnetic field in the radial direction over the Cartesian grid.
-
-        """
-        if self.mode.family == "LP":
-            radial = self.Ht(phi, theta)
-            polarisation = self.Hpol(phi, theta) - self.cylindrical_coordinates.phi
-            azimuthal = numpy.cos(polarisation)
-            array = radial * azimuthal
-
-        else:
-            azimuthal_dependency_f = self.get_azimuthal_dependency(phi=phi, dependency_type="f")
-            array = self._radial_component("H", "rho") * azimuthal_dependency_f
-
-        return array
-
-    def Hphi(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
-        r"""
-        Compute the azimuthal component of the magnetic field :math:`H_\phi`.
-
-        For LP modes, this is computed using the transverse field :math:`H_T` and
-        the polarization angle :math:`\theta_{\text{pol}}`:
-
-        .. math::
-            H_\phi = H_T \cdot \sin(\theta_{\text{pol}} - \phi)
-
-        For other modes, the azimuthal field and azimuthal dependency :math:`g_\nu(\phi)` are used:
-
-        .. math::
-            H_\phi = H_\phi \cdot g_\nu(\phi)
-
-        Parameters
-        ----------
-        phi : float, optional
-            Phase of the field in radians (default is 0).
-        theta : float, optional
-            Orientation of the field in radians (default is 0).
-
-        Returns
-        -------
-        np.ndarray
-            The magnetic field in the azimuthal direction over the Cartesian grid.
-
-        """
-        if self.mode.family == "LP":
-            polarisation = self.Hpol(phi, theta) - self.cylindrical_coordinates.phi
-            array = self.Ht(phi, theta) * numpy.sin(polarisation)
-        else:
-            azimuthal_dependency_g = self.get_azimuthal_dependency(phi=phi, dependency_type="g")
-            array = self._radial_component("H", "phi") * azimuthal_dependency_g
-
-        return array
-
-    def Ht(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
-        r"""
-        Compute the transverse component of the magnetic field, :math:`H_T`.
-
-        The transverse magnetic field is calculated as the magnitude of the
-        components perpendicular to the z-axis. For LP (linearly polarized) modes,
-        it is derived from the x and y components. For other modes, it is computed
-        using the radial and azimuthal components.
-
-        .. math::
-            H_T =
-            \begin{cases}
-            \sqrt{H_x^2 + H_y^2} & \text{if mode is LP} \\
-            \sqrt{H_r^2 + H_\phi^2} & \text{otherwise}
-            \end{cases}
-
-        Parameters
-        ----------
-        phi : float, optional
-            Phase of the field in radians (default is 0).
-        theta : float, optional
-            Orientation of the field in radians (default is 0).
-
-        Returns
-        -------
-        numpy.ndarray
-            The transverse magnetic field, :math:`H_T`, computed over the Cartesian grid.
-
-        """
-        if self.mode.family == "LP":
-            h_x = self.Hx(phi, theta)
-            h_y = self.Hy(phi, theta)
-            return numpy.sqrt(numpy.square(h_x) + numpy.square(h_y))
-        else:
-            h_r = self.Hr(phi, theta)
-            h_phi = self.Hphi(phi, theta)
-            return numpy.sqrt(numpy.square(h_r) + numpy.square(h_phi))
-
-    def Hpol(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
-        r"""
-        Compute the polarization angle of the transverse magnetic field, :math:`\theta_{\text{pol}}`.
-
-        The polarization angle represents the direction of the transverse magnetic
-        field vector in the plane perpendicular to the z-axis. For LP modes, it is
-        calculated using the x and y components. For other modes, it is calculated
-        using the radial and azimuthal components.
-
-        .. math::
-            \theta_{\text{pol}} =
-            \begin{cases}
-            \arctan2(H_y, H_x) & \text{if mode is LP} \\
-            \arctan2(H_\phi, H_r) + \phi & \text{otherwise}
-            \end{cases}
-
-        Parameters
-        ----------
-        phi : float, optional
-            Phase of the field in radians (default is 0).
-        theta : float, optional
-            Orientation of the field in radians (default is 0).
-
-        Returns
-        -------
-        numpy.ndarray
-            The polarization angle of the transverse magnetic field in radians.
-
-        """
-        if self.mode.family == "LP":
-            h_polarization = numpy.arctan2(self.Hy(phi, theta), self.Hx(phi, theta))
-
-        else:
-            h_polarization = numpy.arctan2(self.Hphi(phi, theta), self.Hr(phi, theta))
-            h_polarization += self.cylindrical_coordinates.phi
-
-        return h_polarization
-
-    def Hmod(self, phi: float = 0, theta: float = 0) -> numpy.ndarray:
-        r"""
-        Compute the modulus (magnitude) of the magnetic field vector, :math:`|\vec{H}|`.
-
-        The magnetic field modulus is the magnitude of the field vector, which
-        includes all components (transverse and longitudinal). For LP (linearly
-        polarized) modes, it uses the Cartesian components. For other modes, it
-        uses the cylindrical components.
-
-        .. math::
-            |\vec{H}| =
-            \begin{cases}
-            \sqrt{H_x^2 + H_y^2 + H_z^2} & \text{if mode is LP} \\
-            \sqrt{H_r^2 + H_\phi^2 + H_z^2} & \text{otherwise}
-            \end{cases}
-
-        where:
-            - :math:`H_x, H_y, H_z` are the Cartesian components of the magnetic field.
-            - :math:`H_r, H_\phi, H_z` are the cylindrical components of the magnetic field.
-
-        Parameters
-        ----------
-        phi : float, optional
-            Phase of the field in radians (default is 0).
-        theta : float, optional
-            Orientation of the field in radians (default is 0).
-
-        Returns
-        -------
-        numpy.ndarray
-            The modulus of the magnetic field, :math:`|\vec{H}|`, computed over the Cartesian grid.
-
-        """
-        if self.mode.family == "LP":
-            h_x = self.Hx(phi, theta)
-            h_y = self.Hy(phi, theta)
-            h_z = self.Hz(phi, theta)
-            h_modulus = numpy.sqrt(numpy.square(h_x) + numpy.square(h_y) + numpy.square(h_z))
-
-        else:
-            h_r = self.Hr(phi, theta)
-            h_phi = self.Hphi(phi, theta)
-            h_z = self.Hz(phi, theta)
-            h_modulus = numpy.sqrt(numpy.square(h_r) + numpy.square(h_phi) + numpy.square(h_z))
-
-        return h_modulus
-
-    def get_effective_area(self) -> float:
-        r"""
-        Compute the effective area of the mode, :math:`A_{\text{eff}}`.
-
-        The effective area is defined as:
-
-        .. math::
-            A_{\text{eff}} = \frac{\left( \int |E|^2 \, dx \, dy \right)^2}{\int |E|^4 \, dx \, dy}
-
-        where:
-            - :math:`|E|` is the modulus of the electric field.
-            - The integrals are evaluated over the cross-sectional area.
-
-        Returns
-        -------
-        float
-            The effective area, :math:`A_{\text{eff}}`.
-
-        """
-        field_array_norm = self.Emod()
-        integral = self.get_integrale_square(array=field_array_norm)
-        cell_area = self.cartesian_coordinates.dx * self.cartesian_coordinates.dy
-        fourth_moment = numpy.sum(numpy.abs(field_array_norm) ** 4) * cell_area
-        return float(numpy.real(integral**2 / fourth_moment))
-
-    def get_integrale_square(self, array: numpy.ndarray) -> float:
-        r"""
-        Compute the square of the integral of the given array.
-
-        .. math::
-            \left( \int |F(x, y)|^2 \, dx \, dy \right)
-
-        Parameters
-        ----------
-        array : numpy.ndarray
-            Array representing the field values over the grid.
-
-        Returns
-        -------
-        float
-            The squared integral of the array.
-
-        """
-        square_field = numpy.abs(array) ** 2
-
-        sum_square_field = numpy.sum(square_field)
-
-        integral = sum_square_field * self.cartesian_coordinates.dx * self.cartesian_coordinates.dy
-
-        return integral
-
-    def get_intensity(self) -> float:
-        r"""
-        Compute the intensity of the mode, :math:`I`.
-
-        The intensity is defined as:
-
-        .. math::
-            I = \frac{n_{\text{eff}}}{n_{\text{eff}}^{\text{HE11}}} \cdot \int |E_T|^2 \, dx \, dy
-
-        where:
-            - :math:`n_{\text{eff}}` is the effective index of the mode.
-            - :math:`n_{\text{eff}}^{\text{HE11}}` is the effective index of the fundamental HE11 mode.
-            - :math:`|E_T|^2` is the squared transverse electric field.
-
-        Returns
-        -------
-        float
-            The intensity of the mode.
-
-        """
-        HE11_n_eff = self.fiber.get_effective_index(mode=HE11)
-
-        n_eff = self.fiber.get_effective_index(mode=self.mode)
-
-        norm_squared = self.get_integrale_square(array=self.Et())
-
-        return n_eff / HE11_n_eff * norm_squared
-
-    def get_normalization_constant(self) -> float:
-        r"""
-        Compute the normalization constant, :math:`N`.
-
-        The normalization constant is defined as:
-
-        .. math::
-            N = \frac{I}{2} \cdot \epsilon_0 \cdot n_{\text{eff}}^{\text{HE11}} \cdot c
-
-        where:
-            - :math:`I` is the intensity of the mode.
-            - :math:`\epsilon_0` is the permittivity of free space.
-            - :math:`n_{\text{eff}}^{\text{HE11}}` is the effective index of the fundamental HE11 mode.
-            - :math:`c` is the speed of light in vacuum.
-
-        Returns
-        -------
-        float
-            The normalization constant, :math:`N`.
-
-        """
-        neff = self.fiber.get_effective_index(mode=HE11)
-
-        intensity = self.get_intensity()
-
-        return 0.5 * scipy.constants.epsilon_0 * neff * scipy.constants.c * intensity
-
-    def get_poynting_vector(self, phi: float = 0, theta: float = 0):
-        """Return the time-averaged Cartesian Poynting-vector components.
-
-        Parameters
-        ----------
-        phi : float, optional
-            Azimuthal phase offset in radians.
-        theta : float, optional
-            Polarization rotation in radians.
-
-        Returns
-        -------
-        tuple of numpy.ndarray
-            The x, y, and z Poynting-vector components.
-        """
-        fields = self.get_components(phi=phi, theta=theta)
-        electric = numpy.stack((fields["Ex"], fields["Ey"], fields["Ez"]))
-        magnetic = numpy.stack((fields["Hx"], fields["Hy"], fields["Hz"]))
-        vector = 0.5 * numpy.real(
-            numpy.cross(electric, numpy.conjugate(magnetic), axisa=0, axisb=0, axisc=0)
+        phi: Angle = 0 * ureg.radian,
+        theta: Angle = 0 * ureg.radian,
+    ):
+        """Return electric and magnetic component arrays with physical units."""
+        values = self._si.get_components(
+            components=components,
+            phi=scalar(phi, "radian", "phi"),
+            theta=scalar(theta, "radian", "theta"),
         )
-        return tuple(vector)
+        return {
+            name: quantity(value, "volt / meter" if name.startswith("E") else "ampere / meter")
+            for name, value in values.items()
+        }
 
-    def get_power(self, phi: float = 0, theta: float = 0) -> float:
-        """Integrate the longitudinal time-averaged power over the grid.
+    def get_azimuthal_dependency(self, phi: Angle, dependency_type: str):
+        """Evaluate dimensionless sine/cosine angular dependencies."""
+        return quantity(
+            self._si.get_azimuthal_dependency(scalar(phi, "radian", "phi"), dependency_type),
+            "dimensionless",
+        )
 
-        Parameters
-        ----------
-        phi : float, optional
-            Azimuthal phase offset in radians.
-        theta : float, optional
-            Polarization rotation in radians.
+    def get_effective_area(self):
+        """Return effective mode area in square meters."""
+        return quantity(self._si.get_effective_area(), "meter ** 2")
 
-        Returns
-        -------
-        float
-            Integrated longitudinal power in watts.
-        """
-        _, _, poynting_z = self.get_poynting_vector(phi, theta)
-        cell_area = self.cartesian_coordinates.dx * self.cartesian_coordinates.dy
-        return float(numpy.sum(poynting_z) * cell_area)
+    def get_integrale_square(self, array):
+        """Integrate a quantity-valued squared field over the sample area."""
+        if not hasattr(array, "units"):
+            raise TypeError("array must be a pint Quantity")
+        return quantity(
+            self._si.get_integrale_square(array.magnitude), array.units**2 * ureg.meter**2
+        )
 
-    def get_confinement_factor(self, radius: float) -> float:
-        """Return the fraction of electric energy inside a radius.
+    def get_intensity(self):
+        """Return the solver's integrated electric intensity in square volts."""
+        return quantity(self._si.get_intensity(), "volt ** 2")
 
-        Parameters
-        ----------
-        radius : float
-            Integration radius in meters.
+    def get_normalization_constant(self):
+        """Return the field's power normalization constant in watts."""
+        return quantity(self._si.get_normalization_constant(), "watt")
 
-        Returns
-        -------
-        float
-            Fraction of sampled electric-field energy inside the radius.
-        """
-        density = numpy.abs(self.Emod()) ** 2
-        total = numpy.sum(density)
-        if total == 0:
-            return 0.0
-        inside = self.cylindrical_coordinates.rho <= radius
-        return float(numpy.sum(density[inside]) / total)
+    def get_poynting_vector(self, phi: Angle = 0 * ureg.radian, theta: Angle = 0 * ureg.radian):
+        """Return Cartesian power flux components in watts per square meter."""
+        return tuple(
+            quantity(value, "watt / meter ** 2")
+            for value in self._si.get_poynting_vector(
+                phi=scalar(phi, "radian", "phi"),
+                theta=scalar(theta, "radian", "theta"),
+            )
+        )
 
-    def overlap(self, other) -> complex:
-        """Return the normalized vector-field overlap with another field.
+    def get_power(self, phi: Angle = 0 * ureg.radian, theta: Angle = 0 * ureg.radian):
+        """Return integrated longitudinal power in watts."""
+        return quantity(
+            self._si.get_power(
+                phi=scalar(phi, "radian", "phi"),
+                theta=scalar(theta, "radian", "theta"),
+            ),
+            "watt",
+        )
 
-        Parameters
-        ----------
-        other : Field
-            Field to compare with this field.
+    def get_confinement_factor(self, radius: Length):
+        """Return the dimensionless fraction of electric energy within radius."""
+        return quantity(
+            self._si.get_confinement_factor(scalar(radius, "meter", "radius")), "dimensionless"
+        )
 
-        Returns
-        -------
-        complex
-            Normalized complex overlap amplitude.
-        """
+    def overlap(self, other):
+        """Return the dimensionless normalized electric-field overlap."""
         from PyFiberModes.propagation import overlap
 
         return overlap(self, other)
 
-    def plot(
-        self,
-        plot_type: list[str] | tuple[str, ...] = (),
-        show: bool = True,
-        save_filename: str | None = None,
-    ) -> Any:
-        """Plot selected field components using the optional plotting layer.
+    def plot(self, plot_type=(), show=True, save_filename=None):
+        """Plot selected numerical field components using the optional backend."""
+        return self._si.plot(plot_type=plot_type, show=show, save_filename=save_filename)
 
-        Parameters
-        ----------
-        plot_type : list of str, optional
-            Field-component names to plot.
-        show : bool, optional
-            Whether to display the plot. If False, the plot will not be shown but can still be saved
-            or returned. Default is True.
-        save_filename : str, optional
-            A file path to save the figure. If None, the figure will not be saved. Default is None.
 
-        Returns
-        -------
-        matplotlib.figure.Figure
-            The matplotlib Figure object created or used for the plot.
+def _component_method(name):
+    """Wrap a numerical field component with angle checks and output units."""
+    original = getattr(_field.Field, name)
 
-        Raises
-        ------
-        ImportError
-            If the optional plotting dependencies are not installed.
-        """
-        from PyFiberModes.plotting import plot_field
-
-        return plot_field(
-            self,
-            plot_type=plot_type,
-            show=show,
-            save_filename=save_filename,
+    def method(self, phi: Angle = 0 * ureg.radian, theta: Angle = 0 * ureg.radian):
+        """Evaluate a field component at quantity-valued phase/rotation angles."""
+        value = original(
+            self._si, phi=scalar(phi, "radian", "phi"), theta=scalar(theta, "radian", "theta")
         )
+        unit = (
+            "radian"
+            if name.endswith("pol")
+            else "volt / meter"
+            if name.startswith("E")
+            else "ampere / meter"
+        )
+        return quantity(value, unit)
+
+    method.__name__ = name
+    return method
 
 
-# -
+for _name in (
+    "Ex",
+    "Ey",
+    "Ez",
+    "Er",
+    "Ephi",
+    "Et",
+    "Epol",
+    "Emod",
+    "Hx",
+    "Hy",
+    "Hz",
+    "Hr",
+    "Hphi",
+    "Ht",
+    "Hpol",
+    "Hmod",
+):
+    setattr(Field, _name, _component_method(_name))

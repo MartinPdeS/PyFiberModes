@@ -1,5 +1,6 @@
 import pytest
 import yaml
+from PyFiberModes.units import ureg
 import numpy as np
 from PyFiberModes.materials import FusedSilica, MaterialRegistry
 from PyFiberModes.loader import (  # Replace `your_module_name` with the actual module name
@@ -13,7 +14,7 @@ from PyFiberModes.loader import (  # Replace `your_module_name` with the actual 
 )
 
 WAVELENGTH = 1550e-9
-FUSEDSILICA_RI = FusedSilica().refractive_index(WAVELENGTH)
+FUSEDSILICA_RI = FusedSilica().refractive_index(WAVELENGTH * ureg.meter)
 
 
 @pytest.fixture
@@ -58,7 +59,7 @@ def test_calculate_layer_index():
 
 def test_calculate_layer_index_accepts_pluggable_material():
     """Custom dispersive materials do not depend on a global material bank."""
-    materials = MaterialRegistry({"custom_glass": lambda wavelength: 1.5 + wavelength})
+    materials = MaterialRegistry({"custom_glass": lambda wavelength: (1.5 + wavelength.to("meter").magnitude) * ureg.dimensionless})
 
     index = calculate_layer_index(
         {"material": "custom_glass"},

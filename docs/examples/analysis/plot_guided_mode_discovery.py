@@ -5,13 +5,14 @@ Guided-mode discovery
 Discover the supported linearly polarized modes and compare their effective
 indices at one wavelength.
 """
+from PyFiberModes.units import ureg
 
 import matplotlib.pyplot as plt
 
 from PyFiberModes.analysis import find_modes
 from PyFiberModes.fiber import load_fiber
 
-fiber = load_fiber("SMF28", wavelength=1310e-9)
+fiber = load_fiber("SMF28", wavelength=1310e-9 * ureg.meter)
 modes = find_modes(fiber, families=("LP",), max_nu=3, max_m=3)
 effective_indices = [fiber.get_effective_index(mode) for mode in modes]
 

@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from PyFiberModes.units import ureg
+
 import numpy
 import pytest
 from PyFiberModes.fiber import load_fiber
@@ -9,7 +11,7 @@ from tests.helpers import get_mode_beta
 
 
 def test_two_layer_solver():
-    fiber = load_fiber(fiber_name='SMF28', wavelength=1550e-9, add_air_layer=False)
+    fiber = load_fiber(fiber_name='SMF28', wavelength=1550e-9 * ureg.meter, add_air_layer=False)
 
     itr_list = numpy.linspace(1.0, 0.3, 10)
 

@@ -10,9 +10,11 @@ layer uses a dispersive material:
 
 .. code-block:: python
 
+   from PyFiberModes.units import ureg
+
    from PyFiberModes import load_fiber
 
-   fiber = load_fiber("SMF28", wavelength=1.55e-6)
+   fiber = load_fiber("SMF28", wavelength=1.55e-6 * ureg.meter)
    for layer in fiber.layers:
        print(layer.name, layer.radius_in, layer.radius_out, layer.refractive_index)
 
@@ -38,16 +40,18 @@ Custom material models
 
 Use :class:`~PyFiberModes.materials.MaterialRegistry` when a definition names a
 material that is not built in. A model can be any callable receiving wavelength
-in metres and returning refractive index:
+as a length quantity and returning a dimensionless index quantity:
 
 .. code-block:: python
+
+   from PyFiberModes.units import ureg
 
    from PyFiberModes import MaterialRegistry, load_fiber
 
    materials = MaterialRegistry({
-       "my_glass": lambda wavelength: 1.46 - 0.003 * (wavelength / 1e-6 - 1.0),
+       "my_glass": lambda wavelength: (1.46 - 0.003 * (wavelength.to("micrometer").magnitude - 1.0)) * ureg.dimensionless,
    })
-   fiber = load_fiber("my_fiber", wavelength=1.55e-6, materials=materials)
+   fiber = load_fiber("my_fiber", wavelength=1.55e-6 * ureg.meter, materials=materials)
 
 Programmatic construction
 --------------------------
@@ -57,11 +61,13 @@ from the center outward, and initialize it once all interfaces are defined:
 
 .. code-block:: python
 
+   from PyFiberModes.units import ureg
+
    from PyFiberModes import Fiber
 
-   fiber = Fiber(wavelength=1.55e-6)
-   fiber.add_layer(name="core", radius=4.1e-6, index=1.450)
-   fiber.add_layer(name="cladding", radius=62.5e-6, index=1.444)
+   fiber = Fiber(wavelength=1.55e-6 * ureg.meter)
+   fiber.add_layer(name="core", radius=4.1e-6 * ureg.meter, index=1.450 * ureg.dimensionless)
+   fiber.add_layer(name="cladding", radius=62.5e-6 * ureg.meter, index=1.444 * ureg.dimensionless)
    fiber.initialize_layers()
 
 Use :class:`~PyFiberModes.factory.FiberFactory` when radii or indices are
@@ -72,7 +78,6 @@ Mutation and caches
 
 Call :meth:`~PyFiberModes.fiber.Fiber.update_wavelength` when changing
 wavelength; it updates dependent state and clears cached modal and radial-field
-solutions. After directly changing a layer radius or refractive index, call
-:meth:`~PyFiberModes.fiber.Fiber.clear_caches`. Prefer
+solutions. Layer radius and refractive-index assignments also validate units and clear caches. Prefer
 :meth:`~PyFiberModes.fiber.Fiber.sweep` or the optimization helpers for repeated
 calculations because they work on copies and keep the input fiber unchanged.

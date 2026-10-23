@@ -32,8 +32,10 @@ class BaseSolver(ABC):
         wavelength : float
             Vacuum wavelength in meters.
         """
-        self.fiber = fiber
-        self.wavelength = wavelength
+        # Low-level solvers work in SI even when constructed from the public API.
+        from PyFiberModes.units import Quantity, scalar
+        self.fiber = getattr(fiber, "_si", fiber)
+        self.wavelength = scalar(wavelength, "meter", "wavelength") if isinstance(wavelength, Quantity) else wavelength
 
     @abstractmethod
     def solve(self, *args, **kwargs):

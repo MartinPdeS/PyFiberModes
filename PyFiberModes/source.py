@@ -1,6 +1,9 @@
 """Optical-source wavelength and frequency conversions."""
 
+import math
+
 from scipy.constants import c, pi
+from PyFiberModes.units import Length, scalar, quantity
 
 
 class Source():
@@ -8,55 +11,71 @@ class Source():
 
     Parameters
     ----------
-    wavelength : float
+    wavelength : TypedUnit.Length
         Vacuum wavelength in meters.
     """
 
-    def __init__(self, wavelength: float):
+    def __init__(self, wavelength: Length):
         """Initialize a source from its vacuum wavelength.
 
         Parameters
         ----------
-        wavelength : float
+        wavelength : TypedUnit.Length
             Vacuum wavelength in meters.
         """
-        self.wavelength = wavelength
+        value = scalar(wavelength, "meter", "wavelength")
+        if value <= 0 or not math.isfinite(value):
+            raise ValueError("wavelength must be positive and finite")
+        self._wavelength = quantity(value, "meter")
 
     @property
-    def wavenumber(self) -> float:
+    def wavelength(self) -> Length:
+        """Validated vacuum wavelength."""
+        return self._wavelength
+
+    @wavelength.setter
+    def wavelength(self, value: Length):
+        """Validate wavelength mutations as well as construction."""
+        wavelength = scalar(value, "meter", "wavelength")
+        if not math.isfinite(wavelength) or wavelength <= 0:
+            raise ValueError("wavelength must be positive and finite")
+        self._wavelength = quantity(wavelength, "meter")
+
+    @property
+    def wavenumber(self):
         """
         Wave number (2π/λ).
 
         Returns
         -------
-        float
+        pint.Quantity
             Wave number in radians per meter.
         """
-        return 2 * pi / self if self != 0 else float('inf')
+        return 2 * pi * quantity(1, "radian") / self.wavelength
 
     @property
-    def omega(self) -> float:
+    def omega(self):
         """
         Angular frequency (in rad/s).
 
         Returns
         -------
-        float
+        pint.Quantity
             Angular frequency.
         """
-        return c * 2 * pi / self if self != 0 else float('inf')
+        return quantity(c, "meter / second") * 2 * pi * quantity(1, "radian") / self.wavelength
 
     @property
-    def frequency(self) -> float:
+    def frequency(self):
         """
         Frequency (in Hertz).
 
         Returns
         -------
-        float
+        pint.Quantity
             Frequency in Hz.
         """
-        return c / self if self != 0 else float('inf')
+        return quantity(c, "meter / second") / self.wavelength
 
     def __str__(self) -> str:
         """
@@ -67,7 +86,7 @@ class Source():
         str
             Wavelength formatted as a string in nanometers with 2 decimal places.
         """
-        return f"{1e9 * self.wavelength:.2f} nm"
+        return f"{self.wavelength.to('nanometer').magnitude:.2f} nm"
 
     def __repr__(self) -> str:
         """
@@ -78,4 +97,4 @@ class Source():
         str
             Debug string representation.
         """
-        return f"Wavelength({self.wavelength:.6e} meters)"
+        return f"Source(wavelength={self.wavelength!r})"

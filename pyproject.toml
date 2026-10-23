@@ -37,6 +37,8 @@ keywords = [
 
 dependencies = [
     "PyFinitDiff",
+    "TypedUnit>=0.2.9",
+    "pint>=0.24,<0.26",
     "pyyaml",
     "numpy",
     "scipy",

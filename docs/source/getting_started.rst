@@ -19,17 +19,19 @@ Install the optional plotting dependency if you intend to render field maps:
 Your first guided mode
 ----------------------
 
-Fiber dimensions and wavelengths use SI units. Load a bundled definition,
+Fiber dimensions and wavelengths require Pint length quantities; results carry units. Load a bundled definition,
 solve the fundamental LP mode, and inspect its effective index:
 
 .. code-block:: python
 
+   from PyFiberModes.units import ureg
+
    from PyFiberModes import LP01
    from PyFiberModes.fiber import load_fiber
 
-   fiber = load_fiber("SMF28", wavelength=1550e-9)
+   fiber = load_fiber("SMF28", wavelength=1550e-9 * ureg.meter)
    neff = fiber.get_effective_index(LP01)
-   field = fiber.get_mode_field(LP01, limit=15e-6, n_point=151)
+   field = fiber.get_mode_field(LP01, limit=15e-6 * ureg.meter, n_point=151)
 
    print(neff)
    print(field.get_effective_area())
@@ -45,12 +47,14 @@ A useful calculation includes a physical and a numerical check:
 
 .. code-block:: python
 
+   from PyFiberModes.units import ureg
+
    n_cladding = fiber.last_layer.refractive_index
    n_core = fiber.maximum_index
    assert n_cladding < neff < n_core
 
-   coarse = fiber.get_mode_field(LP01, limit=15e-6, n_point=151)
-   fine = fiber.get_mode_field(LP01, limit=20e-6, n_point=251)
+   coarse = fiber.get_mode_field(LP01, limit=15e-6 * ureg.meter, n_point=151)
+   fine = fiber.get_mode_field(LP01, limit=20e-6 * ureg.meter, n_point=251)
    relative_change = abs(
        fine.get_effective_area() / coarse.get_effective_area() - 1
    )

@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from PyFiberModes.units import ureg
+
 import numpy
 import pytest
 from PyFiberModes.fiber import load_fiber
@@ -10,7 +12,7 @@ from PyFiberModes.solver.multilayer import EffectiveIndexSolver
 
 
 def test_three_layer_solver():
-    fiber = load_fiber(fiber_name='SMF28', wavelength=1550e-9, add_air_layer=True)
+    fiber = load_fiber(fiber_name='SMF28', wavelength=1550e-9 * ureg.meter, add_air_layer=True)
 
     itr_list = numpy.linspace(1.0, 0.3, 2)
 
@@ -20,7 +22,7 @@ def test_three_layer_solver():
 @pytest.mark.parametrize("mode", [TE01, TM01])
 def test_multilayer_axisymmetric_fields_are_finite_in_every_region(mode):
     """Evaluate completed TE/TM branches across core, cladding, and air."""
-    fiber = load_fiber(fiber_name="SMF28", wavelength=1550e-9, add_air_layer=True)
+    fiber = load_fiber(fiber_name="SMF28", wavelength=1550e-9 * ureg.meter, add_air_layer=True)
     solver = EffectiveIndexSolver(fiber=fiber, wavelength=fiber.wavelength)
     solution = solver.solve_result(mode=mode, delta_neff=1e-6)
     field_function = solver.get_TE_field if mode.family == "TE" else solver.get_TM_field

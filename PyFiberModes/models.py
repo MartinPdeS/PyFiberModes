@@ -4,6 +4,7 @@ from dataclasses import dataclass
 import math
 
 from PyFiberModes.exceptions import ValidationError
+from PyFiberModes.units import Length, RefractiveIndex, scalar
 
 
 @dataclass(frozen=True, slots=True)
@@ -14,23 +15,25 @@ class LayerSpec:
     ----------
     name : str
         Human-readable layer name.
-    radius : float
+    radius : TypedUnit.Length
         Outer radius in meters. The outermost layer may use infinity.
-    refractive_index : float
+    refractive_index : TypedUnit.RefractiveIndex
         Positive finite refractive index.
     """
 
     name: str
-    radius: float
-    refractive_index: float
+    radius: Length
+    refractive_index: RefractiveIndex
 
     def __post_init__(self) -> None:
         """Validate physical layer values."""
         if not self.name:
             raise ValidationError("layer name must not be empty")
-        if math.isnan(self.radius) or self.radius <= 0:
+        radius = scalar(self.radius, "meter", "radius")
+        index = scalar(self.refractive_index, "dimensionless", "refractive_index")
+        if math.isnan(radius) or radius <= 0:
             raise ValidationError("layer radius must be positive")
-        if not math.isfinite(self.refractive_index) or self.refractive_index <= 0:
+        if not math.isfinite(index) or index <= 0:
             raise ValidationError("refractive index must be positive and finite")
 
 

@@ -2,6 +2,7 @@ from dataclasses import dataclass
 
 import numpy as np
 import pytest
+from PyFiberModes.units import ureg
 
 from PyFiberModes import (
     ConvergenceError,
@@ -110,7 +111,7 @@ def test_sweep_validates_parameters_and_custom_setter_is_non_mutating():
 
 def test_inverse_design_does_not_mutate_source():
     fiber = FakeFiber()
-    parameter = DesignParameter.layer_index(0, (1.1, 2.0))
+    parameter = DesignParameter.layer_index(0, (1.1 * ureg.dimensionless, 2.0 * ureg.dimensionless))
     result = optimize_fiber(
         fiber,
         [parameter],
@@ -123,17 +124,17 @@ def test_inverse_design_does_not_mutate_source():
 
 def test_design_parameter_radius_updates_both_interfaces():
     fiber = FakeFiber()
-    parameter = DesignParameter.layer_radius(0, (0.5, 1.5))
-    parameter.setter(fiber, 1.25)
-    assert fiber.layers[0].radius_out == 1.25
-    assert fiber.layers[1].radius_in == 1.25
+    parameter = DesignParameter.layer_radius(0, (0.5 * ureg.meter, 1.5 * ureg.meter))
+    parameter.setter(fiber, 1.25 * ureg.meter)
+    assert fiber.layers[0].radius_out == 1.25 * ureg.meter
+    assert fiber.layers[1].radius_in == 1.25 * ureg.meter
 
 
 def test_inverse_design_validates_parameters_and_enforces_constraint():
     fiber = FakeFiber()
     with pytest.raises(ValueError, match="at least one"):
         optimize_fiber(fiber, [], lambda candidate: 0)
-    parameter = DesignParameter.layer_index(0, (1.1, 2.0))
+    parameter = DesignParameter.layer_index(0, (1.1 * ureg.dimensionless, 2.0 * ureg.dimensionless))
     result = optimize_fiber(
         fiber,
         [parameter],
@@ -146,17 +147,17 @@ def test_inverse_design_validates_parameters_and_enforces_constraint():
 
 def test_lossless_coupled_mode_propagation_conserves_power():
     z = np.linspace(0, 5, 100)
-    result = CoupledModeSystem([0, 0], [[0, 0.2], [0.2, 0]]).propagate([1, 0], z)
+    result = CoupledModeSystem(np.array([0, 0]) / ureg.meter, np.array([[0, 0.2], [0.2, 0]]) / ureg.meter).propagate([1, 0], z * ureg.meter)
     assert result.amplitudes.shape == (100, 2)
     assert np.allclose(result.powers.sum(axis=1), 1, atol=1e-6)
 
 
 def test_longitudinally_varying_coupling_and_input_validation():
-    system = CoupledModeSystem([0, 0], lambda z: [[0, 0.1 * z], [0.1 * z, 0]])
-    result = system.propagate([1, 0], np.linspace(0, 1, 10))
+    system = CoupledModeSystem(np.array([0, 0]) / ureg.meter, lambda z: np.array([[0, 0.1 * z.to("meter").magnitude], [0.1 * z.to("meter").magnitude, 0]]) / ureg.meter)
+    result = system.propagate([1, 0], np.linspace(0, 1, 10) * ureg.meter)
     assert result.powers[-1, 1] > 0
     with pytest.raises(ValueError, match="same length"):
-        system.propagate([1], [0, 1])
+        system.propagate([1], np.array([0, 1]) * ureg.meter)
 
 
 class FakeCoordinates:

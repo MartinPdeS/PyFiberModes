@@ -6,6 +6,16 @@ from the package root and listed in ``PyFiberModes.__all__`` are stable. Public
 signatures and important defaults are recorded in ``tests/api_snapshot.json``
 and checked on every supported Python version.
 
+Unit contract
+-------------
+
+Import ``ureg`` and physical type hints from ``PyFiberModes.units``. This unit
+module shares ``TypedUnit.ureg`` with PyMieSim. Physical inputs require explicit
+Pint quantities, including dimensionless refractive indices. Physical outputs
+are quantities; use ``.to(unit).magnitude`` at numerical or plotting boundaries.
+Bare physical inputs raise ``TypeError`` and incompatible dimensions raise
+``pint.DimensionalityError``. YAML geometry and private solvers use SI numbers.
+
 Core models
 -----------
 
@@ -21,9 +31,9 @@ Core models
      - Immutable identifier. ``family`` accepts a string or
        :class:`~PyFiberModes.mode.Family`; ``nu >= 0`` and ``m >= 1``.
    * - :class:`~PyFiberModes.fiber.Fiber`
-     - ``Fiber(wavelength, ...)``
-     - Mutable physical model; wavelength and radii are metres. Direct layer
-       mutation requires ``clear_caches()``.
+     - ``Fiber(wavelength)``
+     - Mutable physical model; wavelength and radii require length quantities.
+       Layer property assignments validate units and invalidate caches.
    * - :class:`~PyFiberModes.models.LayerSpec`
      - ``LayerSpec(name, radius, refractive_index)``
      - Immutable validated layer input; radius is metres and index is
@@ -52,7 +62,7 @@ Fiber construction and analysis
      - ``ValidationError``, ``KeyError``, or file-loading exception for invalid
        definitions
    * - ``fiber.solve_effective_index(mode)``
-     - ``SolverResult[float]``; effective index is dimensionless
+     - ``SolverResult[Quantity]``; effective index is dimensionless
      - No
      - Failed numerical or unguided solve is represented by
        ``converged=False``
@@ -100,7 +110,7 @@ Modal-property names and units
      - dimensionless
      - Normalized propagation constant
    * - ``get_propagation_constant``
-     - rad/m
+     - 1/m (convertible to rad/m)
      - Longitudinal propagation constant
    * - ``get_phase_velocity``, ``get_group_velocity``
      - m/s

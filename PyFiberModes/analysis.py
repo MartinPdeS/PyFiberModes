@@ -8,6 +8,7 @@ import numpy as np
 
 from PyFiberModes.exceptions import ConvergenceError, ValidationError
 from PyFiberModes.mode import Mode
+from PyFiberModes.units import MODAL_UNITS, Quantity, magnitude, quantity
 
 
 @dataclass(frozen=True)
@@ -30,9 +31,9 @@ class ModeSweepResult:
     """
 
     parameter_name: str
-    parameters: np.ndarray
+    parameters: np.ndarray | Quantity
     modes: tuple[Mode, ...]
-    values: dict[str, np.ndarray]
+    values: dict[str, np.ndarray | Quantity]
 
     def __getitem__(self, metric: str) -> np.ndarray:
         """Return the array associated with a metric name.
@@ -74,9 +75,11 @@ class ModeSweepResult:
             One record for every parameter and mode combination.
         """
         return [
-            {self.parameter_name: float(parameter), "mode": mode, **{
-                name: float(array[i, j]) for name, array in self.values.items()
-            }}
+            {
+                self.parameter_name: parameter,
+                "mode": mode,
+                **{name: array[i, j] for name, array in self.values.items()},
+            }
             for i, parameter in enumerate(self.parameters)
             for j, mode in enumerate(self.modes)
         ]
@@ -137,11 +140,7 @@ def find_modes(fiber, families=("LP",), max_nu=6, max_m=6) -> tuple[Mode, ...]:
     for mode in candidate_modes(families, max_nu, max_m):
         try:
             effective_index = fiber.get_effective_index(mode)
-            guided = (
-                fiber.last_layer.refractive_index
-                < effective_index
-                <= fiber.maximum_index
-            )
+            guided = fiber.last_layer.refractive_index < effective_index <= fiber.maximum_index
             if np.isfinite(effective_index) and guided:
                 found.append(mode)
         except ConvergenceError:
@@ -167,8 +166,8 @@ def sweep_modes(
     ----------
     fiber : Fiber
         Fiber used as the immutable sweep template.
-    parameters : iterable of float
-        Ordered parameter values.
+    parameters : pint.Quantity or iterable of pint.Quantity
+        Ordered parameter values with explicit units for public fibers.
     modes : sequence of Mode, optional
         Modes to evaluate. When omitted, modes are discovered automatically.
     parameter_name : str, optional
@@ -195,7 +194,26 @@ def sweep_modes(
         If ``parameters`` is empty or not one-dimensional, or when a custom
         parameter is requested without a setter.
     """
-    parameters = np.asarray(tuple(parameters), dtype=float)
+    unit_aware = hasattr(fiber, "_si")
+    parameter_unit = None
+    if unit_aware:
+        if isinstance(parameters, Quantity):
+            parameter_unit = parameters.units
+            if setter is None:
+                magnitude(parameters, "meter", "parameters")
+            parameters = np.asarray(parameters.magnitude, dtype=float)
+        else:
+            items = tuple(parameters)
+            if not items:
+                raise ValueError("parameters must be a non-empty one-dimensional sequence")
+            parameter_unit = items[0].units if isinstance(items[0], Quantity) else "meter"
+            parameters = np.asarray(
+                [magnitude(item, parameter_unit, "parameters") for item in items], dtype=float
+            )
+            if setter is None:
+                quantity(parameters, parameter_unit).to("meter")
+    else:
+        parameters = np.asarray(tuple(parameters), dtype=float)
     if parameters.ndim != 1 or not len(parameters):
         raise ValueError("parameters must be a non-empty one-dimensional sequence")
     if setter is None:
@@ -205,11 +223,14 @@ def sweep_modes(
         def setter(current_fiber, value):
             """Update wavelength for the default sweep behavior."""
             current_fiber.update_wavelength(value)
+
     if modes is None:
         discovered = []
         for parameter in parameters:
             parameter_fiber = deepcopy(fiber)
-            setter(parameter_fiber, float(parameter))
+            setter(
+                parameter_fiber, quantity(parameter, parameter_unit) if unit_aware else parameter
+            )
             for mode in find_modes(parameter_fiber, families, max_nu, max_m):
                 if mode not in discovered:
                     discovered.append(mode)
@@ -218,17 +239,22 @@ def sweep_modes(
     values = {metric: np.full((len(parameters), len(modes)), np.nan) for metric in metrics}
     parameter_fibers = tuple(deepcopy(fiber) for _ in parameters)
     for parameter_fiber, parameter in zip(parameter_fibers, parameters, strict=True):
-        setter(parameter_fiber, float(parameter))
+        setter(parameter_fiber, quantity(parameter, parameter_unit) if unit_aware else parameter)
 
     for i, parameter_fiber in enumerate(parameter_fibers):
-        metric_functions = {
-            metric: getattr(parameter_fiber, f"get_{metric}") for metric in metrics
-        }
+        metric_functions = {metric: getattr(parameter_fiber, f"get_{metric}") for metric in metrics}
         for metric, metric_function in metric_functions.items():
             for j, mode in enumerate(modes):
                 try:
                     value = metric_function(mode)
-                    values[metric][i, j] = value if np.isfinite(value) else np.nan
+                    values[metric][i, j] = (
+                        (value.to(MODAL_UNITS[metric]).magnitude if unit_aware else value)
+                        if np.isfinite(value)
+                        else np.nan
+                    )
                 except ConvergenceError:
                     pass
+    if unit_aware:
+        parameters = quantity(parameters, parameter_unit)
+        values = {metric: quantity(array, MODAL_UNITS[metric]) for metric, array in values.items()}
     return ModeSweepResult(parameter_name, parameters, modes, values)

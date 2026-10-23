@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from PyFiberModes.units import ureg
+
 import pytest
 import numpy
 
@@ -10,21 +12,21 @@ from PyFiberModes import FiberFactory
 
 
 def test_fiber_factory():
-    factory = FiberFactory(wavelength=1550e-9)
+    factory = FiberFactory(wavelength=1550e-9 * ureg.meter)
 
     factory.add_layer(
         name="core",
-        radius=4e-6,
-        index=numpy.linspace(1.464, 1.494, 10)
+        radius=4e-6 * ureg.meter,
+        index=(numpy.linspace(1.464, 1.494, 10)) * ureg.dimensionless
     )
 
-    factory.add_layer(name="cladding", index=1.4444)
+    factory.add_layer(name="cladding", index=1.4444 * ureg.dimensionless)
 
     print(factory)
 
 
 def test_fiber_loader():
-    smf28 = load_fiber(fiber_name='SMF28', wavelength=1310e-9)
+    smf28 = load_fiber(fiber_name='SMF28', wavelength=1310e-9 * ureg.meter)
 
     print(smf28)
 

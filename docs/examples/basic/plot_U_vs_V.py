@@ -2,6 +2,7 @@
 Figure 3.13 of Jacques Bures
 ============================
 """
+from PyFiberModes.units import ureg
 
 
 # %%
@@ -30,7 +31,7 @@ for mode in [HE11, TE01, TM01, HE21, EH11, HE31, HE12, HE22, HE32]:
         fiber = get_fiber_from_delta_and_V0(
             delta=0.3,
             V0=V0,
-            wavelength=1310e-9
+            wavelength=1310e-9 * ureg.meter
         )
 
         data = get_U_parameter(

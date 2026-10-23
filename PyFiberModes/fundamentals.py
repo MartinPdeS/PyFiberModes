@@ -1,7 +1,5 @@
 """Fundamental normalized-frequency and propagation relations."""
 
-from __future__ import annotations
-
 import numpy
 import numpy as np
 from typing import TYPE_CHECKING
@@ -9,7 +7,7 @@ from PyFiberModes.mode import Mode
 from PyFiberModes.mode_instances import HE11, LP01
 from scipy.constants import c
 
-from PyFiberModes.coordinates import CylindricalCoordinates
+from PyFiberModes._coordinates import CylindricalCoordinates
 from PyFiberModes.exceptions import ConvergenceError, UnsupportedGeometryError
 
 if TYPE_CHECKING:

@@ -4,6 +4,7 @@ from itertools import product
 from dataclasses import dataclass, field
 import numpy as np
 from PyFiberModes.fiber import Fiber
+from PyFiberModes.units import Length, RefractiveIndex, magnitude, quantity, ureg
 
 
 @dataclass
@@ -15,9 +16,9 @@ class ProxyLayer:
     ----------
     name : str
         Name of the layer.
-    radius : list[float]
+    radius : pint.Quantity
         Radius values for the layer (in meters).
-    index : list[float]
+    index : pint.Quantity
         Refractive index values for the layer.
     """
     name: str
@@ -27,8 +28,8 @@ class ProxyLayer:
     def __post_init__(self):
         """Normalize scalar layer parameters into one-dimensional arrays."""
         self.name = [self.name]
-        self.radius = np.atleast_1d(self.radius)
-        self.index = np.atleast_1d(self.index)
+        self.radius = quantity(np.atleast_1d(magnitude(self.radius, "meter", "radius")), "meter")
+        self.index = quantity(np.atleast_1d(magnitude(self.index, "dimensionless", "index")), "dimensionless")
 
     def get_generator(self):
         """
@@ -48,40 +49,40 @@ class FiberFactory:
 
     Parameters
     ----------
-    wavelength : float
+    wavelength : TypedUnit.Length
         Wavelength (in meters) used for fiber simulations.
 
     Attributes
     ----------
     layers_list : list[ProxyLayer]
         List of ProxyLayer objects representing the layers of the fiber.
-    wavelength : float
+    wavelength : TypedUnit.Length
         Wavelength used in simulations.
     """
 
-    def __init__(self, wavelength: float):
+    def __init__(self, wavelength: Length):
         """Initialize an empty fiber-configuration factory.
 
         Parameters
         ----------
-        wavelength : float
+        wavelength : TypedUnit.Length
             Vacuum wavelength in meters for generated fibers.
         """
         self.layers_list = []
-        self.wavelength = wavelength
+        self.wavelength = quantity(magnitude(wavelength, "meter", "wavelength"), "meter")
 
-    def add_layer(self, index: float, name: str = "", radius: float = 0.0):
+    def add_layer(self, index: RefractiveIndex, name: str = "", radius: Length = np.inf * ureg.meter):
         """
         Add a new layer to the fiber factory.
 
         Parameters
         ----------
-        index : float
+        index : TypedUnit.RefractiveIndex
             Refractive index of the layer.
         name : str, optional
             Name of the layer (default is an empty string).
-        radius : float, optional
-            Radius of the layer (default is 0.0 meters).
+        radius : TypedUnit.Length, optional
+            Radius of the layer (defaults to an unbounded outer layer).
         """
         layer = ProxyLayer(name=name, radius=radius, index=index)
         self.layers_list.append(layer)

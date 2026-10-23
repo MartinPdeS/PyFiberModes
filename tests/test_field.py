@@ -2,8 +2,8 @@ import pytest
 import numpy as np
 from types import SimpleNamespace
 from unittest.mock import MagicMock
-from PyFiberModes.field import Field
-from PyFiberModes.coordinates import CartesianCoordinates, CylindricalCoordinates
+from PyFiberModes._field import Field
+from PyFiberModes._coordinates import CartesianCoordinates, CylindricalCoordinates
 from PyFiberModes.mode import Mode
 
 

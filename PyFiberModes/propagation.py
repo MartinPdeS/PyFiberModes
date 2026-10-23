@@ -5,6 +5,7 @@ from typing import Sequence
 
 import numpy as np
 from scipy.integrate import solve_ivp
+from PyFiberModes.units import magnitude, quantity
 
 
 def overlap(field_a, field_b, *, normalized: bool = True) -> complex:
@@ -27,6 +28,9 @@ def overlap(field_a, field_b, *, normalized: bool = True) -> complex:
     ValueError
         If the two field grids have different shapes.
     """
+    if hasattr(field_a, "_si"):
+        result = overlap(field_a._si, field_b._si, normalized=normalized)
+        return quantity(result, "dimensionless" if normalized else "volt ** 2")
     if field_a.cartesian_coordinates.x.shape != field_b.cartesian_coordinates.x.shape:
         raise ValueError("fields must use the same grid shape")
     components_a = (field_a.Ex(), field_a.Ey(), field_a.Ez())
@@ -56,6 +60,10 @@ def coupling_matrix(fields: Sequence, perturbation=None) -> np.ndarray:
     numpy.ndarray
         Complex Hermitian matrix with a zero diagonal.
     """
+    if fields and hasattr(fields[0], "_si"):
+        unit = perturbation.units if hasattr(perturbation, "units") else "dimensionless"
+        weight = perturbation.magnitude if hasattr(perturbation, "units") else perturbation
+        return quantity(coupling_matrix([field._si for field in fields], weight), unit)
     count = len(fields)
     matrix = np.zeros((count, count), dtype=complex)
     weight = 1.0 if perturbation is None else np.asarray(perturbation)
@@ -64,8 +72,7 @@ def coupling_matrix(fields: Sequence, perturbation=None) -> np.ndarray:
             components_a = (fields[i].Ex(), fields[i].Ey(), fields[i].Ez())
             components_b = (fields[j].Ex(), fields[j].Ey(), fields[j].Ez())
             value = sum(
-                np.sum(np.conjugate(a) * weight * b)
-                for a, b in zip(components_a, components_b)
+                np.sum(np.conjugate(a) * weight * b) for a, b in zip(components_a, components_b)
             )
             value *= fields[i].cartesian_coordinates.dx * fields[i].cartesian_coordinates.dy
             norm_a = sum(fields[i].get_integrale_square(a) for a in components_a)
@@ -86,6 +93,7 @@ class PropagationResult:
     amplitudes : numpy.ndarray
         Complex modal amplitudes shaped ``(n_positions, n_modes)``.
     """
+
     z: np.ndarray
     amplitudes: np.ndarray
 
@@ -127,8 +135,14 @@ class CoupledModeSystem:
         coupling : array-like or callable
             Constant or position-dependent coupling matrix.
         """
-        self.betas = np.asarray(betas, dtype=float)
-        self.coupling = coupling
+        self.betas = quantity(
+            np.asarray(magnitude(betas, "1 / meter", "betas"), dtype=float), "1 / meter"
+        )
+        self.coupling = (
+            coupling
+            if callable(coupling)
+            else quantity(magnitude(coupling, "1 / meter", "coupling"), "1 / meter")
+        )
 
     def propagate(self, initial, z, **solve_options) -> PropagationResult:
         """Propagate initial modal amplitudes over longitudinal positions.
@@ -154,22 +168,34 @@ class CoupledModeSystem:
         RuntimeError
             If numerical integration fails.
         """
-        z = np.asarray(z, dtype=float)
+        z = np.asarray(magnitude(z, "meter", "z"), dtype=float)
         initial = np.asarray(initial, dtype=complex)
         if initial.shape != self.betas.shape:
             raise ValueError("initial amplitudes and betas must have the same length")
 
         def derivative(position, amplitudes):
             """Evaluate the coupled-mode ordinary differential equation."""
-            coupling = self.coupling(position) if callable(self.coupling) else self.coupling
-            hamiltonian = np.diag(self.betas) + np.asarray(coupling, dtype=complex)
+            coupling = (
+                self.coupling(quantity(position, "meter"))
+                if callable(self.coupling)
+                else self.coupling
+            )
+            hamiltonian = np.diag(self.betas.magnitude) + np.asarray(
+                magnitude(coupling, "1 / meter", "coupling"), dtype=complex
+            )
             return -1j * hamiltonian @ amplitudes
 
         solution = solve_ivp(
-            derivative, (z[0], z[-1]), initial, t_eval=z,
+            derivative,
+            (z[0], z[-1]),
+            initial,
+            t_eval=z,
             rtol=solve_options.pop("rtol", 1e-8),
-            atol=solve_options.pop("atol", 1e-10), **solve_options,
+            atol=solve_options.pop("atol", 1e-10),
+            **solve_options,
         )
         if not solution.success:
             raise RuntimeError(solution.message)
-        return PropagationResult(solution.t, solution.y.T)
+        return PropagationResult(
+            quantity(solution.t, "meter"), quantity(solution.y.T, "dimensionless")
+        )

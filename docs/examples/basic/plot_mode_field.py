@@ -2,6 +2,7 @@
 Mode fields
 ===========
 """
+from PyFiberModes.units import ureg
 
 
 # %%
@@ -16,7 +17,7 @@ import matplotlib.pyplot as plt
 # Generating the fiber structures
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Here we create the different fiber design that we want to explore
-fiber = load_fiber('SMF28', wavelength=1310e-9)
+fiber = load_fiber('SMF28', wavelength=1310e-9 * ureg.meter)
 
 # %%
 # Preparing the figure
@@ -33,11 +34,11 @@ for mode in [HE11, LP01, LP11]:
     field = Field(
         fiber=fiber,
         mode=mode,
-        limit=10e-6,
+        limit=10e-6 * ureg.meter,
         n_point=101
     )
 
-    Ex = field.Ex()
+    Ex = field.Ex().to("volt / meter").magnitude
     max_abs = abs(max(Ex.max(), Ex.min()))
     ax.pcolormesh(Ex, vmin=-max_abs, vmax=max_abs)
 

@@ -151,7 +151,7 @@ class FieldAnalysis:
         Field
             Sampled vector field.
         """
-        from PyFiberModes.field import Field
+        from PyFiberModes._field import Field
 
         if n_point < 2:
             raise ValidationError("n_point must be at least two")

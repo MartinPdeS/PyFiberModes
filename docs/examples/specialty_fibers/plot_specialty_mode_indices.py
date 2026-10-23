@@ -4,13 +4,14 @@ Specialty-fiber mode indices
 
 Compare the effective indices of low-order modes in a multilayer fiber.
 """
+from PyFiberModes.units import ureg
 
 import matplotlib.pyplot as plt
 
 from PyFiberModes import LP01, LP11, LP21
 from PyFiberModes.fiber import load_fiber
 
-fiber = load_fiber("DCF1300S_20", wavelength=1550e-9)
+fiber = load_fiber("DCF1300S_20", wavelength=1550e-9 * ureg.meter)
 modes = (LP01, LP11, LP21)
 effective_indices = [fiber.get_effective_index(mode) for mode in modes]
 

@@ -6,7 +6,7 @@ import numpy as np
 if TYPE_CHECKING:
     from matplotlib.figure import Figure
 
-    from PyFiberModes.field import Field
+    from PyFiberModes._field import Field
 
 
 def plot_field(

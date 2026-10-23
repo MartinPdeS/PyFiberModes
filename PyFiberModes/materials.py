@@ -1,19 +1,18 @@
 """Pluggable refractive-index models used by fiber configuration loading."""
 
-from __future__ import annotations
-
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field
 from typing import Protocol, runtime_checkable
 
 import numpy as np
+from PyFiberModes.units import Length, RefractiveIndex, scalar, quantity
 
 
 @runtime_checkable
 class RefractiveIndexModel(Protocol):
     """Provide a refractive index at a vacuum wavelength."""
 
-    def refractive_index(self, wavelength: float) -> float:
+    def refractive_index(self, wavelength: Length) -> RefractiveIndex:
         """Return the refractive index at ``wavelength`` in meters."""
         ...
 
@@ -22,22 +21,30 @@ class RefractiveIndexModel(Protocol):
 class ConstantIndex:
     """Represent a wavelength-independent refractive index."""
 
-    value: float
+    value: RefractiveIndex
 
-    def refractive_index(self, wavelength: float) -> float:
+    def __post_init__(self) -> None:
+        """Require a positive finite dimensionless refractive-index quantity."""
+        value = scalar(self.value, "dimensionless", "value")
+        if not np.isfinite(value) or value <= 0:
+            raise ValueError("refractive index must be positive and finite")
+
+    def refractive_index(self, wavelength: Length) -> RefractiveIndex:
         """Return the constant index after validating the wavelength."""
-        if wavelength <= 0:
+        wavelength = scalar(wavelength, "meter", "wavelength")
+        if not np.isfinite(wavelength) or wavelength <= 0:
             raise ValueError("wavelength must be positive")
-        return float(self.value)
+        return quantity(scalar(self.value, "dimensionless", "value"), "dimensionless")
 
 
 @dataclass(frozen=True, slots=True)
 class FusedSilica:
     """Evaluate fused silica with the Malitson Sellmeier coefficients."""
 
-    def refractive_index(self, wavelength: float) -> float:
+    def refractive_index(self, wavelength: Length) -> RefractiveIndex:
         """Return fused-silica index for a wavelength expressed in meters."""
-        if wavelength <= 0:
+        wavelength = scalar(wavelength, "meter", "wavelength")
+        if not np.isfinite(wavelength) or wavelength <= 0:
             raise ValueError("wavelength must be positive")
         wavelength_micrometers = wavelength * 1e6
         wavelength_squared = wavelength_micrometers**2
@@ -47,21 +54,24 @@ class FusedSilica:
             (0.4079426, 0.1162414),
             (0.8974794, 9.896161),
         ):
-            index_squared += coefficient * wavelength_squared / (
-                wavelength_squared - resonance**2
-            )
-        return float(np.sqrt(index_squared))
+            index_squared += coefficient * wavelength_squared / (wavelength_squared - resonance**2)
+        return quantity(float(np.sqrt(index_squared)), "dimensionless")
 
 
 @dataclass(frozen=True, slots=True)
 class CallableIndex:
     """Adapt a plain wavelength-to-index callable to the material protocol."""
 
-    function: Callable[[float], float]
+    function: Callable[[Length], RefractiveIndex]
 
-    def refractive_index(self, wavelength: float) -> float:
-        """Evaluate the wrapped callable."""
-        return float(self.function(wavelength))
+    def refractive_index(self, wavelength: Length) -> RefractiveIndex:
+        """Evaluate the wrapped callable with a validated length quantity."""
+        value = scalar(wavelength, "meter", "wavelength")
+        if not np.isfinite(value) or value <= 0:
+            raise ValueError("wavelength must be positive and finite")
+        return quantity(
+            scalar(self.function(wavelength), "dimensionless", "refractive_index"), "dimensionless"
+        )
 
 
 @dataclass(slots=True)
@@ -72,7 +82,8 @@ class MaterialRegistry:
 
     def __init__(
         self,
-        models: Mapping[str, RefractiveIndexModel | Callable[[float], float]] | None = None,
+        models: Mapping[str, RefractiveIndexModel | Callable[[Length], RefractiveIndex]]
+        | None = None,
     ) -> None:
         """Create a registry with built-in fused-silica aliases."""
         silica = FusedSilica()
@@ -84,7 +95,7 @@ class MaterialRegistry:
     def register(
         self,
         name: str,
-        model: RefractiveIndexModel | Callable[[float], float],
+        model: RefractiveIndexModel | Callable[[Length], RefractiveIndex],
     ) -> None:
         """Register a model or callable under a normalized material name."""
         if not name.strip():
@@ -98,11 +109,21 @@ class MaterialRegistry:
             return self.models[name.casefold()]
         except KeyError as error:
             available = ", ".join(sorted(self.models))
-            raise KeyError(f"unknown material {name!r}; available materials: {available}") from error
+            raise KeyError(
+                f"unknown material {name!r}; available materials: {available}"
+            ) from error
 
-    def refractive_index(self, name: str, wavelength: float) -> float:
+    def refractive_index(self, name: str, wavelength: Length) -> RefractiveIndex:
         """Evaluate a named material at a vacuum wavelength."""
-        return self.resolve(name).refractive_index(wavelength)
+        value = scalar(wavelength, "meter", "wavelength")
+        if not np.isfinite(value) or value <= 0:
+            raise ValueError("wavelength must be positive and finite")
+        index = scalar(
+            self.resolve(name).refractive_index(wavelength), "dimensionless", "refractive_index"
+        )
+        if not np.isfinite(index) or index <= 0:
+            raise ValueError("refractive index must be positive and finite")
+        return quantity(index, "dimensionless")
 
 
 DEFAULT_MATERIALS = MaterialRegistry()

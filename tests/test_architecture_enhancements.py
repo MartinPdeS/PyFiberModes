@@ -1,4 +1,5 @@
 """Regression tests for the typed solver and service architecture."""
+from PyFiberModes.units import ureg
 
 import numpy as np
 import pytest
@@ -21,10 +22,10 @@ def test_field_uses_the_canonical_coordinate_model():
 
 def test_validated_immutable_models():
     """Reject nonphysical input and prevent configuration mutation."""
-    layer = LayerSpec("core", 4.1e-6, 1.45)
+    layer = LayerSpec("core", 4.1e-6 * ureg.meter, 1.45 * ureg.dimensionless)
     assert layer.refractive_index == 1.45
     with pytest.raises(ValidationError):
-        LayerSpec("core", -1, 1.45)
+        LayerSpec("core", -1 * ureg.meter, 1.45 * ureg.dimensionless)
     with pytest.raises(ValidationError):
         SolverSettings(tolerance=0)
     with pytest.raises(Exception):
@@ -52,7 +53,7 @@ def test_modal_service_cache_tracks_geometry(monkeypatch):
     """Reuse solutions until wavelength or geometry changes."""
     import PyFiberModes.fundamentals as fundamentals
 
-    fiber = load_fiber("SMF28", wavelength=1550e-9)
+    fiber = load_fiber("SMF28", wavelength=1550e-9 * ureg.meter)
     calls = []
 
     def solve(**kwargs):
@@ -71,16 +72,16 @@ def test_modal_service_cache_tracks_geometry(monkeypatch):
 
 def test_vectorized_index_profile_matches_scalar_lookup():
     """Evaluate a complete radial profile without a Python radius loop."""
-    fiber = load_fiber("SMF28", wavelength=1550e-9)
-    radii = np.array([0.0, fiber.first_layer.radius_out / 2, 2 * fiber.radius])
+    fiber = load_fiber("SMF28", wavelength=1550e-9 * ureg.meter)
+    radii = np.array([0.0, fiber.first_layer.radius_out.magnitude / 2, 2 * fiber.radius.magnitude]) * ureg.meter
     profile = fiber.get_index_profile(radii)
-    expected = np.array([fiber.get_index_at_radius(radius) for radius in radii])
-    assert np.array_equal(profile, expected)
+    expected = np.array([fiber.get_index_at_radius(radius).magnitude for radius in radii]) * ureg.dimensionless
+    assert np.array_equal(profile.magnitude, expected.magnitude)
 
 
 def test_structured_solve_result_and_scalar_value_agree():
     """Keep the float convenience API consistent with solver diagnostics."""
-    fiber = load_fiber("SMF28", wavelength=1550e-9)
+    fiber = load_fiber("SMF28", wavelength=1550e-9 * ureg.meter)
     result = fiber.solve_effective_index(LP01)
     assert result.converged
     assert result.value == pytest.approx(fiber.get_effective_index(LP01))

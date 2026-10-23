@@ -2,6 +2,7 @@
 Comparing two and three layers
 ==============================
 """
+from PyFiberModes.units import ureg
 
 
 # %%
@@ -15,13 +16,13 @@ import matplotlib.pyplot as plt
 
 fiber_2L = load_fiber(
     fiber_name='SMF28',
-    wavelength=1550e-9,
+    wavelength=1550e-9 * ureg.meter,
     add_air_layer=False
 )
 
 fiber_3L = load_fiber(
     fiber_name='SMF28',
-    wavelength=1550e-9,
+    wavelength=1550e-9 * ureg.meter,
     add_air_layer=True
 )
 

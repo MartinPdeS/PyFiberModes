@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from PyFiberModes.units import ureg
+
 import numpy
 import pytest
 
-import PyFiberModes.fiber as fiber_module
+import PyFiberModes._fiber as fiber_module
 from PyFiberModes import HE11, TE01, TM01, HE21, EH11, HE31, HE12, LP01
 from PyFiberModes import ConvergenceError, UnsupportedGeometryError, ValidationError
 from PyFiberModes.fundamentals import get_U_parameter
@@ -15,7 +17,7 @@ from tests.helpers import get_mode_beta
 
 def test_validation_cutoff_wavelength():
     """ Validation data are from Table 3.6 of Jacques Bures """
-    fiber = get_fiber_from_delta_and_V0(delta=0.3, V0=5, wavelength=1310e-9)
+    fiber = get_fiber_from_delta_and_V0(delta=0.3, V0=5, wavelength=1310e-9 * ureg.meter)
 
     mode_list = [HE11, TE01, TM01, HE21, EH11, HE31, HE12]
     val_list = [0, 2.405, 2.405, 2.853, 3.832, 4.342, 3.832]
@@ -26,7 +28,7 @@ def test_validation_cutoff_wavelength():
 
 
 def test_two_and_three_layer_solver():
-    kwargs = dict(fiber_name='SMF28', wavelength=1550e-9)
+    kwargs = dict(fiber_name='SMF28', wavelength=1550e-9 * ureg.meter)
 
     fiber_2L = load_fiber(**kwargs, add_air_layer=False)
     fiber_3L = load_fiber(**kwargs, add_air_layer=True)
@@ -47,13 +49,13 @@ def test_two_and_three_layer_solver():
 
 
 def test_unsupported_geometry_raises_a_domain_error():
-    fiber = load_fiber("SMF28", wavelength=1550e-9, add_air_layer=True)
+    fiber = load_fiber("SMF28", wavelength=1550e-9 * ureg.meter, add_air_layer=True)
     with pytest.raises(UnsupportedGeometryError, match="exactly two"):
         get_U_parameter(fiber, fiber.wavelength, LP01)
 
 
 def test_invalid_mode_and_derivative_failure_are_not_silenced(monkeypatch):
-    fiber = load_fiber("SMF28", wavelength=1550e-9)
+    fiber = load_fiber("SMF28", wavelength=1550e-9 * ureg.meter)
     with pytest.raises(ValidationError, match="Mode instance"):
         fiber.solve_effective_index("LP01")
 
