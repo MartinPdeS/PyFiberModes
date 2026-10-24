@@ -343,7 +343,7 @@ Releases and changelog
 
 User-visible changes are recorded in
 `CHANGELOG.md <https://github.com/MartinPdeS/PyFiberModes/blob/master/CHANGELOG.md>`_.
-Release helpers keep the Python package, Conda recipe, generated version,
+Release helpers keep the Python package, Conda recipe, checked-in version,
 Zenodo metadata, changelog, and annotated Git tag synchronized.
 
 .. code-block:: bash

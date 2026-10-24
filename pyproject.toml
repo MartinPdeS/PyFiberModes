@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=40.8.0", "wheel", "setuptools_scm[toml]>=8.0"]
+requires = ["setuptools>=40.8.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -55,12 +55,9 @@ packages = {find = {where = ["."], include = ["PyFiberModes*"]}}
 include-package-data = true
 
 
-[tool.setuptools_scm]
-version_scheme = "only-version"
-local_scheme = "no-local-version"
-
 [project.optional-dependencies]
-testing = [
+release = ["martinpdes-maintenance==0.2.2"]
+testing = ["martinpdes-maintenance==0.2.2",
     "pytest >=7.4,<10.0",
     "pytest-cov >=2,<8",
     "pytest-json-report ~=1.5",
@@ -111,3 +108,11 @@ files = [
 # Include runtime resources when building wheels from a source archive without Git.
 [tool.setuptools.package-data]
 PyFiberModes = ["fiber_files/*.yaml"]
+
+[tool.mps-maintenance]
+version-file = "PyFiberModes/_version.py"
+version-method = "literal"
+conda-recipe = "conda.recipe/meta.yaml"
+zenodo = ".zenodo.json"
+changelog = "CHANGELOG.md"
+repository = "MartinPdeS/PyFiberModes"
