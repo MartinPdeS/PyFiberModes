@@ -14,8 +14,8 @@ jobs:
     uses: MartinPdeS/MPSActions/.github/workflows/run_quality.yml@v2
     with:
       install-command: >-
-        python -m pip install --upgrade pip && python -m pip install -e ".[dev]"
+        python -m pip install --upgrade pip && python -m pip install -e ".[dev,release]"
       quality-command: |
-        python -m ruff check PyFiberModes tests tools
+        python -m ruff check PyFiberModes tests
         python -m mypy
-        python tools/check_release.py
+        python -m martinpdes_maintenance.cli check

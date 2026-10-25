@@ -24,7 +24,9 @@ jobs:
       pypi_package_type: pure
       pypi_python_version: "3.11"
       pypi_test_command: 'python -c "import PyFiberModes"'
-      release_validation_command: 'python tools/check_release.py --version "${GITHUB_REF_NAME}"'
+      release_validation_command: |
+        python -m pip install "martinpdes-maintenance==0.2.2"
+        python -m martinpdes_maintenance.cli check --version "${GITHUB_REF_NAME}"
       conda_python_versions: '["3.14"]'
       conda_os_list: '["ubuntu-latest"]'
       conda_package_name: pyfibermodes
