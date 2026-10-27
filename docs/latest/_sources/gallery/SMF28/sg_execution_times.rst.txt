@@ -33,11 +33,11 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_gallery_SMF28_plot_smf28_dispersion_vs_wavelength.py` (``plot_smf28_dispersion_vs_wavelength.py``)
-     - 00:00.262
+     - 00:00.263
      - 0.0
    * - :ref:`sphx_glr_gallery_SMF28_plot_smf28_group_index_vs_wavelength.py` (``plot_smf28_group_index_vs_wavelength.py``)
-     - 00:00.208
+     - 00:00.206
      - 0.0
    * - :ref:`sphx_glr_gallery_SMF28_plot_smf28.py` (``plot_smf28.py``)
-     - 00:00.019
+     - 00:00.021
      - 0.0
