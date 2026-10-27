@@ -10,6 +10,7 @@ The supported import boundary and compatibility guarantees are defined in the
 :doc:`migration_guide`.
 
 .. toctree::
+   :hidden:
    :maxdepth: 2
 
    code/fibers
