@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "PyFiberModes"
-version = "1.0.1"
+version = "1.0.2"
 description = "Guided-mode analysis and design for circular optical fibers."
 license = {file = "LICENSE"}
 readme = "README.rst"
