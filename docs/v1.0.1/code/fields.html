@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="dark">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Fields and coordinates &#8212; PyFiberModes 1.0.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "dark";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "dark";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=c83e6b79" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/default.css?v=1c2bbcbb" />
+    <link rel="stylesheet" type="text/css" href="../_static/martinpdes_layout.css?v=a8cc01cd" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
+
+    <script src="../_static/documentation_options.js?v=e7fff540"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/sg-tags.js?v=d80f6fa4"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'code/fields';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/MartinPdeS/PyFiberModes/documentation_page/version_switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '1.0.1';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="icon" href="../_static/favicon.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Analysis, design, and propagation" href="analysis.html" />
+    <link rel="prev" title="Fibers and layers" href="fibers.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.0.1" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="dark">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-dark" alt="PyFiberModes 1.0.1 documentation - Home"/>
+    <img src="../_static/logo.png" class="logo__image only-light pst-js-only" alt="PyFiberModes 1.0.1 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started.html">
+    Start
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../guide.html">
+    Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../code.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../resources.html">
+    Resources
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/MartinPdeS/PyFiberModes" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/PyFiberModes/" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-solid fa-box fa-lg" aria-hidden="true"></i><span class="visually-hidden">PyPI</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://anaconda.org/MartinPdeS/PyFiberModes" title="Anaconda" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-python fa-lg" aria-hidden="true"></i><span class="visually-hidden">Anaconda</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started.html">
+    Start
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../guide.html">
+    Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../code.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../resources.html">
+    Resources
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/MartinPdeS/PyFiberModes" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/PyFiberModes/" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-solid fa-box fa-lg" aria-hidden="true"></i><span class="visually-hidden">PyPI</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://anaconda.org/MartinPdeS/PyFiberModes" title="Anaconda" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-python fa-lg" aria-hidden="true"></i><span class="visually-hidden">Anaconda</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="fibers.html">Fibers and layers</a></li>
+<li class="toctree-l1 current active"><a aria-current="page" class="current reference internal" href="#">Fields and coordinates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis, design, and propagation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fundamentals.html">Modes and fundamentals</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../code.html" class="nav-link">API reference</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Fields and coordinates</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-PyFiberModes.field">
+<span id="fields-and-coordinates"></span><h1>Fields and coordinates<a class="headerlink" href="#module-PyFiberModes.field" title="Link to this heading">#</a></h1>
+<p>Unit-aware mode fields and integrated modal observables.</p>
+<p>Analytical fields have an arbitrary overall amplitude. Attaching V/m and A/m
+expresses the solver’s electric/magnetic convention; absolute optical power
+requires choosing an amplitude normalization.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="PyFiberModes.field.radial_quantities">
+<span class="sig-name descname"><span class="pre">radial_quantities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vectors</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#radial_quantities"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.radial_quantities" title="Link to this definition">#</a></dt>
+<dd><p>Attach field units to cylindrical component containers (not positions).</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fiber</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">101</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Sample an optical mode over a grid with a length-valued half-width.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>limit</strong> (<em>Length</em>)</p></li>
+<li><p><strong>n_point</strong> (<em>int</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.limit">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">limit</span></span><a class="headerlink" href="#PyFiberModes.field.Field.limit" title="Link to this definition">#</a></dt>
+<dd><p>Grid half-width in meters.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.n_point">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">n_point</span></span><a class="headerlink" href="#PyFiberModes.field.Field.n_point" title="Link to this definition">#</a></dt>
+<dd><p>Number of grid points along each axis.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.cartesian_coordinates">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">cartesian_coordinates</span></span><a class="headerlink" href="#PyFiberModes.field.Field.cartesian_coordinates" title="Link to this definition">#</a></dt>
+<dd><p>Sample positions as length-valued Cartesian coordinates.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.cylindrical_coordinates">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">cylindrical_coordinates</span></span><a class="headerlink" href="#PyFiberModes.field.Field.cylindrical_coordinates" title="Link to this definition">#</a></dt>
+<dd><p>Sample positions in cylindrical coordinates.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.get_components">
+<span class="sig-name descname"><span class="pre">get_components</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">components</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('Ex'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'Ey'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'Ez'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'Hx'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'Hy'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'Hz')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;Quantity(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'radian')&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;Quantity(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'radian')&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.get_components"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_components" title="Link to this definition">#</a></dt>
+<dd><p>Return electric and magnetic component arrays with physical units.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phi</strong> (<em>Angle</em>)</p></li>
+<li><p><strong>theta</strong> (<em>Angle</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.get_azimuthal_dependency">
+<span class="sig-name descname"><span class="pre">get_azimuthal_dependency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dependency_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.get_azimuthal_dependency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_azimuthal_dependency" title="Link to this definition">#</a></dt>
+<dd><p>Evaluate dimensionless sine/cosine angular dependencies.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phi</strong> (<em>Angle</em>)</p></li>
+<li><p><strong>dependency_type</strong> (<em>str</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.get_effective_area">
+<span class="sig-name descname"><span class="pre">get_effective_area</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.get_effective_area"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_effective_area" title="Link to this definition">#</a></dt>
+<dd><p>Return effective mode area in square meters.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.get_integrale_square">
+<span class="sig-name descname"><span class="pre">get_integrale_square</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.get_integrale_square"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_integrale_square" title="Link to this definition">#</a></dt>
+<dd><p>Integrate a quantity-valued squared field over the sample area.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.get_intensity">
+<span class="sig-name descname"><span class="pre">get_intensity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.get_intensity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_intensity" title="Link to this definition">#</a></dt>
+<dd><p>Return the solver’s integrated electric intensity in square volts.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.get_normalization_constant">
+<span class="sig-name descname"><span class="pre">get_normalization_constant</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.get_normalization_constant"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_normalization_constant" title="Link to this definition">#</a></dt>
+<dd><p>Return the field’s power normalization constant in watts.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.get_poynting_vector">
+<span class="sig-name descname"><span class="pre">get_poynting_vector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;Quantity(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'radian')&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;Quantity(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'radian')&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.get_poynting_vector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_poynting_vector" title="Link to this definition">#</a></dt>
+<dd><p>Return Cartesian power flux components in watts per square meter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phi</strong> (<em>Angle</em>)</p></li>
+<li><p><strong>theta</strong> (<em>Angle</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.get_power">
+<span class="sig-name descname"><span class="pre">get_power</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;Quantity(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'radian')&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;Quantity(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'radian')&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.get_power"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_power" title="Link to this definition">#</a></dt>
+<dd><p>Return integrated longitudinal power in watts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phi</strong> (<em>Angle</em>)</p></li>
+<li><p><strong>theta</strong> (<em>Angle</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.get_confinement_factor">
+<span class="sig-name descname"><span class="pre">get_confinement_factor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.get_confinement_factor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.get_confinement_factor" title="Link to this definition">#</a></dt>
+<dd><p>Return the dimensionless fraction of electric energy within radius.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>radius</strong> (<em>Length</em>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.overlap">
+<span class="sig-name descname"><span class="pre">overlap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.overlap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.overlap" title="Link to this definition">#</a></dt>
+<dd><p>Return the dimensionless normalized electric-field overlap.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plot_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/field.html#Field.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.field.Field.plot" title="Link to this definition">#</a></dt>
+<dd><p>Plot selected numerical field components using the optional backend.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.Emod">
+<span class="sig-name descname"><span class="pre">Emod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;Quantity(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'radian')&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;Quantity(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'radian')&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyFiberModes.field.Field.Emod" title="Link to this definition">#</a></dt>
+<dd><p>Evaluate a field component at quantity-valued phase/rotation angles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phi</strong> (<em>Angle</em>)</p></li>
+<li><p><strong>theta</strong> (<em>Angle</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.Ephi">
+<span class="sig-name descname"><span class="pre">Ephi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;Quantity(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'radian')&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;Quantity(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'radian')&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyFiberModes.field.Field.Ephi" title="Link to this definition">#</a></dt>
+<dd><p>Evaluate a field component at quantity-valued phase/rotation angles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phi</strong> (<em>Angle</em>)</p></li>
+<li><p><strong>theta</strong> (<em>Angle</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.Epol">
+<span class="sig-name descname"><span class="pre">Epol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;Quantity(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'radian')&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;Quantity(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'radian')&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyFiberModes.field.Field.Epol" title="Link to this definition">#</a></dt>
+<dd><p>Evaluate a field component at quantity-valued phase/rotation angles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phi</strong> (<em>Angle</em>)</p></li>
+<li><p><strong>theta</strong> (<em>Angle</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.Er">
+<span class="sig-name descname"><span class="pre">Er</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;Quantity(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'radian')&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;Quantity(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'radian')&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyFiberModes.field.Field.Er" title="Link to this definition">#</a></dt>
+<dd><p>Evaluate a field component at quantity-valued phase/rotation angles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phi</strong> (<em>Angle</em>)</p></li>
+<li><p><strong>theta</strong> (<em>Angle</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.Et">
+<span class="sig-name descname"><span class="pre">Et</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;Quantity(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'radian')&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;Quantity(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'radian')&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyFiberModes.field.Field.Et" title="Link to this definition">#</a></dt>
+<dd><p>Evaluate a field component at quantity-valued phase/rotation angles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phi</strong> (<em>Angle</em>)</p></li>
+<li><p><strong>theta</strong> (<em>Angle</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.Ex">
+<span class="sig-name descname"><span class="pre">Ex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;Quantity(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'radian')&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;Quantity(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'radian')&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyFiberModes.field.Field.Ex" title="Link to this definition">#</a></dt>
+<dd><p>Evaluate a field component at quantity-valued phase/rotation angles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phi</strong> (<em>Angle</em>)</p></li>
+<li><p><strong>theta</strong> (<em>Angle</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.Ey">
+<span class="sig-name descname"><span class="pre">Ey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;Quantity(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'radian')&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;Quantity(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'radian')&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyFiberModes.field.Field.Ey" title="Link to this definition">#</a></dt>
+<dd><p>Evaluate a field component at quantity-valued phase/rotation angles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phi</strong> (<em>Angle</em>)</p></li>
+<li><p><strong>theta</strong> (<em>Angle</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.Ez">
+<span class="sig-name descname"><span class="pre">Ez</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;Quantity(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'radian')&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;Quantity(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'radian')&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyFiberModes.field.Field.Ez" title="Link to this definition">#</a></dt>
+<dd><p>Evaluate a field component at quantity-valued phase/rotation angles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phi</strong> (<em>Angle</em>)</p></li>
+<li><p><strong>theta</strong> (<em>Angle</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.Hmod">
+<span class="sig-name descname"><span class="pre">Hmod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;Quantity(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'radian')&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;Quantity(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'radian')&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyFiberModes.field.Field.Hmod" title="Link to this definition">#</a></dt>
+<dd><p>Evaluate a field component at quantity-valued phase/rotation angles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phi</strong> (<em>Angle</em>)</p></li>
+<li><p><strong>theta</strong> (<em>Angle</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.Hphi">
+<span class="sig-name descname"><span class="pre">Hphi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;Quantity(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'radian')&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;Quantity(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'radian')&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyFiberModes.field.Field.Hphi" title="Link to this definition">#</a></dt>
+<dd><p>Evaluate a field component at quantity-valued phase/rotation angles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phi</strong> (<em>Angle</em>)</p></li>
+<li><p><strong>theta</strong> (<em>Angle</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.Hpol">
+<span class="sig-name descname"><span class="pre">Hpol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;Quantity(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'radian')&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;Quantity(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'radian')&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyFiberModes.field.Field.Hpol" title="Link to this definition">#</a></dt>
+<dd><p>Evaluate a field component at quantity-valued phase/rotation angles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phi</strong> (<em>Angle</em>)</p></li>
+<li><p><strong>theta</strong> (<em>Angle</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.Hr">
+<span class="sig-name descname"><span class="pre">Hr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;Quantity(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'radian')&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;Quantity(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'radian')&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyFiberModes.field.Field.Hr" title="Link to this definition">#</a></dt>
+<dd><p>Evaluate a field component at quantity-valued phase/rotation angles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phi</strong> (<em>Angle</em>)</p></li>
+<li><p><strong>theta</strong> (<em>Angle</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.Ht">
+<span class="sig-name descname"><span class="pre">Ht</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;Quantity(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'radian')&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;Quantity(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'radian')&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyFiberModes.field.Field.Ht" title="Link to this definition">#</a></dt>
+<dd><p>Evaluate a field component at quantity-valued phase/rotation angles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phi</strong> (<em>Angle</em>)</p></li>
+<li><p><strong>theta</strong> (<em>Angle</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.Hx">
+<span class="sig-name descname"><span class="pre">Hx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;Quantity(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'radian')&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;Quantity(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'radian')&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyFiberModes.field.Field.Hx" title="Link to this definition">#</a></dt>
+<dd><p>Evaluate a field component at quantity-valued phase/rotation angles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phi</strong> (<em>Angle</em>)</p></li>
+<li><p><strong>theta</strong> (<em>Angle</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.Hy">
+<span class="sig-name descname"><span class="pre">Hy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;Quantity(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'radian')&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;Quantity(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'radian')&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyFiberModes.field.Field.Hy" title="Link to this definition">#</a></dt>
+<dd><p>Evaluate a field component at quantity-valued phase/rotation angles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phi</strong> (<em>Angle</em>)</p></li>
+<li><p><strong>theta</strong> (<em>Angle</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.field.Field.Hz">
+<span class="sig-name descname"><span class="pre">Hz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;Quantity(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'radian')&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;Quantity(0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'radian')&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyFiberModes.field.Field.Hz" title="Link to this definition">#</a></dt>
+<dd><p>Evaluate a field component at quantity-valued phase/rotation angles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phi</strong> (<em>Angle</em>)</p></li>
+<li><p><strong>theta</strong> (<em>Angle</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<p id="module-PyFiberModes.coordinates">Length-valued Cartesian and cylindrical coordinate grids.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CylindricalCoordinates">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">CylindricalCoordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rho</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/coordinates.html#CylindricalCoordinates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.coordinates.CylindricalCoordinates" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Cylindrical positions with length-valued rho/z and angle-valued phi.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rho</strong> (<em>Length</em>)</p></li>
+<li><p><strong>phi</strong> (<em>Angle</em>)</p></li>
+<li><p><strong>z</strong> (<em>Length</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CylindricalCoordinates.rho">
+<span class="sig-name descname"><span class="pre">rho</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Length</span></span><a class="headerlink" href="#PyFiberModes.coordinates.CylindricalCoordinates.rho" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CylindricalCoordinates.phi">
+<span class="sig-name descname"><span class="pre">phi</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Angle</span></span><a class="headerlink" href="#PyFiberModes.coordinates.CylindricalCoordinates.phi" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CylindricalCoordinates.z">
+<span class="sig-name descname"><span class="pre">z</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Length</span></span><a class="headerlink" href="#PyFiberModes.coordinates.CylindricalCoordinates.z" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CylindricalCoordinates.to_cartesian">
+<span class="sig-name descname"><span class="pre">to_cartesian</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/coordinates.html#CylindricalCoordinates.to_cartesian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.coordinates.CylindricalCoordinates.to_cartesian" title="Link to this definition">#</a></dt>
+<dd><p>Convert cylindrical positions to Cartesian positions.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CylindricalCoordinates.to_cylindrical">
+<span class="sig-name descname"><span class="pre">to_cylindrical</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/coordinates.html#CylindricalCoordinates.to_cylindrical"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.coordinates.CylindricalCoordinates.to_cylindrical" title="Link to this definition">#</a></dt>
+<dd><p>Return these cylindrical positions.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CartesianCoordinates">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">CartesianCoordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_structured</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_3D</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/coordinates.html#CartesianCoordinates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Cartesian positions with explicit length units on every axis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>Length</em>)</p></li>
+<li><p><strong>y</strong> (<em>Length</em>)</p></li>
+<li><p><strong>z</strong> (<em>Length</em>)</p></li>
+<li><p><strong>is_structured</strong> (<em>bool</em>)</p></li>
+<li><p><strong>is_3D</strong> (<em>bool</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CartesianCoordinates.x">
+<span class="sig-name descname"><span class="pre">x</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Length</span></span><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates.x" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CartesianCoordinates.y">
+<span class="sig-name descname"><span class="pre">y</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Length</span></span><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates.y" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CartesianCoordinates.z">
+<span class="sig-name descname"><span class="pre">z</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Length</span></span><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates.z" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CartesianCoordinates.is_structured">
+<span class="sig-name descname"><span class="pre">is_structured</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></span><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates.is_structured" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CartesianCoordinates.is_3D">
+<span class="sig-name descname"><span class="pre">is_3D</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></span><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates.is_3D" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CartesianCoordinates.x_boundaries">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">x_boundaries</span></span><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates.x_boundaries" title="Link to this definition">#</a></dt>
+<dd><p>Minimum and maximum x positions.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CartesianCoordinates.y_boundaries">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">y_boundaries</span></span><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates.y_boundaries" title="Link to this definition">#</a></dt>
+<dd><p>Minimum and maximum y positions.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CartesianCoordinates.dx">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">dx</span></span><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates.dx" title="Link to this definition">#</a></dt>
+<dd><p>Structured grid spacing along x.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CartesianCoordinates.dy">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">dy</span></span><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates.dy" title="Link to this definition">#</a></dt>
+<dd><p>Structured grid spacing along y.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CartesianCoordinates.generate_from_square">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">generate_from_square</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_points</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/coordinates.html#CartesianCoordinates.generate_from_square"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates.generate_from_square" title="Link to this definition">#</a></dt>
+<dd><p>Generate a square grid with a length-valued side and center.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>length</strong> (<em>Length</em>)</p></li>
+<li><p><strong>n_points</strong> (<em>int</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CartesianCoordinates.generate_from_boundaries">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">generate_from_boundaries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_limits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_limits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_limits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_points</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/coordinates.html#CartesianCoordinates.generate_from_boundaries"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates.generate_from_boundaries" title="Link to this definition">#</a></dt>
+<dd><p>Generate a structured grid from length-valued axis limits.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CartesianCoordinates.to_cylindrical">
+<span class="sig-name descname"><span class="pre">to_cylindrical</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/coordinates.html#CartesianCoordinates.to_cylindrical"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates.to_cylindrical" title="Link to this definition">#</a></dt>
+<dd><p>Convert positions to cylindrical coordinates.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CartesianCoordinates.centering">
+<span class="sig-name descname"><span class="pre">centering</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/coordinates.html#CartesianCoordinates.centering"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates.centering" title="Link to this definition">#</a></dt>
+<dd><p>Center each axis in place.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CartesianCoordinates.shift_coordinates">
+<span class="sig-name descname"><span class="pre">shift_coordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shift</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/coordinates.html#CartesianCoordinates.shift_coordinates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates.shift_coordinates" title="Link to this definition">#</a></dt>
+<dd><p>Shift the grid by three length-valued displacements.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFiberModes.coordinates.CartesianCoordinates.scale_coordinates">
+<span class="sig-name descname"><span class="pre">scale_coordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scale</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFiberModes/coordinates.html#CartesianCoordinates.scale_coordinates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFiberModes.coordinates.CartesianCoordinates.scale_coordinates" title="Link to this definition">#</a></dt>
+<dd><p>Scale axes by dimensionless factors.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="fibers.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Fibers and layers</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="analysis.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Analysis, design, and propagation</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.radial_quantities"><code class="docutils literal notranslate"><span class="pre">radial_quantities()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field"><code class="docutils literal notranslate"><span class="pre">Field</span></code></a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.limit"><code class="docutils literal notranslate"><span class="pre">Field.limit</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.n_point"><code class="docutils literal notranslate"><span class="pre">Field.n_point</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.cartesian_coordinates"><code class="docutils literal notranslate"><span class="pre">Field.cartesian_coordinates</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.cylindrical_coordinates"><code class="docutils literal notranslate"><span class="pre">Field.cylindrical_coordinates</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.get_components"><code class="docutils literal notranslate"><span class="pre">Field.get_components()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.get_azimuthal_dependency"><code class="docutils literal notranslate"><span class="pre">Field.get_azimuthal_dependency()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.get_effective_area"><code class="docutils literal notranslate"><span class="pre">Field.get_effective_area()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.get_integrale_square"><code class="docutils literal notranslate"><span class="pre">Field.get_integrale_square()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.get_intensity"><code class="docutils literal notranslate"><span class="pre">Field.get_intensity()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.get_normalization_constant"><code class="docutils literal notranslate"><span class="pre">Field.get_normalization_constant()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.get_poynting_vector"><code class="docutils literal notranslate"><span class="pre">Field.get_poynting_vector()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.get_power"><code class="docutils literal notranslate"><span class="pre">Field.get_power()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.get_confinement_factor"><code class="docutils literal notranslate"><span class="pre">Field.get_confinement_factor()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.overlap"><code class="docutils literal notranslate"><span class="pre">Field.overlap()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.plot"><code class="docutils literal notranslate"><span class="pre">Field.plot()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.Emod"><code class="docutils literal notranslate"><span class="pre">Field.Emod()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.Ephi"><code class="docutils literal notranslate"><span class="pre">Field.Ephi()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.Epol"><code class="docutils literal notranslate"><span class="pre">Field.Epol()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.Er"><code class="docutils literal notranslate"><span class="pre">Field.Er()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.Et"><code class="docutils literal notranslate"><span class="pre">Field.Et()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.Ex"><code class="docutils literal notranslate"><span class="pre">Field.Ex()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.Ey"><code class="docutils literal notranslate"><span class="pre">Field.Ey()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.Ez"><code class="docutils literal notranslate"><span class="pre">Field.Ez()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.Hmod"><code class="docutils literal notranslate"><span class="pre">Field.Hmod()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.Hphi"><code class="docutils literal notranslate"><span class="pre">Field.Hphi()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.Hpol"><code class="docutils literal notranslate"><span class="pre">Field.Hpol()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.Hr"><code class="docutils literal notranslate"><span class="pre">Field.Hr()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.Ht"><code class="docutils literal notranslate"><span class="pre">Field.Ht()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.Hx"><code class="docutils literal notranslate"><span class="pre">Field.Hx()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.Hy"><code class="docutils literal notranslate"><span class="pre">Field.Hy()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.field.Field.Hz"><code class="docutils literal notranslate"><span class="pre">Field.Hz()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CylindricalCoordinates"><code class="docutils literal notranslate"><span class="pre">CylindricalCoordinates</span></code></a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CylindricalCoordinates.rho"><code class="docutils literal notranslate"><span class="pre">CylindricalCoordinates.rho</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CylindricalCoordinates.phi"><code class="docutils literal notranslate"><span class="pre">CylindricalCoordinates.phi</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CylindricalCoordinates.z"><code class="docutils literal notranslate"><span class="pre">CylindricalCoordinates.z</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CylindricalCoordinates.to_cartesian"><code class="docutils literal notranslate"><span class="pre">CylindricalCoordinates.to_cartesian()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CylindricalCoordinates.to_cylindrical"><code class="docutils literal notranslate"><span class="pre">CylindricalCoordinates.to_cylindrical()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CartesianCoordinates"><code class="docutils literal notranslate"><span class="pre">CartesianCoordinates</span></code></a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CartesianCoordinates.x"><code class="docutils literal notranslate"><span class="pre">CartesianCoordinates.x</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CartesianCoordinates.y"><code class="docutils literal notranslate"><span class="pre">CartesianCoordinates.y</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CartesianCoordinates.z"><code class="docutils literal notranslate"><span class="pre">CartesianCoordinates.z</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CartesianCoordinates.is_structured"><code class="docutils literal notranslate"><span class="pre">CartesianCoordinates.is_structured</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CartesianCoordinates.is_3D"><code class="docutils literal notranslate"><span class="pre">CartesianCoordinates.is_3D</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CartesianCoordinates.x_boundaries"><code class="docutils literal notranslate"><span class="pre">CartesianCoordinates.x_boundaries</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CartesianCoordinates.y_boundaries"><code class="docutils literal notranslate"><span class="pre">CartesianCoordinates.y_boundaries</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CartesianCoordinates.dx"><code class="docutils literal notranslate"><span class="pre">CartesianCoordinates.dx</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CartesianCoordinates.dy"><code class="docutils literal notranslate"><span class="pre">CartesianCoordinates.dy</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CartesianCoordinates.generate_from_square"><code class="docutils literal notranslate"><span class="pre">CartesianCoordinates.generate_from_square()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CartesianCoordinates.generate_from_boundaries"><code class="docutils literal notranslate"><span class="pre">CartesianCoordinates.generate_from_boundaries()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CartesianCoordinates.to_cylindrical"><code class="docutils literal notranslate"><span class="pre">CartesianCoordinates.to_cylindrical()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CartesianCoordinates.centering"><code class="docutils literal notranslate"><span class="pre">CartesianCoordinates.centering()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CartesianCoordinates.shift_coordinates"><code class="docutils literal notranslate"><span class="pre">CartesianCoordinates.shift_coordinates()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#PyFiberModes.coordinates.CartesianCoordinates.scale_coordinates"><code class="docutils literal notranslate"><span class="pre">CartesianCoordinates.scale_coordinates()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  
+  <div class="tocsection editthispage">
+    <a href="https://github.com/MartinPdeS/PyFiberModes/edit/v1.0.1/docs/source/code/fields.rst">
+      <i class="fa-solid fa-pencil"></i>
+      
+      
+        
+          Edit on GitHub
+        
+      
+    </a>
+  </div>
+</div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/code/fields.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright Martin Poinsinet de Sivry-Houle.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+  </body>
+</html>
