@@ -2,7 +2,6 @@
 
 from pathlib import Path
 import sys
-import tomllib
 
 from martinpdes_docs import configure
 
@@ -25,6 +24,7 @@ globals().update(
     configure(
         project="PyFiberModes",
         package="PyFiberModes",
+        version="auto",
         repository="MartinPdeS/PyFiberModes",
         logo="_static/logo.png",
         favicon="_static/favicon.png",
@@ -35,7 +35,3 @@ globals().update(
         autodoc_default_options={"members": True},
     )
 )
-
-# Keep page substitutions independent of importing the numerical package.
-metadata = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
-version = release = metadata["project"]["version"]
