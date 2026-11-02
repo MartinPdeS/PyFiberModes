@@ -56,16 +56,8 @@ include-package-data = true
 
 
 [project.optional-dependencies]
-release = ["martinpdes-maintenance==0.2.2"]
-testing = ["martinpdes-maintenance==0.2.2",
-    "pytest >=7.4,<10.0",
-    "pytest-cov >=2,<8",
-    "pytest-json-report ~=1.5",
-    "coverage ~=7.6",
-    "ruff>=0.8,<1",
-    "matplotlib>=3.8",
-    "mypy>=1.15,<3",
-]
+release = ["martinpdes-maintenance==0.2.3"]
+testing = ["martinpdes-maintenance[testing]==0.2.3", "pytest-json-report ~=1.5", "matplotlib>=3.8", "coverage ~=7.6", "pytest-cov<8"]
 
 plotting = [
     "matplotlib>=3.8",
@@ -81,10 +73,7 @@ documentation = [
     "matplotlib>=3.8",
 ]
 
-dev = [
-    "ruff>=0.8,<1",
-    "mypy>=1.15,<3",
-]
+dev = ["martinpdes-maintenance[quality]==0.2.3"]
 
 [tool.ruff]
 target-version = "py311"
