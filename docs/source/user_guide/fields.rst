@@ -58,7 +58,9 @@ Overlap and coupling
 The convenience method ``field_a.overlap(field_b)`` returns normalized complex
 electric-field overlap. The standalone :func:`~PyFiberModes.propagation.overlap`
 also supports an unnormalized result. Both fields must have identical grid
-shapes and spacing. :func:`~PyFiberModes.propagation.coupling_matrix` constructs
+shapes and spacing. Construct the two fields with the same ``limit`` and
+``n_point``. For example, two 101-by-101 arrays spanning different core
+widths pair different physical positions and cannot be integrated together. :func:`~PyFiberModes.propagation.coupling_matrix` constructs
 a Hermitian matrix from several fields and accepts an optional scalar or
 sampled spatial perturbation.
 

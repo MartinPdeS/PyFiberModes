@@ -6,6 +6,10 @@ use [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+- Reuse effective-index solutions across radial field samples and refresh cached fields after layer geometry or refractive-index changes.
+- Validate coupled-mode propagation grids, amplitudes and coupling matrices, and detect incompatible field sampling in overlaps and coupling integrals.
+- Add worked examples for mode-area convergence and phase-matched power transfer.
+
 ## [1.0.2] - 2026-10-27
 
 ## [1.0.1] - 2026-10-27

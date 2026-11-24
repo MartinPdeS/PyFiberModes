@@ -26,6 +26,7 @@ def mock_fiber():
         return electric, magnetic
     fiber.get_radial_fields = MagicMock(side_effect=radial_fields)
     fiber.wavelength = 1.55e-6
+    fiber.geometry_signature = (fiber.wavelength, ())
     fiber.get_effective_index = MagicMock(return_value=1.45)
     return fiber
 
@@ -132,6 +133,7 @@ def test_field_cache_is_invalidated_by_wavelength_change(field_instance, mock_fi
 
     field_instance.get_components(("Ex",))
     mock_fiber.wavelength = 1.31e-6
+    mock_fiber.geometry_signature = (mock_fiber.wavelength, ())
     field_instance.get_components(("Ex",))
 
     assert mock_fiber.get_radial_fields.call_count == 2 * expected_calls
@@ -192,3 +194,8 @@ def test_plot(field_instance):
 
 if __name__ == "__main__":
     pytest.main(["-W error", __file__])
+
+
+def test_component_names_from_generator(field_instance):
+    """Preserve single-pass component selections during validation."""
+    assert list(field_instance.get_components(iter(("Ez", "Hz")))) == ["Ez", "Hz"]

@@ -53,16 +53,16 @@ class Field:
         self._radial_map_cache = {}
         self._azimuthal_cache = {}
         self._component_cache = {}
-        self._cache_wavelength = self.fiber.wavelength
+        self._cache_geometry = self.fiber.geometry_signature
 
     def _ensure_cache_valid(self) -> None:
-        """Discard cached fields after a wavelength change."""
-        if self.fiber.wavelength != self._cache_wavelength:
+        """Discard cached fields after a wavelength or layer change."""
+        if self.fiber.geometry_signature != self._cache_geometry:
             self._radial_cache.clear()
             self._radial_map_cache.clear()
             self._azimuthal_cache.clear()
             self._component_cache.clear()
-            self._cache_wavelength = self.fiber.wavelength
+            self._cache_geometry = self.fiber.geometry_signature
 
     def _populate_radial_cache(self) -> None:
         """Solve every radial field component in one shared radial pass."""
@@ -76,7 +76,7 @@ class Field:
             mode=self.mode, radius=radii
         )
         values = {
-            (field_name, component): np.asarray(getattr(vector, component), dtype=complex)
+            (field_name, component): np.asarray(getattr(vector, component))
             for field_name, vector in (("E", electric), ("H", magnetic))
             for component in ("rho", "phi", "z")
         }
@@ -99,9 +99,9 @@ class Field:
 
         radii, values = self._radial_cache[key]
         rho = self.cylindrical_coordinates.rho
-        real = np.interp(rho, radii, values.real)
-        imaginary = np.interp(rho, radii, values.imag)
-        result = np.real_if_close(real + 1j * imaginary)
+        result = np.interp(rho, radii, values.real)
+        if np.iscomplexobj(values):
+            result = np.real_if_close(result + 1j * np.interp(rho, radii, values.imag))
         self._radial_map_cache[key] = result
         return result
 
@@ -204,6 +204,7 @@ class Field:
         """
         self._ensure_cache_valid()
         available = {"Ex", "Ey", "Ez", "Er", "Ephi", "Hx", "Hy", "Hz", "Hr", "Hphi"}
+        components = tuple(components)
         invalid = set(components) - available
         if invalid:
             names = ", ".join(sorted(invalid))

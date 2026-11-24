@@ -86,24 +86,35 @@ several seeds and validate the returned ``design.fiber`` independently.
 Coupled-mode propagation
 ------------------------
 
-:class:`~PyFiberModes.propagation.CoupledModeSystem` integrates
-:math:`dA/dz=-i(\mathrm{diag}(\beta)+\kappa)A`. Subtracting a common propagation
-constant reduces rapid common phase rotation without changing modal powers:
+For a phase-matched pair, choose zero relative propagation constants and a
+real, symmetric coupling matrix. With light launched into mode 1, its power
+fraction is :math:`\cos^2(\kappa z)` and the fraction in mode 2 is
+:math:`\sin^2(\kappa z)`. This gives an independent check on both the launch
+condition and the exchange distance.
 
 .. code-block:: python
 
+   import numpy as np
+   from PyFiberModes import CoupledModeSystem
    from PyFiberModes.units import ureg
 
-   from PyFiberModes import CoupledModeSystem
+   kappa = 0.25 / ureg.meter
+   betas = np.zeros(2) / ureg.meter
+   coupling = np.array([[0, 1], [1, 0]]) * kappa
+   system = CoupledModeSystem(betas=betas, coupling=coupling)
+   transfer_length = np.pi / (2 * kappa)
+   z = np.linspace(0, 1, 101) * transfer_length
+   result = system.propagate(initial=[1, 0], z=z)
+   np.testing.assert_allclose(result.powers[-1].magnitude, [0, 1], atol=1e-7)
 
-   betas = ureg.Quantity.from_list([fiber.get_propagation_constant(LP01),
-                                      fiber.get_propagation_constant(LP11)])
-   relative_betas = betas - betas[0]
-   coupling = np.array([[0.0, 0.25], [0.25, 0.0]]) / ureg.meter
-   system = CoupledModeSystem(relative_betas, coupling)
-   z = np.linspace(0.0, 20.0, 501) * ureg.meter
-   result = system.propagate([1.0, 0.0], z)
+Each row of ``result.amplitudes`` corresponds to a position and each column
+to a mode, ordered as in ``betas``. For this normalized launch, the sum of
+each row of ``result.powers`` is one within the integration tolerance.
+The first complete transfer occurs about 6.28 m from launch.
 
-``coupling`` may be a constant matrix or a callable ``coupling(z)``. Use a
-Hermitian matrix for lossless reciprocal exchange; check that the sum of
-``result.powers`` remains constant to the integration tolerance.
+For detuned modes, supply their individual propagation constants. Subtracting
+a common constant removes a common phase and preserves the modal powers.
+For varying coupling, pass a function that takes a length quantity and returns
+a finite square matrix with inverse-length units at each position. Supply at
+least two strictly ordered positions. Decreasing positions propagate backward
+from the initial amplitudes at the first sample.

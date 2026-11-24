@@ -19,50 +19,44 @@ Install the optional plotting dependency if you intend to render field maps:
 Your first guided mode
 ----------------------
 
-Fiber dimensions and wavelengths require Pint length quantities; results carry units. Load a bundled definition,
-solve the fundamental LP mode, and inspect its effective index:
+Load the bundled SMF28 step-index model at a vacuum wavelength of 1550 nm.
+The scalar fundamental mode, LP01, has an effective refractive index between
+the cladding and core indices.
 
 .. code-block:: python
 
+   from PyFiberModes import LP01, load_fiber
    from PyFiberModes.units import ureg
 
-   from PyFiberModes import LP01
-   from PyFiberModes.fiber import load_fiber
-
-   fiber = load_fiber("SMF28", wavelength=1550e-9 * ureg.meter)
+   fiber = load_fiber("SMF28", wavelength=1550 * ureg.nanometer)
    neff = fiber.get_effective_index(LP01)
-   field = fiber.get_mode_field(LP01, limit=15e-6 * ureg.meter, n_point=151)
+   assert fiber.last_layer.refractive_index < neff < fiber.maximum_index
+   print(f"{neff.magnitude:.6f}")
 
-   print(neff)
-   print(field.get_effective_area())
+For this fiber definition the result is approximately **1.447491**.
+The effective index is dimensionless. To extract a number from a result
+with dimensions, first convert it to the unit you intend to report.
 
-``LP01`` identifies the scalar fundamental mode. ``limit`` is the positive
-half-width of the square sampling window in metres, and ``n_point`` is the
-number of samples along each Cartesian axis.
+Check the sampled mode area
+---------------------------
 
-Check the result
-----------------
-
-A useful calculation includes a physical and a numerical check:
+The effective area depends on how much of the field fits inside the window
+and how finely the field is sampled. Use the same fiber for these three grids.
 
 .. code-block:: python
 
-   from PyFiberModes.units import ureg
+   for half_width, samples in [(10, 101), (20, 201), (20, 401)]:
+       field = fiber.get_mode_field(
+           mode=LP01, limit=half_width * ureg.micrometer, n_point=samples
+       )
+       area = field.get_effective_area().to("micrometer ** 2")
+       print(half_width, samples, round(area.magnitude, 3))
 
-   n_cladding = fiber.last_layer.refractive_index
-   n_core = fiber.maximum_index
-   assert n_cladding < neff < n_core
-
-   coarse = fiber.get_mode_field(LP01, limit=15e-6 * ureg.meter, n_point=151)
-   fine = fiber.get_mode_field(LP01, limit=20e-6 * ureg.meter, n_point=251)
-   relative_change = abs(
-       fine.get_effective_area() / coarse.get_effective_area() - 1
-   )
-   print(f"effective-area change: {relative_change:.2%}")
-
-Increase the window until the field decays before its boundary, then increase
-the resolution until the derived quantity changes less than the accuracy your
-application requires.
+The first two grids keep the spacing at 0.2 µm and double the window width.
+The area increases from about 64.417 to 64.519 µm² as the window includes more
+of the evanescent tail. The last grid keeps the window fixed and halves the
+spacing, giving about 64.515 µm². Repeat these checks for the mode and
+accuracy you need, especially near cutoff.
 
 Where to go next
 ----------------

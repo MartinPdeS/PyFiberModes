@@ -204,3 +204,54 @@ def test_coupling_matrix_is_hermitian_and_has_zero_diagonal():
     matrix = coupling_matrix([first, second])
     assert np.allclose(matrix, matrix.conjugate().T)
     assert np.allclose(np.diag(matrix), 0)
+
+
+@pytest.mark.parametrize("start, stop", [(2.0, 6.0), (6.0, 2.0)])
+@pytest.mark.parametrize("varying", [False, True])
+def test_phase_matched_mode_exchange(start, stop, varying):
+    """Recover signed quadrature amplitudes for both propagation directions."""
+    positions = np.linspace(start, stop, 13) * ureg.centimeter
+    matrix = np.array([[0, 1], [1, 0]]) / ureg.centimeter
+
+    def coupling(position):
+        """Increase coupling linearly with displacement from launch."""
+        return matrix * (1 + (position.to("centimeter").magnitude - start) / 10)
+
+    system = CoupledModeSystem(np.zeros(2) / ureg.meter, coupling if varying else matrix)
+    result = system.propagate([1, 0], positions)
+    displacement = positions.magnitude - start
+    phase = displacement + displacement**2 / 20 if varying else displacement
+    expected = np.column_stack((np.cos(phase), -1j * np.sin(phase)))
+    np.testing.assert_allclose(result.amplitudes.magnitude, expected, atol=3e-8, rtol=0)
+
+
+@pytest.mark.parametrize("positions", [[], [1], [0, 0], [0, 2, 1], [0, np.nan], [0, 1j], [[0, 1]]])
+def test_propagation_rejects_invalid_positions(positions):
+    """Reject unusable grids before entering the integrator."""
+    system = CoupledModeSystem(np.zeros(2) / ureg.meter, np.zeros((2, 2)) / ureg.meter)
+    with pytest.raises(ValueError, match="z "):
+        system.propagate([1, 0], np.asarray(positions) * ureg.meter)
+
+
+@pytest.mark.parametrize("matrix", [0, [0, 1], [[0, 1]], [[0, np.inf], [1, 0]]])
+@pytest.mark.parametrize("varying", [False, True])
+def test_propagation_rejects_invalid_coupling(matrix, varying):
+    """Reject accidental broadcasting and nonfinite entries in either matrix path."""
+    value = np.asarray(matrix) / ureg.meter
+    with pytest.raises(ValueError, match="coupling"):
+        system = CoupledModeSystem(np.zeros(2) / ureg.meter, (lambda z: value) if varying else value)
+        system.propagate([1, 0], np.arange(2) * ureg.meter)
+
+
+@pytest.mark.parametrize("constants", [[], [[1]], [np.nan], [1 + 1j]])
+def test_propagation_rejects_invalid_constants(constants):
+    """Require one finite real propagation constant per mode."""
+    with pytest.raises(ValueError, match="betas"):
+        CoupledModeSystem(np.asarray(constants) / ureg.meter, np.zeros((1, 1)) / ureg.meter)
+
+
+def test_propagation_rejects_nonfinite_launch():
+    """Reject a nonfinite launch before evaluating the derivative."""
+    system = CoupledModeSystem(np.zeros(2) / ureg.meter, np.zeros((2, 2)) / ureg.meter)
+    with pytest.raises(ValueError, match="initial"):
+        system.propagate([np.nan, 1], np.arange(2) * ureg.meter)

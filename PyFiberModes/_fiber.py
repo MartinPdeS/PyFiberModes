@@ -2,7 +2,6 @@
 
 import numpy
 from typing import Generator
-from functools import cache
 from dataclasses import dataclass, field
 from scipy import constants
 from copy import deepcopy
@@ -64,6 +63,8 @@ class Fiber(object):
         self.radius_in = 0
         self.layers = []
         self._analysis_service = None
+        self._radial_fields = {}
+        self._radial_geometry = None
         self._field_service = None
 
     @property
@@ -111,7 +112,8 @@ class Fiber(object):
         """Clear modal and radial-field caches after a physical mutation."""
         if self._analysis_service is not None:
             self._analysis_service.clear()
-        self.get_radial_field.cache_clear()
+        self._radial_fields.clear()
+        self._radial_geometry = None
 
     def scale(self, factor: float) -> None:
         """
@@ -815,7 +817,6 @@ class Fiber(object):
         """
         return self.fields.mode_field(mode=mode, limit=limit, n_point=n_point)
 
-    @cache
     def get_radial_field(
         self, mode: Mode, radius: float
     ) -> tuple[CylindricalCoordinates, CylindricalCoordinates]:
@@ -834,14 +835,16 @@ class Fiber(object):
         tuple[CylindricalCoordinates, CylindricalCoordinates]
             Electric and magnetic radial fields.
         """
-        radial_field = get_radial_field(
-            fiber=self,
-            mode=mode,
-            wavelength=self.wavelength,
-            radius=radius
-        )
-
-        return radial_field
+        geometry = self.geometry_signature
+        if geometry != self._radial_geometry:
+            self._radial_fields.clear()
+            self._radial_geometry = geometry
+        key = (mode, radius)
+        if key not in self._radial_fields:
+            self._radial_fields[key] = get_radial_field(
+                fiber=self, mode=mode, wavelength=self.wavelength, radius=radius
+            )
+        return self._radial_fields[key]
 
     def get_radial_fields(self, mode: Mode, radius) -> tuple[CylindricalCoordinates, CylindricalCoordinates]:
         """Evaluate radial electric and magnetic fields over an array.

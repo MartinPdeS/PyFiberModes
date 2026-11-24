@@ -1,6 +1,5 @@
 """Fundamental normalized-frequency and propagation relations."""
 
-import numpy
 import numpy as np
 from typing import TYPE_CHECKING
 from PyFiberModes.mode import Mode
@@ -107,7 +106,7 @@ def get_propagation_constant_from_omega(
     )
 
     effective_index = effective_index_solver.solve(mode=mode, delta_neff=delta_neff)
-    return effective_index * (2 * numpy.pi / wavelength)
+    return effective_index * (2 * np.pi / wavelength)
 
 
 def get_U_parameter(
@@ -303,31 +302,15 @@ def get_radial_field(
             fiber=fiber, wavelength=wavelength
         )
 
-    neff = get_effective_index(
-        fiber=fiber,
-        wavelength=fiber.wavelength,
-        mode=mode
-    )
-    if not numpy.isfinite(neff):
+    effective_index = fiber.get_effective_index(mode)
+    if not np.isfinite(effective_index):
         raise ConvergenceError(f"no guided effective-index solution for {mode}")
 
-    kwargs = dict(
-        nu=mode.nu,
-        neff=neff,
-        radius=radius
+    # Mode validates the family against the five supported field kernels.
+    evaluate = getattr(effective_index_solver, f"get_{mode.family}_field")
+    (er, ephi, ez), (hr, hphi, hz) = evaluate(
+        nu=mode.nu, neff=effective_index, radius=radius
     )
-
-    match mode.family:
-        case 'LP':
-            (er, ephi, ez), (hr, hphi, hz) = effective_index_solver.get_LP_field(**kwargs)
-        case 'TE':
-            (er, ephi, ez), (hr, hphi, hz) = effective_index_solver.get_TE_field(**kwargs)
-        case 'TM':
-            (er, ephi, ez), (hr, hphi, hz) = effective_index_solver.get_TM_field(**kwargs)
-        case 'EH':
-            (er, ephi, ez), (hr, hphi, hz) = effective_index_solver.get_EH_field(**kwargs)
-        case 'HE':
-            (er, ephi, ez), (hr, hphi, hz) = effective_index_solver.get_HE_field(**kwargs)
 
     e_field = CylindricalCoordinates(rho=er, phi=ephi, z=ez)
     h_field = CylindricalCoordinates(rho=hr, phi=hphi, z=hz)

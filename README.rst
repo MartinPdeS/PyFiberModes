@@ -3,30 +3,7 @@
    :align: center
    :alt: PyFiberModes logo
 
-.. list-table::
-   :widths: 35 65
-   :header-rows: 1
-
-   * - Badge
-     - Status
-   * - Python versions
-     - |python|
-   * - Documentation
-     - |docs|
-   * - Continuous integration
-     - |ci/cd|
-   * - Test coverage
-     - |coverage|
-   * - PyPI package
-     - |PyPI|
-   * - PyPI downloads
-     - |PyPI_download|
-   * - Anaconda package
-     - |anaconda|
-   * - Anaconda downloads
-     - |anaconda_download|
-   * - Latest Anaconda release
-     - |anaconda_date|
+|python| |PyPI| |docs| |ci/cd| |coverage|
 
 PyFiberModes
 ============
@@ -37,8 +14,9 @@ two-layer and multilayer step-index structures, full electric and magnetic
 field maps, wavelength-dependent modal properties, inverse design, and
 coupled-mode propagation.
 
-The package is intended for reproducible fiber analysis without requiring a
-general-purpose finite-element model for every concentric geometry.
+Start with the `guided calculation <https://martinpdes.github.io/PyFiberModes/docs/latest/getting_started.html>`_
+to check the effective index and sampled mode area of SMF28 at 1550 nm.
+For executable scripts, see the `example gallery <https://martinpdes.github.io/PyFiberModes/docs/latest/examples.html>`_.
 
 Features
 --------
@@ -303,9 +281,9 @@ API stability
 
 Supported imports come from the package root, for example
 ``from PyFiberModes import Fiber, LP01``. The
-`public API policy <https://martinpdes.github.io/PyFiberModes/latest/api_policy.html>`_
+`public API policy <https://martinpdes.github.io/PyFiberModes/docs/latest/api_policy.html>`_
 defines compatibility guarantees and the deprecation period. Review the
-`migration guide <https://martinpdes.github.io/PyFiberModes/latest/migration_guide.html>`_
+`migration guide <https://martinpdes.github.io/PyFiberModes/docs/latest/migration_guide.html>`_
 when upgrading across minor or major versions. Internal solver modules are not
 covered by the compatibility guarantee.
 

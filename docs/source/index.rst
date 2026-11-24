@@ -1,12 +1,15 @@
-**Date**: |today|, **Version**: |version|
+PyFiberModes documentation
+==========================
 
 .. image:: _static/logo.png
    :width: 620
    :align: center
    :alt: PyFiberModes logo
 
-.. include:: ../../README.rst
-    :start-line: 5
+Calculate guided modes in circular step-index fibers, sample their electric
+and magnetic fields, and propagate coupled modal amplitudes. The examples use
+Pint quantities so you can enter a core radius in micrometers and a wavelength
+in nanometers in the same calculation.
 
 .. toctree::
     :maxdepth: 2
@@ -44,7 +47,5 @@ Choose your path
 
       Browse the generated API reference, signatures, and source links.
 
-PyFiberModes uses SI units throughout. Wavelengths and radii are in metres,
-propagation constants are in radians per metre, and the dispersion helper
-returns ps/(nm km). See :doc:`user_guide/units` for a complete conventions
-table.
+See :doc:`user_guide/units` for input dimensions and output units, or
+:doc:`troubleshooting` if a solve fails or a field integral changes with grid size.

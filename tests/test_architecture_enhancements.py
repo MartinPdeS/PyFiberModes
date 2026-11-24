@@ -4,7 +4,9 @@ from PyFiberModes.units import ureg
 import numpy as np
 import pytest
 
-from PyFiberModes import LP01
+from PyFiberModes import HE11, LP01
+from PyFiberModes.solver.two_layer import EffectiveIndexSolver as TwoLayerSolver
+from unittest.mock import patch
 from PyFiberModes.coordinates import CylindricalCoordinates
 from PyFiberModes.exceptions import ConvergenceError, ValidationError
 from PyFiberModes.fiber import load_fiber
@@ -85,3 +87,20 @@ def test_structured_solve_result_and_scalar_value_agree():
     result = fiber.solve_effective_index(LP01)
     assert result.converged
     assert result.value == pytest.approx(fiber.get_effective_index(LP01))
+
+def test_field_reuses_modal_solution_until_geometry_changes():
+    """Solve once per geometry and refresh all sampled fields after a layer edit."""
+    fiber = load_fiber("SMF28", wavelength=1550 * ureg.nanometer)
+    field = fiber.get_mode_field(HE11, limit=12 * ureg.micrometer, n_point=11)
+    with patch.object(TwoLayerSolver, "solve_result", autospec=True, side_effect=TwoLayerSolver.solve_result) as solve:
+        original = field.get_components(("Ex",))["Ex"].magnitude
+        assert solve.call_count == 1
+        fiber.layers[0].refractive_index += 1e-4
+        updated = field.get_components(("Ex",))["Ex"].magnitude
+        assert solve.call_count == 2
+
+    reference = load_fiber("SMF28", wavelength=1550 * ureg.nanometer)
+    reference.layers[0].refractive_index += 1e-4
+    expected = reference.get_mode_field(HE11, limit=12 * ureg.micrometer, n_point=11)
+    assert not np.array_equal(original, updated)
+    np.testing.assert_array_equal(updated, expected.get_components(("Ex",))["Ex"].magnitude)

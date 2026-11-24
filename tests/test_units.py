@@ -245,3 +245,13 @@ def test_optimization_preserves_parameter_units(fiber):
         4.5, abs=1e-4
     )
     assert fiber[0].radius_out.to("micrometer").magnitude == pytest.approx(4.1)
+
+
+def test_field_integrals_reject_mismatched_physical_grids(fiber):
+    """Equal array dimensions must still refer to the same physical sample positions."""
+    first = fiber.get_mode_field(LP01, limit=10 * ureg.micrometer, n_point=11)
+    other = fiber.get_mode_field(LP01, limit=12 * ureg.micrometer, n_point=11)
+    with pytest.raises(ValueError, match="spacing"):
+        overlap(first, other)
+    with pytest.raises(ValueError, match="spacing"):
+        coupling_matrix([first, other])

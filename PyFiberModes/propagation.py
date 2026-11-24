@@ -8,6 +8,16 @@ from scipy.integrate import solve_ivp
 from PyFiberModes.units import magnitude, quantity
 
 
+def _require_common_grid(*, reference, other):
+    """Require equal dimensions and physical sampling intervals on centered grids."""
+    first = reference.cartesian_coordinates
+    second = other.cartesian_coordinates
+    if first.x.shape != second.x.shape or not np.allclose(
+        (first.dx, first.dy), (second.dx, second.dy), rtol=1e-12, atol=0
+    ):
+        raise ValueError("fields must use the same grid shape and spacing")
+
+
 def overlap(field_a, field_b, *, normalized: bool = True) -> complex:
     """Calculate the electric-field overlap on a shared Cartesian grid.
 
@@ -26,13 +36,12 @@ def overlap(field_a, field_b, *, normalized: bool = True) -> complex:
     Raises
     ------
     ValueError
-        If the two field grids have different shapes.
+        If the two field grids have different shapes or spacings.
     """
     if hasattr(field_a, "_si"):
         result = overlap(field_a._si, field_b._si, normalized=normalized)
         return quantity(result, "dimensionless" if normalized else "volt ** 2")
-    if field_a.cartesian_coordinates.x.shape != field_b.cartesian_coordinates.x.shape:
-        raise ValueError("fields must use the same grid shape")
+    _require_common_grid(reference=field_a, other=field_b)
     components_a = (field_a.Ex(), field_a.Ey(), field_a.Ez())
     components_b = (field_b.Ex(), field_b.Ey(), field_b.Ez())
     inner = sum(np.vdot(a, b) for a, b in zip(components_a, components_b))
@@ -64,6 +73,8 @@ def coupling_matrix(fields: Sequence, perturbation=None) -> np.ndarray:
         unit = perturbation.units if hasattr(perturbation, "units") else "dimensionless"
         weight = perturbation.magnitude if hasattr(perturbation, "units") else perturbation
         return quantity(coupling_matrix([field._si for field in fields], weight), unit)
+    for field in fields[1:]:
+        _require_common_grid(reference=fields[0], other=field)
     count = len(fields)
     matrix = np.zeros((count, count), dtype=complex)
     weight = 1.0 if perturbation is None else np.asarray(perturbation)
@@ -131,18 +142,29 @@ class CoupledModeSystem:
         Parameters
         ----------
         betas : array-like
-            Propagation constants for each mode.
+            Finite real inverse-length quantities, one per mode.
         coupling : array-like or callable
-            Constant or position-dependent coupling matrix.
+            Square inverse-length matrix, or a function mapping a length
+            quantity to such a matrix. Mode order must match ``betas``.
         """
-        self.betas = quantity(
-            np.asarray(magnitude(betas, "1 / meter", "betas"), dtype=float), "1 / meter"
+        constants = np.asarray(magnitude(betas, "1 / meter", "betas"))
+        if constants.ndim != 1 or not constants.size or not np.all(np.isfinite(constants)):
+            raise ValueError("betas must be a non-empty vector of finite propagation constants")
+        if np.any(np.imag(constants)):
+            raise ValueError("betas must be real")
+        self.betas = quantity(np.asarray(constants.real, dtype=float), "1 / meter")
+        self.coupling = coupling if callable(coupling) else quantity(
+            self._coupling_matrix(value=coupling), "1 / meter"
         )
-        self.coupling = (
-            coupling
-            if callable(coupling)
-            else quantity(magnitude(coupling, "1 / meter", "coupling"), "1 / meter")
-        )
+
+    def _coupling_matrix(self, *, value):
+        """Return a finite square coupling matrix in inverse meters."""
+        matrix = np.asarray(magnitude(value, "1 / meter", "coupling"), dtype=complex)
+        if matrix.shape != (self.betas.size, self.betas.size):
+            raise ValueError("coupling must have shape (n_modes, n_modes)")
+        if not np.all(np.isfinite(matrix)):
+            raise ValueError("coupling must contain only finite values")
+        return matrix
 
     def propagate(self, initial, z, **solve_options) -> PropagationResult:
         """Propagate initial modal amplitudes over longitudinal positions.
@@ -152,7 +174,7 @@ class CoupledModeSystem:
         initial : array-like
             Complex modal amplitudes at ``z[0]``.
         z : array-like
-            Ordered longitudinal evaluation positions.
+            At least two finite length samples in strictly increasing or decreasing order.
         **solve_options
             Additional options forwarded to :func:`scipy.integrate.solve_ivp`.
 
@@ -164,26 +186,36 @@ class CoupledModeSystem:
         Raises
         ------
         ValueError
-            If initial amplitudes and propagation constants differ in length.
+            If the position grid, amplitude vector, or coupling matrix is invalid.
         RuntimeError
             If numerical integration fails.
         """
-        z = np.asarray(magnitude(z, "meter", "z"), dtype=float)
+        positions = np.asarray(magnitude(z, "meter", "z"))
+        if np.any(np.imag(positions)):
+            raise ValueError("z positions must be real")
+        z = np.asarray(positions.real, dtype=float)
+        if z.ndim != 1 or z.size < 2 or not np.all(np.isfinite(z)):
+            raise ValueError("z must be a vector of at least two finite positions")
+        if not (np.all(z[1:] > z[:-1]) or np.all(z[1:] < z[:-1])):
+            raise ValueError("z positions must be strictly monotonic")
         initial = np.asarray(initial, dtype=complex)
         if initial.shape != self.betas.shape:
             raise ValueError("initial amplitudes and betas must have the same length")
 
-        def derivative(position, amplitudes):
-            """Evaluate the coupled-mode ordinary differential equation."""
-            coupling = (
-                self.coupling(quantity(position, "meter"))
-                if callable(self.coupling)
-                else self.coupling
-            )
-            hamiltonian = np.diag(self.betas.magnitude) + np.asarray(
-                magnitude(coupling, "1 / meter", "coupling"), dtype=complex
-            )
-            return -1j * hamiltonian @ amplitudes
+        if not np.all(np.isfinite(initial)):
+            raise ValueError("initial amplitudes must be finite")
+        diagonal = np.diag(self.betas.magnitude)
+        if callable(self.coupling):
+            def derivative(position, amplitudes):
+                """Evaluate the local coupling at the integrator's position."""
+                local = self.coupling(quantity(position, "meter"))
+                return -1j * (diagonal + self._coupling_matrix(value=local)) @ amplitudes
+        else:
+            generator = -1j * (diagonal + self._coupling_matrix(value=self.coupling))
+
+            def derivative(position, amplitudes):
+                """Apply the constant propagation operator."""
+                return generator @ amplitudes
 
         solution = solve_ivp(
             derivative,
