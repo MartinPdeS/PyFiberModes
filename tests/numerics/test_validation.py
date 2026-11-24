@@ -12,7 +12,7 @@ from PyFiberModes import ConvergenceError, UnsupportedGeometryError, ValidationE
 from PyFiberModes.fundamentals import get_U_parameter
 from PyFiberModes.fiber import get_fiber_from_delta_and_V0
 from PyFiberModes.fiber import load_fiber
-from tests.helpers import get_mode_beta
+from tests.numerics.helpers import get_mode_beta
 
 
 def test_validation_cutoff_wavelength():

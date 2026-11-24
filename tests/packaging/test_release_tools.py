@@ -5,7 +5,7 @@ from martinpdes_maintenance import cli
 import yaml
 
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 
 
 def test_release_metadata_is_synchronized_and_changelog_has_current_version():

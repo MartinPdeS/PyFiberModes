@@ -4,7 +4,7 @@ import ast
 from pathlib import Path
 
 
-PACKAGE_PATH = Path(__file__).resolve().parents[1] / "PyFiberModes"
+PACKAGE_PATH = Path(__file__).resolve().parents[2] / "PyFiberModes"
 
 
 def _documentable_nodes(tree):

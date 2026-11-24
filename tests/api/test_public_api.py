@@ -8,7 +8,7 @@ import PyFiberModes
 
 
 SNAPSHOT = Path(__file__).with_name("api_snapshot.json")
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
 
 def test_public_api_matches_reviewed_snapshot():

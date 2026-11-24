@@ -11,7 +11,7 @@ example::
 
 These names are covered by the compatibility policy below. Their documented
 signatures, return semantics, and import locations are treated as public API.
-The public surface is stored in ``tests/api_snapshot.json`` and checked in CI.
+The public surface is stored in ``tests/api/api_snapshot.json`` and checked in CI.
 An intentional API change must update that snapshot, the changelog, and the
 :doc:`migration_guide` in the same pull request.
 

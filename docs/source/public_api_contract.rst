@@ -3,7 +3,7 @@ Public API contract
 
 This page defines the supported PyFiberModes 1.0 surface. Only names imported
 from the package root and listed in ``PyFiberModes.__all__`` are stable. Public
-signatures and important defaults are recorded in ``tests/api_snapshot.json``
+signatures and important defaults are recorded in ``tests/api/api_snapshot.json``
 and checked on every supported Python version.
 
 Unit contract
