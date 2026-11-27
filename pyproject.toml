@@ -105,3 +105,6 @@ conda-recipe = "conda.recipe/meta.yaml"
 zenodo = ".zenodo.json"
 changelog = "CHANGELOG.md"
 repository = "MartinPdeS/PyFiberModes"
+
+[dependency-groups]
+readme = ["martinpdes-maintenance @ git+https://github.com/MartinPdeS/MartinPdeS-maintenance.git@1f47c0ca92f8d6fd7440190aa16c7bea662cd26d"]

@@ -43,3 +43,7 @@ docs/source/sg_execution_times.rst
 *.so*
 *.a*
 !Makefile
+
+!/readme.yml
+
+!/USAGE.rst

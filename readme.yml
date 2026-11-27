@@ -1,0 +1,12 @@
+introduction: |-
+  Find the modes supported by a circular optical fiber at a given wavelength. Compare
+  effective indices, inspect field profiles, and follow modes as the wavelength or
+  fiber geometry changes.
+
+  See the `usage guide <https://github.com/MartinPdeS/PyFiberModes/blob/HEAD/USAGE.rst>`__ for further examples and implementation details.
+quickstart:
+  title: Discover the guided modes of a fiber
+  source: docs/examples/analysis/plot_guided_mode_discovery.py
+sections:
+- title: Citation
+  content: Cite the version used in your calculations with the `software citation metadata <https://github.com/MartinPdeS/PyFiberModes/blob/HEAD/CITATION.cff>`__.

@@ -19,3 +19,9 @@ jobs:
         python -m ruff check PyFiberModes tests
         python -m mypy
         python -m martinpdes_maintenance.cli check
+
+  readme:
+    uses: MartinPdeS/MPSActions/.github/workflows/run_quality.yml@v2
+    with:
+      install-command: python -m pip install --upgrade pip && python -m pip install --group readme
+      quality-command: mps-maintenance readme --check
